@@ -1,0 +1,80 @@
+# proof s37_export4_be26ec5a
+# utc 20261029T142921Z
+# head be26ec5a (uncommitted paths: 19)
+# env none
+# cmd bash .qa_logs/s37_export_vc11.sh
+store and key password: the same
+# STEP export_android 17:29:22
+# STEP export_android rc=0 17:34:50
+bundle: 90309004 bytes sha256 839cae39687e65ce9d2081f46d2deb279a3a58fa82cc3f19b623cd92e22eaaf4
+# STEP aab_check 17:34:51
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=11 expected=11: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    90309004 bytes
+sha256  839cae39687e65ce9d2081f46d2deb279a3a58fa82cc3f19b623cd92e22eaaf4
+entries 2463
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2460 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s37_vcode10.aab: 0 entries gone, 0 new, 70 with other bytes
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/imported/ammo.png-c681ad6332e5073e37301fab37b75e34.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/backpack.png-31576670d60c647710c392eba16545ff.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/backpack_l1.png-d96d312b318cb7da510fad2242468eb9.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/backpack_l2.png-23bbaf1a7dbd72b07f86e9a3d6021123.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/bandage.png-782e461fda0b6658e7701840e9fc0c85.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/battery_l2.png-7c7300e46b20a28ca5359759611ddda4.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint.png-739f93ba5f5cf1d90307bfcecb0c2a4a.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_backpack_capacity.png-049f968d36e957c08d98313445c05476.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_backpack_slots.png-e7ee5c037534ae6cde376b1507c8d23a.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_battery_l2.png-4b55ebd897650fff8905a280fcb48b18.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_enhanced_battery.png-6ff4178593b05ec4ca1a0afa9644837d.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_flashlight_battery.png-6f700e404616c36807f708111e41f688.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_flashlight_brightness.png-381bb833c8906ad7e0ec9075d0496f36.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_portable_workbench.png-fc846a7865fb403a6db15080b5ea53d1.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_strobe_flashlight.png-7c893f9f27f9b006bee5f15516e30153.ctex
+  changed assetPackInstallTime/assets/.godot/imported/blueprint_uv_flashlight.png-c69b35f0e5a5fddef861219cc397c5f6.ctex
+  changed assetPackInstallTime/assets/.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/cable.png-fe44293c14cbabd4587a627dc6dccde6.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/can_food.png-8cde7e073fdd19d3a1ce772bf373a3fb.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/document.png-d26fc714af09a16d81b7c01786a98ea0.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/enhanced_battery.png-138732bf5cf9b302e9243917bc1f46d0.ctex
+  changed assetPackInstallTime/assets/.godot/imported/fabric.png-b4a0e7a147c0995f6b27c47213eba9ce.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/fuse.png-458ba8043d7f92abc135241512118c51.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/gas_station.ogg-d9a2eedecaadcee8ba964d383ff0c931.oggvorbisstr
+  changed assetPackInstallTime/assets/.godot/imported/gear.png-6e11d423a13a53345dc02b97f7dea15d.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/hospital.ogg-721debdbe2e82874b54e2eb1eb21cac0.oggvorbisstr
+  changed assetPackInstallTime/assets/.godot/imported/key.png-4a4ac4defb90020414329b3cc57e10ec.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/lockpick.png-9f158d276aead648aecf4441b70b14d2.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/medkit.png-7bd86f0bba9046d400298c17b94fd5ea.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/metal.png-eb1319e9a7c28645d6b84b8385ea50cd.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/music_battle.ogg-29d1ed4ae21574dbbf14c70630f7c523.oggvorbisstr
+  changed ... and 30 more
+aab_check: PASS
+# STEP aab_check rc=0 17:35:15
+# STEP release_export_check 17:35:15
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 17:35:15
+# STEP export_refs 17:35:15
+export_refs_check: 503 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 17:35:22
+# STEP done
+# EXIT=0

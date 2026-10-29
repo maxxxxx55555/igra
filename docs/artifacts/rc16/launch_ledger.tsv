@@ -328,3 +328,8 @@ n	utc	head	id	exit	command
 327	20261029T125542Z	c45258ac	s37_final_all_c45258ac	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 328	20261029T133855Z	c45258ac	s37_perf2_c45258ac	1	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
 329	20261029T134037Z	c45258ac	s37_perf3_c45258ac	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+330	20261029T142921Z	be26ec5a	s37_export4_be26ec5a	0	bash .qa_logs/s37_export_vc11.sh
+331	20261029T143548Z	be26ec5a	s37_fin_store_be26ec5a	0	bash -c TLS_CAPTURE_HASH=be26ec5a bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+332	20261029T143650Z	be26ec5a	s37_fin_ui_be26ec5a	0	bash -c TLS_FRAMES_HASH=fin bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+333	20261029T143802Z	be26ec5a	s37_fin_perf_be26ec5a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+334	20261029T143912Z	be26ec5a	s37_fin_soak_be26ec5a	0	bash tools/qa_sim/soak soak be26ec5a 12 1200
