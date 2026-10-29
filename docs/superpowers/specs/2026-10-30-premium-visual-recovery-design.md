@@ -4,6 +4,8 @@ Date: 2026-10-30
 Branch: `qoder/premium-visual-recovery`
 Source: owner-supplied `the-last-streetlight-3d-first-person-mega-prompt-en (3).pdf`, including its fixed reference decisions and inventory blueprint.
 
+Precedence: the owner-supplied brief supersedes earlier visual-only prompts and conflicting chamfered UI direction. The Production Bible remains authoritative for gameplay, power-stage behavior, audio, and performance unless this design explicitly states otherwise.
+
 ## Objective
 
 Replace the rejected block-plaza and mostly empty inventory presentation with a coherent, detailed, worn-industrial visual style across the running game. Deliver actual geometry, materials, lighting, UI composition, and captures—not a post-processing-only approximation. Preserve first-person gameplay, content, progression, input, saves, power stages, collisions, navigation, and existing item operations.
