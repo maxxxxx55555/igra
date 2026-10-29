@@ -155,6 +155,8 @@ func _p1_new_game() -> void:
 	if not menu_ok:
 		_fail("P1 menu not reachable in 12s")
 		return
+	# the onboarding cards hold the tree paused until a player skips them (closeout check ON1 covers them): on a profile that never saw them they would freeze every later phase, the hit flash included
+	SaveSystem.mark_onboard_done()
 	Routes.start_game()
 	var playing := await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0)
 	if not playing:
@@ -277,11 +279,6 @@ func _p2b_combat() -> void:
 	holder.add_child(inst)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	# the last district change can still hold the tree paused (the fade of a transition pauses it, and check.sh --all met it paused): a paused tree ticks no tween, so the hit flash would never hand the material back
-	var unpaused: float = 0.0
-	while get_tree().paused and unpaused < 5.0:
-		await get_tree().create_timer(0.1).timeout
-		unpaused += 0.1
 	var monsters := get_tree().get_nodes_in_group("monsters")
 	if monsters.is_empty():
 		_fail("P2b no monsters in group after building suburbs")
