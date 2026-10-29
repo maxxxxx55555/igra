@@ -1,6 +1,7 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
 ## NEXT-ROW (Session 37, MEGA_PROMPT v7, 2026-10-29; no tag): read this block first; the Session 37 block under it still stands
+**Update (later the same day): steps (1) and (4) below are done.** The 18 images are generated and applied by delegation on the branch `art/v7-slots` (batches B1 to B4); what is left is (2) the icons, (3) the three world sheets, (5) the music and (6) the old list.
 
 **Where everything is.** Main holds the colour work of pull request 38 (no layout change) and version code 9; the branch `release/1.0.3-v7` holds what v7 asked for that needs no image: the canon in `docs/VISUAL_REMAINING.md` (section "MEGA_PROMPT v7"), `tools/art_slots.py`, the icon proposal, `tools/qa_sim/music_audit.py`, the sting duck. The branch `release/1.0.2-sheets` (tip `6ac5fa91`) is the archived rebuild of screens that v7 rules out; it is not in main and is not to be merged.
 
