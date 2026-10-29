@@ -1,0 +1,23 @@
+# proof s37_z_b2
+# utc 20261029T022225Z
+# head ff3869c3 (uncommitted paths: 36)
+# env none
+# cmd bash .qa_logs/s37_ui2.sh
+# STEP import 05:22:26
+errors=0
+# STEP import rc=0 05:22:36
+# STEP compile 05:22:37
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# STEP compile rc=0 05:23:00
+# STEP ui 05:23:00
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/ui_frames_scene.tscn rc=0 (log: .qa_logs/ui_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# STEP ui rc=0 05:24:02
+      1 ERROR: Texture with GL ID of 149: leaked 349524 bytes.
+      1 ERROR: Texture with GL ID of 154: leaked 349524 bytes.
+16
+# STEP done
+# EXIT=0

@@ -1,0 +1,18 @@
+# proof s37_a4_9a5148c8
+# utc 20261029T022702Z
+# head 9a5148c8 (uncommitted paths: 29)
+# env none
+# cmd bash .qa_logs/s37_f.sh
+# STEP import 05:27:03
+errors=0
+# STEP import rc=0 05:27:14
+# STEP release_frames 05:27:14
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/release_frames_scene.tscn rc=0 (log: .qa_logs/release_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# STEP release_frames rc=0 05:28:01
+frames of this hash: 8
+ M docs/artifacts/rc16/launch_ledger.tsv
+ M store/PRESS_KIT.md
+# STEP done
+# EXIT=0

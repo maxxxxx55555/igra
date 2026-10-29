@@ -1,0 +1,11 @@
+# proof s37_c1_f5056630
+# utc 20261029T015653Z
+# head f5056630 (uncommitted paths: 24)
+# env none
+# cmd bash .qa_logs/s37_all.sh
+check.sh --all rc=2
+  FAIL единая тема: chrome виден на всех экранах (код 1)
+  FAIL GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 1)
+Провалено: 2, пройдено: 94
+# STEP done
+# EXIT=0
