@@ -198,7 +198,7 @@ const _LAMP_HEAD_OFFSET := Vector3(1.16, 4.2, 0.0)
 func _build_streetlight_multimesh() -> void:
 	if _lamp_local_positions.is_empty():
 		return
-	var pole_mat := _prop_material(_TEX_STREETLIGHT, Color(0.32, 0.31, 0.27), 0.58, 0.05)
+	var pole_mat := _prop_material(_TEX_STREETLIGHT, Color(0.135, 0.132, 0.122), 0.68, 0.05)
 	var pole_mm := MultiMesh.new()
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
 	pole_mm.mesh = _STREETLIGHT_KIT.mesh()
@@ -326,7 +326,7 @@ func _on_setting_changed(key: String, _value: Variant) -> void:
 
 func _build_prop_multimesh() -> void:
 	_build_one_multimesh(_raised(_bench_positions, 0.2), _bench,
-		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
+		_prop_material(_TEX_BENCH, Color(0.075, 0.062, 0.050), 0.88, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
 			_prop_material("", Color(0.17, 0.15, 0.125), 0.95, 0.0), "TreeTrunksBatched")

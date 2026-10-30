@@ -14,6 +14,8 @@
 shader_type spatial;
 
 uniform sampler2D tex : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D nrm : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform float nrm_depth : hint_range(0.0, 2.0) = 0.0;
 uniform vec3 tint = vec3(0.055, 0.057, 0.063);
 uniform float mean_lum = 0.04;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
@@ -68,6 +70,10 @@ void fragment() {
 			c *= 1.0 - 0.5 * paint * smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
 			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);
 		}
+	}
+	if (nrm_depth > 0.0) {
+		NORMAL_MAP = texture(nrm, UV).rgb;
+		NORMAL_MAP_DEPTH = nrm_depth * (1.0 - 0.55 * wet);  // a wet film fills the hollows and flattens the relief
 	}
 	ALBEDO = c * (1.0 - 0.3 * wet);
 	ROUGHNESS = mix(0.92, 0.6, wet);

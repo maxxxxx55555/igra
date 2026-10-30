@@ -40,6 +40,8 @@ const GENERATOR_FUEL: StringName = &"gas_canister"
 
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+const _NRM_ASPHALT   := "res://assets/textures/pbr/wet_asphalt_normal.png"
+const _NRM_CONCRETE  := "res://assets/textures/pbr/cracked_concrete_normal.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
@@ -61,13 +63,13 @@ func _ready() -> void:
 func _make_road_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.0316, 0.0, 2.0)
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.062, 0.066, 0.074), 0.0316, 0.0, 2.0, _NRM_ASPHALT)
 	return m
 
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.058, 0.061, 0.060), 0.1156, 0.0, 1.0, _NRM_CONCRETE)
 	return m
 
 func _make_marking_mesh() -> BoxMesh:
@@ -79,21 +81,24 @@ func _make_marking_mesh() -> BoxMesh:
 func _make_curb_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, 0.17, 0.22)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.066, 0.069, 0.067), 0.1156, 0.0, 1.0, _NRM_CONCRETE)
 	return m
 
 func _make_damage_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(2.2, 0.012, 0.9)
-	m.material = _surface(_TEX_ASPHALT, Vector3(0.052, 0.058, 0.064), 0.0316, 0.0, 2.0)
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.044, 0.049, 0.055), 0.0316, 0.0, 2.0, _NRM_ASPHALT)
 	return m
 
 ## One surface of the street: its texture (none for the paint), its mean albedo in linear light, the texture's mean luminance and the kind of wear it carries (`surface` of the road shader: 1 slabs, 2 asphalt); `detail` follows the graphics tier.
-func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
+func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float, normal_path: String = "") -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):
 		mat.set_shader_parameter("tex", load(texture_path))
+	if normal_path != "" and ResourceLoader.exists(normal_path):
+		mat.set_shader_parameter("nrm", load(normal_path))
+		mat.set_shader_parameter("nrm_depth", 0.85)
 	mat.set_shader_parameter("tint", tint)
 	mat.set_shader_parameter("mean_lum", mean_lum)
 	mat.set_shader_parameter("paint", paint)

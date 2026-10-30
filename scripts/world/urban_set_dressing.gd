@@ -23,12 +23,12 @@ const KIT := {
 
 const LOOK := {
 	"wreck": [Color(0.14, 0.15, 0.16), "rusted_metal", 1.4],
-	"pallets": [Color(0.33, 0.24, 0.14), "plywood", 0.9],
-	"pipes": [Color(0.27, 0.18, 0.14), "rusted_metal", 1.1],
-	"cabinet": [Color(0.19, 0.22, 0.21), "rusted_metal", 0.7],
-	"barrier": [Color(0.40, 0.33, 0.21), "plywood", 0.75],
+	"pallets": [Color(0.072, 0.056, 0.040), "plywood", 0.9],
+	"pipes": [Color(0.135, 0.092, 0.070), "rusted_metal", 1.1],
+	"cabinet": [Color(0.105, 0.122, 0.117), "rusted_metal", 0.7],
+	"barrier": [Color(0.098, 0.084, 0.058), "plywood", 0.75],
 	"tyres": [Color(0.055, 0.055, 0.06), "", 0.7],
-	"sacks": [Color(0.18, 0.16, 0.12), "cracked_concrete", 0.75],
+	"sacks": [Color(0.085, 0.078, 0.062), "cracked_concrete", 0.75],
 	"shrub": [Color(0.10, 0.085, 0.07), "", 0.8],
 }
 
