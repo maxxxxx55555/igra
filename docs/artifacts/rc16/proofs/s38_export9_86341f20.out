@@ -1,0 +1,72 @@
+# proof s38_export9_86341f20
+# utc 20261029T232047Z
+# head 86341f20 (uncommitted paths: 34)
+# env none
+# cmd bash .qa_logs/s38_export_vc13.sh
+store and key password: the same
+# STEP export_android 02:20:48
+# STEP export_android rc=0 02:24:07
+bundle: 95714058 bytes sha256 c107c0da56d72a136179d0823b1172e22d242463b7424a72aa7071d87bc81a6d
+# STEP aab_check 02:24:08
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=13 expected=13: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    95714058 bytes
+sha256  c107c0da56d72a136179d0823b1172e22d242463b7424a72aa7071d87bc81a6d
+entries 2469
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2466 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s37_vcode12.aab: 0 entries gone, 4 new, 28 with other bytes
+  new     assetPackInstallTime/assets/scripts/ui/inv_kit.gd.remap
+  new     assetPackInstallTime/assets/scripts/ui/inv_kit.gdc
+  new     assetPackInstallTime/assets/scripts/world/facade_relief.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/facade_relief.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-2b72b0dbc749b837caefc9d3afeb6c38-streetlight_3d.scn
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/assets/shaders/grain_overlay.gdshader
+  changed assetPackInstallTime/assets/assets/shaders/soviet_road.gdshader
+  changed assetPackInstallTime/assets/assets/textures/postfx/presets.json
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+  changed assetPackInstallTime/assets/data/i18n/pt_BR.json
+  changed assetPackInstallTime/assets/data/i18n/ru.json
+  changed assetPackInstallTime/assets/scripts/effects/dust_motes.gdc
+  changed assetPackInstallTime/assets/scripts/post_process_overlay.gdc
+  changed assetPackInstallTime/assets/scripts/ui/inventory_ui.gdc
+  changed assetPackInstallTime/assets/scripts/ui/quick_slot_cell.gdc
+  changed assetPackInstallTime/assets/scripts/world/lamp_hardware.gdc
+  changed assetPackInstallTime/assets/scripts/world/skyline.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_builder.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_props.gdc
+  changed assetPackInstallTime/assets/scripts/world_env_setup.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# STEP aab_check rc=0 02:25:06
+# STEP release_export_check 02:25:06
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 02:25:07
+# STEP export_refs 02:25:07
+export_refs_check: 506 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 02:25:17
+ M docs/artifacts/rc16/launch_ledger.tsv
+# STEP done
+# EXIT=0

@@ -269,7 +269,7 @@ The brief supersedes the art direction of the v8 prompt and the table above stan
 | C2 | FAIL | the lamp, the paving and the facade relief changed (`02` and `03` of the store set against the same views at `5cedfa03`), the plaza is still boxes with relief: the brief calls that a failed visual task |
 | C3 | NOT RUN | no close or oblique capture of a facade, the street, the lamp and the equipment was made |
 | C4 | NOT RUN for the review | the bots won 6 of 6 seeds (rows 370, 371) and the perf gate walks two districts, but no recorded traversal was reviewed for pacing, clipping, pop-in and shimmer |
-| C5 | PARTIAL | the inventory was rebuilt and shot; the other screens were not restyled and are shot at both sizes only where the rows below say so |
+| C5 | PARTIAL | the inventory was rebuilt and shot at 1280 x 720, 1600 x 900 and 1920 x 1080 and in the six languages (rows 389 to 397); the other screens keep the older chrome and were shot at 1600 x 900 and at the two sizes (the frames of rows 396, 397) but not restyled |
 | C6 | PASS (headless) | the GOLD MASTER suite, the save and settings gates and the bots, `docs/artifacts/rc16/proofs/s38_all2_b958e2d0.out` |
 | C7 | BLOCKED for Android, PASS for Windows | the bundle is built and checked (row 364) and was never launched on a device; the Windows build booted outside the editor (row 374) |
 

@@ -8,6 +8,7 @@ The owner sent a brief that supersedes the visual prompts and then told the agen
 - **The minimap is points in an empty ring** (`scripts/ui/minimap.gd`) and **a reward and a level-up are two separate floating lines**: the brief asks for streets on the minimap and one notification queue; the checks `hud_checks.gd` and `sec_checks.gd` read `UIManager._toast` and change with the queue.
 - **Only the inventory uses the new kit** (`scripts/ui/inv_kit.gd`); the menu, the map, the settings and the other screens keep the older chrome.
 - **The sidewalk tiles (4 m) overlap the road lanes** (`scripts/world/street_builder.gd`): a raised curb and a separate sidewalk need the layout and the collisions changed together; the paving is a shader only.
+- **The shared QA profile can be held by another process**: at the end of the pass a Godot run that was not this pass' held `Last Streetlight.qa_snapshot`, and the guarded Windows boot refused to start (the guard worked); a boot with a fresh isolated profile (`APPDATA` redirected) replaced it. Run a guarded launch only when `app_userdata/Last Streetlight.qa_snapshot` does not exist.
 - **No close or oblique capture and no reviewed traversal** (C3, C4) were made.
 
 ## OPEN (2026-10-29, Session 38, MEGA_PROMPT v8 FINAL): what the v8 pass closed and what keeps the status at INCOMPLETE

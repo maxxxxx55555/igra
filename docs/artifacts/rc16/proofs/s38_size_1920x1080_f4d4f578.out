@@ -1,0 +1,9 @@
+# proof s38_size_1920x1080_f4d4f578
+# utc 20261029T231004Z
+# head f4d4f578 (uncommitted paths: 30)
+# env none
+# cmd bash -c TLS_FRAMES_SIZE=1920x1080 TLS_FRAMES_HASH=s1920x1080 bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/ui_frames_scene.tscn rc=0 (log: .qa_logs/ui_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0
