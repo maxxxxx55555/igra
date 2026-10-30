@@ -114,6 +114,15 @@ var _low_tier: bool = false
 ## Milliseconds the deferred build() took (props, lamps, skyline), for WorldRuntime.get_last_load_stats().
 var build_ms: float = 0.0
 
+## A pole pair, and with it a bench, a tree or a cone now and then, every 16 m of a road whatever the tile size of the street is (the walk is built of 2 m tiles, and a step counted in tiles put every pole in the first third).
+const POLE_SPACING_M: float = 16.0
+
+static func pole_distances(length: float) -> PackedFloat32Array:
+	var out := PackedFloat32Array()
+	for s in maxi(1, int(length / POLE_SPACING_M)):
+		out.append(float(s) * POLE_SPACING_M)
+	return out
+
 func build() -> void:
 	var started: int = Time.get_ticks_usec()
 	var sb: Node = get_node_or_null(street_builder_path)
@@ -122,12 +131,10 @@ func build() -> void:
 	_low_tier = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
 	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
 	_district_id = district_id
-	var step: int = 4
 	for road in sb.roads:
-		var length: float = float(road.get("length", 0.0))
-		var count: int = max(1, int(length / (float(step) * 4.0)))
-		for s in range(count):
-			var pos: Vector3 = sb.road_step_pos(road, s * step)
+		var distances := pole_distances(float(road.get("length", 0.0)))
+		for s in distances.size():
+			var pos: Vector3 = sb.road_pos_at(road, distances[s])
 			_spawn_pole_pair(pos, road, district_id)
 			var slot_ok: bool = not _low_tier or s % 2 == 0
 			if slot_ok and _rng.randf() < 0.30 * density:
