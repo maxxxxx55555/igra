@@ -424,3 +424,4 @@ n	utc	head	id	exit	command
 423	20261030T103040Z	547beb82	s38_all_final_547beb82	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 424	20261030T104502Z	547beb82	s38_closeout_rerun1_547beb82	0	bash tools/qa_sim/closeout_check 400
 425	20261030T104943Z	547beb82	s38_all_final2_547beb82	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+426	20261030T133742Z	2ef1720b	s38_premium_2ef1720b	0	bash tools/qa_sim/guarded_headless res://scenes/tools/premium_visual_check_scene.tscn 180
