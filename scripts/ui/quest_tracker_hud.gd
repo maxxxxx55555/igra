@@ -2,10 +2,11 @@ extends Control
 class_name QuestTrackerHUD
 
 # S5.3: HUD quest tracker - right top under minimap
-# Shows up to 3 active objectives with progress, optional direction arrow
+# Shows the current objective with its progress and an optional direction arrow; the full list lives in the journal (quest_journal.gd)
 
 const PANEL_WIDTH := 360
 const PANEL_HEIGHT := 224
+const MAX_ROWS := 1
 const PANEL_MARGIN := 20
 ## Below the top-right maps, not just below the radar. The comment here used to
 ## read "ниже миникарты" at 140, which was never true: the radar spans y 16..180
@@ -91,6 +92,7 @@ func _build_ui() -> void:
 	# Objectives list
 	_objectives_vbox = VBoxContainer.new()
 	_objectives_vbox.add_theme_constant_override("separation", 6)
+	_objectives_vbox.custom_minimum_size = Vector2(0.0, 62.0)  # room for a title that wraps to a second line: the panel kept its height of one line and lost its bottom edge
 	inner_vb.add_child(_objectives_vbox)
 
 	_container.visible = false
@@ -147,7 +149,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 
 	var count := 0
 	for quest in active_quests:
-		if count >= 3:
+		if count >= MAX_ROWS:
 			break
 		var current := int(quest.get("progress", 0))
 		var target := int(quest.get("target_count", 1))
@@ -187,17 +189,6 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 
 		count += 1
 
-	# GDD V.1 3.3/3.16: the sheet's list is "up to 3 active" and the loop above
-	# stops there, but anything past the third used to vanish without a word - a
-	# player holding four objectives could not tell whether the tracker had lost
-	# one. Count them instead of hiding them.
-	if count < active_quests.size():
-		var more := Label.new()
-		more.name = "MoreActiveLabel"
-		more.text = LocalizationManager.tf("QUEST_MORE_ACTIVE", [active_quests.size() - count])
-		more.add_theme_font_size_override("font_size", 18)
-		more.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
-		_objectives_vbox.add_child(more)
 	_ignore_input(_container)
 	_FADE.show_for([_container], _SHOW_SEC)
 

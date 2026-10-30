@@ -1312,7 +1312,6 @@
   "HUD_LEGEND_PLAYER": "Você (jogador)",
   "HUD_LEGEND_CURRENT": "Distrito atual",
   "HUD_HINT_DARK": "Ache uma fonte de luz — um interruptor ou sua lanterna.",
-  "QUEST_MORE_ACTIVE": "+%d mais objetivos",
   "HUD_MELEE": "CORPO A CORPO",
   "HUD_LEGEND_MARKER": "Sinal de rádio",
   "HUD_ENEMY_RESIST_WEAK": "FRACO EM COMBATE ×%.1f",
@@ -1570,5 +1569,9 @@
   "THERMAL_COLD": "Frio",
   "THERMAL_LABEL": "Calor",
   "THERMAL_WARM": "Quente",
-  "THERMAL_WARMING": "Fresco"
+  "THERMAL_WARMING": "Fresco",
+  "INV_SORT_LABEL": "Ordenar",
+  "INV_NOT_EQUIPPABLE": "Este item não pode ser equipado",
+  "INV_PACK_EMPTY": "Sua mochila está vazia",
+  "INV_FILTER_EMPTY": "Nada desta raridade"
 }

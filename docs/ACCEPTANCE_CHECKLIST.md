@@ -219,7 +219,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 |---|---|---|---|---|
 | H3.1 | HP / stamina / energy bars | V.1 | PT frame | PT-A04 |
 | H3.2 | Six quick slots: weapon x2, battery, medkit, grenade, special | V.1 | closeout_check H3.2 (the bar holds two weapons, battery, medkit, grenade and the light as the special) | PASS(closeout) |
-| H3.3 | Up to 3 active objectives | V.1 | quest_tracker_hud | PT-A04 |
+| H3.3 | The current active objective (the full list is the journal's; v8 contract) | V.1 | quest_tracker_hud | PT-A04 |
 | H3.4 | Minimap with legend | V.1 | minimap legend chip (player, district, stages) | PT-A07 |
 | H3.5 | Toast with a [m.ss] timestamp | V.1 | toast_manager | PT-A04 |
 | H3.6 | Crosshair changes colour by target | V.1 | hud_3d aim scan | PT-A05 |

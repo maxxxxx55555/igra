@@ -1,0 +1,12 @@
+# proof s38_winboot2_b958e2d0
+# utc 20261029T224557Z
+# head b958e2d0 (uncommitted paths: 40)
+# env none
+# cmd bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+exe exit 0
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

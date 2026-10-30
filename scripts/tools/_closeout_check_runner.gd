@@ -297,6 +297,10 @@ func _slot_of(item: StringName) -> int:
 			return i
 	return -1
 
+## The cells of the pack grid that hold a stack; the free slots are Panels (inventory_ui.gd `_empty_cell`).
+func _item_cells(ui: Control) -> int:
+	return ui._grid.get_children().filter(func(cell: Node) -> bool: return cell is Button).size()
+
 # ── V03: the heading face is the emboldened Bebas Neue ───────────────────────
 func _check_theme() -> void:
 	var font := ThemeProvider.build_theme().get_font(&"font", &"Button")
@@ -684,13 +688,14 @@ func _check_inventory_and_pause() -> void:
 	await get_tree().process_frame
 	var ui: Control = UIManager._get_screen(&"inventory")
 	_ok(ui != null and ui.visible, "V.5 the inventory screen opens")
-	_ok(ui._grid.get_child_count() == 2, "V.5 one cell per stack (%d)" % ui._grid.get_child_count())
+	_ok(_item_cells(ui) == 2, "V.5 one cell per stack (%d)" % _item_cells(ui))
+	_ok(ui._grid.get_child_count() == InventoryManager.slots.size(), "I1.1 the free slots of the pack are drawn as empty cells (%d of %d)" % [ui._grid.get_child_count(), InventoryManager.slots.size()])
 	ui._on_filter(1)
 	await get_tree().process_frame
-	_ok(ui._grid.get_child_count() == 1, "I9.13 the Common filter leaves the one common stack of two (%d cells)" % ui._grid.get_child_count())
+	_ok(ui._grid.get_child_count() == 1, "I9.13 the Common filter leaves the one common stack of two, no empty cells (%d cells)" % ui._grid.get_child_count())
 	ui._on_filter(0)
 	await get_tree().process_frame
-	_ok(ui._grid.get_child_count() == 2, "I9.13 All shows every stack again (%d cells)" % ui._grid.get_child_count())
+	_ok(_item_cells(ui) == 2, "I9.13 All shows every stack again (%d cells)" % _item_cells(ui))
 	ui._on_sort(1)
 	_ok(InventoryManager.slots[0]["item_id"] == &"medkit", "I9.8 sorting by weight puts the heaviest stack, the medkit, first (%s)" % InventoryManager.slots[0]["item_id"])
 	var battery_slot := _slot_of(&"battery")

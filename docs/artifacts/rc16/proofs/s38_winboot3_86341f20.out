@@ -1,0 +1,7 @@
+# proof s38_winboot3_86341f20
+# utc 20261029T235329Z
+# head 86341f20 (uncommitted paths: 48)
+# env none
+# cmd bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+  user-data guard: FAIL C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight.qa_snapshot exists (a QA run is live or was interrupted) - launch the game once without TLS_UDG_GUARDED to restore it
+# EXIT=99

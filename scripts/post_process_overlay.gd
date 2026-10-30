@@ -242,7 +242,7 @@ func _build_grain() -> void:
 func _grain_shader() -> Shader:
 	var s := Shader.new()
 	s.code = "shader_type canvas_item;\n" \
-		+ "uniform float intensity : hint_range(0.0, 0.2) = 0.10;\n" \
+		+ "uniform float intensity : hint_range(0.0, 0.2) = 0.03;\n" \
 		+ "uniform float speed : hint_range(0.0, 3.0) = 0.8;\n" \
 		+ "float hash(vec2 p){ vec3 p3 = fract(p.xyx * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }\n" \
 		+ "void fragment(){\n" \

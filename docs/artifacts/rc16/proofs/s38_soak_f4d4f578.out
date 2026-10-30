@@ -1,0 +1,9 @@
+# proof s38_soak_f4d4f578
+# utc 20261029T225201Z
+# head f4d4f578 (uncommitted paths: 21)
+# env none
+# cmd bash tools/qa_sim/soak soak f4d4f578 12 900
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak soak rc=0 (log: .qa_logs/soak_soak.log, 12 minute lines, 0 stress lines)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

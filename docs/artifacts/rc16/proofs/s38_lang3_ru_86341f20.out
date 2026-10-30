@@ -1,0 +1,9 @@
+# proof s38_lang3_ru_86341f20
+# utc 20261029T233142Z
+# head 86341f20 (uncommitted paths: 43)
+# env none
+# cmd bash -c TLS_FRAMES_LANG=ru TLS_FRAMES_HASH=ru3 bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 200
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/ui_frames_scene.tscn rc=0 (log: .qa_logs/ui_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

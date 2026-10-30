@@ -1,0 +1,9 @@
+# proof s38_touch2_4fb018d3
+# utc 20261029T183514Z
+# head 4fb018d3 (uncommitted paths: 56)
+# env none
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/touch_probe_scene.tscn rc=0 (log: .qa_logs/touch_probe_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

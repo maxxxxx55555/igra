@@ -1,7 +1,7 @@
 // grain_overlay.gdshader — GL Compatibility / mobile-safe, single pass.
 // Fullscreen animated film grain + vignette for the permanent-night mood.
 // Uniforms:
-//   grain_amount : float — noise amplitude 0.08..0.12 recommended (0.10)
+//   grain_amount : float — noise amplitude, 0.03 by default: the final image holds without it (the recovery brief)
 //   grain_scale  : float — pixel size of grain cells (1.0)
 //   vignette     : float — corner darkening strength (0.35)
 //   vignette_soft: float — falloff width 0..1 (0.45)
@@ -10,7 +10,7 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear; // read 1:1 at SCREEN_UV: no coarser level is ever used
-uniform float grain_amount : hint_range(0.0, 0.3) = 0.10;
+uniform float grain_amount : hint_range(0.0, 0.3) = 0.03;
 uniform float grain_scale : hint_range(0.5, 4.0) = 1.0;
 uniform float vignette : hint_range(0.0, 1.0) = 0.35;
 uniform float vignette_soft : hint_range(0.05, 1.0) = 0.45;

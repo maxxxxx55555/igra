@@ -1312,7 +1312,6 @@
   "HUD_LEGEND_PLAYER": "Vous (joueur)",
   "HUD_LEGEND_CURRENT": "District actuel",
   "HUD_HINT_DARK": "Trouvez une source de lumière — un interrupteur ou votre lampe.",
-  "QUEST_MORE_ACTIVE": "+%d autres objectifs",
   "HUD_MELEE": "MÊLÉE",
   "HUD_LEGEND_MARKER": "Signal radio",
   "HUD_ENEMY_RESIST_WEAK": "FAIBLE EN MÊLÉE ×%.1f",
@@ -1570,5 +1569,9 @@
   "THERMAL_COLD": "Froid",
   "THERMAL_LABEL": "Chaleur",
   "THERMAL_WARM": "Chaud",
-  "THERMAL_WARMING": "Frais"
+  "THERMAL_WARMING": "Frais",
+  "INV_SORT_LABEL": "Trier",
+  "INV_NOT_EQUIPPABLE": "Cet objet ne peut pas être équipé",
+  "INV_PACK_EMPTY": "Ton sac est vide",
+  "INV_FILTER_EMPTY": "Rien de cette rareté"
 }
