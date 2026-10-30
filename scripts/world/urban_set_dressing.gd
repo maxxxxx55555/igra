@@ -160,7 +160,7 @@ func _material(kind: String) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = look[0]
 	mat.roughness = 0.88
-	mat.metallic = 0.35 if String(look[1]) == "rusted_metal" else 0.0
+	mat.metallic = 0.08 if String(look[1]) == "rusted_metal" else 0.0
 	mat = _PBR.apply(mat, String(look[1]))
 	_mat_cache[kind] = mat
 	return mat

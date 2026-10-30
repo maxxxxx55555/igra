@@ -198,7 +198,7 @@ const _LAMP_HEAD_OFFSET := Vector3(1.16, 4.2, 0.0)
 func _build_streetlight_multimesh() -> void:
 	if _lamp_local_positions.is_empty():
 		return
-	var pole_mat := _prop_material(_TEX_STREETLIGHT, Color(0.22, 0.22, 0.20), 0.72, 0.45)
+	var pole_mat := _prop_material(_TEX_STREETLIGHT, Color(0.32, 0.31, 0.27), 0.58, 0.05)
 	var pole_mm := MultiMesh.new()
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
 	pole_mm.mesh = _STREETLIGHT_KIT.mesh()
@@ -236,7 +236,7 @@ func _build_streetlight_multimesh() -> void:
 	var halo_mm := MultiMesh.new()
 	halo_mm.transform_format = MultiMesh.TRANSFORM_3D
 	var halo_quad := QuadMesh.new()
-	halo_quad.size = Vector2(2.8, 2.8)
+	halo_quad.size = Vector2(1.15, 1.15)
 	halo_mm.mesh = halo_quad
 	halo_mm.instance_count = _lamp_local_positions.size()
 	for i in _lamp_local_positions.size():
