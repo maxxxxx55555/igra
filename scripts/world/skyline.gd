@@ -118,7 +118,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			var w: float = rng.randf_range(style[2], style[3])
 			var d: float = rng.randf_range(8.0, 12.0)
 			var h: float = rng.randf_range(style[0], style[1])
-			var skip: bool = rng.randf() < float(style[4])
+			var skip: bool = false
+			rng.randf()
 			var cx := along + w * 0.5
 			along += w + rng.randf_range(1.0, 3.0)
 			if skip:
