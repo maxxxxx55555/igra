@@ -21,8 +21,8 @@ const MANHOLES: int = 2
 const LAMP_RANGE_M: float = 9.0
 const LAMP_ENERGY: float = 1.4
 ## The pool of light under a streetlamp: its diameter, how far toward the block it is moved from the pole, its opacity per power stage (DARK, PARTIAL, STREETS, FULL).
-const POOL_M: float = 9.0
-const POOL_TOWARD_BLOCK_M: float = 2.2
+const POOL_M: float = 6.5
+const POOL_TOWARD_BLOCK_M: float = 1.6
 const POOL_Y: float = 0.095
 const POOL_BY_STAGE: Array[float] = [0.0, 0.05, 0.11, 0.16]
 const REST_POOL_ALPHA: float = 0.22
@@ -31,6 +31,7 @@ const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substa
 const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
 const _LAMP_DETAILS := preload("res://scripts/world/lamp_details.gd")
 const _STORY := preload("res://scripts/world/story_props.gd")
+const _URBAN := preload("res://scripts/world/urban_set_dressing.gd")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
 const FOG_BY_STAGE: Array[float] = [0.12, 0.25, 0.35, 0.45]
@@ -144,6 +145,10 @@ func build(district_id: StringName, sb: Node) -> void:
 	set_meta("story_spots", spots)
 	for i in spots.size():
 		_STORY.hook(self, spots[i], kinds[i])
+	var urban: Node3D = _URBAN.new()
+	urban.name = "UrbanSetDressing"
+	add_child(urban)
+	urban.call("build", district_id, sb, _clear, _grid, _inner)
 	_add_landmark()
 	_add_rest_spot()
 	_add_fog()

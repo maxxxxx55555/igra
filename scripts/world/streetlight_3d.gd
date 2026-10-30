@@ -1,5 +1,7 @@
 extends Node3D
 
+const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
+
 @export var district_id: StringName = &"test_zone"
 @export var force_on: bool = false
 @export var lamp_flicker: bool = true
@@ -35,6 +37,9 @@ func _ready() -> void:
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
 	var pole := get_node_or_null("Pole")
 	var lamp := get_node_or_null("Lamp")
+	if pole is MeshInstance3D:
+		(pole as MeshInstance3D).mesh = _HARDWARE.pole_mesh()
+		(pole as MeshInstance3D).material_override = _HARDWARE.material()
 	if pole: pole.visible = mesh_visible
 	if lamp: lamp.visible = mesh_visible
 	if lamp is MeshInstance3D and mesh_visible: lamp.material_override = preload("res://scripts/world/lamp_head.gd").shared()  # W4: a head that stands alone flickers like the batched ones

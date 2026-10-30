@@ -1468,6 +1468,7 @@
   "INV_EMPTY": "vacío",
   "INV_SELECT": "Elige un objeto",
   "INV_HINTS": "Tab / Esc: cerrar · Clic: elegir · Supr: tirar",
+  "INV_HINTS_TOUCH": "Toca: elegir · Arrastra: acceso rápido · Toca de nuevo: inspeccionar",
   "INV_VITALS": "Salud %d · Aguante %d · Batería %d",
   "Auto Aim": "Apuntado asistido",
   "EVENT_HALLUCINATION": "Pasos a tu espalda. No hay nadie.",

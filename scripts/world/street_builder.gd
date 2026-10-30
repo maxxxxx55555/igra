@@ -4,9 +4,9 @@ class_name StreetBuilder
 signal streets_ready
 
 @export var district_id: StringName = &""
-@export var tile_size: float = 4.0
+@export var tile_size: float = 2.0
 @export var road_width: float = 6.0
-@export var sidewalk_width: float = 1.5
+@export var sidewalk_width: float = 2.0
 @export var lane_mark_spacing: float = 2.0
 ## The markings are whole tiles lying on the road tiles: at the same height they z-fought, which drew stacked dark stripes and
 ## wedges wherever the lamp or the flashlight lit the road (the first screen of a game).
@@ -28,6 +28,8 @@ var build_ms: float = 0.0
 var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
 var _marking_mm: MultiMeshInstance3D
+var _curb_mm: MultiMeshInstance3D
+var _damage_mm: MultiMeshInstance3D
 var _collision: StaticBody3D
 var _surfaces: Array[ShaderMaterial] = []
 
@@ -50,6 +52,8 @@ func _ready() -> void:
 	_init_mm(_road_mm,     _make_road_mesh())
 	_init_mm(_sidewalk_mm, _make_sidewalk_mesh())
 	_init_mm(_marking_mm,  _make_marking_mesh())
+	_init_mm(_curb_mm,     _make_curb_mesh())
+	_init_mm(_damage_mm,   _make_damage_mesh())
 	_set_detail()
 	EventBus.settings_changed.connect(_set_detail)
 	call_deferred("build")
@@ -63,13 +67,25 @@ func _make_road_mesh() -> BoxMesh:
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.140, 0.143, 0.140), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
 	return m
 
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
 	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0, 0.0)
+	return m
+
+func _make_curb_mesh() -> BoxMesh:
+	var m := BoxMesh.new()
+	m.size = Vector3(tile_size, 0.17, 0.22)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 1.0)
+	return m
+
+func _make_damage_mesh() -> BoxMesh:
+	var m := BoxMesh.new()
+	m.size = Vector3(2.2, 0.012, 0.9)
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.052, 0.058, 0.064), 0.0316, 0.0, 2.0)
 	return m
 
 ## One surface of the street: its texture (none for the paint), its mean albedo in linear light, the texture's mean luminance and the kind of wear it carries (`surface` of the road shader: 1 slabs, 2 asphalt); `detail` follows the graphics tier.
@@ -102,6 +118,8 @@ func build() -> void:
 	_fill_roads()
 	_fill_sidewalks()
 	_fill_markings()
+	_fill_curbs()
+	_fill_damage()
 	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
 	streets_ready.emit()
 
@@ -179,7 +197,7 @@ func _fill_sidewalks() -> void:
 			var pos: Vector3 = road_step_pos(r, s)
 			for side in [-1, 1]:
 				for wi in range(w):
-					var off: float = (road_width * 0.5 + sidewalk_width * 0.5 - float(wi) * tile_size - tile_size * 0.5) * float(side)
+					var off: float = (road_width * 0.5 + sidewalk_width * 0.5 - float(wi) * tile_size) * float(side)
 					var t := Transform3D()
 					t.origin = pos + (Vector3(0, 0, off) if r.dir == "h" else Vector3(off, 0, 0))
 					if r.dir == "v":
@@ -209,6 +227,53 @@ func _fill_markings() -> void:
 			_marking_mm.multimesh.set_instance_transform(idx, t)
 			idx += 1
 
+## Raised kerbs separate the road from the walk on every block edge; the gaps at crossings read as
+## dropped kerbs and keep the old visual road grid from looking like one poured slab.
+func _fill_curbs() -> void:
+	var xforms: Array[Transform3D] = []
+	var crossing := maxi(1, int(round(grid_spacing / tile_size)))
+	for r in roads:
+		var steps := int(r.length / tile_size)
+		for s in range(steps):
+			if s % crossing == 0:
+				continue
+			var pos: Vector3 = road_step_pos(r, s)
+			for side in [-1.0, 1.0]:
+				var off: float = (road_width * 0.5 + 0.11) * side
+				var t := Transform3D()
+				t.origin = pos + (Vector3(0.0, 0.115, off) if r.dir == "h" else Vector3(off, 0.115, 0.0))
+				if r.dir == "v":
+					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
+				xforms.append(t)
+	_curb_mm.multimesh.instance_count = xforms.size()
+	for i in xforms.size():
+		_curb_mm.multimesh.set_instance_transform(i, xforms[i])
+
+## Dark, shallow patches break the tiling of the asphalt without changing its collision or wetness.
+func _fill_damage() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(str(district_id) + "_road_damage")
+	var chance: float = [0.16, 0.26, 0.38][clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2)]
+	var xforms: Array[Transform3D] = []
+	for r in roads:
+		var steps := int(r.length / tile_size)
+		for s in range(steps):
+			if s % 4 == 0 or rng.randf() >= chance:
+				continue
+			var pos: Vector3 = road_step_pos(r, s)
+			var off: float = rng.randf_range(-road_width * 0.42, road_width * 0.42)
+			var t := Transform3D()
+			t.origin = pos + (Vector3(0.0, 0.061, off) if r.dir == "h" else Vector3(off, 0.061, 0.0))
+			t.basis = Basis(Vector3.UP, rng.randf_range(-0.10, 0.10))
+			var scale: float = rng.randf_range(0.55, 1.35)
+			t.basis = t.basis.scaled(Vector3(scale, 1.0, rng.randf_range(0.45, 0.95)))
+			if r.dir == "v":
+				t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
+			xforms.append(t)
+	_damage_mm.multimesh.instance_count = xforms.size()
+	for i in xforms.size():
+		_damage_mm.multimesh.set_instance_transform(i, xforms[i])
+
 func _ensure_mm() -> void:
 	if _road_mm == null:
 		_road_mm = MultiMeshInstance3D.new()
@@ -223,6 +288,14 @@ func _ensure_mm() -> void:
 		_marking_mm = MultiMeshInstance3D.new()
 		_marking_mm.name = "MarkingMM"
 		add_child(_marking_mm)
+	if _curb_mm == null:
+		_curb_mm = MultiMeshInstance3D.new()
+		_curb_mm.name = "CurbMM"
+		add_child(_curb_mm)
+	if _damage_mm == null:
+		_damage_mm = MultiMeshInstance3D.new()
+		_damage_mm.name = "RoadDamageMM"
+		add_child(_damage_mm)
 
 ## One long box per lane strip instead of one body per tile (about 384 bodies per district): `first` is the origin of the
 ## strip's first tile and the box runs from it along the road over `steps` tiles. The strips share one StreetCollision body

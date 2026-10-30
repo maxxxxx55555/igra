@@ -36,7 +36,11 @@ var _lamp_local_positions: Array[Vector3] = []
 const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 var _lamp_mat: ShaderMaterial
+var _halo_mat: StandardMaterial3D
 var _district_id: StringName = &""
+const _BRASS := Color("#c9a24a")
+const _HALO_ALPHA: Array[float] = [0.0, 0.12, 0.30, 0.52]
+const _GLOW_TEX := preload("res://scripts/world/district_landmark.gd")
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
@@ -228,6 +232,28 @@ func _build_streetlight_multimesh() -> void:
 	lamp_mmi.multimesh = lamp_mm
 	lamp_mmi.material_override = _lamp_mat
 	add_child(lamp_mmi)
+	var halo_mm := MultiMesh.new()
+	halo_mm.transform_format = MultiMesh.TRANSFORM_3D
+	var halo_quad := QuadMesh.new()
+	halo_quad.size = Vector2(1.15, 1.15)
+	halo_mm.mesh = halo_quad
+	halo_mm.instance_count = _lamp_local_positions.size()
+	for i in _lamp_local_positions.size():
+		halo_mm.set_instance_transform(i, Transform3D(Basis(), _lamp_local_positions[i] + _LAMP_HEAD_OFFSET))
+	_halo_mat = StandardMaterial3D.new()
+	_halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	_halo_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	_halo_mat.albedo_texture = _GLOW_TEX.glow_texture()
+	_halo_mat.disable_receive_shadows = true
+	var halo_mmi := MultiMeshInstance3D.new()
+	halo_mmi.name = "StreetlightHalosBatched"
+	halo_mmi.multimesh = halo_mm
+	halo_mmi.material_override = _halo_mat
+	halo_mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(halo_mmi)
+	_apply_halo_stage(PowerGrid.get_stage(_district_id))
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -235,6 +261,12 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 
 func _apply_lamp_stage(stage: int) -> void:
 	_LampHead.apply_stage(_lamp_mat, stage, self)
+	_apply_halo_stage(stage)
+
+func _apply_halo_stage(stage: int) -> void:
+	if _halo_mat == null:
+		return
+	_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

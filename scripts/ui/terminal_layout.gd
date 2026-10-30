@@ -65,5 +65,21 @@ static func _fit(screen: Control, scroll: ScrollContainer, center: CenterContain
 		if control is Label or control is Button:
 			var font_px: float = 32.0 if child == content.get_child(0) else 18.0
 			control.add_theme_font_size_override("font_size", ceili(font_px * text_scale / ratio))
+			control.custom_minimum_size.x = 0.0
+		if control is Label:
+			(control as Label).autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		if control is Button:
 			control.custom_minimum_size.y = 44.0 / ratio
+	_wrap_nested(content)
+
+static func _wrap_nested(node: Node) -> void:
+	for child in node.get_children():
+		if child is Label:
+			var label := child as Label
+			label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			label.custom_minimum_size.x = 0.0
+		elif child is Button:
+			var button := child as Button
+			button.clip_text = true
+			button.custom_minimum_size.x = 0.0
+		_wrap_nested(child)
