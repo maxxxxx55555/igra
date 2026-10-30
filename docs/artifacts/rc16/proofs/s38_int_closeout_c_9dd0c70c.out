@@ -1,0 +1,10 @@
+# proof s38_int_closeout_c_9dd0c70c
+# utc 20261030T091526Z
+# head 9dd0c70c (uncommitted paths: 36)
+# env none
+# cmd bash tools/qa_sim/closeout_check 400
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=627 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

@@ -12,6 +12,7 @@ const PACK: Array = [[&"battery", 2], [&"medkit", 1], [&"serum", 1], [&"fuse", 2
 func _run() -> void:
 	if not await _enter_game():
 		return
+	SettingsManager.set_setting("text_size", 1)  # the frames do not depend on the large text of a saved profile
 	var lang := OS.get_environment("TLS_FRAMES_LANG")
 	if lang != "":
 		LocalizationManager.set_language(lang)
@@ -23,6 +24,12 @@ func _run() -> void:
 	for id in (SCREENS if lang == "" else SCREENS.slice(0, 1)):
 		UIManager.open(id)
 		await get_tree().create_timer(0.8).timeout
+		if id == &"inventory" and OS.get_environment("TLS_OPEN_INVENTORY_INSPECTOR") == "1":
+			var inv := UIManager._get_screen(id)
+			if inv != null:
+				inv.set("_overlay_open", true)
+				inv.call("_apply_responsive")
+				await get_tree().create_timer(0.3).timeout
 		await _frame("ui_" + String(id))
 		UIManager.close(id)
 		await get_tree().create_timer(0.4).timeout

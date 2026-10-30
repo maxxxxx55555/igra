@@ -1,0 +1,9 @@
+# proof s38_sec2_cap_orig_56a6bdc5
+# utc 20261030T095010Z
+# head 56a6bdc5 (uncommitted paths: 32)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh orig
+godot exit=1
+[closeout] FAIL SEC2 log and leaderboard: a flag adds a line (false) and the file is encrypted (true), a tainting flag stops the leaderboard (true) and a clean guard records (true)
+[closeout] DONE checks=67 fails=1
+# EXIT=0

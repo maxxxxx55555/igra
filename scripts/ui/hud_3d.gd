@@ -71,6 +71,8 @@ var vignette: ColorRect:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_apply_canonical_theme()
+	_add_status_backing()
+	_apply_safe_area()
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	_fix_radar_anchor()
@@ -718,7 +720,7 @@ func _apply_touch_visibility() -> void:
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
 func _apply_button_size() -> void:
-	var factor := float(SettingsManager.get_setting("button_size", 1.0))
+	var factor := maxf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
 		if cluster != null:
@@ -782,6 +784,45 @@ func _apply_canonical_theme() -> void:
 	for child in get_children():
 		if child is Control:
 			(child as Control).theme = t
+
+## One restrained backing makes the status stack readable over a lit street without boxing each bar.
+func _add_status_backing() -> void:
+	var top_left := get_node_or_null("TopLeft") as Control
+	if top_left == null or get_node_or_null("StatusBacking") != null:
+		return
+	var backing := Panel.new()
+	backing.name = "StatusBacking"
+	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
+	style.border_color = Color(ThemeProvider.COLOR_BORDER, 0.72)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(0)
+	backing.add_theme_stylebox_override("panel", style)
+	backing.position = Vector2(26.0, 8.0)
+	backing.size = Vector2(276.0, 104.0)
+	add_child(backing)
+	move_child(backing, top_left.get_index())
+
+func _apply_safe_area() -> void:
+	var inset := UiScale.insets(get_viewport().get_visible_rect().size)
+	if inset == Vector4.ZERO:
+		return
+	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter"]:
+		var ctrl := get_node_or_null(path) as Control
+		if ctrl != null:
+			ctrl.offset_left += inset.x
+			ctrl.offset_right -= inset.z
+			ctrl.offset_top += inset.y
+	for path in ["BottomLeft", "BottomRight", "BottomCenter"]:
+		var ctrl := get_node_or_null(path) as Control
+		if ctrl != null:
+			ctrl.offset_left += inset.x
+			ctrl.offset_right -= inset.z
+			ctrl.offset_bottom -= inset.w
+	var backing := get_node_or_null("StatusBacking") as Control
+	if backing != null:
+		backing.position += Vector2(inset.x, inset.y)
 
 func _remove_dup_leftbottom() -> void:
 	var vp := get_viewport().get_visible_rect().size

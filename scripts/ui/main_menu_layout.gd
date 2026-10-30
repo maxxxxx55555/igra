@@ -23,8 +23,11 @@ static func fit(screen: Control, column: VBoxContainer) -> void:
 	var viewport: Vector2 = screen.get_viewport_rect().size
 	var scale: float = clampf(viewport.y / 900.0, 0.65, 1.15)
 	var text_scale: float = SettingsManager.TEXT_SCALE[clampi(int(SettingsManager.get_setting("text_size", 1)), 0, 2)]
-	var margin: float = maxf(24.0, viewport.x * 0.055)
-	var width: float = minf(560.0 * scale, viewport.x - margin * 2.0)
+	var inset: Vector4 = UiScale.insets(viewport)
+	var margin: float = maxf(24.0, viewport.x * 0.055) + inset.x
+	var usable_width: float = viewport.x - inset.x - inset.z - margin * 2.0
+	var usable_height: float = viewport.y - inset.y - inset.w - 40.0
+	var width: float = minf(560.0 * scale, usable_width)
 	column.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	column.add_theme_constant_override("separation", ceili(12.0 * scale))
 	for child: Node in column.get_children():
@@ -51,6 +54,6 @@ static func fit(screen: Control, column: VBoxContainer) -> void:
 				label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				label.add_theme_font_size_override("font_size", ceili(18.0 * scale * text_scale))
 	column.size = Vector2(width, column.get_combined_minimum_size().y)
-	var fit_scale: float = minf(1.0, maxf(viewport.y - 40.0, 1.0) / maxf(column.size.y, 1.0))
+	var fit_scale: float = minf(1.0, maxf(usable_height, 1.0) / maxf(column.size.y, 1.0))
 	column.scale = Vector2.ONE * fit_scale
-	column.position = Vector2(margin, maxf(20.0, (viewport.y - column.size.y * fit_scale) * 0.5))
+	column.position = Vector2(margin, maxf(inset.y + 20.0, inset.y + (usable_height - column.size.y * fit_scale) * 0.5))

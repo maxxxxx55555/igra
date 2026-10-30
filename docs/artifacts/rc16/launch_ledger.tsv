@@ -400,3 +400,28 @@ n	utc	head	id	exit	command
 399	20261029T235228Z	86341f20	s38_winexport3_86341f20	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
 400	20261029T235329Z	86341f20	s38_winboot3_86341f20	99	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 401	20261030T000202Z	86341f20	s38_winboot4_86341f20	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
+402	20261030T075812Z	9efeb89b	s38_main_all_9efeb89b	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+403	20261030T081924Z	17170222	s38_export10_17170222	0	bash .qa_logs/s38_export_vc14.sh
+404	20261030T082408Z	17170222	s38_s23_pre_17170222	1	bash tools/qa_sim/closeout_check
+405	20261030T082626Z	17170222	s38_s23_fix_17170222	0	bash tools/qa_sim/closeout_check
+406	20261030T082824Z	9dd0c70c	s38_int_all_9dd0c70c	4	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+407	20261030T091511Z	9dd0c70c	s38_int_closeout_b_9dd0c70c	127	--attach .qa_logs/closeout_check.log -- bash tools/qa_sim/closeout_check 400
+408	20261030T091526Z	9dd0c70c	s38_int_closeout_c_9dd0c70c	0	bash tools/qa_sim/closeout_check 400
+409	20261030T092653Z	56a6bdc5	s38_int_all_56a6bdc5	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+410	20261030T095010Z	56a6bdc5	s38_sec2_cap_orig_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh orig
+411	20261030T095121Z	56a6bdc5	s38_sec2_cap_fix_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh fix
+412	20261030T095237Z	56a6bdc5	s38_sec2_cap_fix2_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh fix2
+413	20261030T095449Z	b935b643	s38_botC_b935b643	0	bash tools/qa_sim/autoplay_bot
+414	20261030T100216Z	b935b643	s38_botD_b935b643	0	bash tools/qa_sim/autoplay_bot
+415	20261030T101002Z	b935b643	s38_perf3_b935b643	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+416	20261030T101129Z	b935b643	s38_audio3_b935b643	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+417	20261030T101236Z	b935b643	s38_touch4_b935b643	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+418	20261030T101316Z	b935b643	s38_store4_b935b643	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+419	20261030T101518Z	a91a3ad3	s38_export11_a91a3ad3	0	bash .qa_logs/s38_export_vc14.sh
+420	20261030T101915Z	a91a3ad3	s38_winexport4_a91a3ad3	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
+421	20261030T102027Z	a91a3ad3	s38_winboot6_a91a3ad3	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+422	20261030T102116Z	a91a3ad3	s38_winboot7_a91a3ad3	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
+423	20261030T103040Z	547beb82	s38_all_final_547beb82	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+424	20261030T104502Z	547beb82	s38_closeout_rerun1_547beb82	0	bash tools/qa_sim/closeout_check 400
+425	20261030T104943Z	547beb82	s38_all_final2_547beb82	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+426	20261030T133742Z	2ef1720b	s38_premium_2ef1720b	0	bash tools/qa_sim/guarded_headless res://scenes/tools/premium_visual_check_scene.tscn 180

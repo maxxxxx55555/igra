@@ -296,13 +296,13 @@ func _apply_postfx(district_id: StringName) -> void:
 		return
 	var vignette: Dictionary = preset.get("vignette", {})
 	if overlay.has_method("set_vignette_strength"):
-		overlay.set_vignette_strength(float(vignette.get("strength", 0.55)))
+		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.32)), 0.0, 0.4))
 	var chroma: Dictionary = preset.get("chroma", {})
 	if overlay.has_method("set_chroma_amount"):
 		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))
 	var grain: Dictionary = preset.get("grain", {})
 	if overlay.has_method("set_grain_intensity"):
-		overlay.set_grain_intensity(float(grain.get("intensity", 0.03)))
+		overlay.set_grain_intensity(clampf(float(grain.get("intensity", 0.03)), 0.0, 0.05))
 
 func _find_postfx_overlay() -> Node:
 	if is_instance_valid(_postfx_overlay):

@@ -15,6 +15,8 @@ shader_type spatial;
 uniform vec3 glow = vec3(0.5, 0.67, 1.0);
 uniform float gain : hint_range(0.0, 3.0) = 0.4;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
+uniform sampler2D facade_tex : source_color, filter_linear_mipmap, repeat_enable;
+uniform float tex_scale = 0.34;
 uniform vec3 rust = vec3(0.30, 0.17, 0.10);  // linear: what the drip adds is a fraction of it
 
 varying vec3 v_pos;
@@ -87,6 +89,10 @@ void fragment() {
 		base += rust * drip * 0.09 * (0.5 + 0.5 * mottle);
 		lift = 0.85 + 0.5 * flake;
 	}
+	float side_face = step(0.5, abs(v_normal.x));
+	vec2 tuv = mix(v_pos.xy, v_pos.zy, side_face) * tex_scale;
+	vec3 grain = texture(facade_tex, tuv).rgb;
+	base *= mix(vec3(1.0), grain * 1.35, step(0.5, detail));
 	ALBEDO = base * keep;
 	EMISSION = glow * gain * keep * lift;
 	// the whitewash keeps a faint sheen that the flaked patches have lost: a lamp shows where the paint is peeling

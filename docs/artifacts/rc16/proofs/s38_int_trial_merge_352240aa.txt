@@ -1,0 +1,12 @@
+# trial merge of origin/qoder/premium-visual-recovery (352240aa) into integrate/best-variants (b87c46be), 2026-10-30 12:24; ended with git merge --abort (HEAD unchanged). Output of: git merge --no-commit --no-ff origin/qoder/premium-visual-recovery
+Auto-merging assets/shaders/soviet_road.gdshader
+CONFLICT (content): Merge conflict in assets/shaders/soviet_road.gdshader
+CONFLICT (modify/delete): docs/superpowers/evidence/2026-10-30-premium-visual-recovery.md deleted in HEAD and modified in origin/qoder/premium-visual-recovery.  Version origin/qoder/premium-visual-recovery of docs/superpowers/evidence/2026-10-30-premium-visual-recovery.md left in tree.
+Auto-merging scripts/tools/premium_visual_check.gd
+Auto-merging scripts/ui/inventory_ui.gd
+CONFLICT (content): Merge conflict in scripts/ui/inventory_ui.gd
+Auto-merging scripts/world/street_builder.gd
+Auto-merging scripts/world/street_props.gd
+CONFLICT (content): Merge conflict in scripts/world/street_props.gd
+Auto-merging scripts/world/urban_set_dressing.gd
+Automatic merge failed; fix conflicts and then commit the result.
