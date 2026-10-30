@@ -2,7 +2,7 @@
 
 Date: 2026-10-30
 Branch: `qoder/premium-visual-recovery`
-Candidate commit: `caef80bed1dd09d30274904f6bcea5acb32bb488`
+Candidate commit: `20af0da1` (second realism pass; supersedes `caef80be`)
 Spec: `docs/superpowers/specs/2026-10-30-premium-visual-recovery-design.md`
 Plan: `docs/superpowers/plans/2026-10-30-premium-visual-recovery.md`
 
@@ -94,3 +94,20 @@ Density runner measurements show 147k–217k rendered primitives per district an
 4. Two pre-existing static evidence-administration checks remain red and are unrelated to the visual runtime.
 
 The branch is pushed and ready for review; it is not marked release-ready.
+
+## Second realism pass (2026-10-30, `20af0da1`)
+
+The first pass still read as boxes with stickers on them. This pass changed geometry and light, not palette only.
+
+- The front of every block is built as piers and spandrel bands around the window openings and the body stands 0.30 m behind it, so each window is a recess with jamb, lintel and sill faces (`_build_front_shell` in `scripts/world/skyline.gd`). One MultiMesh still draws the whole ring.
+- Every piece carries its own block in instance custom data — facade width, height, the offset along it and the weathering seed — so panel seams, rain stains, cornice drips, peeled whitewash and the concrete grain continue across the pieces of one building instead of restarting per box (`assets/shaders/soviet_facade.gdshader`).
+- Balconies got rails and stored clutter; a share of the windows is boarded, shuttered or sits over a condenser unit (`WindowBoards`, `WindowUnits`, `BalconyRails`).
+- The self-glow now falls off over the height the lamps reach; a flat glow over a whole facade was reading as a painted box. Stage gains `[0.20, 0.25, 0.30, 0.34]`, lit windows `[0.04, 0.26, 0.44, 0.62]`.
+- Asphalt, sidewalks, curbs and the facade textures take normal maps; street, prop and dressing albedos were cut by roughly half and the lamp metal and benches darkened.
+- The inventory body takes the width of the grid it holds instead of the leftover of the screen (`scripts/ui/inventory_ui.gd`).
+
+Evidence of this pass: `docs/stills/premium/realism/` (8 frames at `5556161e`) and `docs/stills/store/*_after_20af0da1_*.png` (18 frames, AF3 green).
+
+Gate results at `20af0da1`: `tools/check.sh --static` 69 pass / 2 fail (`branch_absorb_sim`, `proofs_audit_sim`, both pre-existing and unrelated), `af3_frame_check` 18/18, `store_frames_check` 10 frames 0 faults, `consistency_check` green, `premium_visual_check_scene` `fails=0` with the new facade, rail and board assertions.
+
+Known visual debt left: the plank stack placed by `scripts/world/district_dressing.gd` is still too bright next to the darkened dressing, and the strip of ground between the street and the ring goes to black where no lamp reaches it.
