@@ -391,7 +391,7 @@ var _base_font_size: int = 0
 ## that doesn't hard-override its own font size. Locale-agnostic.
 ## GDD 14: Small / Medium / Large scale every Control (a window-wide factor): screens build their own themes with
 ## pinned sizes, so a default font size alone never reached them.
-const TEXT_SCALE: Array[float] = [1.0, 1.1, 1.25]
+const TEXT_SCALE: Array[float] = [0.9, 1.0, 1.15]
 ## The world's environment is written when the district loads and when the tier changes; High Contrast goes on top after.
 const HIGH_CONTRAST_DELAY: float = 0.5
 
