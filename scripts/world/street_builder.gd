@@ -13,6 +13,8 @@ signal streets_ready
 const MARKING_LIFT: float = 0.02
 ## Height of every street tile, mesh and collision box alike.
 const TILE_THICKNESS: float = 0.1
+## Half of the 4 m tile the streets were laid out and graded with: a road spans -2 to length-2 m along itself at any tile size.
+const LEGACY_HALF_TILE: float = 2.0
 ## Шаг сетки кварталов в метрах. roads хранит перекрёстки в клетках (0..3),
 ## и без умножения на этот шаг четыре параллельные улицы ложились на
 ## z = 0,1,2,3 — то есть слипались в одну полосу шириной 3 метра вместо
@@ -136,7 +138,7 @@ func _layout() -> void:
 ## Точка на дороге по номеру плитки. Начало дороги переводится из клеток
 ## сетки в метры (× grid_spacing), иначе улицы строятся вплотную друг к другу.
 func road_step_pos(road: Dictionary, step: int) -> Vector3:
-	return road_pos_at(road, float(step) * tile_size)
+	return road_pos_at(road, float(step) * tile_size - (LEGACY_HALF_TILE - tile_size * 0.5))
 
 ## Точка на дороге по расстоянию от её начала в метрах.
 ## Сетка центрируется на нуле: лут (радиус 6..22 м) и точки появления врагов

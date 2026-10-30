@@ -4,7 +4,6 @@ extends Node3D
 
 const _Parts := preload("res://scripts/art/part_mesh.gd")
 const _PBR := preload("res://scripts/world/pbr_sets.gd")
-const _CONTACT := preload("res://scripts/world/contact_shadows.gd")
 const KEEP_CLEAR_M: float = 1.8
 
 const KIT := {
@@ -40,7 +39,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 	_rng.seed = hash("urban_set_" + String(district_id))
 	var kit: Dictionary = KIT.get(district_id, KIT[&"suburbs"])
 	var low: bool = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
-	var shadows: MultiMeshInstance3D = null
+	var shadows := get_node_or_null("../../ContactShadows") as MultiMeshInstance3D  # the district's one board, made by StreetProps before this node
 	for kind: String in kit:
 		var count: int = int(kit[kind])
 		if low:
@@ -57,11 +56,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 		if xforms.is_empty():
 			continue
 		_add_batch("Urban_" + kind.capitalize(), kind, xforms)
-		if _CONTACT.enabled():
-			if shadows == null:
-				shadows = _CONTACT.new()
-				shadows.name = "UrbanContactShadows"
-				add_child(shadows)
+		if shadows != null:
 			shadows.stamp_all(spots, 0.8 if kind in ["wreck", "pipes", "cabinet"] else 0.5)
 	_street_clutter(sb, clear, low, shadows)
 
@@ -98,11 +93,7 @@ func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiM
 			(places[kind] as Array).append(at)
 	for kind: String in batches:
 		_add_batch("UrbanStreet_" + kind.capitalize(), kind, batches[kind] as Array[Transform3D])
-		if _CONTACT.enabled():
-			if shadows == null:
-				shadows = _CONTACT.new()
-				shadows.name = "UrbanContactShadows"
-				add_child(shadows)
+		if shadows != null:
 			var pts: Array[Vector3] = []
 			for point: Variant in places[kind]:
 				pts.append(point as Vector3)

@@ -45,11 +45,10 @@ const STAGE_KEYS: Array[String] = [
 ## past the row and the list got a horizontal bar of its own.
 const NAME_WIDTH: float = 190.0
 const STAGE_WIDTH: float = 150.0
-const ACTION_SIZE := Vector2(230, 48)
+const ACTION_SIZE := Vector2(230, 34)
 
 var _list: VBoxContainer = null
 var _title: Label = null
-var _panel: PanelContainer = null
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -57,22 +56,11 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
 	_build()
-	_fit()
-	resized.connect(_fit)
 	EventBus.district_stage_changed.connect(func(_a: StringName, _b: int) -> void: _refresh())
 	EventBus.district_entered.connect(func(_a: StringName) -> void: _refresh())
 	visibility_changed.connect(func() -> void:
 		if visible:
-			_fit()
 			_refresh())
-
-func _fit() -> void:
-	if _panel == null:
-		return
-	var viewport := get_viewport_rect().size
-	var inset := UiScale.insets(viewport)
-	var available := Vector2(viewport.x - inset.x - inset.z - 32.0, viewport.y - inset.y - inset.w - 32.0)
-	_panel.custom_minimum_size = Vector2(minf(1100.0, available.x), minf(700.0, available.y))
 
 func _build() -> void:
 	var bg := ColorRect.new()
@@ -80,14 +68,12 @@ func _build() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
-	_panel = PanelContainer.new()
-	_panel.name = "MapPanel"
-	_panel.set_anchors_preset(Control.PRESET_CENTER)
-	_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
-	_panel.custom_minimum_size = Vector2(720, 560)
-	add_child(_panel)
-	var panel := _panel
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
+	panel.custom_minimum_size = Vector2(720, 560)
+	add_child(panel)
 	# V2 SKIN WIRING P4: real isometric city backdrop under the district
 	# rows below (textless by design - rows/labels are the "engine overlay").
 	var map_bg_path := "res://assets/textures/maps_v2/city_iso_2048.png"
@@ -110,8 +96,7 @@ func _build() -> void:
 	root.add_child(_title)
 
 	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(680, 440)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	root.add_child(scroll)
 
@@ -122,7 +107,7 @@ func _build() -> void:
 
 	var close := Button.new()
 	close.text = LocalizationManager.t("BTN_CLOSE")
-	close.custom_minimum_size = Vector2(160, 48)
+	close.custom_minimum_size = Vector2(160, 40)
 	close.pressed.connect(_close)
 	root.add_child(close)
 

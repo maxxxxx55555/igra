@@ -1468,7 +1468,6 @@
   "INV_EMPTY": "vide",
   "INV_SELECT": "Choisissez un objet",
   "INV_HINTS": "Tab / Échap : fermer · Clic : choisir · Suppr : jeter",
-  "INV_HINTS_TOUCH": "Toucher : choisir · Glisser : accès rapide · Toucher encore : examiner",
   "INV_VITALS": "Santé %d · Endurance %d · Batterie %d",
   "Auto Aim": "Aide à la visée",
   "EVENT_HALLUCINATION": "Des pas derrière vous. Personne.",

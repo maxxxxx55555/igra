@@ -1468,7 +1468,6 @@
   "INV_EMPTY": "empty",
   "INV_SELECT": "Select an item",
   "INV_HINTS": "Tab / Esc: close · Click: select · Del: drop",
-  "INV_HINTS_TOUCH": "Tap: select · Drag: quick slot · Tap again: inspect",
   "INV_VITALS": "Health %d · Stamina %d · Battery %d",
   "Auto Aim": "Auto Aim",
   "EVENT_HALLUCINATION": "Footsteps behind you. Nobody is there.",
