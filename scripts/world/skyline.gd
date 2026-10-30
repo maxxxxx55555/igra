@@ -30,6 +30,19 @@ const PALETTES := {
 	&"power_station": [[Color("#15191e"), Color("#1b2026"), Color("#21262d")], Color(0.10, 0.11, 0.13)],
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
+const FACADE_TEX := {
+	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.png",
+	&"residential": "res://assets/textures/pbr/painted_brick_albedo.png",
+	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.png",
+	&"school": "res://assets/textures/pbr/panel_facade_albedo.png",
+	&"hospital": "res://assets/textures/pbr/panel_facade_albedo.png",
+	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.png",
+	&"police": "res://assets/textures/pbr/panel_facade_albedo.png",
+	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.png",
+	&"industrial": "res://assets/textures/pbr/cracked_concrete_albedo.png",
+	&"substation": "res://assets/textures/pbr/panel_facade_albedo.png",
+	&"power_station": "res://assets/textures/pbr/panel_facade_albedo.png",
+}
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
@@ -39,7 +52,7 @@ const _GRASS := preload("res://scripts/world/dead_grass.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
-const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]
+const FACADE_GAIN: Array[float] = [0.18, 0.22, 0.26, 0.32]
 ## How much of the hue of a district's glow the concrete keeps: 1 is the palette's own, 0 a grey wall. The police and the park stood a saturated blue and green in the store frames of launch 8; the style guide says
 ## desaturated.
 const GLOW_HUE: float = 0.5
@@ -50,7 +63,7 @@ const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
 const BALCONIES := {&"suburbs": 0.30, &"residential": 0.35, &"hospital": 0.12, &"school": 0.08, &"police": 0.10}
 const WIN_BONE := Color(0.85, 0.82, 0.77)
 ## Share of windows lit per power stage: DARK, PARTIAL, STREETS, FULL.
-const STAGE_LIT: Array[float] = [0.04, 0.30, 0.60, 0.90]
+const STAGE_LIT: Array[float] = [0.02, 0.18, 0.36, 0.56]
 ## Per district: [min height, max height, min width, max width, share of empty lots].
 const STYLE := {
 	&"suburbs": [6.0, 9.0, 8.0, 11.0, 0.25],
@@ -93,6 +106,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var tints: Array[Color] = []
 	var panes: Array[Transform3D] = []
 	var no_tints: Array[Color] = []
+	var trim: Array[Transform3D] = []
+	var sills: Array[Transform3D] = []
+	var pipes: Array[Transform3D] = []
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
@@ -114,14 +130,27 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			_widths.append(w)
 			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
 			if with_windows:
+				var block_frame := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
 				var y := 2.6
 				while y < h - 1.4:
 					var x := cx - w * 0.5 + 1.2
 					while x < cx + w * 0.5 - 1.0:
 						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
+						_dress_window(trim, sills, Transform3D(turn, turn * Vector3(x, y, -edge)))
 						x += 2.2
+					trim.append(block_frame * Transform3D(Basis.from_scale(Vector3(w - 0.3, 0.09, 0.22)), Vector3(0.0, y - 1.32, 0.11)))
 					y += 2.6
+				_dress_front(trim, pipes, block_frame, Vector3(w, h, d))
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
+	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
+	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
+	var pipe_mesh := CylinderMesh.new()
+	pipe_mesh.top_radius = 0.055
+	pipe_mesh.bottom_radius = 0.055
+	pipe_mesh.height = 1.0
+	pipe_mesh.radial_segments = 8
+	pipe_mesh.rings = 1
+	_add_detail_batch("FacadePipes", pipe_mesh, pipes, _detail_material("rusted_metal", Color(0.34, 0.31, 0.27)))
 	_apply_gain(PowerGrid.get_stage(district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	if not panes.is_empty():
@@ -167,6 +196,51 @@ func _put(blocks: Array[Transform3D], tints: Array[Color], frame: Transform3D, a
 	blocks.append(frame * Transform3D(Basis.from_scale(size), at))
 	tints.append(tint)
 
+## A window gets a projecting metal frame, a concrete sill and a deeper drip ledge: the pane sits behind
+## them, so the opening reads as a real recess from an oblique view instead of a lit sticker on a box.
+func _dress_window(trim: Array[Transform3D], sills: Array[Transform3D], frame: Transform3D) -> void:
+	for side in [-0.55, 0.55]:
+		trim.append(frame * Transform3D(Basis.from_scale(Vector3(0.08, 1.52, 0.20)), Vector3(side, 0.0, 0.10)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(1.28, 0.09, 0.20)), Vector3(0.0, 0.74, 0.10)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(1.36, 0.07, 0.26)), Vector3(0.0, -0.70, 0.13)))
+	sills.append(frame * Transform3D(Basis.from_scale(Vector3(1.34, 0.10, 0.36)), Vector3(0.0, -0.76, 0.16)))
+	sills.append(frame * Transform3D(Basis.from_scale(Vector3(1.16, 0.06, 0.52)), Vector3(0.0, -0.84, 0.23)))
+
+## Base course, cornice, parapet and a rain pipe with brackets give the block a hand-built silhouette.
+func _dress_front(trim: Array[Transform3D], pipes: Array[Transform3D], frame: Transform3D, size: Vector3) -> void:
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x, 0.82, 0.18)), Vector3(0.0, 0.41, 0.09)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.24, 0.26, 0.34)), Vector3(0.0, size.y - 0.14, 0.12)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x - 0.18, 0.34, 0.42)), Vector3(0.0, size.y + 0.10, -size.z * 0.34)))
+	pipes.append(frame * Transform3D(Basis.from_scale(Vector3(1.0, size.y - 0.6, 1.0)),
+		Vector3(size.x * 0.5 - 0.24, 0.35 + (size.y - 0.6) * 0.5, 0.19)))
+	for y in [0.82, size.y - 0.82]:
+		trim.append(frame * Transform3D(Basis.from_scale(Vector3(0.16, 0.07, 0.12)), Vector3(size.x * 0.5 - 0.24, y, 0.22)))
+
+func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], material: Material) -> void:
+	if xforms.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = mesh
+	mm.instance_count = xforms.size()
+	for i in xforms.size():
+		mm.set_instance_transform(i, xforms[i])
+	var mmi := MultiMeshInstance3D.new()
+	mmi.name = node_name
+	mmi.multimesh = mm
+	mmi.material_override = material
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mmi)
+
+func _detail_material(set_name: String, tint: Color) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.roughness = 0.88
+	mat = preload("res://scripts/world/pbr_sets.gd").apply(mat, set_name)
+	mat.albedo_color = tint
+	mat.emission_enabled = true
+	mat.emission = Color(0.045, 0.042, 0.038)
+	return mat
+
 func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool, glow: Color = FACADE_GLOW) -> void:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
@@ -189,6 +263,9 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		_facade_mat.shader = _FACADE
 		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
+		var facade_tex_path: String = FACADE_TEX.get(_district_id, FACADE_TEX[&"suburbs"])
+		if ResourceLoader.exists(facade_tex_path):
+			_facade_mat.set_shader_parameter("facade_tex", load(facade_tex_path))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
 		mat = _facade_mat
@@ -250,6 +327,10 @@ func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
 		_window_mat.set_shader_parameter("interior", minf(detail, 1.0))
 	if _halos != null:
 		_halos.visible = detail > 0.5
+	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes"]:
+		var node := get_node_or_null(node_name) as Node3D
+		if node != null:
+			node.visible = detail >= 1.0
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
