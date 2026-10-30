@@ -238,9 +238,9 @@ commit, and revert the batch the same turn on red.
 
 Session 25 (2026-10-16): the cleanup of ten branches, eight tags and 246 ignored files is logged in `docs/CLEANUP_LOG.md`; the branch counts of 12.6 are the state at the end of Session 24.
 
-## 13. Session 38 (the v10 swarm pass, branch sweep): the merged branches
+## 13. Session 38 (the v10 swarm pass, branch sweep): the merged branches, verified and NOT yet deleted
 
-`origin/main` was `9efeb89b` when these 18 remote branches were deleted on 2026-10-30. Each tip is an ancestor of `origin/main`, so no commit became unreachable and a full bundle (the repository pack is 1.09 GiB) would only copy `main` again; the tip and a restore command are the backup. The ancestry was read twice by the queen (`git merge-base --is-ancestor` and `git rev-list --count origin/main..<tip>`) and once more, independently, by the read-only subagent B-BRANCH (report in `docs/RUN_STATE.md`, S38W-SWEEP). `gh-pages` (the privacy policy page), `claude/*`, `qoder/premium-visual-recovery` and `integrate/best-variants` were not touched.
+`origin/main` was `9efeb89b` on 2026-10-30 when these 18 remote branches were verified as deletable. **They are still on the remote: the deletion was refused by the permission classifier (Git Destructive) and needs the owner's yes**; the owner's command is `git push origin --delete` followed by the 18 names of the table. Each tip is an ancestor of `origin/main`, so no commit becomes unreachable and a full bundle (the repository pack is 1.09 GiB) would only copy `main` again; the tip and a restore command are the backup. The ancestry was read twice by the queen (`git merge-base --is-ancestor` and `git rev-list --count origin/main..<tip>`) and once more, independently, by the read-only subagent B-BRANCH (report in `docs/RUN_STATE.md`, S38W-SWEEP). `gh-pages` (the privacy policy page), `claude/*`, `qoder/premium-visual-recovery` and `integrate/best-variants` were not touched.
 
 | Branch | Tip | Proof | Restore |
 |---|---|---|---|
