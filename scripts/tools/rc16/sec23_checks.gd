@@ -46,8 +46,11 @@ static func _log_and_leaderboard(r: Node) -> void:
 	var guard: Node = IntegrityGuard
 	var tampered0: bool = guard.tampered
 	var before: int = _Log.read().size()
+	var started: float = Time.get_unix_time_from_system()
 	guard.call("flag", "check_untainted", "the emulator of a test", false)
-	var kept: bool = _Log.read().size() == before + 1 and not guard.tampered
+	var lines: Array = _Log.read()  # a full log (MAX_ENTRIES) takes the new line in and drops the oldest, so the count does not move: the newest line has to be this flag
+	var newest: Dictionary = lines.back() as Dictionary if not lines.is_empty() else {}
+	var kept: bool = lines.size() == mini(before + 1, _Log.MAX_ENTRIES) and newest.get("kind", "") == "check_untainted" and float(newest.get("t", 0.0)) >= started and not guard.tampered
 	var raw: String = FileAccess.get_file_as_bytes(_Log.PATH).get_string_from_utf8()
 	var encrypted: bool = not raw.contains("check_untainted") and not raw.contains("emulator")
 	var runs0: Array = (LocalLeaderboard.get("_runs") as Array).duplicate()

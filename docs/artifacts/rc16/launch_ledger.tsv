@@ -407,3 +407,7 @@ n	utc	head	id	exit	command
 406	20261030T082824Z	9dd0c70c	s38_int_all_9dd0c70c	4	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 407	20261030T091511Z	9dd0c70c	s38_int_closeout_b_9dd0c70c	127	--attach .qa_logs/closeout_check.log -- bash tools/qa_sim/closeout_check 400
 408	20261030T091526Z	9dd0c70c	s38_int_closeout_c_9dd0c70c	0	bash tools/qa_sim/closeout_check 400
+409	20261030T092653Z	56a6bdc5	s38_int_all_56a6bdc5	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+410	20261030T095010Z	56a6bdc5	s38_sec2_cap_orig_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh orig
+411	20261030T095121Z	56a6bdc5	s38_sec2_cap_fix_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh fix
+412	20261030T095237Z	56a6bdc5	s38_sec2_cap_fix2_56a6bdc5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/sec2_run.sh fix2
