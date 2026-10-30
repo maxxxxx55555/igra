@@ -81,7 +81,7 @@ func _load_defaults() -> void:
 	_settings["hud_opacity"] = 1.0
 	_settings["button_size"] = 1.0
 	_settings["show_minimap"] = false
-	_settings["graphics_tier"] = 2  # High
+	_settings["graphics_tier"] = 1 if OS.has_feature("mobile") else 2  # Medium on a fresh phone, High on desktop
 	_settings["resolution"] = 1     # 1080p
 	_settings["vsync"] = true
 	_settings["fps_cap"] = 1        # 60
@@ -328,7 +328,7 @@ func set_hud_opacity(v: float) -> void:
 	EventBus.settings_changed.emit("hud_opacity", _settings["hud_opacity"])
 
 func set_button_size(v: float) -> void:
-	_settings["button_size"] = clampf(v, 0.5, 2.0)
+	_settings["button_size"] = clampf(v, maxf(0.5, UiScale.min_touch() / 72.0), 2.0)
 	EventBus.settings_changed.emit("button_size", _settings["button_size"])
 
 func set_colorblind_mode(idx: int) -> void:
@@ -391,7 +391,7 @@ var _base_font_size: int = 0
 ## that doesn't hard-override its own font size. Locale-agnostic.
 ## GDD 14: Small / Medium / Large scale every Control (a window-wide factor): screens build their own themes with
 ## pinned sizes, so a default font size alone never reached them.
-const TEXT_SCALE: Array[float] = [0.9, 1.0, 1.15]
+const TEXT_SCALE: Array[float] = [1.0, 1.1, 1.25]
 ## The world's environment is written when the district loads and when the tier changes; High Contrast goes on top after.
 const HIGH_CONTRAST_DELAY: float = 0.5
 

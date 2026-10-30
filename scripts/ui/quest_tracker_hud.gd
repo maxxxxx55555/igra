@@ -5,7 +5,7 @@ class_name QuestTrackerHUD
 # Shows up to 3 active objectives with progress, optional direction arrow
 
 const PANEL_WIDTH := 360
-const PANEL_HEIGHT := 224
+const PANEL_HEIGHT := 156
 const PANEL_MARGIN := 20
 ## Below the top-right maps, not just below the radar. The comment here used to
 ## read "ниже миникарты" at 140, which was never true: the radar spans y 16..180
@@ -147,7 +147,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 
 	var count := 0
 	for quest in active_quests:
-		if count >= 3:
+		if count >= 1:
 			break
 		var current := int(quest.get("progress", 0))
 		var target := int(quest.get("target_count", 1))

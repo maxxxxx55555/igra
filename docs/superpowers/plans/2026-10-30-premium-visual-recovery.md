@@ -392,7 +392,7 @@ git commit -m "Dress every district with curated urban props"
 ### Task 5: Apply the mobile-first theme, exposure and shared UI scale
 
 **Files:**
-- Modify: `scripts/ui/theme_provider.gd:10-173`
+- Modify: `scripts/ui/theme_provider.gd`
 - Modify: `scripts/systems/settings_manager.gd:72-121`, `:381-408`
 - Modify: `scripts/ui/main_menu_layout.gd:22-56`
 - Modify: `scripts/world_env_setup.gd:270-305`

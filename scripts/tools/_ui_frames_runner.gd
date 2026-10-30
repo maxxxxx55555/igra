@@ -9,11 +9,22 @@ const CODEX: Array[StringName] = [&"journal", &"quests", &"achievements", &"stat
 func _run() -> void:
 	if not await _enter_game():
 		return
-	get_window().size = Vector2i(1600, 900)
+	SettingsManager.set_setting("text_size", 1)
+	var frame_width: int = int(OS.get_environment("TLS_FRAME_WIDTH")) if not OS.get_environment("TLS_FRAME_WIDTH").is_empty() else 1280
+	var frame_height: int = int(OS.get_environment("TLS_FRAME_HEIGHT")) if not OS.get_environment("TLS_FRAME_HEIGHT").is_empty() else 720
+	get_window().size = Vector2i(frame_width, frame_height)
 	await get_tree().create_timer(1.0).timeout
+	for item_id in [&"fuse", &"battery", &"medkit", &"cable", &"alcohol"]:
+		InventoryManager.try_add(item_id, 1, false)
 	for id in SCREENS:
 		UIManager.open(id)
 		await get_tree().create_timer(0.8).timeout
+		if id == &"inventory" and OS.get_environment("TLS_OPEN_INVENTORY_INSPECTOR") == "1":
+			var inv := UIManager._get_screen(id)
+			if inv != null:
+				inv.set("_overlay_open", true)
+				inv.call("_apply_responsive")
+				await get_tree().create_timer(0.3).timeout
 		await _frame("ui_" + String(id))
 		UIManager.close(id)
 		await get_tree().create_timer(0.4).timeout

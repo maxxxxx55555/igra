@@ -1,26 +1,24 @@
-# ThemeProvider — ЕДИНЫЙ визуальный слой по арт-библии docs/ART_UI_STYLE.md:
-# латунь (brass) вместо янтаря, СРЕЗАННЫЕ углы (chamfer, радиус 0), шрифты
-# Bebas Neue Bold / Roboto Condensed / Share Tech Mono (канон-саммит 2026-08-10,
-# GDD §11.3 — Saira/Rajdhani больше не подключаются к Theme).
-# Все экраны тянут build_theme() отсюда — это единственная точка истины для UI.
+# ThemeProvider — the single visual layer for every screen: aged-brass rectangular
+# chrome, opaque near-black surfaces and the canon Bebas Neue / Roboto Condensed /
+# Share Tech Mono families. All screens build from build_theme().
 class_name ThemeProvider
 extends RefCounted
 
 # ── Цветовые токены (docs/ART_UI_STYLE.md) ─────────────────────────────
-const COLOR_BG_DARK   := Color("#060f13")   # bg-deep (owner canon 2026-10-29, docs/STYLE_GUIDE.md section 8)
-const COLOR_BG_PANEL  := Color("#0f1314")   # panel
-const COLOR_BG_PANEL2 := Color("#1c1e1d")   # panel-hover (чуть светлее)
-const COLOR_BORDER    := Color("#5a4a2a")   # panel-edge: the 1 px bronze of the canon
-const COLOR_AMBER     := Color("#c9a24a")   # brass — акцент, активное
-const COLOR_AMBER_DIM := Color("#8a7338")   # brass-dim — неактивное
-const COLOR_AMBER_HI  := Color("#d8d5cc")   # bone — заголовки
-const COLOR_TEXT      := Color("#d8d5cc")   # bone-text
-const COLOR_TEXT_DIM  := Color("#8a8a85")   # steel-text
-const COLOR_DANGER    := Color("#c0392b")   # ember
+const COLOR_BG_DARK   := Color("#080E10")   # premium-recovery deep backing
+const COLOR_BG_PANEL  := Color("#121A1B")   # panel
+const COLOR_BG_PANEL2 := Color("#1C2423")   # raised surface
+const COLOR_BORDER    := Color("#655332")   # aged brass edge
+const COLOR_AMBER     := Color("#C58A2D")   # amber accent
+const COLOR_AMBER_DIM := Color("#8A7338")   # dimmed brass
+const COLOR_AMBER_HI  := Color("#D7CCB6")   # bone heading
+const COLOR_TEXT      := Color("#D7CCB6")   # primary text
+const COLOR_TEXT_DIM  := Color("#A89F8D")   # secondary text
+const COLOR_DANGER    := Color("#A43C2B")   # danger
 
 const FONT_SIZE_BODY: int = 16
 const SCROLLBAR_MARGIN: float = 5.0
-const FONT_SIZE_TITLE: int = 22
+const FONT_SIZE_TITLE: int = 24
 
 ## SystemFont спрашивает шрифт у ОС по имени — на машине/устройстве без
 ## Rajdhani/Saira установленными это молча откатывалось на системный шрифт
@@ -38,25 +36,6 @@ static func _bold(base: Font) -> Font:
 	f.base_font = base
 	f.variation_embolden = HEADING_EMBOLDEN
 	return f
-
-static func _load_tex(path: String) -> Texture2D:
-	return load(path) if ResourceLoader.exists(path) else null
-
-## Кнопочный chrome kit (256x64, chamfer уже вырезан в самой текстуре).
-## margin=16 — вне зоны 5-12px, где ERROR_LOG зафиксировал дрейф каёмки
-## на 9-slice срезе; 16 держит края чисто и оставляет плоский центр.
-static func _btn_stylebox(tex: Texture2D) -> StyleBoxTexture:
-	var sb := StyleBoxTexture.new()
-	sb.texture = tex
-	sb.texture_margin_left = 16.0
-	sb.texture_margin_right = 16.0
-	sb.texture_margin_top = 16.0
-	sb.texture_margin_bottom = 16.0
-	sb.content_margin_left = 14.0
-	sb.content_margin_right = 14.0
-	sb.content_margin_top = 8.0
-	sb.content_margin_bottom = 8.0
-	return sb
 
 static var _heading: Font
 
@@ -96,10 +75,18 @@ static func build_theme() -> Theme:
 	var panel2 := panel_sb.duplicate() as StyleBoxFlat
 	panel2.bg_color = COLOR_BG_PANEL2
 	theme.set_stylebox("panel", "Frame", panel2)
+	theme.set_type_variation(&"RaisedPanel", &"PanelContainer")
+	theme.set_stylebox("panel", &"RaisedPanel", panel2)
+	var slot_sb := panel2.duplicate() as StyleBoxFlat
+	slot_sb.bg_color = COLOR_BG_DARK
+	slot_sb.border_color = COLOR_BORDER.darkened(0.35)
+	slot_sb.set_content_margin_all(8)
+	theme.set_type_variation(&"SlotPanel", &"PanelContainer")
+	theme.set_stylebox("panel", &"SlotPanel", slot_sb)
 	theme.set_color("font_color", "Label", COLOR_TEXT)
 	theme.set_font_size("font_size", "Label", FONT_SIZE_BODY)
 
-	# Кнопка: chamfer, 1px рамка brass-dim → brass при наведении.
+	# Button: rectangular, 1 px aged-brass border that strengthens on hover.
 	var btn_n := StyleBoxFlat.new()
 	btn_n.bg_color = COLOR_BG_DARK
 	btn_n.border_color = COLOR_AMBER_DIM
@@ -128,18 +115,6 @@ static func build_theme() -> Theme:
 	theme.set_stylebox("focus", "Button", btn_focus)
 	theme.set_stylebox("disabled", "Button", btn_d)
 	theme.set_stylebox("focus", "LineEdit", btn_focus)
-	# P2.3: реальные текстуры поверх StyleBoxFlat выше, если ассеты на месте
-	# (остальной chrome kit — panel/tooltip/slot — оставлен на StyleBoxFlat,
-	# см. комментарий у _btn_stylebox()).
-	var btn_tex_n := _load_tex("res://assets/textures/ui/btn_tex_normal.png")
-	var btn_tex_h := _load_tex("res://assets/textures/ui/btn_tex_hover.png")
-	var btn_tex_p := _load_tex("res://assets/textures/ui/btn_tex_pressed.png")
-	var btn_tex_d := _load_tex("res://assets/textures/ui/btn_tex_disabled.png")
-	if btn_tex_n != null and btn_tex_h != null and btn_tex_p != null and btn_tex_d != null:
-		theme.set_stylebox("normal", "Button", _btn_stylebox(btn_tex_n))
-		theme.set_stylebox("hover", "Button", _btn_stylebox(btn_tex_h))
-		theme.set_stylebox("pressed", "Button", _btn_stylebox(btn_tex_p))
-		theme.set_stylebox("disabled", "Button", _btn_stylebox(btn_tex_d))
 	theme.set_color("font_color", "Button", COLOR_TEXT)
 	theme.set_color("font_hover_color", "Button", COLOR_AMBER_HI)
 	theme.set_color("font_disabled_color", "Button", COLOR_TEXT_DIM)
@@ -176,7 +151,7 @@ static func build_theme() -> Theme:
 ## option buttons given the brass focus ring and the dimmed disabled fill of the buttons.
 const FONT_SIZE_DISPLAY: int = 44
 const FONT_SIZE_HUGE: int = 30
-const FONT_SIZE_SMALL: int = 13
+const FONT_SIZE_SMALL: int = 14
 const FONT_SIZE_MONO: int = 15
 
 static func _scale(theme: Theme, heading: Font, mono: Font) -> Theme:

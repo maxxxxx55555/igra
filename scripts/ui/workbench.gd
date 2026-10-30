@@ -49,38 +49,67 @@ var _salvage_vbox: VBoxContainer
 var _salvage_info: Label
 var _salvage_btn: Button
 var _selected_salvage: int = -1
+var _stage: Control
+
+const DESIGN := Vector2(1180, 640)
 
 func _ready() -> void:
 	theme = ThemeProvider.build_theme()
 	if not enable_workbench: return
-	# the screen had no backdrop: the recipe names were 11 px text straight over the street
 	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
+	bg.color = Color(0.027, 0.039, 0.043, 0.97)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	_stage = Control.new()
+	_stage.name = "WorkbenchStage"
+	_stage.set_anchors_preset(Control.PRESET_CENTER)
+	_stage.offset_left = -DESIGN.x * 0.5
+	_stage.offset_right = DESIGN.x * 0.5
+	_stage.offset_top = -DESIGN.y * 0.5
+	_stage.offset_bottom = DESIGN.y * 0.5
+	_stage.pivot_offset = DESIGN * 0.5
+	add_child(_stage)
+	var frame := Panel.new()
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var style := StyleBoxFlat.new()
+	style.bg_color = ThemeProvider.COLOR_BG_PANEL
+	style.border_color = ThemeProvider.COLOR_BORDER
+	style.set_border_width_all(1)
+	frame.add_theme_stylebox_override("panel", style)
+	_stage.add_child(frame)
 	_build_tabs()
 	_build_craft_panel()
 	_build_salvage_panel()
 	_switch_tab(0)
+	_fit_stage()
+	get_viewport().size_changed.connect(_fit_stage)
 	visibility_changed.connect(func() -> void:
 		if visible:
+			_fit_stage()
 			_refresh_list())
+
+func _fit_stage() -> void:
+	if _stage == null:
+		return
+	var viewport := get_viewport_rect().size
+	var factor := minf(1.0, minf((viewport.x - 32.0) / DESIGN.x, (viewport.y - 32.0) / DESIGN.y))
+	_stage.scale = Vector2.ONE * maxf(0.5, factor)
 
 func _build_tabs() -> void:
 	# The old "Upgrade" tab only ever showed a "coming soon" placeholder —
 	# flashlight upgrades have a real screen (screens.gd's 5-branch
 	# FlashlightUpgradeManager UI), so this tab was misleading. Removed.
-	var tw := size.x / 2.0
+	var tw := DESIGN.x / 2.0
 	var names := [tr("WORKBENCH_CRAFT"), tr("WORKBENCH_SALVAGE")]
 	for i in 2:
 		var btn := Button.new()
 		btn.text = names[i]
-		btn.size = Vector2(tw - 4, 26)
-		btn.position = Vector2(i * tw + 2, 2)
-		btn.add_theme_font_size_override("font_size", 11)
+		btn.size = Vector2(tw - 8, 40)
+		btn.position = Vector2(i * tw + 4, 4)
+		btn.add_theme_font_size_override("font_size", 18)
 		btn.toggle_mode = true
 		btn.button_pressed = i == 0
-		add_child(btn)
+		_stage.add_child(btn)
 		btn.pressed.connect(func(idx := i): _on_tab_pressed(idx))
 
 func _on_tab_pressed(idx: int) -> void:
@@ -94,41 +123,44 @@ func _switch_tab(idx: int) -> void:
 
 func _build_craft_panel() -> void:
 	_craft_panel = Control.new()
-	_craft_panel.size = Vector2(size.x, size.y - 32)
-	_craft_panel.position = Vector2(0, 32)
-	add_child(_craft_panel)
+	_craft_panel.size = Vector2(DESIGN.x - 32.0, DESIGN.y - 56.0)
+	_craft_panel.position = Vector2(16.0, 48.0)
+	_stage.add_child(_craft_panel)
 
-	var list_w := size.x * 0.42
+	var list_w := 480.0
 	var list_scroll := ScrollContainer.new()
 	list_scroll.size = Vector2(list_w, _craft_panel.size.y - 10)
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	list_scroll.position = Vector2(0, 0)
 	_craft_panel.add_child(list_scroll)
 	var list_vbox := VBoxContainer.new()
-	list_vbox.size = Vector2(list_w, RECIPES.size() * 38)
+	list_vbox.size = Vector2(list_w, RECIPES.size() * 48)
+	list_vbox.add_theme_constant_override("separation", 6)
 	list_scroll.add_child(list_vbox)
 
 	for i in RECIPES.size():
 		var r := RECIPES[i]
 		var row = ColorRect.new()
 		row.color = INSET_FILL
-		row.custom_minimum_size = Vector2(list_w - 6, 34)
-		row.size = Vector2(list_w - 6, 34)
+		row.custom_minimum_size = Vector2(list_w - 6, 44)
+		row.size = Vector2(list_w - 6, 44)
 		row.visible = Logic.is_available(r)
 		list_vbox.add_child(row)
 		var lbl := Label.new()
 		lbl.text = tr(r["name_key"])
-		lbl.size = Vector2(row.size.x - 36, 30)
-		lbl.position = Vector2(4, 2)
+		lbl.size = Vector2(row.size.x - 88, 38)
+		lbl.position = Vector2(10, 6)
 		lbl.add_theme_color_override("font_color", STEEL_TEXT)
-		lbl.add_theme_font_size_override("font_size", 11)
+		lbl.add_theme_font_size_override("font_size", 16)
 		row.add_child(lbl)
 		var stlbl := Label.new()
 		stlbl.name = "Status"
 		stlbl.text = tr("WORKBENCH_CRAFTABLE") if _can_craft_recipe(i) else "--"
-		stlbl.size = Vector2(24, 20)
-		stlbl.position = Vector2(row.size.x - 28, 7)
+		stlbl.size = Vector2(72, 24)
+		stlbl.position = Vector2(row.size.x - 82, 10)
+		stlbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		stlbl.add_theme_color_override("font_color", STAMINA if _can_craft_recipe(i) else EMBER)
-		stlbl.add_theme_font_size_override("font_size", 10)
+		stlbl.add_theme_font_size_override("font_size", 12)
 		row.add_child(stlbl)
 		_recipe_btns.append(row)
 		var idx := i
@@ -137,59 +169,60 @@ func _build_craft_panel() -> void:
 				_select_recipe(idx)
 		)
 
-	var detail_x := list_w + 10
+	var detail_x := list_w + 18
 	_detail_frame = ColorRect.new()
 	_detail_frame.color = PANEL
-	_detail_frame.size = Vector2(size.x - detail_x - 10, _craft_panel.size.y - 10)
+	_detail_frame.size = Vector2(_craft_panel.size.x - detail_x, _craft_panel.size.y)
 	_detail_frame.position = Vector2(detail_x, 0)
 	_craft_panel.add_child(_detail_frame)
 
 	_detail_title = Label.new()
-	_detail_title.size = Vector2(_detail_frame.size.x - 20, 22)
-	_detail_title.position = Vector2(10, 6)
+	_detail_title.size = Vector2(_detail_frame.size.x - 32, 30)
+	_detail_title.position = Vector2(16, 12)
 	_detail_title.add_theme_color_override("font_color", BONE_TEXT)
-	_detail_title.add_theme_font_size_override("font_size", 14)
+	_detail_title.add_theme_font_size_override("font_size", 22)
 	_detail_frame.add_child(_detail_title)
 
 	var req_lbl := Label.new()
 	req_lbl.text = tr("CRAFT_REQUIRES")
-	req_lbl.size = Vector2(_detail_frame.size.x - 20, 18)
-	req_lbl.position = Vector2(10, 32)
+	req_lbl.size = Vector2(_detail_frame.size.x - 32, 22)
+	req_lbl.position = Vector2(16, 50)
 	req_lbl.add_theme_color_override("font_color", STEEL_TEXT)
-	req_lbl.add_theme_font_size_override("font_size", 11)
+	req_lbl.add_theme_font_size_override("font_size", 15)
 	_detail_frame.add_child(req_lbl)
 
-	var qty_y := _detail_frame.size.y - 70
+	var qty_y := _detail_frame.size.y - 76
 	var minus := Button.new()
 	minus.text = "-1"
-	minus.size = Vector2(36, 26)
-	minus.position = Vector2(10, qty_y)
-	minus.add_theme_font_size_override("font_size", 10)
+	minus.size = Vector2(52, 48)
+	minus.position = Vector2(16, qty_y)
+	minus.add_theme_font_size_override("font_size", 14)
 	_detail_frame.add_child(minus)
 	minus.pressed.connect(func(): _change_qty(-1))
 
 	_qty_label = Label.new()
 	_qty_label.text = "1"
-	_qty_label.size = Vector2(40, 26)
-	_qty_label.position = Vector2(50, qty_y)
+	_qty_label.size = Vector2(52, 48)
+	_qty_label.position = Vector2(76, qty_y)
 	_qty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_qty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_qty_label.add_theme_color_override("font_color", BONE_TEXT)
-	_qty_label.add_theme_font_size_override("font_size", 14)
+	_qty_label.add_theme_font_size_override("font_size", 18)
 	_detail_frame.add_child(_qty_label)
 
 	var plus := Button.new()
 	plus.text = "+1"
-	plus.size = Vector2(36, 26)
-	plus.position = Vector2(94, qty_y)
-	plus.add_theme_font_size_override("font_size", 10)
+	plus.size = Vector2(52, 48)
+	plus.position = Vector2(136, qty_y)
+	plus.add_theme_font_size_override("font_size", 14)
 	_detail_frame.add_child(plus)
 	plus.pressed.connect(func(): _change_qty(1))
 
 	_create_btn = Button.new()
 	_create_btn.text = tr("WORKBENCH_CREATE_BTN")
-	_create_btn.size = Vector2(110, 30)
-	_create_btn.position = Vector2(_detail_frame.size.x * 0.5 - 55, qty_y)
-	_create_btn.add_theme_font_size_override("font_size", 11)
+	_create_btn.size = Vector2(190, 48)
+	_create_btn.position = Vector2(_detail_frame.size.x - 206, qty_y)
+	_create_btn.add_theme_font_size_override("font_size", 15)
 	_create_btn.disabled = true
 	_detail_frame.add_child(_create_btn)
 	_create_btn.pressed.connect(_do_craft)
@@ -210,33 +243,33 @@ func _update_detail() -> void:
 		return
 	var r := RECIPES[_selected_recipe]
 	_detail_title.text = tr(r["name_key"])
-	var cy := 54.0
+	var cy := 84.0
 	for comp in r["components"]:
 		var item_id = comp[0] as String
 		var needed = comp[1] * _craft_qty
 		var have := InventoryManager.count_of(item_id) if InventoryManager else 0
 		var key := "ITEM_" + item_id.to_upper()
-		var label_x := 10.0
+		var label_x := 16.0
 		var icon_path: String = _INGREDIENT_ICON.get(item_id, "")
 		if icon_path != "" and ResourceLoader.exists(icon_path):
 			var icon := TextureRect.new()
-			icon.position = Vector2(10, cy)
-			icon.size = Vector2(18, 18)
+			icon.position = Vector2(16, cy)
+			icon.size = Vector2(24, 24)
 			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			icon.texture = load(icon_path)
 			_detail_frame.add_child(icon)
 			_comp_labels.append(icon)
-			label_x = 32.0
+			label_x = 50.0
 		var clbl := Label.new()
 		clbl.text = tr(key) + ": " + str(needed) + " / " + str(have)
-		clbl.size = Vector2(_detail_frame.size.x - 10 - label_x, 18)
+		clbl.size = Vector2(_detail_frame.size.x - 32 - label_x, 24)
 		clbl.position = Vector2(label_x, cy)
 		clbl.add_theme_color_override("font_color", STAMINA if have >= needed else EMBER)
-		clbl.add_theme_font_size_override("font_size", 11)
+		clbl.add_theme_font_size_override("font_size", 15)
 		_detail_frame.add_child(clbl)
 		_comp_labels.append(clbl)
-		cy += 22
+		cy += 32
 	var can := _can_craft_qty(_selected_recipe, _craft_qty)
 	_create_btn.disabled = not can
 	_qty_label.text = str(_craft_qty)
@@ -288,24 +321,23 @@ func _refresh_list() -> void:
 
 func _build_salvage_panel() -> void:
 	_salvage_panel = Control.new()
-	_salvage_panel.size = Vector2(size.x, size.y - 32)
-	_salvage_panel.position = Vector2(0, 32)
+	_salvage_panel.size = Vector2(DESIGN.x - 32.0, DESIGN.y - 56.0)
+	_salvage_panel.position = Vector2(16.0, 48.0)
 	_salvage_panel.visible = false
-	add_child(_salvage_panel)
+	_stage.add_child(_salvage_panel)
 	var title := Label.new()
 	title.text = tr("WORKBENCH_SALVAGE")
-	title.size = Vector2(size.x - 20, 24)
-	title.position = Vector2(10, 10)
+	title.size = Vector2(DESIGN.x - 52.0, 30)
+	title.position = Vector2(16, 10)
 	title.add_theme_color_override("font_color", BONE_TEXT)
-	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_font_size_override("font_size", 22)
 	_salvage_panel.add_child(title)
-	title.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098, 1.0))
-	title.add_theme_constant_override("outline_size", 2)
 
 	var scroll := ScrollContainer.new()
 	scroll.name = "SalvageScroll"
-	scroll.size = Vector2(size.x * 0.55, _salvage_panel.size.y - 50)
-	scroll.position = Vector2(10, 36)
+	scroll.size = Vector2(DESIGN.x * 0.54, _salvage_panel.size.y - 60)
+	scroll.position = Vector2(16, 48)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_salvage_panel.add_child(scroll)
 	_salvage_vbox = VBoxContainer.new()
 	_salvage_vbox.size = Vector2(scroll.size.x, 0)
@@ -313,17 +345,18 @@ func _build_salvage_panel() -> void:
 
 	_salvage_info = Label.new()
 	_salvage_info.text = ""
-	_salvage_info.size = Vector2(size.x * 0.35, 80)
-	_salvage_info.position = Vector2(size.x * 0.55 + 20, 36)
+	_salvage_info.size = Vector2(DESIGN.x * 0.34, 120)
+	_salvage_info.position = Vector2(DESIGN.x * 0.55 + 20, 60)
+	_salvage_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_salvage_info.add_theme_color_override("font_color", STEEL_TEXT)
-	_salvage_info.add_theme_font_size_override("font_size", 11)
+	_salvage_info.add_theme_font_size_override("font_size", 16)
 	_salvage_panel.add_child(_salvage_info)
 
 	_salvage_btn = Button.new()
 	_salvage_btn.text = tr("WORKBENCH_CREATE_BTN")
-	_salvage_btn.size = Vector2(110, 30)
-	_salvage_btn.position = Vector2(size.x * 0.55 + 20, 120)
-	_salvage_btn.add_theme_font_size_override("font_size", 11)
+	_salvage_btn.size = Vector2(190, 48)
+	_salvage_btn.position = Vector2(DESIGN.x * 0.55 + 20, 200)
+	_salvage_btn.add_theme_font_size_override("font_size", 15)
 	_salvage_btn.disabled = true
 	_salvage_panel.add_child(_salvage_btn)
 	_salvage_btn.pressed.connect(_do_salvage)
@@ -341,16 +374,16 @@ func _refresh_salvage() -> void:
 		var cnt = slot["count"]
 		var row = ColorRect.new()
 		row.color = INSET_FILL
-		row.custom_minimum_size = Vector2(_salvage_vbox.size.x - 6, 30)
-		row.size = Vector2(_salvage_vbox.size.x - 6, 30)
+		row.custom_minimum_size = Vector2(_salvage_vbox.size.x - 6, 42)
+		row.size = Vector2(_salvage_vbox.size.x - 6, 42)
 		_salvage_vbox.add_child(row)
 		var key := "ITEM_" + String(item_id).to_upper()
 		var lbl := Label.new()
 		lbl.text = tr(key) + " x" + str(cnt)
-		lbl.size = Vector2(row.size.x - 8, 26)
-		lbl.position = Vector2(4, 2)
+		lbl.size = Vector2(row.size.x - 16, 34)
+		lbl.position = Vector2(10, 4)
 		lbl.add_theme_color_override("font_color", STEEL_TEXT)
-		lbl.add_theme_font_size_override("font_size", 11)
+		lbl.add_theme_font_size_override("font_size", 16)
 		row.add_child(lbl)
 		var sidx := idx
 		var click := ColorRect.new()

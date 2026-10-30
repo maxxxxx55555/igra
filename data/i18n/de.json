@@ -1469,6 +1469,7 @@
   "INV_EMPTY": "leer",
   "INV_SELECT": "Wähle einen Gegenstand",
   "INV_HINTS": "Tab / Esc: schließen · Klick: wählen · Entf: wegwerfen",
+  "INV_HINTS_TOUCH": "Tippen: wählen · Ziehen: Schnellzugriff · Erneut tippen: prüfen",
   "INV_VITALS": "Gesundheit %d · Ausdauer %d · Batterie %d",
   "Auto Aim": "Zielhilfe",
   "EVENT_HALLUCINATION": "Schritte hinter dir. Niemand ist da.",
