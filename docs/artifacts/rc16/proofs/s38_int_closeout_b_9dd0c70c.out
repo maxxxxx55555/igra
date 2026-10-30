@@ -1,0 +1,7 @@
+# proof s38_int_closeout_b_9dd0c70c
+# utc 20261030T091511Z
+# head 9dd0c70c (uncommitted paths: 35)
+# env none
+# cmd --attach .qa_logs/closeout_check.log -- bash tools/qa_sim/closeout_check 400
+tools/qa_sim/proof_run: line 36: --attach: command not found
+# EXIT=127

@@ -1,5 +1,13 @@
 ﻿# Known issues
 
+## OPEN (2026-10-30, Session 38, the best variants integration): what the merge of the other branches left
+
+The other branches were reviewed and the world art of `origin/qoder/premium-visual-recovery` up to `44a374a1` was integrated (the rows are S38I of `docs/RUN_STATE.md`).
+
+- **Three later commits of that branch are not in `main`** (`5556161e`, `20af0da1`, `352240aa`): they darken the road and the props and add normal maps to a road shader that `main` replaced; take them only with frames of every district and a read of the road at night. The other agent keeps working on the branch.
+- **The power_station frame p95 is 29.59 ms against the 33 ms budget** (`docs/artifacts/rc16/proofs/s38_perf3_b935b643.attach.perf_check_scene.log`) on a shared desktop GPU; nothing was read on a phone, and a fresh phone profile now starts at the Medium tier (`scripts/systems/settings_manager.gd:84`; SSAO off, 0.75 of the particles).
+- **The security log of the shared QA profile holds 48 of its 50 entries** (QA runs, not play): a check that counts one more line fails on a full log; SEC2 no longer does (`scripts/tools/rc16/sec23_checks.gd`).
+
 ## OPEN (2026-10-30, Session 38, the visual recovery brief): what the rebuilt inventory and street left
 
 The owner sent a brief that supersedes the visual prompts and then told the agent to stop the visual work; what was done is in the Session 38 block of `docs/RUN_STATE.md` (S38R rows) and the open defects are its S38R-DEFECTS row.
@@ -7,7 +15,7 @@ The owner sent a brief that supersedes the visual prompts and then told the agen
 - **The world is still boxes with relief** (G2 and G3 FAIL, C2 FAIL): the facades need authored or CC0 meshes with modelled openings and several families; the electrical equipment, the wrecks and the first-person hands need meshes the repo does not have.
 - **The minimap is points in an empty ring** (`scripts/ui/minimap.gd`) and **a reward and a level-up are two separate floating lines**: the brief asks for streets on the minimap and one notification queue; the checks `hud_checks.gd` and `sec_checks.gd` read `UIManager._toast` and change with the queue.
 - **Only the inventory uses the new kit** (`scripts/ui/inv_kit.gd`); the menu, the map, the settings and the other screens keep the older chrome.
-- **The sidewalk tiles (4 m) overlap the road lanes** (`scripts/world/street_builder.gd`): a raised curb and a separate sidewalk need the layout and the collisions changed together; the paving is a shader only.
+- **The sidewalk tiles overlapped the road lanes**: closed by the integration, the street is 2 m tiles with a 2 m sidewalk and curbs (`scripts/world/street_builder.gd`); the collision is still strips on the old footprint.
 - **The shared QA profile can be held by another process**: at the end of the pass a Godot run that was not this pass' held `Last Streetlight.qa_snapshot`, and the guarded Windows boot refused to start (the guard worked); a boot with a fresh isolated profile (`APPDATA` redirected) replaced it. Run a guarded launch only when `app_userdata/Last Streetlight.qa_snapshot` does not exist.
 - **No close or oblique capture and no reviewed traversal** (C3, C4) were made.
 
