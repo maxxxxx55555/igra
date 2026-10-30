@@ -57,7 +57,7 @@ const _GRASS := preload("res://scripts/world/dead_grass.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
-const FACADE_GAIN: Array[float] = [0.24, 0.30, 0.36, 0.42]
+const FACADE_GAIN: Array[float] = [0.20, 0.25, 0.30, 0.34]
 ## How much of the hue of a district's glow the concrete keeps: 1 is the palette's own, 0 a grey wall. The police and the park stood a saturated blue and green in the store frames of launch 8; the style guide says
 ## desaturated.
 const GLOW_HUE: float = 0.5

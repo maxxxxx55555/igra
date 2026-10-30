@@ -25,6 +25,9 @@ const QUICK_TARGET := Vector2(64, 64)
 const QUICK_ICON: float = 40.0
 const QUICK_KEY_POS := Vector2(6.0, 2.0)
 const EQUIPMENT_WIDTH: float = 216.0
+## The item column is as wide as the grid it holds and no wider: an expanding column pushed the four columns of slots to
+## the middle of the leftover space, so the sheet read as two panels with a hole between them.
+const ITEM_WIDTH: float = 508.0
 const INSPECTOR_WIDTH: float = 368.0
 const MIN_ACTION_HEIGHT: float = 48.0
 
@@ -115,6 +118,7 @@ func _root(frame: PanelContainer) -> void:
 	_body = HBoxContainer.new()
 	_body.name = "InventoryBody"
 	_body.add_theme_constant_override("separation", 14)
+	_body.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(_body)
 	_equipment_col = VBoxContainer.new()
@@ -126,7 +130,8 @@ func _root(frame: PanelContainer) -> void:
 	_item_col = VBoxContainer.new()
 	_item_col.name = "ItemColumn"
 	_item_col.add_theme_constant_override("separation", 8)
-	_item_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_item_col.custom_minimum_size = Vector2(ITEM_WIDTH, 0)
+	_item_col.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_item_col.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_body.add_child(_item_col)
 	_build_toolbar()
@@ -261,6 +266,7 @@ func _apply_responsive() -> void:
 	_narrow = UiScale.narrow_layout(window_width, text_scale)
 	_inspector_col.visible = not _narrow
 	_equipment_col.custom_minimum_size.x = 184.0 if _narrow else EQUIPMENT_WIDTH
+	_item_col.custom_minimum_size.x = 0.0 if _narrow else ITEM_WIDTH  # a phone screen has no leftover to keep the grid away from
 	_overlay.visible = _narrow and _overlay_open and _selected >= 0
 	if _narrow and _selected >= 0:
 		_refresh_detail()
