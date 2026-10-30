@@ -400,3 +400,10 @@ n	utc	head	id	exit	command
 399	20261029T235228Z	86341f20	s38_winexport3_86341f20	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
 400	20261029T235329Z	86341f20	s38_winboot3_86341f20	99	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 401	20261030T000202Z	86341f20	s38_winboot4_86341f20	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
+402	20261030T075812Z	9efeb89b	s38_main_all_9efeb89b	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+403	20261030T081924Z	17170222	s38_export10_17170222	0	bash .qa_logs/s38_export_vc14.sh
+404	20261030T082408Z	17170222	s38_s23_pre_17170222	1	bash tools/qa_sim/closeout_check
+405	20261030T082626Z	17170222	s38_s23_fix_17170222	0	bash tools/qa_sim/closeout_check
+406	20261030T082824Z	9dd0c70c	s38_int_all_9dd0c70c	4	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+407	20261030T091511Z	9dd0c70c	s38_int_closeout_b_9dd0c70c	127	--attach .qa_logs/closeout_check.log -- bash tools/qa_sim/closeout_check 400
+408	20261030T091526Z	9dd0c70c	s38_int_closeout_c_9dd0c70c	0	bash tools/qa_sim/closeout_check 400
