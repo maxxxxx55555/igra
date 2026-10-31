@@ -20,18 +20,18 @@ CODE decides whether to adopt each into a content file or wire it.
 | `CAPTION_GALLERY_POWER_STATION` | The center. My forty years end here — one way or another. |
 | `CAPTION_GALLERY_RESIDENTIAL` | A thousand windows. I count the lit ones every night. The count grows. |
 | `CAPTION_GALLERY_SCHOOL` | Somebody chalked a sun on the blackboard. It outlasted the grid. |
-| `CAPTION_GALLERY_SUBSTATION` | Marat walked in here and never walked out. Mind the hum. |
+| `CAPTION_GALLERY_SUBSTATION` | Marat walked in here and kept walking east. Mind the hum. |
 | `CAPTION_GALLERY_SUBURBS` | Where the lights went out first, and where they'll come back first. |
 | `CAPTION_GALLERY_THE_ARCHITECT` | It built its nest in the dead grid. Tonight we evict it. |
 | `CAPTION_GALLERY_THE_KEEPER` | Forty years of work orders. This face kept every lamp logged by hand. |
 | `CAPTION_GALLERY_WAREHOUSES` | Crates of lamps nobody installed. I installed them. You're welcome. |
-| `CAPTION_MOMENT_DOC_BLACKOUT_NEWS` | The last paper says one day. It has been years. Somebody tore the date out — hope or mercy. |
+| `CAPTION_MOMENT_DOC_BLACKOUT_NEWS` | The last paper says one day. It has been months. Somebody tore the date out — hope or mercy. |
 | `CAPTION_MOMENT_DOC_FINAL_LIGHT` | "While one lamp burns, the city lives." I wrote that. I still believe it. |
 | `CAPTION_MOMENT_DOC_FIRST_DEATH` | A dead man's note: "Light is the only prayer." He was right. He is still right. |
 | `CAPTION_MOMENT_DOC_MANIFESTO` | Found my own manifesto by the last lamp. Younger handwriting. Same promise. |
 | `CAPTION_MOMENT_DOC_PROTOCOL_DAWN` | EON's Protocol Dawn: lock the grid, save the staff. They locked it. Nobody saved anybody. |
 | `CAPTION_MOMENT_DOC_VOICE_IN_WIRES` | Something talks on the wires at night. I log the words. I do not answer. |
-| `CAPTION_MOMENT_ENDING_DARKNESS` | Last night. I blew the lamps out myself. Forgive me. It was the only way to starve it. |
+| `CAPTION_MOMENT_ENDING_DARKNESS` | Last night. The lamps went out and I could not relight them. Forgive me. |
 | `CAPTION_MOMENT_ENDING_LIGHT` | Last night. The grid held. Forty years of work orders — paid in full. |
 | `CAPTION_MOMENT_FIRST_LIGHT` | Night 1. One lamp. Mine. The street remembered what morning was. |
 | `CAPTION_MOMENT_NG_PLUS` | Night 1, again. The city reset; I didn't. The log continues. It always continues. |
@@ -59,7 +59,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DAILY_PLAY_120_FLAVOR` | Two hours. A full watch. Log it with pride. |
 | `DAILY_PLAY_12_FLAVOR` | Twelve minutes. The city is quieter when you are in it. |
 | `DAILY_PLAY_15_FLAVOR` | Fifteen minutes on the wire. Steady work. |
-| `DAILY_PLAY_20_FLAVOR` | Twenty minutes. That is a shift, Keeper. |
+| `DAILY_PLAY_20_FLAVOR` | Twenty minutes. That is a shift, engineer. |
 | `DAILY_PLAY_30_FLAVOR` | Thirty minutes. Half an hour against the dark. |
 | `DAILY_PLAY_45_FLAVOR` | Forty-five. The lamps know your footsteps by now. |
 | `DAILY_PLAY_60_FLAVOR` | Sixty minutes. A full hour. The Keeper nods. |
@@ -98,7 +98,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DAILY_STREETS_12_FLAVOR` | Twelve streets. A whole district's worth of dawn. |
 | `DAILY_STREETS_16_FLAVOR` | Sixteen streets. Light the city like it's Night Zero in reverse. |
 | `DISTRICT_2_TOAST` | District 2 restored! The city breathes again. |
-| `DOC_BLACKOUT_NEWS_TEXT` | “EON announces: the outage will last no more than a day. Residents are asked to remain calm...” |
+| `DOC_BLACKOUT_NEWS_TEXT` | “City Power announces: the outage will last no more than a day. Residents are asked to remain calm...” |
 | `DOC_BOSS_SUIT_TEXT` | “Surname blacked out. Position: director. Special notes: never once seen in daylight.” |
 | `DOC_BOSS_SUIT_TITLE` | EON Director's Personnel File |
 | `DOC_CABLE_MATH_TEXT` | “Total reserve capacity: 0. Extent of damage: the entire city.” |
@@ -128,7 +128,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_MACHINE_DIARY_TEXT` | “Day 1: I am a conveyor. Day 3: I remember the hands that assembled me. Day 7: I assemble hands.” |
 | `DOC_MACHINE_DIARY_TITLE` | The Machine's Diary (Unsigned) |
 | `DOC_MURDER_LETTERS_TEXT` | “Dear neighbor! I switch off your light at 23:00, because it disturbs my peace.” |
-| `DOC_OLD_WOMAN_TEXT` | “Sonny, if you're reading this, you're alive, and that's what matters. Granny Manya says: the light in this city isn't electricity.” |
+| `DOC_OLD_WOMAN_TEXT` | “Sonny, if you're reading this, you're alive, and that's what matters. Babka Manya says: the light in this city isn't electricity.” |
 | `DOC_OLD_WOMAN_TITLE` | Letter from the Old Woman at No. 24 |
 | `DOC_PROTOCOL_DAWN_TEXT` | Secret EON order No. 7: in case of irreversible failure of the power grid, launch Protocol DAWN. |
 | `DOC_RADIO_DIARY_01_TEXT` | “Friday. The grid died at 03:14. The radio still picks up static from the north.” |
@@ -142,8 +142,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_SCHOOL_INCIDENT_TEXT` | “Teacher on duty: March 15, classes cancelled. All 300 students were in the basement.” |
 | `DOC_SCHOOL_INCIDENT_TITLE` | School Logbook: Last Entry |
 | `DOC_STATION_LOG_FINAL_TEXT` | “23:59 — Power: 0%. Anomaly: 100%. The station: no longer a station. Me: no longer me.” |
-| `DOC_STREETLIGHT_MANIFESTO_TEXT` | “As long as a single streetlight burns, the city lives. I repaired them for forty years. Now I repair them the other way round.” |
-| `DOC_STREETLIGHT_MANIFESTO_TITLE` | The Lamplighter's Manifesto |
+| `DOC_STREETLIGHT_MANIFESTO_TEXT` | “As long as a single streetlight burns, the city lives. I kept them for forty years. Now I keep them the other way round.” |
 | `DOC_STRIKE_TEXT` | “Workers of Factory No. 9, March 12: we demand the night shift be abolished! At night the machines run by themselves.” |
 | `DOC_SUBSTATION_GUARD_TEXT` | “Shift 12, security: the facility cannot be entered, the door is welded shut.” |
 | `DOC_SURVIVOR_TIPS_TEXT` | “1. Don't run — running attracts them. 2. Light — turn it on for only 10 seconds, then switch it off.” |
@@ -194,7 +193,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 184 keys.
+Total: 183 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is
