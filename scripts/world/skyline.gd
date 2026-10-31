@@ -30,6 +30,11 @@ const PALETTES := {
 	&"power_station": [[Color("#15191e"), Color("#1b2026"), Color("#21262d")], Color(0.10, 0.11, 0.13)],
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
+## The front plate of a panel block stands this far in front of its body, so every window sits in a real reveal: the glass is
+## OPEN_X by OPEN_Y, the plate is SHELL_DEPTH deep and the wall of the block behind it is the back of the recess.
+const SHELL_DEPTH := 0.30
+const OPEN_X := 1.16
+const OPEN_Y := 1.52
 const FACADE_TEX := {
 	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.png",
 	&"residential": "res://assets/textures/pbr/painted_brick_albedo.png",
@@ -52,7 +57,7 @@ const _GRASS := preload("res://scripts/world/dead_grass.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
-const FACADE_GAIN: Array[float] = [0.18, 0.22, 0.26, 0.32]
+const FACADE_GAIN: Array[float] = [0.20, 0.25, 0.30, 0.34]
 ## How much of the hue of a district's glow the concrete keeps: 1 is the palette's own, 0 a grey wall. The police and the park stood a saturated blue and green in the store frames of launch 8; the style guide says
 ## desaturated.
 const GLOW_HUE: float = 0.5
@@ -63,7 +68,7 @@ const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
 const BALCONIES := {&"suburbs": 0.30, &"residential": 0.35, &"hospital": 0.12, &"school": 0.08, &"police": 0.10}
 const WIN_BONE := Color(0.85, 0.82, 0.77)
 ## Share of windows lit per power stage: DARK, PARTIAL, STREETS, FULL.
-const STAGE_LIT: Array[float] = [0.02, 0.18, 0.36, 0.56]
+const STAGE_LIT: Array[float] = [0.04, 0.26, 0.44, 0.62]
 ## Per district: [min height, max height, min width, max width, share of empty lots].
 const STYLE := {
 	&"suburbs": [6.0, 9.0, 8.0, 11.0, 0.25],
@@ -89,6 +94,7 @@ var _halos: MultiMeshInstance3D = null
 var _ground_mat: ShaderMaterial = null
 var _fronts: Array[Transform3D] = []
 var _widths: Array[float] = []
+var _cur_seed := 0.0
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
@@ -104,11 +110,15 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var edge := half_extent + RING_GAP
 	var blocks: Array[Transform3D] = []
 	var tints: Array[Color] = []
+	var customs: Array[Color] = []
 	var panes: Array[Transform3D] = []
 	var no_tints: Array[Color] = []
 	var trim: Array[Transform3D] = []
 	var sills: Array[Transform3D] = []
 	var pipes: Array[Transform3D] = []
+	var rails: Array[Transform3D] = []
+	var boards: Array[Transform3D] = []
+	var acs: Array[Transform3D] = []
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
@@ -124,27 +134,31 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			along += w + rng.randf_range(1.0, 3.0)
 			if skip:
 				continue
-			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5)))
+			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5 - SHELL_DEPTH)))
 			var tint: Color = facades[rng.randi() % facades.size()]
+			_cur_seed = rng.randf()
 			tints.append(tint)
+			customs.append(Color(w, h, 0.0, _cur_seed))
 			_fronts.append(Transform3D(turn, turn * Vector3(cx, 0.0, -edge)))
 			_widths.append(w)
-			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
+			var block_frame := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
+			_build_front_shell(blocks, tints, customs, block_frame, Vector3(w, h, d), tint)
+			_dress_block(extra, block_frame, Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints, customs, rails)
 			if with_windows:
-				var block_frame := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
 				var y := 2.6
 				while y < h - 1.4:
 					var x := cx - w * 0.5 + 1.2
 					while x < cx + w * 0.5 - 1.0:
-						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
-						_dress_window(trim, sills, Transform3D(turn, turn * Vector3(x, y, -edge)))
+						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge - 0.09)))
+						_dress_window(extra, trim, sills, boards, acs, Transform3D(turn, turn * Vector3(x, y, -edge)))
 						x += 2.2
 					trim.append(block_frame * Transform3D(Basis.from_scale(Vector3(w - 0.3, 0.09, 0.22)), Vector3(0.0, y - 1.32, 0.11)))
 					y += 2.6
 				_dress_front(trim, pipes, block_frame, Vector3(w, h, d))
-	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
+	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
 	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
 	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
+	_add_detail_batch("BalconyRails", BoxMesh.new(), rails, _detail_material("rusted_metal", Color(0.20, 0.18, 0.15)))
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055
 	pipe_mesh.bottom_radius = 0.055
@@ -152,6 +166,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	pipe_mesh.radial_segments = 8
 	pipe_mesh.rings = 1
 	_add_detail_batch("FacadePipes", pipe_mesh, pipes, _detail_material("rusted_metal", Color(0.34, 0.31, 0.27)))
+	_add_detail_batch("WindowBoards", BoxMesh.new(), boards, _detail_material("plywood", Color(0.72, 0.60, 0.42)))
+	_add_detail_batch("WindowUnits", BoxMesh.new(), acs, _detail_material("ceramic_tile", Color(0.62, 0.63, 0.60)))
 	_apply_gain(PowerGrid.get_stage(district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	if not panes.is_empty():
@@ -173,15 +189,50 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	_add_ground()
 	_add_solid_ground(edge)
 
-## The roof of a panel block, a stairwell and now and then a water tank and an aerial, and a balcony slab under a share of its windows (`frame` is the front face of the block at the ground, x at its middle, z toward the street).
-func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color]) -> void:
+## The front plate of the block: a sill band below the windows, a lintel band above them, an upright pier between every pair
+## of windows and a jamb at each end, all SHELL_DEPTH deep. The body of the block stands behind it, so every opening is a
+## real recess with jamb, lintel and sill faces that catch the lamp, which is what a panel block actually is.
+func _build_front_shell(blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], frame: Transform3D, size: Vector3, tint: Color) -> void:
+	var cols: Array[float] = []
+	var x := 1.2 - size.x * 0.5
+	while x < size.x * 0.5 - 1.0:
+		cols.append(x)
+		x += 2.2
+	var rows: Array[float] = []
+	var y := 2.6
+	while y < size.y - 1.4:
+		rows.append(y)
+		y += 2.6
+	if cols.is_empty() or rows.is_empty():
+		return
+	var z := -SHELL_DEPTH * 0.5
+	var sill := rows[0] - OPEN_Y * 0.5
+	var head := rows[rows.size() - 1] + OPEN_Y * 0.5
+	# the wall across the front, in bands: under the first sill, between the floors, and above the top lintel up to the parapet
+	for row in rows.size() + 1:
+		var bottom: float = 0.0 if row == 0 else rows[row - 1] + OPEN_Y * 0.5
+		var top: float = size.y if row == rows.size() else rows[row] - OPEN_Y * 0.5
+		var height := top - bottom
+		if height > 0.02:
+			_put(blocks, tints, customs, frame, Vector3(0.0, bottom + height * 0.5, z), Vector3(size.x, height, SHELL_DEPTH), tint, size)
+	# and the piers that separate the openings, jamb to jamb across the window strip
+	for col in cols.size() + 1:
+		var left: float = -size.x * 0.5 if col == 0 else cols[col - 1] + OPEN_X * 0.5
+		var right: float = size.x * 0.5 if col == cols.size() else cols[col] - OPEN_X * 0.5
+		var width := right - left
+		if width > 0.02:
+			_put(blocks, tints, customs, frame, Vector3(left + width * 0.5, (sill + head) * 0.5, z), Vector3(width, head - sill, SHELL_DEPTH), tint, size)
+
+## The roof of a panel block, a stairwell and now and then a water tank and an aerial, a balcony slab under a share of its
+## windows and the rail of that balcony (`frame` is the front face of the block at the ground, x at its middle, z toward the street).
+func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], rails: Array[Transform3D]) -> void:
 	var lighter := tint.lightened(0.18)
 	var stair := Vector3(rng.randf_range(2.2, 3.4), 2.4, rng.randf_range(2.4, minf(4.0, size.z * 0.45)))
-	_put(blocks, tints, frame, Vector3(rng.randf_range(-0.25, 0.25) * size.x, size.y + stair.y * 0.5, -size.z * rng.randf_range(0.3, 0.6)), stair, lighter)
+	_put(blocks, tints, customs, frame, Vector3(rng.randf_range(-0.25, 0.25) * size.x, size.y + stair.y * 0.5, -size.z * rng.randf_range(0.3, 0.6)), stair, lighter, size)
 	if rng.randf() < 0.5:
-		_put(blocks, tints, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 0.9, -size.z * 0.7), Vector3(1.6, 1.8, 1.6), tint)
+		_put(blocks, tints, customs, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 0.9, -size.z * 0.7), Vector3(1.6, 1.8, 1.6), tint, size)
 	if rng.randf() < 0.4:
-		_put(blocks, tints, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 2.2, -size.z * 0.5), Vector3(0.12, 4.4, 0.12), tint)
+		_put(blocks, tints, customs, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 2.2, -size.z * 0.5), Vector3(0.12, 4.4, 0.12), tint, size)
 	if balconies <= 0.0:
 		return
 	var y := 2.6
@@ -189,23 +240,48 @@ func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3,
 		var x := 1.2 - size.x * 0.5
 		while x < size.x * 0.5 - 1.0:
 			if rng.randf() < balconies:
-				_put(blocks, tints, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter)
+				_put(blocks, tints, customs, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter, size)
+				var rail := Vector3(0.05, 0.86, 0.72)
+				for side in [-1.0, 1.0]:
+					rails.append(frame * Transform3D(Basis.from_scale(rail), Vector3(x + side * 0.72, y - 0.24, 0.39)))
+				rails.append(frame * Transform3D(Basis.from_scale(Vector3(1.48, 0.86, 0.05)), Vector3(x, y - 0.24, 0.73)))
+				if rng.randf() < 0.4:
+					_put(blocks, tints, customs, frame, Vector3(x + rng.randf_range(-0.4, 0.4), y - 0.16, 0.42), Vector3(0.5, 1.0, 0.45), lighter, size)
 			x += 2.2
 		y += 2.6
 
-func _put(blocks: Array[Transform3D], tints: Array[Color], frame: Transform3D, at: Vector3, size: Vector3, tint: Color) -> void:
+func _put(blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], frame: Transform3D, at: Vector3, size: Vector3, tint: Color, block: Vector3) -> void:
 	blocks.append(frame * Transform3D(Basis.from_scale(size), at))
 	tints.append(tint)
+	# The piece carries its own block into the shader: the width the panel grid is measured against, where the piece sits along
+	# that width and up the storey, and the seed of the weathering. A pier, a lintel and the wall behind them then draw the same
+	# seams, the same stain under the same window and the same peeled patch, so the front reads as one building and not as boxes.
+	customs.append(Color(block.x, block.y, at.x, _cur_seed))
 
 ## A window gets a projecting metal frame, a concrete sill and a deeper drip ledge: the pane sits behind
 ## them, so the opening reads as a real recess from an oblique view instead of a lit sticker on a box.
-func _dress_window(trim: Array[Transform3D], sills: Array[Transform3D], frame: Transform3D) -> void:
+## Some of them are boarded from the inside, some lost their glass and got shutters, and under a few a
+## condenser unit hangs on two brackets — the three ways a flat facade ages.
+func _dress_window(rng: RandomNumberGenerator, trim: Array[Transform3D], sills: Array[Transform3D], boards: Array[Transform3D], acs: Array[Transform3D], frame: Transform3D) -> void:
 	for side in [-0.55, 0.55]:
 		trim.append(frame * Transform3D(Basis.from_scale(Vector3(0.08, 1.52, 0.20)), Vector3(side, 0.0, 0.10)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(1.28, 0.09, 0.20)), Vector3(0.0, 0.74, 0.10)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(1.36, 0.07, 0.26)), Vector3(0.0, -0.70, 0.13)))
 	sills.append(frame * Transform3D(Basis.from_scale(Vector3(1.34, 0.10, 0.36)), Vector3(0.0, -0.76, 0.16)))
 	sills.append(frame * Transform3D(Basis.from_scale(Vector3(1.16, 0.06, 0.52)), Vector3(0.0, -0.84, 0.23)))
+	var roll := rng.randf()
+	if roll < 0.16:
+		for plank in 3:
+			var tilt := rng.randf_range(-0.14, 0.14)
+			boards.append(frame * Transform3D(Basis.from_euler(Vector3(0.0, 0.0, tilt)) * Basis.from_scale(Vector3(1.22, 0.22, 0.05)),
+					Vector3(rng.randf_range(-0.05, 0.05), -0.52 + plank * 0.52, -0.04)))
+	elif roll < 0.30:
+		for side in [-1.0, 1.0]:
+			trim.append(frame * Transform3D(Basis.from_scale(Vector3(0.56, 1.46, 0.05)), Vector3(side * 0.60, 0.0, 0.05)))
+	elif roll < 0.44:
+		var under := rng.randf_range(0.7, 1.3)
+		acs.append(frame * Transform3D(Basis.from_scale(Vector3(0.52, 0.36, 0.32)), Vector3(under - 0.75, -1.05, 0.20)))
+		acs.append(frame * Transform3D(Basis.from_scale(Vector3(0.06, 0.52, 0.06)), Vector3(under - 0.75, -0.80, 0.05)))
 
 ## Base course, cornice, parapet and a rain pipe with brackets give the block a hand-built silhouette.
 func _dress_front(trim: Array[Transform3D], pipes: Array[Transform3D], frame: Transform3D, size: Vector3) -> void:
@@ -242,15 +318,20 @@ func _detail_material(set_name: String, tint: Color) -> StandardMaterial3D:
 	mat.emission = Color(0.045, 0.042, 0.038)
 	return mat
 
-func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool, glow: Color = FACADE_GLOW) -> void:
+func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool, glow: Color = FACADE_GLOW, customs: Array[Color] = []) -> void:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
 	mm.use_colors = true
+	if not customs.is_empty():
+		# four floats per instance: the block the piece belongs to. The flag only turns on while the mesh is still empty.
+		mm.use_custom_data = true
 	mm.mesh = mesh
 	mm.instance_count = xforms.size()
 	for i in xforms.size():
 		mm.set_instance_transform(i, xforms[i])
 		mm.set_instance_color(i, tints[i] if i < tints.size() else WIN_DARK)
+		if not customs.is_empty():
+			mm.set_instance_custom_data(i, customs[i])
 	var mat: Material
 	if unshaded:
 		# The panes: the instance colour is the lamp behind the glass and the shader gives each pane its inside (soviet_window.gdshader); the Low tier keeps the flat pane.
@@ -267,6 +348,9 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		var facade_tex_path: String = FACADE_TEX.get(_district_id, FACADE_TEX[&"suburbs"])
 		if ResourceLoader.exists(facade_tex_path):
 			_facade_mat.set_shader_parameter("facade_tex", load(facade_tex_path))
+		var facade_nrm_path: String = facade_tex_path.replace("_albedo", "_normal")
+		if ResourceLoader.exists(facade_nrm_path):
+			_facade_mat.set_shader_parameter("facade_nrm", load(facade_nrm_path))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
 		mat = _facade_mat
@@ -328,7 +412,7 @@ func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
 		_window_mat.set_shader_parameter("interior", minf(detail, 1.0))
 	if _halos != null:
 		_halos.visible = detail > 0.5
-	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes"]:
+	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes", "BalconyRails", "WindowBoards", "WindowUnits"]:
 		var node := get_node_or_null(node_name) as Node3D
 		if node != null:
 			node.visible = detail >= 1.0

@@ -114,6 +114,18 @@ def violations(root, pats, names=None):
                     out.append('FAIL %s:%d: play_ui("%s") has no %s' % (rel, number, m.group(1), target))
                 elif lacking(target):
                     out.append('FAIL %s:%d: play_ui("%s") names %s, which is %s' % (rel, number, m.group(1), target, why(target)))
+    # A texture set is asked for by its name (`_detail_material("panel_facade", ...)`, pbr_sets.gd builds the path), which no literal path shows:
+    # a quoted set name whose albedo the export leaves out is the facade textures of Session 38 again (the Opus review, R1).
+    sets = sorted(p.name[:-len("_albedo.png")] for p in (root / "assets" / "textures" / "pbr").glob("*_albedo.png")) if (root / "assets" / "textures" / "pbr").is_dir() else []
+    for name in sets:
+        albedo = "assets/textures/pbr/%s_albedo.png" % name
+        if not (matched(albedo, pats) or (names is not None and not packed(root, names, albedo))):
+            continue
+        for rel, path in files:
+            for number, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+                code = strip_comment(line) if path.suffix in (".gd", ".gdshader") else line
+                if path.suffix == ".gd" and '"%s"' % name in code:
+                    out.append("FAIL %s:%d: the texture set %s is asked for by name and its albedo is %s" % (rel, number, name, why(albedo)))
     in_autoload = False
     for number, line in enumerate((root / "project.godot").read_text(encoding="utf-8", errors="replace").splitlines(), 1):
         if line.startswith("["):
@@ -166,7 +178,16 @@ def demo():
         assert found == [], found
         found, count = violations(root, patterns("Android", root), whole - {PACK + "scripts/security/log.gd.remap", PACK + ".godot/imported/a.etc2.ctex"})
         assert len(found) == 4 and all(v.startswith("FAIL") for v in found), found
-    print("export_refs_check demo: a preload and an autoload that the filter leaves out fail; a format string whose files are all left out fails; a load() is a note that fails unless ACCEPTED_NOTES lists it; a comment, a shipped format string and a tools script are not read; "
+        (root / "assets" / "textures" / "pbr").mkdir(parents=True)
+        (root / "assets" / "textures" / "pbr" / "brick_albedo.png").write_bytes(b"x")
+        (root / "scripts" / "systems" / "wall.gd").write_text('func skin() -> void:\n\tpaint("brick")\n', encoding="utf-8")
+        (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*,assets/textures/pbr/brick_*"\n', encoding="utf-8")
+        found, count = violations(root, patterns("Android", root))
+        assert any("wall.gd:2" in v and "brick" in v and v.startswith("FAIL") for v in found), found
+        (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*"\n', encoding="utf-8")
+        found, count = violations(root, patterns("Android", root))
+        assert not any("brick" in v for v in found), found
+    print("export_refs_check demo: a preload and an autoload that the filter leaves out fail; a format string whose files are all left out fails; a load() is a note that fails unless ACCEPTED_NOTES lists it; a quoted texture set name whose albedo is left out fails; a comment, a shipped format string and a tools script are not read; "
           "against a bundle, a file the export did not pack fails and one platform variant of an imported file is enough")
     return 0
 
