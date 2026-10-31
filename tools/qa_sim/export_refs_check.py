@@ -27,6 +27,9 @@ PATH = re.compile(r"res://[^\"'\s)\]},]+")
 CUE = re.compile(r'play_ui\("([A-Za-z0-9_]+)"\)')
 PACK = "assetPackInstallTime/assets/"
 IMPORTED = re.compile(r'(?m)^path[.\w]*="res://([^"]+)"')
+# A NOTE is a decision for a person, and the facade textures were a note nobody read (Session 38, the Opus review, R1): the gate fails on any note that is not listed here.
+# Taken so far: the QA launch guard names a tool script it only runs in a debug build, and the monsters ask for sounds by a format string of which the interact set is not used.
+ACCEPTED_NOTES = (("scripts/core/qa_launch_guard.gd", "scripts/tools/shot_tool.gd"), ("scripts/enemies/base_monster.gd", "assets/audio/sfx/%s%s"))
 
 
 def patterns(preset, root=ROOT):
@@ -122,6 +125,11 @@ def violations(root, pats, names=None):
     return out, len(files)
 
 
+def unaccepted(notes):
+    """The NOTE lines that no (file, path) pair of ACCEPTED_NOTES covers."""
+    return [n for n in notes if not any(f in n and t in n for f, t in ACCEPTED_NOTES)]
+
+
 def demo():
     with tempfile.TemporaryDirectory() as tmp:
         root = pathlib.Path(tmp)
@@ -147,6 +155,7 @@ def demo():
         assert any("icon.gd:1" in v and "2 of the 2" in v for v in fails), found
         assert any("fine.gd:6" in v and "ending_sting" in v and "has no" in v for v in fails), found
         assert any(v.startswith("NOTE") and "fine.gd:4" in v for v in found), found
+        assert unaccepted([v for v in found if v.startswith("NOTE")]) and unaccepted(["NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*"]) == [], found
         (root / "assets" / "audio" / "ui").mkdir(parents=True)
         (root / "assets" / "audio" / "ui" / "ui_ending_sting.ogg").write_bytes(b"x")
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*"\n', encoding="utf-8")
@@ -157,7 +166,7 @@ def demo():
         assert found == [], found
         found, count = violations(root, patterns("Android", root), whole - {PACK + "scripts/security/log.gd.remap", PACK + ".godot/imported/a.etc2.ctex"})
         assert len(found) == 4 and all(v.startswith("FAIL") for v in found), found
-    print("export_refs_check demo: a preload and an autoload that the filter leaves out fail; a format string whose files are all left out fails; a load() is a note; a comment, a shipped format string and a tools script are not read; "
+    print("export_refs_check demo: a preload and an autoload that the filter leaves out fail; a format string whose files are all left out fails; a load() is a note that fails unless ACCEPTED_NOTES lists it; a comment, a shipped format string and a tools script are not read; "
           "against a bundle, a file the export did not pack fails and one platform variant of an imported file is enough")
     return 0
 
@@ -169,9 +178,13 @@ def main():
     names = set(zipfile.ZipFile(sys.argv[sys.argv.index("--bundle") + 1]).namelist()) if "--bundle" in sys.argv else None
     found, count = violations(ROOT, patterns(preset), names)
     fails = [v for v in found if v.startswith("FAIL")]
+    notes = [v for v in found if v.startswith("NOTE")]
     for v in found:
         print(v)
-    print("export_refs_check: %d shipped file(s) read for the %s preset%s, %d violation(s), %d note(s)" % (count, preset, " against the bundle" if names else "", len(fails), len(found) - len(fails)))
+    for v in unaccepted(notes):
+        fails.append("FAIL " + v[len("NOTE "):] + " (an unaccepted note)")
+        print(fails[-1])
+    print("export_refs_check: %d shipped file(s) read for the %s preset%s, %d violation(s), %d note(s)" % (count, preset, " against the bundle" if names else "", len(fails), len(notes) - len(unaccepted(notes))))
     return 1 if fails else 0
 
 
