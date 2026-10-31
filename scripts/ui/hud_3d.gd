@@ -720,7 +720,7 @@ func _apply_touch_visibility() -> void:
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
 func _apply_button_size() -> void:
-	var factor := maxf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0)
+	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0, 2.0)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
 		if cluster != null:
@@ -805,21 +805,19 @@ func _add_status_backing() -> void:
 	move_child(backing, top_left.get_index())
 
 func _apply_safe_area() -> void:
-	var inset := UiScale.insets(get_viewport().get_visible_rect().size)
+	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size))
+
+## Slides each edge of the corner controls by the inset of the side its anchor is on (an offset counts from its anchor): a fixed control keeps its size, a stretched one gives up the margin.
+func _inset_controls(inset: Vector4) -> void:
 	if inset == Vector4.ZERO:
 		return
-	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter"]:
+	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter", "BottomLeft", "BottomRight", "BottomCenter"]:
 		var ctrl := get_node_or_null(path) as Control
 		if ctrl != null:
-			ctrl.offset_left += inset.x
-			ctrl.offset_right -= inset.z
-			ctrl.offset_top += inset.y
-	for path in ["BottomLeft", "BottomRight", "BottomCenter"]:
-		var ctrl := get_node_or_null(path) as Control
-		if ctrl != null:
-			ctrl.offset_left += inset.x
-			ctrl.offset_right -= inset.z
-			ctrl.offset_bottom -= inset.w
+			ctrl.offset_left += lerpf(inset.x, -inset.z, ctrl.anchor_left)
+			ctrl.offset_right += lerpf(inset.x, -inset.z, ctrl.anchor_right)
+			ctrl.offset_top += lerpf(inset.y, -inset.w, ctrl.anchor_top)
+			ctrl.offset_bottom += lerpf(inset.y, -inset.w, ctrl.anchor_bottom)
 	var backing := get_node_or_null("StatusBacking") as Control
 	if backing != null:
 		backing.position += Vector2(inset.x, inset.y)

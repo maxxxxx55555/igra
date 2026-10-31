@@ -23,6 +23,7 @@ static func run(r: Node) -> void:
 	await _prompt_fades(r, hud)
 	await _touch_cluster_is_clear(r)
 	_joystick_fades_only_its_ring(r)
+	_safe_area_slides(r, hud)
 	await _touch_buttons_scale_clear(r)
 	await _combat_hud_rests(r, hud)
 	await _layout_holds(r, hud)
@@ -44,6 +45,25 @@ static func _battery_is_segments(r: Node, hud: Node) -> void:
 		if child is ColorRect and (child as ColorRect).size.x == 2.0:
 			gaps += 1
 	r._ok(whole and gaps == 7, "HUDP2 the battery is eight whole segments behind seven gaps (0.31 lights 3 of 8: %s, gaps %d)" % [whole, gaps])
+
+## HUDSAFE1: a cut-out slides a corner control and does not resize it: the ammo counter (anchored bottom right) keeps its size and follows the right and bottom insets, the top left corner keeps its size and follows the left and top insets, and the opposite inset puts every edge back.
+static func _safe_area_slides(r: Node, hud: Node) -> void:
+	var ammo := hud.get_node_or_null("AmmoCounter") as Control
+	var corner := hud.get_node_or_null("TopLeft") as Control
+	if ammo == null or corner == null:
+		r._ok(false, "HUDSAFE1 the HUD has an ammo counter and a top left corner")
+		return
+	var ammo0 := Rect2(ammo.offset_left, ammo.offset_top, ammo.offset_right - ammo.offset_left, ammo.offset_bottom - ammo.offset_top)
+	var corner0 := Rect2(corner.offset_left, corner.offset_top, corner.offset_right - corner.offset_left, corner.offset_bottom - corner.offset_top)
+	var inset := Vector4(60.0, 20.0, 30.0, 10.0)
+	hud.call("_inset_controls", inset)
+	var ammo1 := Rect2(ammo.offset_left, ammo.offset_top, ammo.offset_right - ammo.offset_left, ammo.offset_bottom - ammo.offset_top)
+	var corner1 := Rect2(corner.offset_left, corner.offset_top, corner.offset_right - corner.offset_left, corner.offset_bottom - corner.offset_top)
+	var kept: bool = ammo1.size.is_equal_approx(ammo0.size) and corner1.size.is_equal_approx(corner0.size)
+	var moved: bool = ammo1.position.is_equal_approx(ammo0.position - Vector2(inset.z, inset.w)) and corner1.position.is_equal_approx(corner0.position + Vector2(inset.x, inset.y))
+	hud.call("_inset_controls", -inset)
+	var back: bool = is_equal_approx(ammo.offset_left, ammo0.position.x) and is_equal_approx(ammo.offset_bottom, ammo0.end.y) and is_equal_approx(corner.offset_right, corner0.end.x)
+	r._ok(kept and moved and back, "HUDSAFE1 a cut-out slides the corner controls and keeps their size (kept %s, moved %s, put back %s)" % [kept, moved, back])
 
 ## HUDP3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
 static func _one_map_in_play(r: Node, hud: Node) -> void:
