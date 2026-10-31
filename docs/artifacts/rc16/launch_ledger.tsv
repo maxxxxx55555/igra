@@ -439,3 +439,4 @@ n	utc	head	id	exit	command
 438	20261031T010420Z	f40d5c04	s38_v16_closeout_c	0	bash tools/qa_sim/closeout_check 400
 439	20261031T010711Z	f40d5c04	s38_v16_perf_b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
 440	20261031T010803Z	f40d5c04	s38_v16_touch_b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+441	20261031T010833Z	d0e5f447	s38_v16_store_d0e5f447	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
