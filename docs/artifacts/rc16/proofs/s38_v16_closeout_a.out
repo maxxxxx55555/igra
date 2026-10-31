@@ -1,0 +1,12 @@
+# proof s38_v16_closeout_a
+# utc 20261031T005309Z
+# head 32ea7909 (uncommitted paths: 28)
+# env none
+# cmd bash tools/qa_sim/closeout_check 400
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=627 fails=0
+engine errors in the log:
+SCRIPT ERROR: Invalid call to function '_dress_block (via call)' in base 'Node3D (CitySkyline)'. Expected 9 argument(s).
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=1

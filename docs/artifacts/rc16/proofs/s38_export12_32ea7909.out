@@ -1,0 +1,89 @@
+# proof s38_export12_32ea7909
+# utc 20261031T004242Z
+# head 32ea7909 (uncommitted paths: 12)
+# env none
+# cmd bash .qa_logs/s38_export_vc15.sh
+store and key password: the same
+# STEP export_android 03:42:43
+# STEP export_android rc=0 03:45:50
+bundle: 106126634 bytes sha256 992fad83f42daa62a5c1ee6b0170c9be7ef707f74a0c434a887eda3f2c2cfc49
+# STEP aab_check 03:45:51
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=15 expected=15: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    106126634 bytes
+sha256  992fad83f42daa62a5c1ee6b0170c9be7ef707f74a0c434a887eda3f2c2cfc49
+entries 2489
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2486 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s38_vcode14.aab: 0 entries gone, 18 new, 32 with other bytes
+  new     assetPackInstallTime/assets/.godot/imported/cracked_concrete_albedo.png-509bfb032f90a6345cba3bf743930d3f.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/cracked_concrete_normal.png-df9e8d6ed2392c2b019ef3fac62aa8b6.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/cracked_concrete_rough.png-62500a1d26804d475e2c8f03b5156b4e.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/painted_brick_albedo.png-e2f05b964cb4762d7666879fa749db21.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/painted_brick_normal.png-991d17bbd292e33e1707a35b4a045011.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/painted_brick_rough.png-b47070bc8e96f2faf04c95a12d736072.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/panel_facade_albedo.png-3814023580ca5c4da86fe3e3babbc31e.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/panel_facade_normal.png-7832ebfa9c25fbcf65d329ee31db22ec.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/panel_facade_rough.png-a6861a88d05a153c6329e01074c4a8e3.astc.ctex
+  new     assetPackInstallTime/assets/assets/textures/pbr/cracked_concrete_albedo.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/cracked_concrete_normal.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/cracked_concrete_rough.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/painted_brick_albedo.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/painted_brick_normal.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/painted_brick_rough.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/panel_facade_albedo.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/panel_facade_normal.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/panel_facade_rough.png.import
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/content/captions.json
+  changed assetPackInstallTime/assets/content/daily_challenges.json
+  changed assetPackInstallTime/assets/content/districts/industrial/lore_notes.json
+  changed assetPackInstallTime/assets/content/districts/park/lore_notes.json
+  changed assetPackInstallTime/assets/content/districts/police/lore_notes.json
+  changed assetPackInstallTime/assets/content/districts/power_station/lore_notes.json
+  changed assetPackInstallTime/assets/content/districts/substation/lore_notes.json
+  changed assetPackInstallTime/assets/content/districts/suburbs/lore_notes.json
+  changed assetPackInstallTime/assets/content/lore/diary_entries.json
+  changed assetPackInstallTime/assets/content/secrets.json
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+  changed assetPackInstallTime/assets/data/i18n/pt_BR.json
+  changed assetPackInstallTime/assets/data/i18n/ru.json
+  changed assetPackInstallTime/assets/data/integrity_manifest.json
+  changed assetPackInstallTime/assets/scripts/systems/settings_manager.gdc
+  changed assetPackInstallTime/assets/scripts/ui/hud_3d.gdc
+  changed assetPackInstallTime/assets/scripts/ui/journal_ui.gdc
+  changed assetPackInstallTime/assets/scripts/ui/main_menu_layout.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_builder.gdc
+  changed assetPackInstallTime/assets/scripts/world/urban_set_dressing.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# STEP aab_check rc=0 03:46:12
+# STEP release_export_check 03:46:12
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 03:46:12
+# STEP export_refs 03:46:12
+export_refs_check: 507 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 03:46:19
+# STEP done
+# EXIT=0
