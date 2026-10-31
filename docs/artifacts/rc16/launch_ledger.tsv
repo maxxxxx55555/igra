@@ -447,3 +447,4 @@ n	utc	head	id	exit	command
 446	20261031T011429Z	5dc31619	s38_audio4_5dc31619	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 447	20261031T011527Z	5dc31619	s38_botC_5dc31619	0	bash tools/qa_sim/autoplay_bot
 448	20261031T012231Z	ea74f315	s38_botD_5dc31619	0	bash tools/qa_sim/autoplay_bot
+449	20261031T013155Z	c6449ea9	s38_all_v16_c6449ea9	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
