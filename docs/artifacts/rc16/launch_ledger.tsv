@@ -427,3 +427,4 @@ n	utc	head	id	exit	command
 426	20261030T133742Z	2ef1720b	s38_premium_2ef1720b	0	bash tools/qa_sim/guarded_headless res://scenes/tools/premium_visual_check_scene.tscn 180
 427	20261030T231445Z	668a0832	s38_v15_compile_a	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 180
 428	20261031T003720Z	668a0832	s38_v15_closeout_a	0	bash tools/qa_sim/closeout_check 400
+429	20261031T004105Z	c9b2404a	s38_v15_store_c9b2404a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
