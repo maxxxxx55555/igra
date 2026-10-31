@@ -23,7 +23,7 @@
       "i18n_keys": { "title": "LORE_POWER_STATION_02_TITLE", "text": "LORE_POWER_STATION_02_TEXT" },
       "en": {
         "title": "Photo: Hall 1, Dark",
-        "text": "A long-exposure photograph of the turbine hall, taken from the gallery on a night the station was fully dark. The three generators stand in a row like sleeping animals, and above them the dark is not empty — the exposure caught it moving, a slow churn in the black over the middle machine, the way heat moves over a road that is not hot. No flash was used. Nothing in the hall was lit. On the back, in a hand that does not appear anywhere else in the station: \"They are not running. Do not let them being still fool you.\""
+        "text": "A long-exposure photograph of the turbine hall, taken from the gallery on a night the station was fully dark. The three generators stand in a row like sleeping animals, and above them the dark is not empty — the exposure caught it moving, a slow churn in the black over the middle machine, the way heat moves over a road that is not hot. No flash was used. Nothing in the hall was lit. On the back, in a hand that does not appear anywhere else in the station: \"They are not running. Do not let their being still fool you.\""
       },
       "location_hint": "Wedged in the turbine-hall gallery rail (z_turbine_hall)",
       "min_stage": 0,
@@ -36,7 +36,7 @@
       "i18n_keys": { "title": "LORE_POWER_STATION_03_TITLE", "text": "LORE_POWER_STATION_03_TEXT" },
       "en": {
         "title": "Signal Loft — The Keeper Answers",
-        "text": "A tape from the signal loft's big receiver, labelled in the night operator's hand: ANSWER — SAME VOICE, NEW WORDS. The calm voice that spent a year looping the call is looping it no longer. It answers: \"You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back.\" The operator's note under the tape: \"It knows the districts are lit. It is counting with us.\""
+        "text": "A tape from the signal loft's big receiver, labelled in the night operator's hand: ANSWER — SAME VOICE, NEW WORDS. The calm voice that spent two months looping the call is looping it no longer. It answers: \"You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back.\" The operator's note under the tape: \"It knows the districts are lit. It is counting with us.\""
       },
       "location_hint": "Tape in the signal loft's big receiver (z_signal_loft)",
       "min_stage": 1,
@@ -49,7 +49,7 @@
       "i18n_keys": { "title": "LORE_POWER_STATION_04_TITLE", "text": "LORE_POWER_STATION_04_TEXT" },
       "en": {
         "title": "Operations — The Pencil Line",
-        "text": "The operations duty file holds the station's own passport copy — 800 megawatts, three generators in reserve, and the standing order stamped by the regime department: DO NOT START AFTER 23:00, reason not stated, seal of EON. The pencil line in the margin is what the whole file is now about, and the duty roster finally names its author: the night engineer, last shift before the blackout, who wrote it and dated it and signed his name to it like a man filing a weather report: \"The generators no longer produce current. They produce voices.\" His supervisor's reply, same pencil, below: \"Noted. Keep the order. Start nothing after 23:00.\""
+        "text": "The operations duty file holds the station's own passport copy — 800 megawatts, three generators in reserve, and the standing order stamped by the regime department: DO NOT START AFTER 23:00, reason not stated, seal of City Power. The pencil line in the margin is what the whole file is now about, and the duty roster finally names its author: the night engineer, last shift before the blackout, who wrote it and dated it and signed his name to it like a man filing a weather report: \"The generators no longer produce current. They produce voices.\" His supervisor's reply, same pencil, below: \"Noted. Keep the order. Start nothing after 23:00.\""
       },
       "location_hint": "Duty file on the operations desk (z_operations)",
       "min_stage": 1,

@@ -62,7 +62,7 @@
       "i18n_keys": { "title": "LORE_SUBSTATION_05_TITLE", "text": "LORE_SUBSTATION_05_TEXT" },
       "en": {
         "title": "Vault Order — Breaker 9, Unmapped",
-        "text": "Clipped to the vault breaker's own frame, where only the man with the key would ever read it: the wiring order that built what Marat traced. Twelve years before the blackout — breaker 9, wired off-plan, fed from the park line and the hospital sub-feed both, metering drums with the second coil wound to pay current back down the line. The day foreman's stamp across it: REFUSED. Below, the disposition that actually happened: \"Night shift takes it.\" Below that, the clipping someone pasted here years later, the council denying the program by name in print — the denial that names what it denies. And last, the night foreman's hand: \"It was never a fault. A fault does not need its own breaker.\""
+        "text": "Clipped to the vault breaker's own frame, where only the man with the key would ever read it: the wiring order that built what Marat traced. Nine years before the blackout — breaker 9, wired off-plan, fed from the park line and the hospital sub-feed both, metering drums with the second coil wound to pay current back down the line. The day foreman's stamp across it: REFUSED. Below, the disposition that actually happened: \"Night shift takes it.\" Below that, the clipping someone pasted here years later, the council denying the program by name in print — the denial that names what it denies. And last, the night foreman's hand: \"It was never a fault. A fault does not need its own breaker.\""
       },
       "location_hint": "Clipped to the breaker 9 frame inside the vault (z_switchgear_vault)",
       "min_stage": 2,
