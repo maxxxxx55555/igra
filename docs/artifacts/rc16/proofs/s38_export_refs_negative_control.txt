@@ -1,0 +1,26 @@
+# negative control of the export check, 2026-10-31, head b8f4a419: the Android filter with one pattern put back in memory
+pattern put back: assets/textures/pbr/ceramic_tile_* -> 1 line(s) that fail the gate
+  FAIL scripts/world/skyline.gd:170: the texture set ceramic_tile is asked for by name and its albedo is excluded by assets/textures/pbr/ceramic_tile_*
+pattern put back: assets/textures/pbr/panel_facade_* -> 6 line(s) that fail the gate
+  FAIL scripts/world/skyline.gd:159: the texture set panel_facade is asked for by name and its albedo is excluded by assets/textures/pbr/panel_facade_*
+  unaccepted note: NOTE scripts/world/skyline.gd:42: assets/textures/pbr/panel_facade_albedo.png is excluded by assets/textures/pbr/panel_facade_*
+  unaccepted note: NOTE scripts/world/skyline.gd:43: assets/textures/pbr/panel_facade_albedo.png is excluded by assets/textures/pbr/panel_facade_*
+  unaccepted note: NOTE scripts/world/skyline.gd:45: assets/textures/pbr/panel_facade_albedo.png is excluded by assets/textures/pbr/panel_facade_*
+# reproduce (python, run from the repository root; the output above is what it prints at b8f4a419):
+#   import pathlib
+#   import sys
+#
+#   root = pathlib.Path(".").resolve()
+#   sys.path.insert(0, str(root / "tools/qa_sim"))
+#   import export_refs_check as c
+#
+#   for pat in ("assets/textures/pbr/ceramic_tile_*", "assets/textures/pbr/panel_facade_*"):
+#       pats = c.patterns("Android", root) + [pat]
+#       found, n = c.violations(root, pats)
+#       fails = [v for v in found if v.startswith("FAIL")]
+#       notes = c.unaccepted([v for v in found if v.startswith("NOTE")])
+#       print("pattern put back: %s -> %d line(s) that fail the gate" % (pat, len(fails) + len(notes)))
+#       for v in fails:
+#           print("  " + v)
+#       for v in notes[:3]:
+#           print("  unaccepted note: " + v)

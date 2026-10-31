@@ -102,7 +102,7 @@
       },
       "en": {
         "title": "The Keeper's Work Orders",
-        "text": "A bundle of work orders, forty years of them, rubber-banded: every streetlight in the city, logged by hand. The last page is dated after the blackout: \"Order 14,208. Dismantle lamp 219, suburbs. Its transformer goes to the center. I kept the light for forty years. Now I keep it backwards — every lamp I take apart is a lamp they cannot drink. Finish the grid without me.\""
+        "text": "A bundle of work orders, forty years of them, rubber-banded: every streetlight in the city, logged by hand. The last page is dated after the blackout: \"Order 14,208. Dismantle all 219 lamps, suburbs. Their transformers go to the center. I kept the light for forty years. Now I keep it backwards — every lamp I take apart is a lamp they cannot drink. Finish the grid without me.\""
       },
       "location_hint": "Work bench inside the keeper's shed (z_keeper_shed)",
       "min_stage": 1,

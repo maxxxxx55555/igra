@@ -1,0 +1,9 @@
+# proof s38_v16_premium_a
+# utc 20261031T005015Z
+# head 32ea7909 (uncommitted paths: 21)
+# env none
+# cmd bash tools/qa_sim/guarded_headless res://scenes/tools/premium_visual_check_scene.tscn 240
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/premium_visual_check_scene.tscn rc=0 (log: .qa_logs/premium_visual_check_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

@@ -60,9 +60,11 @@ static func _skyline(r: Node) -> void:
 	var boxes: Array[Transform3D] = []
 	var tints: Array[Color] = []
 	var rng := RandomNumberGenerator.new()
-	sky.call("_dress_block", rng, Transform3D.IDENTITY, Vector3(10.0, 15.0, 10.0), Color(0.1, 0.1, 0.12), 1.0, boxes, tints)
-	r._ok(mat != null and mat.shader.resource_path == _FACADE and boxes.size() >= 21 and tints.size() == boxes.size() and low == 0.0 and high == 2.0,
-		"SOV2 the blocks use the facade shader, a block gets %d roof boxes and balconies, and the detail follows the graphics tier (Low %.0f, High %.0f)" % [boxes.size(), low, high])
+	var customs: Array[Color] = []
+	var rails: Array[Transform3D] = []
+	sky.call("_dress_block", rng, Transform3D.IDENTITY, Vector3(10.0, 15.0, 10.0), Color(0.1, 0.1, 0.12), 1.0, boxes, tints, customs, rails)
+	r._ok(mat != null and mat.shader.resource_path == _FACADE and boxes.size() >= 21 and tints.size() == boxes.size() and customs.size() == boxes.size() and rails.size() >= 60 and low == 0.0 and high == 2.0,
+		"SOV2 the blocks use the facade shader, a block gets %d roof boxes and balconies, each carrying its block for the shader, with %d balcony rails, and the detail follows the graphics tier (Low %.0f, High %.0f)" % [boxes.size(), rails.size(), low, high])
 	sky.queue_free()
 
 static func _halo(r: Node) -> void:

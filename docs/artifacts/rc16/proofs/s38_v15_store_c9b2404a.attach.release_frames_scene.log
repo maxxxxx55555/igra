@@ -1,0 +1,36 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[release-frames] capture begin 01_main_menu
+[release-frames] frame 01_main_menu result=0
+ERROR: Condition "!is_inside_tree()" is true. Returning: Rect2()
+   at: get_viewport_rect (scene/main/canvas_item.cpp:1231)
+   GDScript backtrace (most recent call first):
+       [0] fit (res://scripts/ui/main_menu_layout.gd:23)
+       [1] _layout_menu (res://scripts/ui/main_menu.gd:267)
+[final] facing 28 of 96 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.556567, -8.0), player at (-8.0, 0.859892, -8.0) hp=100.0, paused=false
+[release-frames] capture begin 03_district_night_dark
+[release-frames] frame 03_district_night_dark result=0
+[release-frames] capture begin 02_district_day_full
+[release-frames] frame 02_district_day_full result=0
+[release-frames] capture begin 07_skill_tree
+[release-frames] frame 07_skill_tree result=0
+[release-frames] capture begin 08_shop
+[release-frames] frame 08_shop result=0
+[final] 04 camera /root/Main3D/Camera3D at (-1.851173, 2.556306, 9.627872), player at (-1.851173, 0.860251, 9.627872) hp=100.0, paused=false
+[release-frames] capture begin 04_combat
+[release-frames] frame 04_combat result=0
+[final] 05 camera /root/Main3D/Camera3D at (-1.359849, 2.561492, -8.263406), player at (-1.359849, 0.858876, -8.263406) hp=100.0, paused=false
+[final] 05 boss at (3.636222, 1.2, -8.461594)
+[release-frames] capture begin 05_boss
+[release-frames] frame 05_boss result=0
+[release-frames] capture begin 06_victory_ngplus
+[release-frames] frame 06_victory_ngplus result=0
+[final] DONE frames=18
+ERROR: Texture with GL ID of 151: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 157: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 9 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

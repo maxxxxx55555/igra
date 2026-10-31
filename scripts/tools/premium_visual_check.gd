@@ -14,8 +14,12 @@ func _check_district(id: StringName) -> void:
 	add_child(root)
 	for i in 8:
 		await get_tree().process_frame
-	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes", "CurbMM", "RoadDamageMM", "UrbanSetDressing"]:
+	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes", "CurbMM", "RoadDamageMM", "UrbanSetDressing", "WindowBoards"]:
 		_expect(root.find_child(node_name, true, false) != null, "%s missing %s" % [id, node_name])
+	var blocks := root.find_child("Blocks", true, false) as MultiMeshInstance3D
+	_expect(blocks != null and blocks.multimesh.instance_count > 40, "%s facade is still a plain box ring" % id)
+	if String(id) in CitySkyline.BALCONIES:
+		_expect(root.find_child("BalconyRails", true, false) != null, "%s balconies have no rails" % id)
 	root.queue_free()
 	await get_tree().process_frame
 

@@ -37,9 +37,14 @@ const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 var _lamp_mat: ShaderMaterial
 var _halo_mat: StandardMaterial3D
+var _cone_mat: ShaderMaterial
 var _district_id: StringName = &""
 const _BRASS := Color("#c9a24a")
 const _HALO_ALPHA: Array[float] = [0.0, 0.12, 0.30, 0.52]
+## The cone of light under a lit lamp (docs/STYLE_GUIDE.md: one warm key with a volumetric cone), faint: it only reads against the dark.
+const _CONE_ALPHA: Array[float] = [0.0, 0.06, 0.11, 0.18]
+const _CONE_HEIGHT: float = 4.1
+const _CONE_SHADER := preload("res://assets/shaders/light_cone.gdshader")
 const _GLOW_TEX := preload("res://scripts/world/district_landmark.gd")
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
@@ -260,7 +265,35 @@ func _build_streetlight_multimesh() -> void:
 	halo_mmi.material_override = _halo_mat
 	halo_mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(halo_mmi)
+	if not _low_tier:
+		_build_light_cones()
 	_apply_halo_stage(PowerGrid.get_stage(_district_id))
+
+## One MultiMesh of open cones from each lamp head to the ground, additive and fading downwards: one draw call for the district.
+func _build_light_cones() -> void:
+	var cone := CylinderMesh.new()
+	cone.top_radius = 0.2
+	cone.bottom_radius = 1.6
+	cone.height = _CONE_HEIGHT
+	cone.radial_segments = 16
+	cone.rings = 1
+	cone.cap_top = false
+	cone.cap_bottom = false
+	_cone_mat = ShaderMaterial.new()
+	_cone_mat.shader = _CONE_SHADER
+	_cone_mat.set_shader_parameter("height", _CONE_HEIGHT)
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = cone
+	mm.instance_count = _lamp_local_positions.size()
+	for i in _lamp_local_positions.size():
+		mm.set_instance_transform(i, Transform3D(Basis(), _lamp_local_positions[i] + _LAMP_HEAD_OFFSET - Vector3(0.0, _CONE_HEIGHT * 0.5, 0.0)))
+	var mmi := MultiMeshInstance3D.new()
+	mmi.name = "StreetlightConesBatched"
+	mmi.multimesh = mm
+	mmi.material_override = _cone_mat
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mmi)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -274,6 +307,8 @@ func _apply_halo_stage(stage: int) -> void:
 	if _halo_mat == null:
 		return
 	_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
+	if _cone_mat != null:
+		_cone_mat.set_shader_parameter("tint", Color(_BRASS, _CONE_ALPHA[clampi(stage, 0, _CONE_ALPHA.size() - 1)]))
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

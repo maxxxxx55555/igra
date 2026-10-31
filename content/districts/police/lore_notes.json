@@ -88,7 +88,7 @@
       "i18n_keys": { "title": "LORE_POLICE_07_TITLE", "text": "LORE_POLICE_07_TEXT" },
       "en": {
         "title": "Channel 3: The Voice, On Our Handset",
-        "text": "Recorded off the dispatch set with the squelch rolled all the way open. Same loop the park shed carries, but it comes in on the station's own channel now, between bursts of the dead siren tail: \"...district by district... lamp by lamp... go to the power station...\" then three soft clicks like a relay, then a sergeant, very tired: \"It's been on our frequency since the diesel died. We stopped answering. It does not need us to answer.\""
+        "text": "Recorded off the dispatch set with the squelch rolled all the way open. Same loop the park shed carries, but it comes in on the station's own channel now, between bursts of the dead siren tail: \"...district by district... lamp by lamp... go to the power station...\" then three soft clicks like a relay, then a sergeant, very tired: \"It's been on our frequency for weeks now. We stopped answering. It does not need us to answer.\""
       },
       "location_hint": "Cassette still in the dispatch deck (z_radio_room)",
       "min_stage": 2,

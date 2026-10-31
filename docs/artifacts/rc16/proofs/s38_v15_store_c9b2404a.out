@@ -1,0 +1,9 @@
+# proof s38_v15_store_c9b2404a
+# utc 20261031T004105Z
+# head c9b2404a (uncommitted paths: 12)
+# env TLS_CAPTURE_HASH=c9b2404a 
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/release_frames_scene.tscn rc=0 (log: .qa_logs/release_frames_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

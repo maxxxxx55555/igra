@@ -1,0 +1,58 @@
+# proof s38_export13_5dc31619
+# utc 20261031T010942Z
+# head 5dc31619 (uncommitted paths: 14)
+# env none
+# cmd bash .qa_logs/s38_export_vc16.sh
+store and key password: the same
+# STEP export_android 04:09:43
+# STEP export_android rc=0 04:11:51
+bundle: 109770553 bytes sha256 03f920fbe7508fb5bb42aa983a7d250b23f922a2ad64239828ed0296e282ec1d
+# STEP aab_check 04:11:52
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=16 expected=16: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    109770553 bytes
+sha256  03f920fbe7508fb5bb42aa983a7d250b23f922a2ad64239828ed0296e282ec1d
+entries 2496
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2493 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s38_vcode15.aab: 0 entries gone, 7 new, 12 with other bytes
+  new     assetPackInstallTime/assets/.godot/imported/ceramic_tile_albedo.png-22447a379517288ab68ddfa63bae38ad.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/ceramic_tile_normal.png-be6e9ee59c116f8f011dab9e2f801b81.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/ceramic_tile_rough.png-57de5adea0c1e7439b619b8cdfaf52d0.astc.ctex
+  new     assetPackInstallTime/assets/assets/shaders/light_cone.gdshader
+  new     assetPackInstallTime/assets/assets/textures/pbr/ceramic_tile_albedo.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/ceramic_tile_normal.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/ceramic_tile_rough.png.import
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/assets/shaders/soviet_facade.gdshader
+  changed assetPackInstallTime/assets/scripts/world/skyline.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_props.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# STEP aab_check rc=0 04:12:06
+# STEP release_export_check 04:12:06
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 04:12:06
+# STEP export_refs 04:12:07
+export_refs_check: 508 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 04:12:11
+# STEP done
+# EXIT=0

@@ -1,0 +1,19 @@
+# proof s38_botD_5dc31619
+# utc 20261031T012231Z
+# head ea74f315 (uncommitted paths: 14)
+# env QA_SEEDS=7 11 42 QA_TIME_SCALE=4 
+# cmd bash tools/qa_sim/autoplay_bot
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 7  ([bot s7]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 11  ([bot s11]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 42  ([bot s42]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0
