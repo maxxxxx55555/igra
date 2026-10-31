@@ -63,7 +63,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 ## A second, sparser layer on the walk itself: a service cabinet, a stack of pipes, sandbags or a barrier
 ## every few metres. These keep the camera's foreground readable without touching a route or an interaction.
 func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiMeshInstance3D) -> void:
-	var kinds: Array[String] = ["barrier", "pallets", "pipes", "sacks", "tyres", "cabinet", "shrub", "wreck"]
+	var kinds: Array[String] = ["pallets", "pipes", "sacks", "tyres", "shrub"]  # low things only: a car, a cabinet or a barrier on the walk would be walked through, the layer has no collision
 	var batches: Dictionary = {}
 	var places: Dictionary = {}
 	var chance: float = 0.12 if low else 0.28
