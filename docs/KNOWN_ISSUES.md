@@ -8,7 +8,7 @@
 - **Two skins of the shop do nothing in the first-person game and show placeholder squares** (R10, `scripts/economy/shop_service.gd`): the owner decides whether they go (a catalog change must keep the saves that own them).
 - **Trim cuts across the district signs** (R12), **dead code** in `scripts/world/skyline.gd` (`skip`) and `scripts/ui/ui_scale.gd` (`narrow_layout`) and **stale comments in the facade shader** (R14, R15).
 - **The shop and the skill tree keep the older chrome**, and the world is blocks with openings and not modelled buildings: the brief's gates G2 and G3 stay open.
-- **Story**: S-12, S-14 to S-17, S-19 to S-22 and S-25 to S-35 of `docs/artifacts/councils/story_audit_20261031.txt` are open; S-15 (22 notes that no district places) is the owner's decision.
+- **Story**: S-05 (the title of the letter, `DOC_OLD_WOMAN_TITLE`), S-12, S-14 to S-17, S-19 to S-22 and S-25 to S-35 of `docs/artifacts/councils/story_audit_20261031.txt` are open; S-15 (22 notes that no district places) is the owner's decision.
 - **Three untracked setup scripts at the repository root held key-like literals** (R11): they are ignored now (`.gitignore`); the files were not read, so if the keys are real, rotate them.
 
 ## OPEN (2026-10-30, Session 38, the best variants integration): what the merge of the other branches left
