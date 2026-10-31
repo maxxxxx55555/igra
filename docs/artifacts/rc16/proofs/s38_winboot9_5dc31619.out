@@ -1,0 +1,11 @@
+# proof s38_winboot9_5dc31619
+# utc 20261031T011401Z
+# head 5dc31619 (uncommitted paths: 18)
+# env none
+# cmd bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+exe exit 0
+fresh profile files: 11
+# EXIT=0

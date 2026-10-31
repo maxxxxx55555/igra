@@ -1,5 +1,16 @@
 ﻿# Known issues
 
+## OPEN (2026-10-31, Session 38, the visual redo and the Opus review): what the redone world look and the review left
+
+- **The store frames are desktop captures** (R2, R17 of `docs/artifacts/councils/opus_council_20261031.txt`): no touch HUD, the High tier, the tutorial box over the middle; replace them with captures from a phone after the device pass.
+- **Primitives per frame are 135,365 (suburbs) and 199,065 (power_station) against the canon of 50,000 a district** (R5; PF4 of `docs/ACCEPTANCE_CHECKLIST.md` is failed): the perf gate has no primitive budget. Splitting `FacadeTrim` and `WindowSills` per ring side would let the ring be culled; read a phone before deciding.
+- **The 48 px touch floor is about 3 mm on a phone** (R9): `UiScale.MIN_TOUCH` is in viewport pixels; convert it with `screen_get_dpi()` or raise the default size after a device read.
+- **Two skins of the shop do nothing in the first-person game and show placeholder squares** (R10, `scripts/economy/shop_service.gd`): the owner decides whether they go (a catalog change must keep the saves that own them).
+- **Trim cuts across the district signs** (R12), **dead code** in `scripts/world/skyline.gd` (`skip`) and `scripts/ui/ui_scale.gd` (`narrow_layout`) and **stale comments in the facade shader** (R14, R15).
+- **The shop and the skill tree keep the older chrome**, and the world is blocks with openings and not modelled buildings: the brief's gates G2 and G3 stay open.
+- **Story**: S-12, S-14 to S-17, S-19 to S-22 and S-25 to S-35 of `docs/artifacts/councils/story_audit_20261031.txt` are open; S-15 (22 notes that no district places) is the owner's decision.
+- **Three untracked setup scripts at the repository root held key-like literals** (R11): they are ignored now (`.gitignore`); the files were not read, so if the keys are real, rotate them.
+
 ## OPEN (2026-10-30, Session 38, the best variants integration): what the merge of the other branches left
 
 The other branches were reviewed and the world art of `origin/qoder/premium-visual-recovery` up to `44a374a1` was integrated (the rows are S38I of `docs/RUN_STATE.md`).
@@ -7,7 +18,7 @@ The other branches were reviewed and the world art of `origin/qoder/premium-visu
 - **Three later commits of that branch are not in `main`** (`5556161e`, `20af0da1`, `352240aa`): they darken the road and the props and add normal maps to a road shader that `main` replaced; take them only with frames of every district and a read of the road at night. The other agent keeps working on the branch.
 - **The power_station frame p95 is 29.59 ms against the 33 ms budget** (`docs/artifacts/rc16/proofs/s38_perf3_b935b643.attach.perf_check_scene.log`) on a shared desktop GPU; nothing was read on a phone, and a fresh phone profile now starts at the Medium tier (`scripts/systems/settings_manager.gd:84`; SSAO off, 0.75 of the particles).
 - **The closeout check HP1 failed once in three runs of the same code** (health read 40.1 after a second at 50, then 46.0 two seconds after a hit; `docs/artifacts/rc16/proofs/s38_all_final_547beb82.attach.gate_closeout_check_scene.log:284`): the closeout alone and a second full run at the head read it green; the damage source of the failed run is not identified (`scripts/tools/_closeout_check_runner.gd` `_check_regeneration_waits_for_peace`). If it repeats, find which monster or barrel reached the player in the closeout scene before changing the check.
-- **A stored `button_size` is read back unclamped and the HUD enforces only its floor** (`scripts/systems/settings_manager.gd:662`, `:663`, `scripts/ui/hud_3d.gd:723`): a hand-edited settings file can make the HUD buttons huge on that device; the slider clamps to 0.667 through 2.0. Put `clampf(..., UiScale.min_touch() / 72.0, 2.0)` at the use when the next runtime change restamps the store frames.
+- **A stored `button_size` was read back unclamped**: closed in version code 16, the HUD clamps it to 0.667 through 2.0 (`scripts/ui/hud_3d.gd:723`).
 - **The security log of the shared QA profile holds 48 of its 50 entries** (QA runs, not play): a check that counts one more line fails on a full log; SEC2 no longer does (`scripts/tools/rc16/sec23_checks.gd`).
 
 ## OPEN (2026-10-30, Session 38, the visual recovery brief): what the rebuilt inventory and street left
