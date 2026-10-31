@@ -445,3 +445,5 @@ n	utc	head	id	exit	command
 444	20261031T011324Z	5dc31619	s38_winboot8_5dc31619	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 445	20261031T011401Z	5dc31619	s38_winboot9_5dc31619	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
 446	20261031T011429Z	5dc31619	s38_audio4_5dc31619	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+447	20261031T011527Z	5dc31619	s38_botC_5dc31619	0	bash tools/qa_sim/autoplay_bot
+448	20261031T012231Z	ea74f315	s38_botD_5dc31619	0	bash tools/qa_sim/autoplay_bot
