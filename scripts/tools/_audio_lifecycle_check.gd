@@ -6,7 +6,7 @@ var _fails: int = 0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	await get_tree().process_frame
-	MusicManager.set_process(false)
+	(MusicManager as Node).set_process(false)
 	MusicManager._unlock_audio()
 	GameManager._change_state(GameManager.GameState.WIN)
 	MusicManager._on_game_won()

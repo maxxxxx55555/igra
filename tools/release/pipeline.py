@@ -39,6 +39,7 @@ GATES = [
     ("audio_lifecycle", "audio_lifecycle_check", r"\[audio-lifecycle\] DONE fails=0\b", 120),
     ("premium_visual", "premium_visual_check", r"\[premium\] DONE fails=0\b", 180),
     ("menu_lifecycle", "menu_lifecycle_check", r"\[menu-lifecycle\] DONE fails=0\b", 120),
+    ("threaded_loader", "threaded_loader_check", r"\[threaded-loader\] DONE fails=0\b", 120),
     ("loot_floor", "loot_floor_check", r"\[lootfloor\] DONE fails=0\b", 180),
     ("theme", "theme_unify_probe", r"\[theme-unify\] DONE bad=0\b", 120),
     ("settings", "settings_persist_probe", r"\[settings-persist\] DONE bad=0\b", 120),

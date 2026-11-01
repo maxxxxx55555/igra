@@ -621,6 +621,7 @@ else
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "аудио: граф шин A01" "res://scenes/tools/audio_bus_check_scene.tscn"
     run_gate "audio: victory, menu and new-run music lifecycle" "res://scenes/tools/audio_lifecycle_check_scene.tscn"
+    run_gate "resources: district and music prefetch ownership" "res://scenes/tools/threaded_loader_check_scene.tscn"
     run_gate "лут: под каждым предметом есть пол (X21)" "res://scenes/tools/loot_floor_check_scene.tscn" 120
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
     run_gate "visual: materials, atmosphere and reference presentation" "res://scenes/tools/premium_visual_check_scene.tscn" 120
