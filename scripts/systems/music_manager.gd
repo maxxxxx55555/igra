@@ -222,6 +222,8 @@ func _unlock_audio() -> void:
 ## during combat"). Reuses the same detection/decay MusicManager already
 ## uses to hold combat music — no second combat tracker needed.
 func _on_game_started() -> void:
+	if _wow_cue != null:
+		_wow_cue.stop()
 	_leave_boss()
 	_run_seed = randi()
 	_bed_turn = 0
@@ -407,11 +409,14 @@ static func bed_slot(turn: int, variants: int, seed_value: int) -> Dictionary:
 
 ## Выбор настроения по обстановке: босс > бой > тревога > спокойствие.
 func _evaluate() -> void:
-	if mood == Mood.VICTORY:
-		return
 	if not GameManager.is_playing():
 		if GameManager.is_menu() and mood != Mood.MENU:
+			# The ending cue is longer than the victory theme and belongs to the old run.
+			if _wow_cue != null:
+				_wow_cue.stop()
 			set_mood(Mood.MENU)
+		return
+	if mood == Mood.VICTORY:
 		return
 	if _boss_active:
 		if mood != Mood.BOSS:

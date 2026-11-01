@@ -49,6 +49,7 @@ const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
+const _FRONTAGE := preload("res://scripts/world/facade_frontage.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
@@ -89,6 +90,7 @@ var _halos: MultiMeshInstance3D = null
 var _ground_mat: ShaderMaterial = null
 var _fronts: Array[Transform3D] = []
 var _widths: Array[float] = []
+var _frontage: Node3D
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
@@ -109,6 +111,10 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var trim: Array[Transform3D] = []
 	var sills: Array[Transform3D] = []
 	var pipes: Array[Transform3D] = []
+	_frontage = _FRONTAGE.new()
+	_frontage.name = "FacadeFrontage"
+	add_child(_frontage)
+	_frontage.begin(district_id)
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
@@ -129,19 +135,22 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			tints.append(tint)
 			_fronts.append(Transform3D(turn, turn * Vector3(cx, 0.0, -edge)))
 			_widths.append(w)
-			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
+			var entry: Vector2 = _frontage.add_block(_fronts.back(), Vector3(w, h, d))
+			_dress_block(extra, _fronts.back(), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints, entry)
 			if with_windows:
 				var block_frame := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
 				var y := 2.6
 				while y < h - 1.4:
 					var x := cx - w * 0.5 + 1.2
 					while x < cx + w * 0.5 - 1.0:
-						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
-						_dress_window(trim, sills, Transform3D(turn, turn * Vector3(x, y, -edge)))
+						if y > 3.5 or absf(x - cx - entry.x) > entry.y * 0.5 + 0.7:
+							panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
+							_dress_window(trim, sills, Transform3D(turn, turn * Vector3(x, y, -edge)))
 						x += 2.2
 					trim.append(block_frame * Transform3D(Basis.from_scale(Vector3(w - 0.3, 0.09, 0.22)), Vector3(0.0, y - 1.32, 0.11)))
 					y += 2.6
 				_dress_front(trim, pipes, block_frame, Vector3(w, h, d))
+	_frontage.finish(float(SettingsManager.get_setting("graphics_tier", 2)))
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
 	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
 	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
@@ -174,7 +183,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	_add_solid_ground(edge)
 
 ## The roof of a panel block, a stairwell and now and then a water tank and an aerial, and a balcony slab under a share of its windows (`frame` is the front face of the block at the ground, x at its middle, z toward the street).
-func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color]) -> void:
+func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color], entry: Vector2) -> void:
 	var lighter := tint.lightened(0.18)
 	var stair := Vector3(rng.randf_range(2.2, 3.4), 2.4, rng.randf_range(2.4, minf(4.0, size.z * 0.45)))
 	_put(blocks, tints, frame, Vector3(rng.randf_range(-0.25, 0.25) * size.x, size.y + stair.y * 0.5, -size.z * rng.randf_range(0.3, 0.6)), stair, lighter)
@@ -188,8 +197,9 @@ func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3,
 	while y < size.y - 1.4:
 		var x := 1.2 - size.x * 0.5
 		while x < size.x * 0.5 - 1.0:
-			if rng.randf() < balconies:
+			if rng.randf() < balconies and (y > 3.5 or absf(x - entry.x) > entry.y * 0.5 + 0.7):
 				_put(blocks, tints, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter)
+				_frontage.add_balcony(frame, x, y)
 			x += 2.2
 		y += 2.6
 
@@ -328,6 +338,8 @@ func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
 		_window_mat.set_shader_parameter("interior", minf(detail, 1.0))
 	if _halos != null:
 		_halos.visible = detail > 0.5
+	if _frontage != null:
+		_frontage.set_detail(detail)
 	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes"]:
 		var node := get_node_or_null(node_name) as Node3D
 		if node != null:
