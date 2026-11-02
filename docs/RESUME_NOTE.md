@@ -1,5 +1,9 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## Current continuation — 2026-11-02
+
+The current-main release entrypoint is `tools/release/Finish-IgraRelease.ps1`. This pass integrates the version-16 branch with facade, audio, resource-lifetime, menu and touch-safe-area fixes. Read `docs/RELEASE_FINISH_20261102.md` for the actual validation and remaining acceptance limits. Use the latest eight committed store captures from runtime `756a4f2`; older captures are preserved under `docs/stills/archive/`. Exact reference-art fidelity, physical-phone acceptance and store submission remain incomplete. Earlier NEXT-ROW blocks below are historical records, not the current action list.
+
 ## NEXT-ROW (Session 38, the visual redo, 2026-10-31; no tag): read this block first; the blocks under it still stand
 
 **State.** Pull request 45 is merged (`0dec1ff5`). The branch `pass/swarm-final` holds the rest of the pass (the councils, the closed Opus and story findings, the redone world look) and goes to `main` through a pull request; `build/tls.aab` is version code 16 (109,770,553 bytes, sha256 `03f920fb…`, `docs/RELEASE_ARTIFACTS.md`, last section) and `build/windows/LastStreetlight.exe` boots outside the editor; **Release status is INCOMPLETE** (no phone test).
