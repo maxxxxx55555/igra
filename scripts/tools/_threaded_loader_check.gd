@@ -1,11 +1,12 @@
 extends Node
 ## Every successful threaded request must be consumed, including on scene exit.
+const _LOADER := preload("res://scripts/world/district_preloader.gd")
 
 var _fails: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	var loader: RefCounted = load("res://scripts/world/district_preloader.gd").new()
+	var loader: RefCounted = _LOADER.new()
 	loader.request_around(&"suburbs")
 	var paths: Array = loader.requested_paths().duplicate()
 	await _wait_loaded(paths)
@@ -19,7 +20,7 @@ func _ready() -> void:
 	if loader.has_method("clear"):
 		loader.clear()
 	_cleanup(paths)
-	loader = load("res://scripts/world/district_preloader.gd").new()
+	loader = _LOADER.new()
 	loader.request_around(&"school")
 	paths = loader.requested_paths().duplicate()
 	if loader.has_method("clear"):
@@ -39,7 +40,7 @@ func _ready() -> void:
 	var music_warm := true
 	for path in paths:
 		var stream: AudioStream = MusicManager._cache.get(path)
-		music_warm = music_warm and stream is AudioStreamOggVorbis and stream.loop
+		music_warm = music_warm and stream is AudioStreamOggVorbis and (stream as AudioStreamOggVorbis).loop
 	_ok(music_warm, "prefetched music remains cached with looping enabled")
 	_cleanup(paths)
 	var director := MusicDirector.new()

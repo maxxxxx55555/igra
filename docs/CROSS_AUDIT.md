@@ -44,7 +44,7 @@ findings at the end of this pass; the full scan is informational and is the numb
 | 26 secrets | `tools/qa_sim/balance_sim.py` section 7 ("all secrets x reward: 26 x 50") | the ids of `content/secrets.json` | 26: holds |
 | 12 monster records | `docs/FIRST_5_MINUTES.md` and `docs/DIFFICULTY_CURVE.md` read them | the files of `data/monsters` | 12 (ten of the rosters, the boss and the Tvar): holds |
 | 203 photos | the album screen, check G26 | `[closeout] ok G26 the game can give 200 photos or more (203)` of launch 109 | 203: holds |
-| 4 graphics tiers | the Settings screen | `GRAPHICS_TIERS` in `scripts/systems/settings_manager.gd:280` | 4 rows: holds |
+| 4 graphics tiers | the Settings screen | `GRAPHICS_TIERS` in `scripts/systems/settings_manager.gd:282` | 4 rows: holds |
 | 7 onboarding cards | `docs/FIRST_5_MINUTES.md` | `PANELS` in `scripts/ui/onboarding_overlay.gd:9` | 7: holds |
 | the signed bundle is 136,508,347 bytes | `docs/RELEASE_ARTIFACTS.md` | `stat build/tls.aab` | 136,508,347: holds **for the bundle of `v8.0.0-shipping`**; the code has changed since, so it is rebuilt at the ship step and the number replaced |
 | D1 142 draw calls, p95 28.79 ms | `docs/PERF_PASS.md:51` | the windowed perf gate | measured at `v8.0.0-shipping`; **false at the final head**: launch 24 (`a4acbb5`, the quality manager off) reads D1 150 draw calls with a p95 of 35.00 ms and D11 140 with 38.63 ms against the budget of 33 ms: the windowed gate is RED (`docs/PERF_PASS.md:19`, section 0b) |

@@ -92,7 +92,7 @@
       "i18n_keys": { "title": "LORE_SUBURBS_08_TITLE", "text": "LORE_SUBURBS_08_TEXT" },
       "en": {
         "title": "Suburbs Watch Roster",
-        "text": "A handwritten roster: \"Street watch — Dark hours. Ivanov 1st floor, Petro 2nd, old Anya at the corner window with the flashlight.\" Three names are crossed out. Next to the last crossed-out name: \"He went to look for his dog. The dog came back. He didn't.\""
+        "text": "A handwritten roster: \"Street watch — Dark hours. Ivanov 1st floor, Petro 2nd, old Anya at the corner window with the flashlight.\" Two names are crossed out. Next to the last crossed-out name: \"He went to look for his dog. The dog came back. He didn't.\""
       },
       "location_hint": "Kitchen table, house at the cul-de-sac (z_cul_de_sac)",
       "min_stage": 1,

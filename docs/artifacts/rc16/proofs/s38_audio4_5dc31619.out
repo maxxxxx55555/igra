@@ -1,0 +1,9 @@
+# proof s38_audio4_5dc31619
+# utc 20261031T011429Z
+# head 5dc31619 (uncommitted paths: 24)
+# env none
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

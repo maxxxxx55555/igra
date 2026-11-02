@@ -81,7 +81,7 @@ func _make_marking_mesh() -> BoxMesh:
 func _make_curb_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, 0.17, 0.22)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
 	return m
 
 func _make_damage_mesh() -> BoxMesh:
@@ -204,10 +204,13 @@ func _fill_sidewalks() -> void:
 					t.origin = pos + (Vector3(0, 0, off) if r.dir == "h" else Vector3(off, 0, 0))
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
-					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					if s == 0:
 						_create_collision(t.origin, r, steps, &"concrete")
+					if _on_crossing(s):
+						continue
+					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					idx += 1
+	_sidewalk_mm.multimesh.visible_instance_count = idx
 
 ## Разметка идёт со своим шагом, а не с шагом плитки дороги, и лежит над дорогой на MARKING_LIFT.
 func marking_origin(road: Dictionary, step: int) -> Vector3:
@@ -229,15 +232,19 @@ func _fill_markings() -> void:
 			_marking_mm.multimesh.set_instance_transform(idx, t)
 			idx += 1
 
+## Whether the tile of step `s` lies on the carriageway of a cross street (one every grid_spacing along a road): the walk and the kerb stop there, so no tile lies flush on the asphalt of the crossing.
+func _on_crossing(s: int) -> bool:
+	var along: float = float(s) * tile_size - (LEGACY_HALF_TILE - tile_size * 0.5)
+	return absf(along - roundf(along / grid_spacing) * grid_spacing) < road_width * 0.5 + tile_size * 0.5
+
 ## Raised kerbs separate the road from the walk on every block edge; the gaps at crossings read as
 ## dropped kerbs and keep the old visual road grid from looking like one poured slab.
 func _fill_curbs() -> void:
 	var xforms: Array[Transform3D] = []
-	var crossing := maxi(1, int(round(grid_spacing / tile_size)))
 	for r in roads:
 		var steps := int(r.length / tile_size)
 		for s in range(steps):
-			if s % crossing == 0:
+			if _on_crossing(s):
 				continue
 			var pos: Vector3 = road_step_pos(r, s)
 			for side in [-1.0, 1.0]:

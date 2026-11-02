@@ -54,7 +54,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 
 ## 4. Quality presets: Low, Medium, High, Ultra
 
-`SettingsManager.set_graphics_tier` (`scripts/systems/settings_manager.gd:512`) sets five things from the row of `GRAPHICS_TIERS` (line 306) and the rest follow the `graphics_tier` signal:
+`SettingsManager.set_graphics_tier` (`scripts/systems/settings_manager.gd:514`) sets five things from the row of `GRAPHICS_TIERS` (line 306) and the rest follow the `graphics_tier` signal:
 
 | Toggle | Low | Medium | High | Ultra | Where |
 |---|---|---|---|---|---|

@@ -160,7 +160,7 @@ func _refresh() -> void:
 		if unlocked:
 			b.pressed.connect(_open.bind(String(id)))
 		_list.add_child(b)
-	_reader_title.text = LocalizationManager.tf("JOURNAL_FOUND", [found, _catalog.size()])
+	_reader_title.text = LocalizationManager.tf("JOURNAL_FOUND", [found, Endings.get_total_documents()])  # the catalog holds 22 notes that no district places: the death and victory screens count 101, so does this
 	_reader_text.text = ""
 
 func _open(doc_id: String) -> void:

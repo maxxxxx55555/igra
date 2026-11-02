@@ -507,12 +507,16 @@ func _p2l_import_save_survives_next_autosave() -> void:
 	# now, so force a fresh write first or the exported snapshot won't
 	# actually match `original`.
 	SaveSystem.save_all()
-	if not SaveSystem.export_save_to_file():
+	# Keep the user's real Downloads export untouched, even in an isolated QA profile.
+	var export_name := "tls_save_export_TESTONLY.json"
+	if not SaveSystem.export_save_to_file(SaveSystem.SAVE_PATH, export_name):
 		_fail("P2l export_save_to_file failed")
 		return
 	wallet.add(777)
 	SaveSystem.save_all()
-	if not SaveSystem.import_save_from_file():
+	var imported: bool = SaveSystem.import_save_from_file(SaveSystem.SAVE_PATH, export_name)
+	DirAccess.remove_absolute(OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(export_name))
+	if not imported:
 		_fail("P2l import_save_from_file failed")
 		wallet.from_dict({"coins": original})
 		SaveSystem.save_all()
