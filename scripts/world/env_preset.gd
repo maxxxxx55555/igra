@@ -2,6 +2,8 @@ extends RefCounted
 ## W1 of docs/VISUAL_PASS.md section 8: the environment preset of the profile (assets/env/night_environment_<mobile|desktop>.tres) copied key by key onto the live environment.
 ## Not copied: the sky and the background (the scene's own panorama is tuned to a lower energy), the ambient light (the stage of the district owns it), the tone mapper (the table of the graphics
 ## tier owns it) and the screen-space effects the Compatibility renderer does not have (SSAO, SSIL, SSR, volumetric fog).
+## Presets contain parameters only. An unused Sky allocated and released during load leaks two GLES3 textures in Godot 4.7.2;
+## the rendered panorama belongs exclusively to scenes/environment/world_env.tscn.
 
 const SKIPPED: Array[String] = ["sky", "background", "ambient_light", "tonemap_mode", "ssao", "ssil", "ssr", "volumetric_fog", "resource_", "script", "sdfgi"]
 
