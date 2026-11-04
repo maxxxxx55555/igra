@@ -55,8 +55,8 @@ static func evaluate() -> Array:
 	if all_districts and docs_pct >= 1.0:
 		out.append({"id": "light", "title": "END_LIGHT_TITLE", "desc": "END_LIGHT_DESC", "tier": "good"})
 
-	# Надежда (нейтральная) — все районы FULL, но < 50% документов
-	if all_districts and docs_pct < 0.5:
+	# Надежда (нейтральная) — все районы FULL, но не все документы
+	if all_districts and docs_pct < 1.0:
 		out.append({"id": "hope", "title": "END_HOPE_TITLE", "desc": "END_HOPE_DESC", "tier": "neutral"})
 
 	# Выживший (средняя) — только District 11 (powerplant) восстановлен

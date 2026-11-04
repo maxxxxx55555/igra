@@ -137,9 +137,7 @@ func _complete(q: Dictionary) -> void:
 	EventBus.quest_completed.emit(StringName(q.id))
 	quest_completed.emit(String(q.id))
 	EventBus.inventory_notice.emit(LocalizationManager.tf("QUEST_DONE_NOTICE", [get_title(q), q.reward_coins]))
-	var gm := get_tree().root.get_node_or_null("/root/GameManager")
-	if gm and gm.has_method("auto_save"):
-		gm.auto_save()
+	SaveSystem.autosave()
 
 func _reward_fits(q: Dictionary) -> bool:
 	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")

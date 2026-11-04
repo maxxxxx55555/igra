@@ -361,6 +361,9 @@ func save_all() -> void:
 
 ## Settings > Auto-save: the timer, the milestone saves and the district-entry save go through here.
 func autosave() -> void:
+	# A deferred call after a hardcore death must not recreate the wiped save.
+	if not GameManager.current_state in [GameManager.GameState.PLAYING, GameManager.GameState.PAUSED]:
+		return
 	if bool(SettingsManager.get_setting("autosave", true)):
 		_save()
 

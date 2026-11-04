@@ -6,6 +6,8 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## порядке сохранённый индекс указывал на чужой язык.
 const LANGUAGES := ["ru", "en"]
 const CFG_PATH := "user://settings.cfg"
+const _FLOAT_RANGES: Dictionary = {"sensitivity": Vector2(0.05, 4.0), "deadzone": Vector2(0.0, 0.9), "hud_opacity": Vector2(0.0, 1.0), "button_size": Vector2(0.5, 2.0), "render_scale": Vector2(0.5, 1.0), "draw_distance": Vector2(10.0, 500.0), "touch_sensitivity": Vector2(0.5, 2.0)}
+const _INT_RANGES: Dictionary = {"crouch_input": Vector2i(0, 2), "colorblind": Vector2i(0, 3), "text_size": Vector2i(0, 2), "shadow_quality": Vector2i(0, 2), "texture_quality": Vector2i(0, 2), "effects_quality": Vector2i(0, 2)}
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
 
@@ -650,9 +652,11 @@ func to_dict() -> Dictionary:
 	return {"volumes": _volumes.duplicate(), "language": get_language(), "settings": _settings.duplicate()}
 
 func from_dict(d: Dictionary) -> void:
-	var v: Dictionary = d.get("volumes", {}) as Dictionary
+	var raw_volumes: Variant = d.get("volumes", {})
+	var v: Dictionary = raw_volumes if raw_volumes is Dictionary else {}
 	for b in BUSES:
-		_volumes[b] = clampf(float(v.get(b, 1.0)), 0.0, 1.0)
+		var level: Variant = v.get(b, 1.0)
+		_volumes[b] = clampf(float(level), 0.0, 1.0) if (level is float or level is int) and is_finite(float(level)) else 1.0
 		_apply(b)
 	# Only override the live language if the payload actually carries one —
 	# an older save (or a game save missing the field) must not silently
@@ -662,9 +666,32 @@ func from_dict(d: Dictionary) -> void:
 		# A language the game no longer ships (de, es, fr, pt_BR until 2026-11-05) reads as English.
 		_language = lang if lang in LANGUAGES else "en"
 		_apply_locale(_language)
-	var s: Dictionary = d.get("settings", {}) as Dictionary
+	var raw_settings: Variant = d.get("settings", {})
+	var s: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	var before: Dictionary = _settings.duplicate()
 	for key in s:
 		_settings[key] = s[key]
+	# A stored number outside its setter's range is clamped; a value that is not a finite number keeps the value it replaced.
+	for key: String in _FLOAT_RANGES:
+		if _settings.has(key):
+			var num: Variant = _settings[key]
+			if (num is float or num is int) and is_finite(float(num)):
+				var bounds: Vector2 = _FLOAT_RANGES[key]
+				_settings[key] = clampf(float(num), bounds.x, bounds.y)
+			elif before.has(key):
+				_settings[key] = before[key]
+			else:
+				_settings.erase(key)
+	for key: String in _INT_RANGES:
+		if _settings.has(key):
+			var num: Variant = _settings[key]
+			if (num is float or num is int) and is_finite(float(num)):
+				var bounds: Vector2i = _INT_RANGES[key]
+				_settings[key] = clampi(int(num), bounds.x, bounds.y)
+			elif before.has(key):
+				_settings[key] = before[key]
+			else:
+				_settings.erase(key)
 	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
 	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
 	_settings["hardcore"] = _settings.get("hardcore", false) is bool and _settings["hardcore"]

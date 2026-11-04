@@ -44,10 +44,21 @@ func _ready() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		checkpoint_run()
-		pause_game()
+		_pause_with_screen()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if is_playing():
+			_pause_with_screen()
+		elif current_state == GameState.MENU:
+			Routes.goto("res://scenes/ui/confirm_quit.tscn")
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		checkpoint_run()
 		get_tree().quit()
+
+func _pause_with_screen() -> void:
+	if not is_playing():
+		return
+	UIManager.open(&"pause")
+	pause_game()
 
 func checkpoint_run() -> void:
 	if current_state in [GameState.PLAYING, GameState.PAUSED]:

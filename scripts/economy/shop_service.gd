@@ -24,7 +24,7 @@ func catalog_by_kind(kind: int) -> Array:
 			out.append(it)
 	return out
 func is_owned(id: StringName) -> bool:
-	return _owned.get(id, false)
+	return _owned.get(id, false) or UpgradeSystem.is_applied(id)
 func buy(id: StringName) -> void:
 	var item := get_item(id)
 	if item == null:
@@ -55,7 +55,7 @@ func _grant(item: ShopItem) -> void:
 		ShopItem.Kind.BUNDLE:
 			for content_id in item.bundle_contents:
 				var c := get_item(content_id)
-				if c != null:
+				if c != null and not is_owned(content_id):
 					_grant(c)
 			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_BUNDLE_GRANTED", [LocalizationManager.name_for("SHOP_ITEM_", item.id, item.display_name)]))
 func to_dict() -> Dictionary:

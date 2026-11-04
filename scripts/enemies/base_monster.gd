@@ -155,6 +155,8 @@ func _ready() -> void:
 	# would be the correct model; this is the reuse-before-write version of
 	# "the monster loses the player" using the signal that already exists.
 	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
+	var hider: Node = get_tree().get_first_node_in_group("player")
+	_player_hiding = hider != null and hider.get("_in_hiding") == true
 	add_to_group("enemies")
 	add_to_group("monsters")
 	_status_node = load("res://scripts/enemies/status_effects.gd").new()
@@ -471,6 +473,9 @@ func _state_attack(delta: float) -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		_change_state(State.PATROL)
 		return
+	if _player_hiding:
+		_enter_investigate_at(player_ref.global_position)
+		return
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist > attack_range:
 		_change_state(State.CHASE)
@@ -529,7 +534,7 @@ func _perform_attack() -> void:
 		_deal_damage()
 
 func _deal_damage() -> void:
-	if _player_hiding:
+	if _player_hiding or ai_state == State.DEAD or ai_state == State.STUN:
 		return
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
