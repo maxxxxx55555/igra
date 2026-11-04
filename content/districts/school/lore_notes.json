@@ -49,7 +49,7 @@
       "i18n_keys": { "title": "LORE_SCHOOL_04_TITLE", "text": "LORE_SCHOOL_04_TEXT" },
       "en": {
         "title": "Yard Collection Notice — Sheet Two",
-        "text": "A weather-swollen sheet still nailed to the gate board. \"COLLECTION POINT: SCHOOL YARD. Sheet two, forty-seven persons. Buses to the central arena. Bring documents and water. Bring no lamps, no batteries, no torches — the convoy travels dark.\" Along the bottom, ballpoint, pressed hard: \"Buses came at 04:00 for sheet one. Sheet two waited until sunrise. Nobody wrote sheet three.\""
+        "text": "A weather-swollen sheet still nailed to the gate board. \"COLLECTION POINT: SCHOOL YARD. Sheet two, forty-seven persons. Buses to the central arena. Bring documents and water. Bring no lamps, no batteries, no torches — the convoy travels dark.\" Along the bottom, ballpoint, pressed hard: \"Buses came at 04:00 for sheet one. Sheet two waited until eight. Nobody wrote sheet three.\""
       },
       "location_hint": "Gate notice board, school yard entrance (z_yard_gate)",
       "min_stage": 0,
@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_SCHOOL_06_TITLE", "text": "LORE_SCHOOL_06_TEXT" },
       "en": {
         "title": "Chalkboard, Copied Down",
-        "text": "A teacher's exercise book, one page filled with numbers copied from the classroom board morning after morning: 300. 300. 297. 297. 291. 291. 284. Under them, in the same careful hand: \"It writes the count at 03:40. It never counts itself. It is not wrong — I checked the register twice. If the number drops, do not go looking for the difference. The difference is looking for you.\""
+        "text": "A teacher's exercise book, one page filled with numbers copied from the classroom board night after night: 300. 300. 297. 297. 291. 291. 284. Under them, in the same careful hand: \"It writes the count at 03:40. It never counts itself. It is not wrong — I checked the register twice. If the number drops, do not go looking for the difference. The difference is looking for you.\""
       },
       "location_hint": "Open on the front desk, classroom wing (z_classroom_wing)",
       "min_stage": 2,

@@ -106,7 +106,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_CHILDREN_COUNTING_TEXT` | “One — the light went out. Two — it's here with us. Three — don't look. Four — don't be the seeker.” |
 | `DOC_CHILDREN_COUNTING_TITLE` | Schoolyard Counting Rhyme (Basement Version) |
 | `DOC_CORE_STATION_TEXT` | “Central station: output 800 MW, reserve of 3 generators. Special conditions: DO NOT START AFTER 23:00.” |
-| `DOC_CORE_STATION_TITLE` | Central Station Technical Passport |
+| `DOC_CORE_STATION_TITLE` | Power Station Technical Passport |
 | `DOC_ENGINEER_WARNING_TEXT` | “To all crews: DO NOT OPEN the substations without an order. What we found inside is not what we expected.” |
 | `DOC_ENGINEER_WARNING_TITLE` | Chief Engineer's Warning |
 | `DOC_EON_CONTRACT_TEXT` | “Clause 13: the city grants EON the right to use the power grid for research purposes.” |
@@ -120,7 +120,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_FOREMAN_NOTE_TEXT` | “The conveyor has started to think it's the foreman. No, I haven't lost my mind. I've worked here for 20 years.” |
 | `DOC_GENERATOR_MANUAL_TEXT` | “Step 1: Make sure the room is ventilated. Step 2: Make sure there are no wires nearby.” |
 | `DOC_GENERATOR_MANUAL_TITLE` | GT-3000 Generator Manual |
-| `DOC_HOSPITAL_NOTE_TEXT` | “Patient brought in from substation Zh-3. Does not speak, does not eat, stares at the lamp.” |
+| `DOC_HOSPITAL_NOTE_TEXT` | “Patient brought in from the substation. Does not speak, does not eat, stares at the lamp.” |
 | `DOC_HYMN_TEXT` | “Holy light that burns in the night, protect us from those who live in the wires. Amen.” |
 | `DOC_HYMN_TITLE` | The Lamplighters' Prayer |
 | `DOC_KING_NOTE_TEXT` | “You made it to the center. So I was right about you. Put out the light at the station — not for yourself.” |
@@ -129,7 +129,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_MACHINE_DIARY_TITLE` | The Machine's Diary (Unsigned) |
 | `DOC_MURDER_LETTERS_TEXT` | “Dear neighbor! I switch off your light at 23:00, because it disturbs my peace.” |
 | `DOC_OLD_WOMAN_TEXT` | “Sonny, if you're reading this, you're alive, and that's what matters. Babka Manya says: the light in this city isn't electricity.” |
-| `DOC_OLD_WOMAN_TITLE` | Letter from the Old Woman at No. 24 |
+| `DOC_OLD_WOMAN_TITLE` | Letter from the Old Woman at House 24 |
 | `DOC_PROTOCOL_DAWN_TEXT` | Secret EON order No. 7: in case of irreversible failure of the power grid, launch Protocol DAWN. |
 | `DOC_RADIO_DIARY_01_TEXT` | “Friday. The grid died at 03:14. The radio still picks up static from the north.” |
 | `DOC_RADIO_DIARY_01_TITLE` | Radio Operator's Diary: Day 1 |
@@ -156,7 +156,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `ITEM_BLUEPRINT_ENHANCED_BATTERY` | Blueprint: enhanced battery |
 | `ITEM_BLUEPRINT_PORTABLE_WORKBENCH` | Blueprint: portable bench |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
-| `MONSTER_DESC_BOSS` | The source of the power plant disaster. In its second phase only the beam of your flashlight can hurt it. |
+| `MONSTER_DESC_BOSS` | The source of the power station disaster. In its second phase only the beam of your flashlight can hurt it. |
 | `MONSTER_DESC_BRUTE` | A heavy charger that winds up a slam and follows through with a lunge, then needs to recover. |
 | `MONSTER_DESC_BURNER` | Spits a burning payload from range and flees in panic when caught in the light. |
 | `MONSTER_DESC_CRAWLER` | A darting creature. It lunges at any noise, so do not run near it. |

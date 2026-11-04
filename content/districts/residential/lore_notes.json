@@ -8,7 +8,7 @@
       "i18n_keys": { "title": "LORE_RESIDENTIAL_01_TITLE", "text": "LORE_RESIDENTIAL_01_TEXT" },
       "en": {
         "title": "Letter Under the Door of House 24",
-        "text": "\"Son, if you are reading this, you are alive, and that is the main thing. Babka Manya says: the light in this city is not electricity. The lamps remember who they were lit for. Walk kindly, and do not let your little lamp die between the buildings.\" The handwriting is careful, pre-war. The paper smells of valerian and kerosene."
+        "text": "\"Son, if you are reading this, you are alive, and that is the main thing. Babka Manya says: the light in this city is not electricity. The lamps remember who they were lit for. Walk kindly, and do not let your little lamp die between the buildings.\" The handwriting is careful, pre-blackout. The paper smells of valerian and kerosene."
       },
       "location_hint": "Doorstep of house 24, the only door with a fresh bell pull (z_house24)",
       "min_stage": 0,
@@ -19,8 +19,8 @@
       "item_type": "photo",
       "i18n_keys": { "title": "LORE_RESIDENTIAL_02_TITLE", "text": "LORE_RESIDENTIAL_02_TEXT" },
       "en": {
-        "title": "Photo: Courtyard Wedding, 1987",
-        "text": "A glossy Soviet-era print. Long tables between the panel blocks, paper garlands strung from one balcony to the next, an old man slow-dancing with a bride. Every streetlight in the frame is burning. Someone has pressed a dried rowan berry into the corner of the print."
+        "title": "Photo: Courtyard Wedding",
+        "text": "A glossy print. Long tables between the panel blocks, paper garlands strung from one balcony to the next, an old man slow-dancing with a bride. Every streetlight in the frame is burning. Someone has pressed a dried rowan berry into the corner of the print."
       },
       "location_hint": "Bench under the archway into the courtyard playground (z_courtyard_play)",
       "min_stage": 0,

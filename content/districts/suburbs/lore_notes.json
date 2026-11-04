@@ -56,7 +56,7 @@
       "i18n_keys": { "title": "LORE_SUBURBS_05_TITLE", "text": "LORE_SUBURBS_05_TEXT" },
       "en": {
         "title": "Note under a Door",
-        "text": "\"If you are reading this — do not knock. We don't open doors after sunset anymore. Take the canned food from the step, it is yours. And if you get to the center: the Keeper still keeps his light on. Go to him.\""
+        "text": "\"If you are reading this — do not knock. We don't open doors after dark anymore. Take the canned food from the step, it is yours. And if you get to the center: the Keeper still keeps his light on. Go to him.\""
       },
       "location_hint": "Doorstep of the house with boarded windows (z_cul_de_sac)",
       "min_stage": 0,

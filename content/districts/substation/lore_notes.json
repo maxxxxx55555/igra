@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_SUBSTATION_06_TITLE", "text": "LORE_SUBSTATION_06_TEXT" },
       "en": {
         "title": "Photo: The Boneyard Count",
-        "text": "A photograph of the lamp boneyard behind the east fence, taken from the control-room window at dusk: rows of dismantled streetlight housings stacked like firewood, brass shells sorted from iron, every stack tagged with wire and a paper slip naming a suburbs street. In the foreground, the chalk tally board, and the tally is in a hand like a ruled line — the same hand that signed the grid's own orders forty years running. Two hundred and nineteen, and then more rows past the count, still being stacked. On the back: \"He does not hide them. He stages them. Whatever he is building at the center, it is built out of our own lamps.\""
+        "text": "A photograph of the lamp boneyard behind the east fence, taken from the control-room window at night: rows of dismantled streetlight housings stacked like firewood, brass shells sorted from iron, every stack tagged with wire and a paper slip naming a suburbs street. In the foreground, the chalk tally board, and the tally is in a hand like a ruled line — the same hand that signed the grid's own orders forty years running. Two hundred and nineteen, and then more rows past the count, still being stacked. On the back: \"He does not hide them. He stages them. Whatever he is building at the center, it is built out of our own lamps.\""
       },
       "location_hint": "Taped to the control-room window frame (z_lamp_boneyard)",
       "min_stage": 2,
