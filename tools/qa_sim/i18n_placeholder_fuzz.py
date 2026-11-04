@@ -17,7 +17,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LOCALES = ["en", "de", "es", "fr", "pt_BR", "ru"]
+LOCALES = ["en", "ru"]
 SCRIPT = {"ru": r"[Ѐ-ӿ]"}
 SPEC = re.compile(r"%[-+0#]*\d*(?:\.\d+)?[sdifxXc]|\{\w+\}")
 SPACE_FLAG = re.compile(r"%[ ]\w")

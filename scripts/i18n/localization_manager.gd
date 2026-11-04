@@ -2,20 +2,19 @@
 
 extends Node
 
-## LocalizationManager - 6 jazykov (v10 E6: en ru de es fr pt_BR), system font fallback, RTL
+## LocalizationManager - English and Russian (owner, 2026-11-05; v10 E6 had six), system font fallback, RTL
 signal language_changed(lang: String)
 
 const LANG_DIR: String = "res://data/i18n/"
 
-const SUPPORTED: Array = ["ru","en","es","de","fr","pt_BR"]
+const SUPPORTED: Array = ["ru","en"]
 
 ## Эндонимы: язык подписан на самом себе, как ждёт игрок в списке языков.
 ## Раньше здесь была латинская транслитерация ("Nihongo", "Zhongwen(Jian)") —
 ## обходной путь вокруг отсутствия глифов. Теперь fallback-шрифт настроен
 ## в _setup_system_font(), и подписи можно писать родным письмом.
 const LANG_NAMES: Dictionary = {
-	"ru": "Русский", "en": "English", "es": "Español", "de": "Deutsch",
-	"fr": "Français", "pt_BR": "Português (BR)"}
+	"ru": "Русский", "en": "English"}
 
 ## No supported language reads right to left since Arabic left in v10 E6; is_rtl() and the layouts that ask it stay for the day one comes back.
 const RTL_LANGS: Array = []
@@ -85,7 +84,6 @@ func _apply_font_to_theme(theme: Theme, font: Font) -> void:
 
 func _detect_system_lang() -> String:
 	var loc = OS.get_locale()
-	if loc.begins_with("pt_BR"): return "pt_BR"
 	var short = loc.substr(0, 2)
 	if short in SUPPORTED: return short
 	return "en"

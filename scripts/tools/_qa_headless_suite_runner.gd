@@ -906,13 +906,13 @@ func _p3_save_load_lang() -> void:
 	if not SaveSystem.has_save():
 		_fail("P3 save_all() produced no save")
 		return
-	LocalizationManager.set_language("de")
+	LocalizationManager.set_language("ru")
 	var l1 := SaveSystem.load_all()
-	LocalizationManager.set_language("fr")
+	LocalizationManager.set_language("en")
 	var l2 := SaveSystem.load_all()
 	LocalizationManager.set_language("en")
 	if not l1 or not l2:
-		_fail("P3 load_all() failed after save (mid-load lang switch): de=%s fr=%s" % [l1, l2])
+		_fail("P3 load_all() failed after save (mid-load lang switch): ru=%s en=%s" % [l1, l2])
 	_log("P3 save/load round-trip with language switch OK")
 
 # ── P4 ────────────────────────────────────────────────────────────────

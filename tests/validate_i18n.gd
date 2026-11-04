@@ -1,7 +1,7 @@
 extends SceneTree
 
 func _initialize() -> void:
-	var langs := ["ru","en","es","de","fr","it","pt_BR","tr","ja","ko","zh","zh_TW","ar"]
+	var langs := ["ru","en"]
 	for lang in langs:
 		var path: String = "res://data/i18n/" + lang + ".json"
 		var f := FileAccess.open(path, FileAccess.READ)

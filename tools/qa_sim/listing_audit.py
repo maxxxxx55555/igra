@@ -15,7 +15,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LISTING = ROOT / "store" / "listing.md"
-LOCALES = ["en", "ru", "es", "de", "fr", "pt_BR"]
+LOCALES = ["en", "ru"]
 TITLE_MAX, SHORT_MAX, FULL_MAX = 30, 80, 4000
 # the English claim -> (what the code holds, how it is read)
 FEATURES = {

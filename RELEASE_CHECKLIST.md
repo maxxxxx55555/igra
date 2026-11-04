@@ -65,7 +65,7 @@ pass could.
 | Touch/fuzz headless gate | `touch_probe_scene.tscn`, 23/23 incl. a 200-event fuzz pass | `3522d89` |
 | `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
 | District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
-| i18n — 6 locales (en, ru, de, es, fr, pt_BR; the thirteen of earlier passes were cut to these), every user-facing string | 1577 keys × 6, 0 MISSING at runtime | `a712dd1`, prior |
+| i18n — 2 locales (en, ru; the owner cut de, es, fr and pt_BR on 2026-11-05, after the thirteen of earlier passes were cut to six), every user-facing string | 1577 keys × 6, 0 MISSING at runtime | `a712dd1`, prior |
 | i18n — native-speaker QA on the 11 non-EN/RU locales | 10 CRITICAL + 458 HIGH fixes applied (468 strings); `docs/NATIVE_QA_FINDINGS.md` | `653d0a8` |
 | Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |
 | Store listing — **6 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated then native-QA'd; EN+RU master untouched | `3babbff`, `653d0a8` |

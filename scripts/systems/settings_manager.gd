@@ -4,7 +4,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## строит список по SUPPORTED, а индекс выбранного пункта хранит в
 ## _settings["language"], который здесь ищется через LANGUAGES.find(). При разном
 ## порядке сохранённый индекс указывал на чужой язык.
-const LANGUAGES := ["ru", "en", "es", "de", "fr", "pt_BR"]
+const LANGUAGES := ["ru", "en"]
 const CFG_PATH := "user://settings.cfg"
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
@@ -658,7 +658,9 @@ func from_dict(d: Dictionary) -> void:
 	# an older save (or a game save missing the field) must not silently
 	# reset a player's chosen language to English.
 	if d.has("language") and String(d["language"]) != "":
-		_language = String(d["language"])
+		var lang := String(d["language"])
+		# A language the game no longer ships (de, es, fr, pt_BR until 2026-11-05) reads as English.
+		_language = lang if lang in LANGUAGES else "en"
 		_apply_locale(_language)
 	var s: Dictionary = d.get("settings", {}) as Dictionary
 	for key in s:
@@ -666,6 +668,8 @@ func from_dict(d: Dictionary) -> void:
 	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
 	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
 	_settings["hardcore"] = _settings.get("hardcore", false) is bool and _settings["hardcore"]
+	# The stored index of the language list could point past the two languages left: it follows the live language.
+	_settings["language"] = maxi(LANGUAGES.find(get_language()), 0)
 	_InputRemap.apply(_settings.get("keybinds", {}) as Dictionary)
 	# Re-apply accessibility effects from the loaded config (deferred: the
 	# root theme / enemy nodes may not exist yet at load time).
