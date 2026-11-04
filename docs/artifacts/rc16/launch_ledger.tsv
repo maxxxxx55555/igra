@@ -451,3 +451,5 @@ n	utc	head	id	exit	command
 450	20261104T184710Z	f954a587	s39_all_f954a587	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 451	20261104T225527Z	3df98f42	s39_all2_3df98f42	6	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 452	20261104T233200Z	8769eaf4	s39_all3_8769eaf4	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+453	20261104T234839Z	e2b54975	s39_store_e2b54975	1	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+454	20261104T234948Z	e2b54975	s39_store2_e2b54975	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300

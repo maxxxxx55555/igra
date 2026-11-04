@@ -1,0 +1,9 @@
+# proof s39_store_e2b54975
+# utc 20261104T234839Z
+# head e2b54975 (uncommitted paths: 12)
+# env none
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/release_frames_scene.tscn rc=1 (log: .qa_logs/release_frames_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=1
