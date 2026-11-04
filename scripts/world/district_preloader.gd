@@ -29,6 +29,8 @@ func _request(path: String) -> void:
 
 ## Poll only completed requests during play, so a background prefetch cannot stall a frame.
 func collect_ready() -> void:
+	if _pending.is_empty():
+		return
 	for path: String in _pending.duplicate():
 		var status := ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:

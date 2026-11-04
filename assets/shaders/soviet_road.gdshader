@@ -61,9 +61,9 @@ float crack_net(vec2 p, float aa) {
 		}
 	}
 	float edge = second - first;
-	float patch = smoothstep(0.58, 0.74, vnoise(p * 0.3 + vec2(3.0, 1.0)));
+	float crack_patch = smoothstep(0.58, 0.74, vnoise(p * 0.3 + vec2(3.0, 1.0)));
 	float broken = smoothstep(0.36, 0.58, vnoise(p * 3.4 + vec2(7.0, 23.0)));
-	return (1.0 - smoothstep(0.0, 0.014 + aa, edge)) * patch * broken / (1.0 + aa * 10.0);
+	return (1.0 - smoothstep(0.0, 0.014 + aa, edge)) * crack_patch * broken / (1.0 + aa * 10.0);
 }
 
 void vertex() {

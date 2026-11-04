@@ -375,6 +375,8 @@ func _preload_around(district_id: StringName) -> void:
 				_cache.erase(path)
 
 func _collect_preloads(wait_for_pending: bool = false) -> void:
+	if _pending_preloads.is_empty():
+		return
 	for path: String in _pending_preloads.duplicate():
 		var status := ResourceLoader.load_threaded_get_status(path)
 		if not wait_for_pending and status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
