@@ -4,6 +4,9 @@ Run: powershell -NoProfile -ExecutionPolicy Bypass -File .\Finish-IgraRelease.ps
 Checks current main and builds Windows/Web. Repeat the command to resume the
 same source; -Update starts from newest main. -CheckGame skips exports.
 -Android additionally requires existing signing environment, SDK and JDK 17.
+-SigningEnv <path to .signingelease.env> sets that signing environment for this process only (nothing is printed);
+a missing -AndroidSdk or -JavaHome is looked up in %LOCALAPPDATA%\Android\Sdk, C:\Android\Sdk and the Adoptium JDK 17.
+Owner's one command: .	oolselease\Finish-IgraRelease.ps1 -Android -SigningEnv .signingelease.env
 This script never replaces a project, generates signing keys or publishes a store release.
 #>
 [CmdletBinding()]
@@ -15,6 +18,7 @@ param(
     [switch]$Android,
     [string]$AndroidSdk = $env:ANDROID_HOME,
     [string]$JavaHome = $env:JAVA_HOME,
+    [string]$SigningEnv,
     [switch]$DraftRelease
 )
 
@@ -112,11 +116,40 @@ function Require-ReleaseApp([string]$Name, [string]$Package) {
     return $app
 }
 
+## Reads the KEY=value lines of the owner's signing file into this process only; values are never printed or written.
+function Import-ReleaseSigning([string]$Path) {
+    $full = [IO.Path]::GetFullPath($Path)
+    if (-not [IO.File]::Exists($full)) { throw "Signing file not found: $full" }
+    $values = @{}
+    foreach ($line in [IO.File]::ReadAllLines($full)) {
+        $text = $line.Trim()
+        if (-not $text -or $text.StartsWith('#')) { continue }
+        $at = $text.IndexOf('=')
+        if ($at -lt 1) { throw 'Signing file lines must be KEY=value.' }
+        $values[$text.Substring(0, $at).Trim()] = $text.Substring($at + 1).Trim().Trim('"').Trim("'")
+    }
+    $defaults = @{
+        GODOT_ANDROID_KEYSTORE_RELEASE_PATH = Join-Path (Split-Path $full -Parent) 'tls-release.keystore'
+        GODOT_ANDROID_KEYSTORE_RELEASE_USER = 'tls_release'
+        GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD = $values['TLS_RELEASE_STOREPASS']
+    }
+    foreach ($name in $defaults.Keys) {
+        $value = $defaults[$name]
+        if ($values.ContainsKey($name)) { $value = $values[$name] }
+        if (-not $value) { throw "Signing file gives no value for $name" }
+        [Environment]::SetEnvironmentVariable($name, [string]$value, 'Process')
+    }
+    if (-not [IO.File]::Exists($env:GODOT_ANDROID_KEYSTORE_RELEASE_PATH)) { throw 'Release keystore not found.' }
+}
+
 function Start-IgraRelease {
     Set-StrictMode -Version Latest
     $ErrorActionPreference = 'Stop'
     if ($Repository -notmatch '^[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+$') { throw 'Repository must be owner/name.' }
     if ($CheckGame -and ($Android -or $DraftRelease)) { throw 'CheckGame cannot be combined with Android or DraftRelease.' }
+    if ($SigningEnv) { Import-ReleaseSigning $SigningEnv }
+    if ($Android -and -not $AndroidSdk) { $AndroidSdk = @((Join-Path $env:LOCALAPPDATA 'Android\Sdk'), 'C:\Android\Sdk') | Where-Object { [IO.Directory]::Exists($_) } | Select-Object -First 1 }
+    if ($Android -and -not $JavaHome) { $JavaHome = Get-ChildItem -LiteralPath 'C:\Program Files\Eclipse Adoptium' -Directory -Filter 'jdk-17*' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName }
     if (-not $WorkRoot) { $WorkRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'IgraReleaseMain' }
     $WorkRoot = [IO.Path]::GetFullPath($WorkRoot)
     $null = [IO.Directory]::CreateDirectory($WorkRoot)

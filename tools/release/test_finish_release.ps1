@@ -68,6 +68,16 @@ try {
     Assert-True (-not (Test-ReleaseResult $state $updated 'build')) 'Unsafe checksum path must be rejected'
     [IO.File]::WriteAllText($reportPath, '{}')
     Assert-True (-not (Test-ReleaseResult $state $updated 'build')) 'Report changes must invalidate reuse'
+    $signing = Join-Path $fixture 'signing'
+    $null = New-Item -ItemType Directory -Path $signing
+    [IO.File]::WriteAllText((Join-Path $signing 'release.env'), "# fixture`nTLS_RELEASE_STOREPASS=fixture-pass`nTLS_RELEASE_KEYPASS=fixture-pass`n")
+    Assert-Throws { Import-ReleaseSigning (Join-Path $signing 'release.env') } 'keystore not found'
+    [IO.File]::WriteAllText((Join-Path $signing 'tls-release.keystore'), 'fixture')
+    Import-ReleaseSigning (Join-Path $signing 'release.env')
+    Assert-True ($env:GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD -eq 'fixture-pass' -and $env:GODOT_ANDROID_KEYSTORE_RELEASE_USER -eq 'tls_release') 'Signing file must set the Godot signing environment'
+    Assert-True ($env:GODOT_ANDROID_KEYSTORE_RELEASE_PATH -eq (Join-Path $signing 'tls-release.keystore')) 'The keystore next to the signing file is used'
+    foreach ($name in @('GODOT_ANDROID_KEYSTORE_RELEASE_PATH', 'GODOT_ANDROID_KEYSTORE_RELEASE_USER', 'GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD')) { [Environment]::SetEnvironmentVariable($name, $null, 'Process') }
+    Assert-Throws { Import-ReleaseSigning (Join-Path $signing 'missing.env') } 'Signing file not found'
     Write-Output "Finish release tests: $passed passed"
     if ($SkipTransport) { Write-Output 'SKIPPED: fresh remote clone and fast-forward transport (Git Bash unavailable in sandbox).' }
 } finally {
