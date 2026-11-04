@@ -1020,7 +1020,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		column.add_child(pl)
 		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(220, 44))
-		btn.custom_minimum_size = Vector2(220.0, 44.0)
+		btn.custom_minimum_size = Vector2(220.0, UiScale.min_touch())
 		btn.add_theme_font_size_override("font_size", 22)
 		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn.pressed.connect(_on_buy.bind(it.id, btn))

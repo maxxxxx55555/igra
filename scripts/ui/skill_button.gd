@@ -38,7 +38,7 @@ func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	cost_label.text = LocalizationManager.tf("SKILL_COST_SP", [skill_data.cost])
 	level_label.text = ""
 	req_label.text = ""
-	
+
 	pressed.connect(_on_pressed)
 	refresh()
 
@@ -53,7 +53,7 @@ func refresh() -> void:
 	var level = SkillTreeManager.get_skill_level(_skill_id)
 	var max_level = _skill_data.max_level
 	var can_unlock = SkillTreeManager.can_unlock(_skill_id)
-	
+
 	if level > 0:
 		level_label.text = LocalizationManager.tf("SKILL_LEVEL_FMT", [level, max_level])
 		self.disabled = level >= max_level
@@ -72,6 +72,7 @@ func refresh() -> void:
 				req_label.text = LocalizationManager.tf("SKILL_REQUIRES", [", ".join(req_names)])
 			else:
 				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")
+	modulate.a = 0.6 if disabled and level == 0 else 1.0
 
 func _on_pressed() -> void:
 	if not self.disabled:

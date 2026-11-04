@@ -163,6 +163,7 @@ func _build_ui() -> void:
 	_skip_btn.name = "SkipButton"
 	_skip_btn.text = LocalizationManager.t("UI_SKIP")
 	_skip_btn.size_flags_horizontal = Control.SIZE_SHRINK_END
+	_skip_btn.custom_minimum_size = Vector2(UiScale.min_touch() * 2.0, UiScale.min_touch())
 	_skip_btn.pressed.connect(_skip_tutorial)
 	box.add_child(_skip_btn)
 

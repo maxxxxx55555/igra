@@ -1525,7 +1525,7 @@ func _add_battery_ad_button() -> void:
 	# Long locales (ru/fr ~2x the EN length) overflow a fixed 150px button —
 	# wrap to a second line instead of spilling past the edge.
 	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	btn.custom_minimum_size = Vector2(150, 40)
+	btn.custom_minimum_size = Vector2(150.0, UiScale.min_touch())
 	btn.position = Vector2(BAR_W + 52.0, -12.0)  # beside the segments: below them it sat on the health row
 	btn.pressed.connect(func() -> void:
 		btn.disabled = true

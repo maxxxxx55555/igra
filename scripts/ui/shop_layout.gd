@@ -17,6 +17,6 @@ static func fit(data: Dictionary, viewport: Vector2) -> void:
 	data.title_lbl.add_theme_font_size_override("font_size", 28)
 	data.content.size = size - Vector2(40.0, 100.0)
 	var close_button: Button = data.close_btn
-	close_button.size = Vector2(220.0, 44.0)
+	close_button.size = Vector2(220.0, UiScale.min_touch())
 	close_button.position = Vector2((size.x - close_button.size.x) * 0.5, size.y - 48.0)
 	close_button.add_theme_font_size_override("font_size", 22)
