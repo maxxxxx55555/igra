@@ -1,0 +1,15 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[threaded-loader] OK district prefetch consumes every completed request
+[threaded-loader] OK district resources stay cached while their owner is alive
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] clear (res://scripts/world/district_preloader.gd:48)
+       [1] _ready (res://scripts/tools/_threaded_loader_check.gd:27)
+       [2] _wait_loaded (res://scripts/tools/_threaded_loader_check.gd:66)
+[threaded-loader] OK scene-exit drain consumes requests without waiting for a poll
+[threaded-loader] OK music prefetch consumes repeated neighbour requests
+[threaded-loader] OK prefetched music remains cached with looping enabled
+[threaded-loader] OK music shutdown drains requests still in flight
+[threaded-loader] DONE fails=0

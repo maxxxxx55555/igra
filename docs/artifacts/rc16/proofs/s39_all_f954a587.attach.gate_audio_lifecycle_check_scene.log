@@ -1,0 +1,10 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[audio-lifecycle] OK victory starts its musical state
+[audio-lifecycle] OK victory starts its one-shot cue
+[audio-lifecycle] OK return from victory resumes menu music
+[audio-lifecycle] OK menu uses its own theme after victory
+[audio-lifecycle] OK victory cue cannot overlap the menu theme
+[audio-lifecycle] OK victory cue cannot overlap a new run
+[audio-lifecycle] OK new run resumes district ambience
+[audio-lifecycle] DONE fails=0
