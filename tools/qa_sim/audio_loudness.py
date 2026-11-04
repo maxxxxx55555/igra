@@ -2,8 +2,8 @@
 """Loudness measurement of the shipped audio (Session 23, CON1): integrated loudness (LUFS, EBU R128) and true peak (dBFS) of every file of each category, with ffmpeg.
 
 usage: python tools/qa_sim/audio_loudness.py [--write docs/AUDIO_LOUDNESS_TABLE.md] [--check] [--seams] [--demo]
-Categories are directories of assets/audio. A file shorter than 0.4 s has no integrated loudness (R128 gates it); it is reported by its mean volume (volumedetect) in a column of its own.
---check fails when a file's true peak is above PEAK_LIMIT_DB (the canon of -1.5 dBFS since v10 N030, the directive said -1), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg is missing.
+Named categories are directories of assets/audio; any other audio file is measured under "other audio" so new folders cannot bypass the gate. A file shorter than 0.4 s has no integrated loudness (R128 gates it); it is reported by its mean volume (volumedetect) in a column of its own.
+--check fails when a file's true peak is above PEAK_LIMIT_DB (the canon of -1.5 dBFS since v10 N030, the directive said -1), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg cannot decode or measure a file.
 """
 import pathlib
 import re
@@ -42,14 +42,20 @@ def ffmpeg():
 
 def measure(tool, path):
     r = subprocess.run([tool, "-nostats", "-hide_banner", "-i", str(path), "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if r.returncode:
+        raise RuntimeError("audio_loudness: cannot decode %s: %s" % (path, r.stderr.strip()[-500:]))
     summary = r.stderr[r.stderr.rfind("Summary:"):]
     lufs = re.search(r"I:\s+(-?[\d.]+) LUFS", summary)
     peak = re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary)
+    if peak is None:
+        raise RuntimeError("audio_loudness: no true-peak measurement for %s" % path)
     mean = None
     if lufs is None or float(lufs.group(1)) <= GATED:
         v = subprocess.run([tool, "-nostats", "-hide_banner", "-i", str(path), "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True, encoding="utf-8", errors="replace")
         m = re.search(r"mean_volume:\s+(-?[\d.]+) dB", v.stderr)
-        mean = float(m.group(1)) if m else None
+        if v.returncode or m is None:
+            raise RuntimeError("audio_loudness: no mean-volume measurement for %s: %s" % (path, v.stderr.strip()[-500:]))
+        mean = float(m.group(1))
         lufs = None
     p = float(peak.group(1)) if peak and peak.group(1) != "-inf" else None
     return (float(lufs.group(1)) if lufs else None), p, mean
@@ -62,6 +68,11 @@ def collect(tool):
             for f in sorted((ROOT / d).rglob("*")):
                 if f.suffix in SUFFIXES:
                     rows.setdefault(category, []).append((f.relative_to(ROOT).as_posix(),) + measure(tool, f))
+    measured = {row[0] for items in rows.values() for row in items}
+    for f in sorted((ROOT / "assets/audio").rglob("*")):
+        relative = f.relative_to(ROOT).as_posix()
+        if f.suffix in SUFFIXES and relative not in measured:
+            rows.setdefault("other audio", []).append((relative,) + measure(tool, f))
     return rows
 
 

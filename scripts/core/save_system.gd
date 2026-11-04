@@ -82,6 +82,9 @@ const EXPORT_FILENAME: String = "tls_save_export.json"
 ## file instead, the same reason its other checks use _SLOT=97 instead of a
 ## real slot - this must never be able to touch a developer's actual save.
 func _export_path(filename: String = EXPORT_FILENAME) -> String:
+	# Explicit paths let callers choose a destination, including disposable QA storage.
+	if filename.is_absolute_path():
+		return filename
 	return OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(filename)
 
 func export_save_to_file(src_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:

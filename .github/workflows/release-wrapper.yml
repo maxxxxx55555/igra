@@ -1,0 +1,35 @@
+name: release-wrapper
+
+on:
+  pull_request:
+    paths:
+      - 'tools/release/**'
+      - '.github/workflows/release-wrapper.yml'
+  push:
+    branches: [main, 'release/**']
+    paths:
+      - 'tools/release/**'
+      - '.github/workflows/release-wrapper.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  powershell:
+    name: Release wrapper (${{ matrix.shell }})
+    runs-on: windows-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test checkout, pinned resume, updates and artifacts (PowerShell 5.1)
+        if: matrix.shell == 'powershell'
+        shell: powershell
+        run: ./tools/release/test_finish_release.ps1
+      - name: Test checkout, pinned resume, updates and artifacts (PowerShell 7)
+        if: matrix.shell == 'pwsh'
+        shell: pwsh
+        run: ./tools/release/test_finish_release.ps1

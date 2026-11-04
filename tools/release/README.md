@@ -1,5 +1,48 @@
 # Single-file source delivery
 
+## Current-main release workflow
+
+`Finish-IgraRelease.ps1` is the current-main entrypoint. Copy that file anywhere
+and run it from a normal Windows PowerShell window:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Finish-IgraRelease.ps1
+```
+
+The first run clones current `main` into `%LOCALAPPDATA%\IgraReleaseMain\source`.
+It installs missing Git/Python/FFmpeg through winget when available, creates a
+private Python environment, verifies cached official Godot downloads, runs the
+complete pipeline (including two full batteries, windowed GPU/audio, three bot
+runs and timing checks), then exports Windows and Web. It never imports the old
+embedded source bundle, rewrites main, or uploads a store release.
+
+Repeat the same command after an interruption. The source revision stays pinned,
+downloads and installed dependencies are reused, and previous logs are retained.
+A failed verification starts a new complete attempt: individual engine gates
+are deliberately rerun because they share an isolated game profile. A completed
+run is reused only when its commit, mode, report hash and every artifact checksum
+still match. `-Update` explicitly advances the clean managed checkout to the
+newest `main` using fast-forward only. Dirty, unrelated or divergent checkouts
+stop without overwriting files. One process at a time may use a WorkRoot.
+
+Options: `-CheckGame` runs all checks without exports; `-WorkRoot C:\IgraRelease`
+chooses the workspace; `-DraftRelease` uploads verified artifacts to a GitHub
+draft using an existing `gh` login. `-Android -AndroidSdk C:\Android -JavaHome
+C:\Java\jdk-17` adds the signed AAB and audits. Android requires the existing
+`GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `GODOT_ANDROID_KEYSTORE_RELEASE_USER` and
+`GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD` process environment variables and the
+SDK packages named by `pipeline.py`; no signing identity is generated and no
+password is written to state. Rights, physical-device and store acceptance remain
+explicitly pending in the report.
+
+Run `powershell -NoProfile -File tools/release/test_finish_release.ps1` for local
+Git-fixture and artifact-tampering tests. If a sandbox prevents Git Bash transport,
+`-SkipTransport` explicitly skips remote clone/update assertions while retaining
+real local Git, pinned-source/dirty-tree guards and checksum tests. It reports
+those skips and must not be described as a complete transport test.
+
+## Legacy embedded payload
+
 Use Igra-MegaRelease(2).ps1. Default mode uploads a new source branch only.
 -Instructions prints the embedded handoff offline. -Build opts into the
 Windows/Web checks and draft release; -Android also builds signed Android.

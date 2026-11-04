@@ -31,6 +31,12 @@ func _ready() -> void:
 	# иначе EnemyPool спавнит врагов вокруг ещё не существующей цели.
 	call_deferred("_load_initial")
 
+func _process(_delta: float) -> void:
+	district_preloader.collect_ready()
+
+func _exit_tree() -> void:
+	district_preloader.clear()
+
 func _load_initial() -> void:
 	var dm := get_node_or_null("/root/DistrictManager")
 	var start_id: StringName = &"suburbs"

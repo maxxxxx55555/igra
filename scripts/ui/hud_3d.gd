@@ -33,6 +33,7 @@ var _slot_items: Array = _SLOT_ITEMS.duplicate()
 var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
+var _safe_area_inset: Vector4 = Vector4.ZERO
 var _battery_ad_button: Button = null
 var _vignette_default_color: Color
 ## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
@@ -741,6 +742,8 @@ func _place_action_cluster(factor: float) -> void:
 	cluster.anchor_left = 0.0 if left else 1.0
 	cluster.anchor_right = cluster.anchor_left
 	cluster.offset_left = (_JOYSTICK_W + _ACTION_W) * factor + _ONE_HAND_GAP if left else 0.0
+	# Reflow chooses a new side, but must keep the safe margin already applied.
+	cluster.offset_left += _safe_area_inset.x if left else -_safe_area_inset.z
 	cluster.offset_right = cluster.offset_left
 
 func _one_handed() -> bool:
@@ -811,6 +814,7 @@ func _apply_safe_area() -> void:
 func _inset_controls(inset: Vector4) -> void:
 	if inset == Vector4.ZERO:
 		return
+	_safe_area_inset += inset
 	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter", "BottomLeft", "BottomRight", "BottomCenter"]:
 		var ctrl := get_node_or_null(path) as Control
 		if ctrl != null:

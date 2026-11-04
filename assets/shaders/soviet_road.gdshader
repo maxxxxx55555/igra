@@ -39,8 +39,11 @@ float vnoise(vec2 p) {
 			mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
-// Cracks as a polygonal network: where the nearest and the second nearest point of a jittered grid are equally far (a Voronoi edge), inside patches that are a few metres wide.
+// Sparse, interrupted fissures. Domain warp and a break mask keep the underlying
+// cell edges from reading as giant paving polygons under the player's flashlight.
 float crack_net(vec2 p, float aa) {
+	float warp = vnoise(p * 3.8 + vec2(5.0, 19.0)) - 0.5;
+	p += vec2(warp, warp * 0.61) * 0.18;
 	vec2 cell = floor(p * 1.7);
 	vec2 at = fract(p * 1.7);
 	float first = 8.0;
@@ -58,7 +61,9 @@ float crack_net(vec2 p, float aa) {
 		}
 	}
 	float edge = second - first;
-	return (1.0 - smoothstep(0.0, 0.03 + aa, edge)) * smoothstep(0.58, 0.68, vnoise(p * 0.3 + vec2(3.0, 1.0))) / (1.0 + aa * 6.0);
+	float patch = smoothstep(0.58, 0.74, vnoise(p * 0.3 + vec2(3.0, 1.0)));
+	float broken = smoothstep(0.36, 0.58, vnoise(p * 3.4 + vec2(7.0, 23.0)));
+	return (1.0 - smoothstep(0.0, 0.014 + aa, edge)) * patch * broken / (1.0 + aa * 10.0);
 }
 
 void vertex() {
@@ -81,7 +86,7 @@ void fragment() {
 				vec2 reach = abs(inside) - (vec2(0.18, 0.2) + 0.12 * vec2(hash12(cell + 7.0), hash12(cell + 13.0)));
 				float repaired = step(max(reach.x, reach.y), 0.0) * step(0.86, hash12(cell));
 				c *= 1.0 - 0.28 * repaired - 0.2 * repaired * step(-0.012, max(reach.x, reach.y));
-				c *= 1.0 - 0.3 * crack_net(v_xz + vec2(40.0, 17.0), fwidth(v_xz.x) + fwidth(v_xz.y));
+				c *= 1.0 - 0.24 * crack_net(v_xz + vec2(40.0, 17.0), fwidth(v_xz.x) + fwidth(v_xz.y));
 			} else if (surface > 0.5) {
 				// paving flags of 0.5 m laid in a running bond, each with its own tone and its own joints (the recovery brief: no oversized uniform tile grid), and cracks that run through patches of the pavement
 				vec2 flag = v_xz / 0.5;
@@ -89,11 +94,11 @@ void fragment() {
 				float shift = 0.5 * mod(course, 2.0);
 				vec2 inside = vec2(fract(flag.x + shift), fract(flag.y));
 				vec2 cell = vec2(floor(flag.x + shift), course);
-				c *= 0.78 + 0.44 * hash12(cell + 17.0);
+				c *= 0.92 + 0.16 * hash12(cell + 17.0);
 				vec2 seam = min(inside, 1.0 - inside) * 0.5;
 				float aa = fwidth(v_xz.x) + fwidth(v_xz.y);
-				c *= 1.0 - 0.6 * (1.0 - smoothstep(0.005 + aa, 0.014 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
-				c *= 1.0 - 0.4 * crack_net(v_xz, aa);
+				c *= 1.0 - 0.32 * (1.0 - smoothstep(0.003 + aa, 0.009 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
+				c *= 1.0 - 0.22 * crack_net(v_xz, aa);
 			}
 			c *= 1.0 - 0.5 * paint * smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
 			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);

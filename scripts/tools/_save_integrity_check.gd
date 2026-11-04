@@ -281,9 +281,10 @@ func _check_fuzz_50_mutants() -> void:
 ## filename that isn't EXPORT_FILENAME) - never touches a real save or a
 ## real Downloads file, same reason as _SLOT=97 above.
 const _SCRATCH_SAVE: String = "user://tls_savegame_TESTONLY.save"
-const _SCRATCH_EXPORT: String = "tls_save_export_TESTONLY.json"
+const _SCRATCH_EXPORT: String = "user://tls_save_export_TESTONLY.json"
 
 func _check_export_import() -> void:
+	_ok(SaveSystem._export_path() == OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(SaveSystem.EXPORT_FILENAME), "the normal export still targets Downloads")
 	if FileAccess.file_exists(_SCRATCH_SAVE):
 		DirAccess.remove_absolute(_SCRATCH_SAVE)
 	_ok(not SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT),
@@ -295,20 +296,20 @@ func _check_export_import() -> void:
 	CoinWallet.add(333)
 	SaveSystem.save_slot(_SLOT)
 	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)
-	_ok(SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "экспорт пишет файл в Downloads")
+	_ok(SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "export writes the chosen scratch destination")
 
 	CoinWallet.from_dict({})
 	CoinWallet.add(999)
 	SaveSystem.save_slot(_SLOT)
 	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)  # scratch now holds 999, export still holds 333
-	_ok(SaveSystem.import_save_from_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "импорт читает файл из Downloads")
+	_ok(SaveSystem.import_save_from_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "import reads the chosen scratch destination")
 	DirAccess.copy_absolute(_SCRATCH_SAVE, _path())
 	CoinWallet.from_dict({})
 	SaveSystem.load_slot(_SLOT)
 	_ok(CoinWallet.get_coins() == 333, "импорт вернул исходные (333) данные, не последние (999) — было %d" % CoinWallet.get_coins())
 
 	# Garbage placed at the export filename must be refused, not imported.
-	var dl_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(_SCRATCH_EXPORT)
+	var dl_path: String = _SCRATCH_EXPORT
 	var gf := FileAccess.open(dl_path, FileAccess.WRITE)
 	gf.store_string("не json{{{")
 	gf.close()

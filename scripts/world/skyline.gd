@@ -54,6 +54,7 @@ const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
+const _FRONTAGE := preload("res://scripts/world/facade_frontage.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
@@ -95,6 +96,7 @@ var _ground_mat: ShaderMaterial = null
 var _fronts: Array[Transform3D] = []
 var _widths: Array[float] = []
 var _cur_seed := 0.0
+var _frontage: Node3D
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
@@ -116,9 +118,12 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var trim: Array[Transform3D] = []
 	var sills: Array[Transform3D] = []
 	var pipes: Array[Transform3D] = []
-	var rails: Array[Transform3D] = []
 	var boards: Array[Transform3D] = []
 	var acs: Array[Transform3D] = []
+	_frontage = _FRONTAGE.new()
+	_frontage.name = "FacadeFrontage"
+	add_child(_frontage)
+	_frontage.begin(district_id)
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
@@ -142,23 +147,25 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			_fronts.append(Transform3D(turn, turn * Vector3(cx, 0.0, -edge)))
 			_widths.append(w)
 			var block_frame := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
-			_build_front_shell(blocks, tints, customs, block_frame, Vector3(w, h, d), tint)
-			_dress_block(extra, block_frame, Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints, customs, rails)
+			var entry: Vector2 = _frontage.add_block(block_frame, Vector3(w, h, d))
+			_build_front_shell(blocks, tints, customs, block_frame, Vector3(w, h, d), tint, entry)
+			_dress_block(extra, block_frame, Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints, customs, entry)
 			if with_windows:
 				var y := 2.6
 				while y < h - 1.4:
 					var x := cx - w * 0.5 + 1.2
 					while x < cx + w * 0.5 - 1.0:
-						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge - 0.09)))
-						_dress_window(extra, trim, sills, boards, acs, Transform3D(turn, turn * Vector3(x, y, -edge)))
+						if _entry_clear(x - cx, y, entry):
+							panes.append(Transform3D(turn, turn * Vector3(x, y, -edge - 0.09)))
+							_dress_window(extra, trim, sills, boards, acs, Transform3D(turn, turn * Vector3(x, y, -edge)))
 						x += 2.2
 					trim.append(block_frame * Transform3D(Basis.from_scale(Vector3(w - 0.3, 0.09, 0.22)), Vector3(0.0, y - 1.32, 0.11)))
 					y += 2.6
 				_dress_front(trim, pipes, block_frame, Vector3(w, h, d))
+	_frontage.finish(float(SettingsManager.get_setting("graphics_tier", 2)))
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
 	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
 	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
-	_add_detail_batch("BalconyRails", BoxMesh.new(), rails, _detail_material("rusted_metal", Color(0.20, 0.18, 0.15)))
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055
 	pipe_mesh.bottom_radius = 0.055
@@ -192,7 +199,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 ## The front plate of the block: a sill band below the windows, a lintel band above them, an upright pier between every pair
 ## of windows and a jamb at each end, all SHELL_DEPTH deep. The body of the block stands behind it, so every opening is a
 ## real recess with jamb, lintel and sill faces that catch the lamp, which is what a panel block actually is.
-func _build_front_shell(blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], frame: Transform3D, size: Vector3, tint: Color) -> void:
+func _build_front_shell(blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], frame: Transform3D, size: Vector3, tint: Color, entry: Vector2 = Vector2(INF, 0.0)) -> void:
 	var cols: Array[float] = []
 	var x := 1.2 - size.x * 0.5
 	while x < size.x * 0.5 - 1.0:
@@ -223,9 +230,18 @@ func _build_front_shell(blocks: Array[Transform3D], tints: Array[Color], customs
 		if width > 0.02:
 			_put(blocks, tints, customs, frame, Vector3(left + width * 0.5, (sill + head) * 0.5, z), Vector3(width, head - sill, SHELL_DEPTH), tint, size)
 
+	# Door bays suppress their first-row panes; close those openings in the shell,
+	# otherwise the blank backing wall appears as two stray holes above the canopy.
+	for column: float in cols:
+		if not _entry_clear(column, rows[0], entry):
+			_put(blocks, tints, customs, frame, Vector3(column, rows[0], z), Vector3(OPEN_X, OPEN_Y, SHELL_DEPTH), tint, size)
+
+static func _entry_clear(x: float, y: float, entry: Vector2) -> bool:
+	return y > 3.5 or absf(x - entry.x) > entry.y * 0.5 + 0.7
+
 ## The roof of a panel block, a stairwell and now and then a water tank and an aerial, a balcony slab under a share of its
 ## windows and the rail of that balcony (`frame` is the front face of the block at the ground, x at its middle, z toward the street).
-func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], rails: Array[Transform3D]) -> void:
+func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color], customs: Array[Color], entry: Vector2 = Vector2(INF, 0.0)) -> void:
 	var lighter := tint.lightened(0.18)
 	var stair := Vector3(rng.randf_range(2.2, 3.4), 2.4, rng.randf_range(2.4, minf(4.0, size.z * 0.45)))
 	_put(blocks, tints, customs, frame, Vector3(rng.randf_range(-0.25, 0.25) * size.x, size.y + stair.y * 0.5, -size.z * rng.randf_range(0.3, 0.6)), stair, lighter, size)
@@ -239,12 +255,10 @@ func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3,
 	while y < size.y - 1.4:
 		var x := 1.2 - size.x * 0.5
 		while x < size.x * 0.5 - 1.0:
-			if rng.randf() < balconies:
+			if rng.randf() < balconies and _entry_clear(x, y, entry):
 				_put(blocks, tints, customs, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter, size)
-				var rail := Vector3(0.05, 0.86, 0.72)
-				for side in [-1.0, 1.0]:
-					rails.append(frame * Transform3D(Basis.from_scale(rail), Vector3(x + side * 0.72, y - 0.24, 0.39)))
-				rails.append(frame * Transform3D(Basis.from_scale(Vector3(1.48, 0.86, 0.05)), Vector3(x, y - 0.24, 0.73)))
+				if _frontage != null:
+					_frontage.add_balcony(frame, x, y)
 				if rng.randf() < 0.4:
 					_put(blocks, tints, customs, frame, Vector3(x + rng.randf_range(-0.4, 0.4), y - 0.16, 0.42), Vector3(0.5, 1.0, 0.45), lighter, size)
 			x += 2.2
@@ -412,7 +426,9 @@ func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
 		_window_mat.set_shader_parameter("interior", minf(detail, 1.0))
 	if _halos != null:
 		_halos.visible = detail > 0.5
-	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes", "BalconyRails", "WindowBoards", "WindowUnits"]:
+	if _frontage != null:
+		_frontage.set_detail(detail)
+	for node_name in ["FacadeTrim", "WindowSills", "FacadePipes", "WindowBoards", "WindowUnits"]:
 		var node := get_node_or_null(node_name) as Node3D
 		if node != null:
 			node.visible = detail >= 1.0

@@ -24,6 +24,7 @@ static func run(r: Node) -> void:
 	await _touch_cluster_is_clear(r)
 	_joystick_fades_only_its_ring(r)
 	_safe_area_slides(r, hud)
+	_safe_area_survives_touch_settings(r, hud)
 	await _touch_buttons_scale_clear(r)
 	await _combat_hud_rests(r, hud)
 	await _layout_holds(r, hud)
@@ -64,6 +65,41 @@ static func _safe_area_slides(r: Node, hud: Node) -> void:
 	hud.call("_inset_controls", -inset)
 	var back: bool = is_equal_approx(ammo.offset_left, ammo0.position.x) and is_equal_approx(ammo.offset_bottom, ammo0.end.y) and is_equal_approx(corner.offset_right, corner0.end.x)
 	r._ok(kept and moved and back, "HUDSAFE1 a cut-out slides the corner controls and keeps their size (kept %s, moved %s, put back %s)" % [kept, moved, back])
+
+## Reflowing the action cluster must keep the cut-out margin when size or handedness changes.
+static func _safe_area_survives_touch_settings(r: Node, hud: Node) -> void:
+	var button := hud.get_node_or_null("BottomRight/BtnAttack") as Control
+	if button == null:
+		r._ok(false, "HUDSAFE2 the action cluster has an attack button")
+		return
+	var handed0: bool = bool(SettingsManager.get_setting("one_handed", false))
+	var size0: float = float(SettingsManager.get_setting("button_size", 1.0))
+	var before: Array[Transform2D] = []
+	for left: bool in [false, true, false]:
+		SettingsManager.set_setting("one_handed", left)
+		for factor: float in [0.7, 1.0, 2.0]:
+			SettingsManager.set_button_size(factor)
+			hud.call("_apply_button_size")
+			before.append(button.get_global_transform())
+	var inset := Vector4(60.0, 20.0, 30.0, 10.0)
+	hud.call("_inset_controls", inset)
+	var bad: Array[String] = []
+	var index: int = 0
+	for left: bool in [false, true, false]:
+		SettingsManager.set_setting("one_handed", left)
+		for factor: float in [0.7, 1.0, 2.0]:
+			SettingsManager.set_button_size(factor)
+			hud.call("_apply_button_size")
+			var drawn: Transform2D = button.get_global_transform()
+			var expected: Vector2 = before[index].origin + Vector2(inset.x if left else -inset.z, -inset.w)
+			if not drawn.origin.is_equal_approx(expected) or not drawn.x.is_equal_approx(before[index].x) or not drawn.y.is_equal_approx(before[index].y):
+				bad.append("left=%s size=%.1f" % [left, factor])
+			index += 1
+	hud.call("_inset_controls", -inset)
+	SettingsManager.set_setting("one_handed", handed0)
+	SettingsManager.set_button_size(size0)
+	hud.call("_apply_button_size")
+	r._ok(bad.is_empty(), "HUDSAFE2 touch resizing and handedness keep the cut-out margin (9 layouts, problems %s)" % [bad])
 
 ## HUDP3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
 static func _one_map_in_play(r: Node, hud: Node) -> void:

@@ -443,10 +443,15 @@ else
   bad "hum_scan / bed_synth --demo (см. 'python tools/qa_sim/hum_scan.py --demo')"
 fi
 if command -v ffmpeg >/dev/null 2>&1; then
-  if "$PY" tools/qa_sim/audio_loudness.py --seams >/dev/null 2>&1; then
-    ok "audio loop seams (every declared loop, limit 0.037)"
+  if "$PY" tools/qa_sim/test_audio_loudness.py >/dev/null 2>&1; then
+    ok "audio decoder regression (corrupt files fail; valid short cues retain measurements)"
   else
-    bad "audio loop seams (python tools/qa_sim/audio_loudness.py --seams)"
+    bad "audio decoder regression (python tools/qa_sim/test_audio_loudness.py)"
+  fi
+  if "$PY" tools/qa_sim/audio_loudness.py --check >/dev/null 2>&1; then
+    ok "audio decode, true peaks and loop seams (every shipped category and declared loop)"
+  else
+    bad "audio decode, true peaks or loop seams (python tools/qa_sim/audio_loudness.py --check)"
   fi
   if "$PY" tools/qa_sim/hum_scan.py --check >/dev/null 2>&1; then
     ok "hum_scan (no dark bed and no district detail loop is a steady low tone: the owner's no-hum rule)"
@@ -615,8 +620,12 @@ else
     if qa_guard_e2e; then ok "QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле"; else bad "QaLaunchGuard: жизненный цикл на реальном профиле"; fi
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "аудио: граф шин A01" "res://scenes/tools/audio_bus_check_scene.tscn"
+    run_gate "audio: victory, menu and new-run music lifecycle" "res://scenes/tools/audio_lifecycle_check_scene.tscn"
+    run_gate "resources: district and music prefetch ownership" "res://scenes/tools/threaded_loader_check_scene.tscn"
     run_gate "лут: под каждым предметом есть пол (X21)" "res://scenes/tools/loot_floor_check_scene.tscn" 120
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
+    run_gate "visual: materials, atmosphere and reference presentation" "res://scenes/tools/premium_visual_check_scene.tscn" 120
+    run_gate "menu: deferred localization layout survives navigation" "res://scenes/tools/menu_lifecycle_check_scene.tscn"
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
     run_gate "accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты" "res://scenes/tools/a11y_probe_scene.tscn"
     run_gate "вёрстка: все экраны UIManager в кадре" "res://scenes/tools/ui_layout_check_scene.tscn"

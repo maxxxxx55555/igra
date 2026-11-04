@@ -135,6 +135,8 @@ var _combat_hold: float = 0.0
 var _boss_active: bool = false
 var _boss_phase: int = 1
 var _cache: Dictionary = {}
+var _pending_preloads: Array[String] = []
+var _preload_keep: Array[String] = []
 var _ambient_path: String = TRACKS[Mood.AMBIENT]
 var _current_district: StringName = &""
 var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
@@ -222,6 +224,8 @@ func _unlock_audio() -> void:
 ## during combat"). Reuses the same detection/decay MusicManager already
 ## uses to hold combat music — no second combat tracker needed.
 func _on_game_started() -> void:
+	if _wow_cue != null:
+		_wow_cue.stop()
 	_leave_boss()
 	_run_seed = randi()
 	_bed_turn = 0
@@ -236,6 +240,7 @@ func is_in_combat() -> bool:
 	return _combat_hold > 0.0
 
 func _process(delta: float) -> void:
+	_collect_preloads()
 	_combat_hold = maxf(0.0, _combat_hold - delta)
 	_tick_layers(delta)
 	_eval_timer -= delta
@@ -243,6 +248,10 @@ func _process(delta: float) -> void:
 		return
 	_eval_timer = EVAL_INTERVAL
 	_evaluate()
+
+func _exit_tree() -> void:
+	_collect_preloads(true)
+	_cache.clear()
 #endregion
 
 #region Public Methods
@@ -319,7 +328,12 @@ func _load(m: Mood) -> AudioStream:
 		return null
 	if _cache.has(path):
 		return _cache[path]
-	var s := load(path) as AudioStream
+	var s: AudioStream
+	if _pending_preloads.has(path):
+		s = ResourceLoader.load_threaded_get(path) as AudioStream
+		_pending_preloads.erase(path)
+	else:
+		s = load(path) as AudioStream
 	# AUDIO_MIX_AUDIT.md b: music_victory.wav is a 14.5s figure, not a bed -
 	# _force_loop looped it forever under the 120s win-screen arc. Every
 	# other Mood is a genuine bed/ambient track meant to loop; VICTORY isn't.
@@ -335,8 +349,9 @@ func _on_district_entered(district_id: StringName) -> void:
 	_refresh_district_ambience()
 	_preload_around(district_id)
 
-## A4: the beds of the districts next to this one are asked of the loader thread, so a border crossing finds them cached (load() takes a
-## finished request without waiting), and the bed of every district farther away leaves _cache. A player that still holds a stream keeps
+## A4: the beds of the districts next to this one are asked of the loader thread, then collected into the cache without blocking.
+## A synchronous load() does not consume a threaded request's handle. Every completed request and every request at exit must be collected.
+## The bed of every district farther away leaves _cache. A player that still holds a stream keeps
 ## it alive: only this cache lets go. The order of the dark table is the order of DistrictSceneFactory.DISTRICTS (the AUD5 check holds
 ## them together); naming that class here would make this autoload depend on the world code, which moves the order scripts compile in.
 func _preload_around(district_id: StringName) -> void:
@@ -348,13 +363,28 @@ func _preload_around(district_id: StringName) -> void:
 	for idx in [at - 1, at + 1]:
 		if idx >= 0 and idx < ids.size():
 			keep.append(_ambience_path_for(ids[idx]))
+	_preload_keep = keep
+	_collect_preloads()
 	for path in keep:
-		if path != "" and not _cache.has(path) and ResourceLoader.exists(path):
-			ResourceLoader.load_threaded_request(path)
+		if path != "" and not _cache.has(path) and not _pending_preloads.has(path) and ResourceLoader.exists(path):
+			if ResourceLoader.load_threaded_request(path) == OK:
+				_pending_preloads.append(path)
 	for table in [AMBIENCE_DARK_BY_DISTRICT, AMBIENCE_LIT_BY_DISTRICT]:
 		for path in table.values():
 			if not keep.has(path) and path != _ambient_path:
 				_cache.erase(path)
+
+func _collect_preloads(wait_for_pending: bool = false) -> void:
+	for path: String in _pending_preloads.duplicate():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if not wait_for_pending and status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			continue
+		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			var stream := ResourceLoader.load_threaded_get(path) as AudioStream
+			if stream != null and _preload_keep.has(path):
+				_force_loop(stream)
+				_cache[path] = stream
+		_pending_preloads.erase(path)
 
 ## Восстановление питания района, в котором сейчас находится игрок,
 ## должно быть слышно, а не только видно (GDD §11.1 — свет и звук вместе).
@@ -407,11 +437,14 @@ static func bed_slot(turn: int, variants: int, seed_value: int) -> Dictionary:
 
 ## Выбор настроения по обстановке: босс > бой > тревога > спокойствие.
 func _evaluate() -> void:
-	if mood == Mood.VICTORY:
-		return
 	if not GameManager.is_playing():
 		if GameManager.is_menu() and mood != Mood.MENU:
+			# The ending cue is longer than the victory theme and belongs to the old run.
+			if _wow_cue != null:
+				_wow_cue.stop()
 			set_mood(Mood.MENU)
+		return
+	if mood == Mood.VICTORY:
 		return
 	if _boss_active:
 		if mood != Mood.BOSS:
