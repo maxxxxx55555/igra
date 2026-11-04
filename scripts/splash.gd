@@ -2,6 +2,8 @@ extends Control
 
 @onready var label: Label = $Title
 
+var _left: bool = false
+
 ## FINAL HARDENING PASS (2026-09-12) — ROOT CAUSE of "world torn down ~8s
 ## after New Game" (docs/KNOWN_ISSUES.md "Autoplay bot"), traced and fixed.
 ##
@@ -28,6 +30,17 @@ func _ready() -> void:
 	label.text = LocalizationManager.t("boot_title")
 	label.add_theme_color_override("font_color", Color("#E2A33C"))
 	var tw = create_tween()
-	tw.tween_property(self, "modulate:a", 1.0, 1.0)
-	tw.tween_interval(2.0)
-	tw.tween_callback(func(): Routes.goto(Routes.BOOT))
+	tw.tween_property(self, "modulate:a", 1.0, 0.6)
+	tw.tween_interval(0.8)
+	tw.tween_callback(_leave)
+
+## A tap or a key skips the splash: it is shown on every launch.
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_pressed() and (event is InputEventScreenTouch or event is InputEventMouseButton or event is InputEventKey):
+		_leave()
+
+func _leave() -> void:
+	if _left:
+		return
+	_left = true
+	Routes.goto(Routes.BOOT)

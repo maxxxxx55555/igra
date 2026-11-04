@@ -339,9 +339,6 @@ func _build_prop_multimesh() -> void:
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
 		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
-		cone_mat.emission_enabled = true
-		cone_mat.emission = Color(0.706, 0.271, 0.184)
-		cone_mat.emission_energy_multiplier = 0.25
 		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, cone_mat, "ConesBatched")
 
 ## The prop meshes are centred on their origin: lift each so it rests on the ground.

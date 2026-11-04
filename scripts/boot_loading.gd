@@ -17,8 +17,8 @@ func _ready() -> void:
 	tip.add_theme_color_override("font_color", Color("#CFC9B8"))
 
 func _process(delta: float) -> void:
-	target = min(target + delta * 30.0, 100.0)
-	progress = lerp(progress, target, delta * 2.0)
+	target = min(target + delta * 60.0, 100.0)
+	progress = lerp(progress, target, delta * 4.0)
 	bar.value = progress
 	# Без флага _left это срабатывало каждый кадр после 99% и спамило переходы.
 	if progress > 99.0 and not _left:
