@@ -134,7 +134,7 @@ func _check_terminals() -> void:
 	_layer.add_child(death)
 	var summary: Dictionary = death._summary.duplicate()
 	SaveSystem.wipe_all_saves()
-	LocalizationManager.set_language("de")
+	LocalizationManager.set_language("ru")
 	_ok(death._summary == summary and death._d.text.contains("2:05"), "Hardcore summary survives wipe and retranslation")
 	death.queue_free()
 	win.show()

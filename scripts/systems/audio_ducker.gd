@@ -1,10 +1,10 @@
 extends Node
 ## Ducking (docs/AUDIO_CONSISTENCY.md): when a cue the player must hear arrives (a boss roar or a new phase, a broadcast, the final night, the
-## ending), the Music, Ambient and Environment buses drop 12 dB for 2 s: down in 0.15 s, held, back in 0.6 s. An Amplify effect on each bus does it, so the
+## ending), the Music and Ambient buses drop 12 dB for 2 s: down in 0.15 s, held, back in 0.6 s. An Amplify effect on each bus does it, so the
 ## volume sliders keep their own say. A second cue inside the hold starts the dip again from where it is.
 ## A sting (an achievement, a quest, a secret, a restored district, a boss down) dips them 6 dB for 1.2 s (docs/AUDIO_COVERAGE.md, the mood matrix: stings and dialogue duck the music); it never lifts a deeper dip that is still held.
 
-const BUSES: Array[StringName] = [&"Music", &"Ambient", &"Environment"]
+const BUSES: Array[StringName] = [&"Music", &"Ambient"]
 const DUCK_DB: float = -12.0
 const HOLD_SEC: float = 2.0
 const STING_DB: float = -6.0
