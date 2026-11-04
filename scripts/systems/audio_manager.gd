@@ -93,7 +93,7 @@ func _ready() -> void:
 	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0, &"Combat"))
 	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0, &"Combat"))
 	# Озвучка игровых событий (раньше были немыми).
-	EventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _one_shot(_gen_pickup(), -10.0, &"UI"))
+	EventBus.item_picked_up.connect(_on_item_picked_up)
 	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0, &"UI"))
 	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0, &"UI"))
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0, &"UI"))
@@ -128,6 +128,8 @@ const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.ogg")
 const HEARTBEAT_SFX := preload("res://assets/audio/one_shots/heartbeat_low_loop.ogg")
 const BREATH_SFX := preload("res://assets/audio/one_shots/breath_low_loop.ogg")
 const LOW_HP_THRESHOLD: float = 0.30
+const LOOT_GENERIC_SFX := preload("res://assets/audio/sfx/interact/loot_pickup_generic.wav")
+const LOOT_RARE_SFX := preload("res://assets/audio/sfx/interact/loot_pickup_rare.wav")
 
 ## .import не в репозитории (см. .gitignore) - loop_mode/loop сбрасывается
 ## на дефолт на свежем клоне, тот же паттерн, что MusicDirector._force_loop().
@@ -153,6 +155,11 @@ func _on_player_health(ratio: float) -> void:
 ## Щелчок фонаря: реальные сэмплы вместо процедурного клика.
 func _on_flashlight_toggled(enabled: bool) -> void:
 	_one_shot(FLASHLIGHT_ON_SFX if enabled else FLASHLIGHT_OFF_SFX, -10.0, &"Environment")
+
+func _on_item_picked_up(item_id: StringName, _amount: int) -> void:
+	var data := ItemDatabase.get_item(item_id)
+	var rare: bool = data != null and int(data.rarity) >= 2
+	_one_shot(LOOT_RARE_SFX if rare else LOOT_GENERIC_SFX, -10.0, &"UI")
 
 func _on_player_damaged(_amount: int) -> void:
 	_one_shot(HURT_SFX, -8.0, &"Combat")

@@ -185,7 +185,7 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(func(w: int, _n: String, _fog: float, _rain: float) -> void: _weather_id = w)
 	EventBus.streetlight_activated.connect(func(_id: String) -> void: _play_wow_cue_first_light())
-	EventBus.game_over.connect(func() -> void: _play_wow_cue("death"))
+	EventBus.game_over.connect(_on_game_over)
 	EventBus.district_restored.connect(_on_district_restored_wow)
 	mood = Mood.MENU
 
@@ -235,6 +235,19 @@ func _on_game_started() -> void:
 func _on_game_won() -> void:
 	set_mood(Mood.VICTORY)
 	_play_wow_cue("ending")
+
+## The battle or tension bed fades out under the death cue; _evaluate leaves a dead run alone, and the next set_mood restarts the stopped bed.
+func _on_game_over() -> void:
+	_play_wow_cue("death")
+	_bed_timer.stop()
+	if _fade != null and _fade.is_valid():
+		_fade.kill()
+	_fade = create_tween().set_parallel(true)
+	for p: AudioStreamPlayer in [_a, _b]:
+		_fade.tween_property(p, "volume_db", MUTE_DB, FADE_TIME)
+	_fade.chain().tween_callback(func() -> void:
+		_a.stop()
+		_b.stop())
 
 func is_in_combat() -> bool:
 	return _combat_hold > 0.0

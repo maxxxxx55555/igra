@@ -1406,6 +1406,10 @@ func _update_low_battery_flicker() -> void:
 	if _base_flashlight_energy < 0.0:
 		_base_flashlight_energy = flashlight.light_energy
 	var ratio_pct: float = battery / maxf(battery_max, 0.001) * 100.0
+	var low: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold
+	if low and not _low_battery_warned:
+		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.wav"), -8.0)
+	_low_battery_warned = low
 	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
 		and not _flashlight_stability_maxed \
 		and not bool(SettingsManager.get_setting("reduce_flash", false))
@@ -1452,6 +1456,7 @@ var _flashlight_stability_maxed: bool = false
 var _flashlight_drain_cut: float = 0.0
 var _base_flashlight_energy: float = -1.0
 var _flickering: bool = false
+var _low_battery_warned: bool = false
 ## v10 N034: the swing of the low-battery light was drawn on every physics frame (60 a second on the default settings); the light now changes at most three times a second (WCAG 2.3.1, docs/GAMEFEEL_SPEC.md).
 const FLICKER_HOLD_MSEC: int = 340
 var _flicker_next_msec: int = 0
