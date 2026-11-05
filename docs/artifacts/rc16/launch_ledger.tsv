@@ -518,3 +518,4 @@ n	utc	head	id	exit	command
 517	20261105T111618Z	3844f05c	s39_store14_3844f05	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 518	20261105T112345Z	ccdae040	s39_store15_ccdae04	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 519	20261105T112505Z	0104f0b2	s39_all12_0104f0b2	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+520	20261105T113824Z	315b9a65	s39_store16_315b9a6	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
