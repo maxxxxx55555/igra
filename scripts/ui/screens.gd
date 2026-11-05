@@ -80,6 +80,18 @@ func _build_screen(name: String) -> void:
 	underlay.name = name
 	underlay.visible = false
 	add_child(underlay)
+	var art: String = _SCREEN_ART.get(name, "")
+	if art != "" and ResourceLoader.exists(art):
+		var backdrop := TextureRect.new()
+		backdrop.texture = load(art)
+		backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		var shade := ColorRect.new()
+		shade.color = _SCREEN_ART_SHADE
+		for layer: Control in [backdrop, shade]:
+			layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			underlay.add_child(layer)
 	var card_w: float = 560.0
 	var card_h: float = vp.y * 0.7
 	card_h = clampf(card_h, 300, 520)
@@ -145,6 +157,14 @@ func _build_screen(name: String) -> void:
 ## screens that got one (visual only - inserted as `inner`'s first child
 ## so it sits behind the existing header/title/content, same show/hide/
 ## fade already driven by card.modulate - no new logic).
+## The Gemini art of the main menu's world behind the whole screen of the cards that close a run or sell to it, darkened so the card reads.
+const _SCREEN_ART: Dictionary = {
+	"Death": "res://assets/textures/screens_v2/death_loom.png",
+	"Victory": "res://assets/textures/screens_v2/loading_street.png",
+	"Shop": "res://assets/textures/screens_v2/character_dim.png",
+}
+const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.45)
+
 const _CARD_BG_V2: Dictionary = {
 	"Loading": "res://assets/textures/screens_v2/loading_street.png",
 	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.png",

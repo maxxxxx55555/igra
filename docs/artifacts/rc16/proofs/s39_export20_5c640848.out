@@ -1,0 +1,95 @@
+# proof s39_export20_5c640848
+# utc 20261105T154049Z
+# head 5c640848 (uncommitted paths: 12)
+# env none
+# cmd bash .qa_logs/s39_export_vc17.sh
+# source 5c6408489a9b38bba188a526c9717ed4118c9acd
+# tracked changes before: 0
+store and key password: the same
+# STEP export_android 18:40:50
+# STEP export_android rc=0 18:43:05
+bundle: 116447351 bytes sha256 ab32e82e369940ec2a5bf3d77375ebe22118b306722159723673a50f4714f4aa
+# STEP aab_check 18:43:06
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=17 expected=17: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    116447351 bytes
+sha256  ab32e82e369940ec2a5bf3d77375ebe22118b306722159723673a50f4714f4aa
+entries 2498
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2495 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s38_vcode16.aab: 5 entries gone, 7 new, 247 with other bytes
+  gone    assetPackInstallTime/assets/assets/shaders/light_cone.gdshader
+  gone    assetPackInstallTime/assets/data/i18n/de.json
+  gone    assetPackInstallTime/assets/data/i18n/es.json
+  gone    assetPackInstallTime/assets/data/i18n/fr.json
+  gone    assetPackInstallTime/assets/data/i18n/pt_BR.json
+  new     assetPackInstallTime/assets/.godot/imported/wet_asphalt_normal.png-996ed2b0074da688424c6bc6f423f9af.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/wet_asphalt_rough.png-7652ec44fc994f895ca70ef34ab2e792.astc.ctex
+  new     assetPackInstallTime/assets/assets/textures/pbr/wet_asphalt_normal.png.import
+  new     assetPackInstallTime/assets/assets/textures/pbr/wet_asphalt_rough.png.import
+  new     assetPackInstallTime/assets/scripts/world/facade_frontage.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/facade_frontage.gdc
+  new     assetPackInstallTime/assets/shaders/wet_asphalt_puddles.gdshader
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets.pb
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0084dca552d5c580923498b4772cbfe7-skill_button.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-012d893920b19235ff74a79415f868d8-lobby.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-06466e5cdd8442007eb5e8fb46afb78e-epilogue.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0d49521621b5ae8aa62230a5ff7fbfc6-water_icon.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0d73029f5e3a4f5e7c62fa45b11ad5b5-secret_room_04.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0ed51c62093e1c93af7834120fc212f2-skill_tree_ui.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-1075af8da5844fd537d21da55079ab6c-substation.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-14114c379f76b1c04097459e2387a1e6-pause_menu.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-163b748db721858ff1aa51a0b457de3b-streetlight.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-193ba3936c3e9c48eea5408bf56a5f2a-weapon_model.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-19f8a1c40d3c7d110a10a07abd4e039a-secret_room_08.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-1baa4f291cb8ed923b9cd62464c5b485-document_pickup.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-200467203a76d287c4e8342d4aeeb593-vfx_muzzle_flash.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-21f2cb677497514c7d068bc46d626fe5-game_over.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-23e11b41862f919b39ffc9b49573d2c3-door.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-28da0e682ce29e47ec96091859b27e5e-save_slots.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-29622b770dc1805ed5bdad0bb8630c86-shadow_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-2a6a4fad87178f86ab1c962009b302a7-zone_trigger.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-2aac87d9b3dd3fe66e9b20cdad7e78e8-hound_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-2c7f62d3c1886dedfb99c8a1e605482f-school.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3218c6cd0ea2c0d195c5eb05e01946d5-secret_room_01.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-339e4d9f16e797c8ed5dd60c7c2b279c-watcher_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3b14314746aaf4198e0b36eb75d0bc7f-vfx_rain.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3c058cfc3264edcd28db597601682b1f-item_pickup_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3fc92b64dce1c8062dc4ab89cc2a7b98-brute_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-40fd0a4077d32b2a7c19ad0c53ec4bf5-vfx_hit_spark.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-46f9f4dfce5f8df48b53edd5a4fa328b-exploding_barrel.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4749103db2082b9887e0365435affdfb-ammo_pickup.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-49da0442e1d89d5a8b7ea20aecd9dbfe-rotter_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4aad388701cafd72b9425ff7cffc9617-night_environment_mobile.res
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4d705c724345cddea95d659f7f57c6b5-settings_screen.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4d9f6f8507a89f9b89c4f846bfb6cc67-puzzle.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4dd61ca3ae939eca6410671e955a6f3f-damage_indicator.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4e44215952f3f2a243b779afd0b1bebd-vfx_blood_hit.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4fb7e1b33c279a87df9557c49c6e4dad-tool_icon.scn
+  changed ... and 207 more
+aab_check: PASS
+# STEP aab_check rc=0 18:43:20
+# STEP release_export_check 18:43:20
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 18:43:20
+# STEP export_refs 18:43:20
+export_refs_check: 509 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 18:43:25
+# tracked changes after: 0
+# STEP done
+# EXIT=0

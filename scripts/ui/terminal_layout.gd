@@ -41,10 +41,20 @@ static func build(screen: Control) -> VBoxContainer:
 	fit.call_deferred()
 	return content
 
+## Each ending stands on the Gemini art a screen already ships, so no picture ships twice (Session 39f; the files of
+## assets/store/endings/ were flat procedural skylines and are no longer read).
+const ENDING_ART: Dictionary = {
+	"light": "res://assets/ui/menu_city.png",
+	"hope": "res://assets/textures/screens_v2/loading_street.png",
+	"survivor": "res://assets/textures/screens_v2/character_dim.png",
+	"dark": "res://assets/textures/screens_v2/death_loom.png",
+	"truth": "res://assets/textures/screens_v2/journal_paper.png",
+}
+
 static func set_ending(screen: Control, id: StringName) -> void:
 	var art := screen.get_node_or_null("EndingArt") as TextureRect
-	if art != null and EndingsManager.ENDING_DATA.has(String(id)):
-		art.texture = load("res://assets/store/endings/ending_%s.png" % id) as Texture2D
+	if art != null and ENDING_ART.has(String(id)):
+		art.texture = load(ENDING_ART[String(id)]) as Texture2D
 
 static func _fit(screen: Control, scroll: ScrollContainer, center: CenterContainer, panel: PanelContainer, content: VBoxContainer, style: StyleBoxFlat) -> void:
 	var physical: Vector2 = Vector2(screen.get_window().size)

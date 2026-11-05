@@ -37,6 +37,7 @@ static func _bold(base: Font) -> Font:
 	var f := FontVariation.new()
 	f.base_font = base
 	f.variation_embolden = HEADING_EMBOLDEN
+	f.spacing_glyph = 1  # Bebas is set tight; a pixel of tracking lets the capitals breathe
 	return f
 
 static var _heading: Font

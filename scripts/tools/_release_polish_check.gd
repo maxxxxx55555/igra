@@ -126,7 +126,7 @@ func _check_terminals() -> void:
 		EndingsManager.force_ending(StringName(id))
 		await _settle()
 		var art := win.get_node("EndingArt") as TextureRect
-		_ok(art.texture != null and art.texture.resource_path.ends_with("ending_%s.png" % id), "ending illustration: " + id)
+		_ok(art.texture != null and art.texture.resource_path == preload("res://scripts/ui/terminal_layout.gd").ENDING_ART[id], "ending illustration: " + id)
 		if _capture:
 			await _shot("ending_" + id)
 	EndingsManager._on_state_changed(GameManager.GameState.MENU)

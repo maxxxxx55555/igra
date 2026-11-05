@@ -239,3 +239,8 @@
 - Changed: pull request 46 merged into `main` on the owner's request, 26 superseded branches deleted (tips and bundles in the backups); lamps register their glow with `LightGrid` and a lit pool lifts the dark cap; the lamp pole carries a wire cage; version code 17 rebuilt from `ddd3c5ad`.
 - Lessons: a check that writes the state it then reads proves nothing about the producer (CORRECTION_LOG 304); verify a branch list by name before a remote delete (the first list held `main` and the HEAD alias).
 - Owner side: sign in to Gemini for the music, a phone run, the Play Console (`docs/RESUME_NOTE.md`).
+
+## 2026-11-05 Session 39f, the screens on the main menu's art (Claude Opus 5.5)
+- Changed: the shop, the skill tree, the death and victory cards and the five endings stand on the Gemini art already in the project (the unused `death_loom` among it); the heading face is tracked a pixel; version code 17 rebuilt from `3f69da98`.
+- Lessons: look for the layer that wins before adding one (the win screen's own art sat under the layout's `EndingArt`, which a check pins to `ending_<id>.png`, so the fix was the five files, not a new node).
+- Owner side: enable SpriteCook or Design if wanted, sign in to Gemini for the music, a phone run, the Play Console.

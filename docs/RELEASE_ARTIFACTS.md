@@ -276,3 +276,10 @@ already works without it). Music generation is excluded by owner decision.
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export19_ddd3c5ad.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 216,966,560 bytes, sha256 `da1879ce7a0a9a7af2a33e18849e539492b03248e73ad6f83bd324c6b607bc8a` (rows 540 to 542: exported, booted under the guard, booted with a fresh profile, exit 0).
 - **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env`. Nobody has booted this bundle on a device.
+
+## Signed AAB (version code 17 rebuilt, 2026-11-05, Session 39f: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,368,428 bytes (102.4 MiB)**, sha256 `82cb698074f68255f670f52c7181ac5d90b3d3dfdf68c70f673dd2c514277fac`, version code 17, versionName 1.0.1, launch ledger row 554 (`s39_export21_3f69da98`) from the clean head `3f69da98` (0 tracked changes before and after the export). The screens and the endings on the main menu's art on top of Session 39e. It replaces the build of row 539 (never uploaded).
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export21_3f69da98.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 216,967,488 bytes, sha256 `ac9994f17eb8b39ea626ad50f1e77f9227045d0e53a3baf4793ce0ff5ba94c00` (rows 555 to 557: exported, booted under the guard, booted with a fresh profile, exit 0).
+- **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env`. Nobody has booted this bundle on a device.
