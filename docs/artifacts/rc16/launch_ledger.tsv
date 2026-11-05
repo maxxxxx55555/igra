@@ -558,3 +558,9 @@ n	utc	head	id	exit	command
 557	20261105T155827Z	3f69da98	s39_winboot6_fresh_3f69da98	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_3f69da98')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_3f69da98' -type f | wc -l)"
 558	20261105T192909Z	b2d553f1	s39_store23_b2d553f	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 559	20261105T193415Z	c26a42e6	s39_store24_c26a42e	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+560	20261105T193525Z	eb0ed574	s39_all16_eb0ed574	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+561	20261105T194751Z	eb0ed574	s39_perf11_eb0ed574	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+562	20261105T194842Z	eb0ed574	s39_touch11_eb0ed574	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+563	20261105T194856Z	eb0ed574	s39_audio11_eb0ed574	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+564	20261105T194957Z	eb0ed574	s39_botQ_eb0ed574	0	bash tools/qa_sim/autoplay_bot
+565	20261105T195728Z	eb0ed574	s39_botR_eb0ed574	0	bash tools/qa_sim/autoplay_bot

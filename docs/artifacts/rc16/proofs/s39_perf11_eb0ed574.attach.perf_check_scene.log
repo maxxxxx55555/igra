@@ -1,0 +1,26 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[perf] district=suburbs draw_calls=104 primitives=151800 objects_in_frame=312
+[perf] draw calls frame by frame after the player spawned: [112, 105, 104, 104, 104, 104, 104, 104, 104, 104]
+[perf] breakdown of 104 draw calls in suburbs, calls saved by hiding each node: 61 Main3D/WorldRuntime (Node3D) 149368 primitives | 47 district_suburbs/Props (Node3D) 120064 primitives | 24 Main3D/HUD (CanvasLayer) 384 primitives | 21 Main3D/MultiplayerManager (Node3D) 54960 primitives | 16 district_suburbs/StreetBuilder (Node3D) 30016 primitives | 10 district_suburbs/@Area3D@182 (Area3D) 904 primitives | 6 district_suburbs/@Area3D@181 (Area3D) 808 primitives | 6 district_suburbs/@Area3D@183 (Area3D) 808 primitives | 6 district_suburbs/@Area3D@184 (Area3D) 808 primitives | 6 district_suburbs/@Area3D@185 (Area3D) 808 primitives | 6 district_suburbs/DocumentPickup (Area3D) 808 primitives | 6 district_suburbs/@Area3D@186 (Area3D) 808 primitives | 6 district_suburbs/@Area3D@187 (Area3D) 808 primitives | 6 district_suburbs/@Area3D@188 (Area3D) 808 primitives
+[perf] suburbs steady draw_calls=98 (everything shown again, after the breakdown)
+[perf] mean over 300 frames: gpu_ms=12.44 render_cpu_ms=0.90 process_ms=23.60 physics_ms=1.69
+[perf] median 16.67 ms, worst 27.7 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=12.68 render_cpu_ms=4.20 process_ms=32.37 physics_ms=2.51
+[perf] median 12.96 ms, worst 44.1 ms, slow frames (index:ms, over max(3 x median, 25 ms)): 61:44
+[perf] mean over 300 frames: gpu_ms=11.13 render_cpu_ms=1.49 process_ms=16.35 physics_ms=2.57
+[perf] median 12.09 ms, worst 14.1 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=11.13 render_cpu_ms=1.51 process_ms=13.94 physics_ms=2.15
+[perf] median 12.12 ms, worst 12.7 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] suburbs frame_p95_ms=12.96 interval_p95_ms=20.83 texture_mem_mib=133.6 video_mem_mib=218.1
+[perf] suburbs static_memory_mib=106.1 particles_emitting=94 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=13.36 render_cpu_ms=1.73 process_ms=29.23 physics_ms=1.88
+[perf] median 14.29 ms, worst 22.1 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=13.49 render_cpu_ms=1.75 process_ms=22.96 physics_ms=1.77
+[perf] median 14.29 ms, worst 27.4 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=13.60 render_cpu_ms=2.00 process_ms=26.55 physics_ms=1.89
+[perf] median 14.29 ms, worst 46.6 ms, slow frames (index:ms, over max(3 x median, 25 ms)): 198:47
+[perf] district=power_station draw_calls=105 primitives=212500 objects_in_frame=275 frame_p95_ms=15.01
+[perf] budget D1<200: 104; D11<350: 105; p95<=33 ms: 12.96 and 15.01; video memory<=512 MiB: 218.1; over budget: []
+[perf] DONE fails=0
