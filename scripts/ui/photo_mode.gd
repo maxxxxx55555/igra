@@ -32,9 +32,13 @@ func toggle() -> void:
 	queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not active or not (event is InputEventKey) or not event.pressed or event.echo:
+	if not active:
 		return
-	if event.is_action_pressed("photo_capture"):
+	var tap: bool = event is InputEventScreenTouch and event.pressed  # a tap takes the photo on a phone
+	if not tap and (not (event is InputEventKey) or not event.pressed or event.echo):
+		return
+	get_viewport().set_input_as_handled()  # Tab cycles the filters here, it must not open the inventory behind
+	if tap or event.is_action_pressed("photo_capture"):
 		_shots += 1
 		EventBus.inventory_notice.emit(LocalizationManager.tf("PHOTO_SAVED", [_shots]))
 		queue_redraw()

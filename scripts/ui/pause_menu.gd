@@ -64,6 +64,12 @@ func _build() -> void:
 	# The shop and the flashlight upgrades are cards of the Screens layer: coins have nothing to buy without them.
 	_btn(vb, LocalizationManager.t("SHOP_COINS"), func() -> void: _open_card("Shop"))
 	_btn(vb, LocalizationManager.t("CRAFT_UPGRADE"), func() -> void: _open_card("FlashlightUpgrade"))
+	# a phone has no T or P key: the skill tree and the photo mode open from here (the owner: every action has a button)
+	_btn(vb, LocalizationManager.t("SKILL_TREE_TITLE"), func() -> void: UIManager.open(&"skill_tree"))
+	_btn(vb, LocalizationManager.t("PHOTO_MODE"), func() -> void:
+		UIManager.close(&"pause")
+		GameManager.resume_game()
+		UIManager.toggle_photo())
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
 	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(_restart))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))

@@ -144,7 +144,7 @@ static func _map_charts_only_restored_light(r: Node) -> void:
 ## HUDP13: every keyboard action has a visible touch button (the owner's final rules): reload, melee, UV, dodge and the
 ## inventory join the jump, flashlight, strobe and quick-wheel buttons, inside the screen and clear of each other.
 static func _touch_covers_actions(r: Node, hud: Node) -> void:
-	var names: Array[String] = ["BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory"]
+	var names: Array[String] = ["BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]
 	var built: bool = hud.get_node_or_null("BottomRight/BtnReload") == null
 	if built:
 		hud.call("_add_side_buttons", InputService, true)

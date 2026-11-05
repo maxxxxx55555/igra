@@ -682,6 +682,8 @@ func _on_game_state(state: int) -> void:
 ## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
 ## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
 func _on_hud_visibility(v: bool) -> void:
+	if not v:
+		InputService.attack_held = false  # an overlay can swallow the button's release: no fire left held behind it
 	visible = v and (GameManager.is_playing() or GameManager.is_paused())
 	_sync_damage_indicator_visibility()
 
@@ -1628,7 +1630,10 @@ func _wire_action_buttons() -> void:
 	var stealth := $BottomRight/BtnStealth
 	var interact := $BottomRight/BtnInteract
 	if attack:
-		attack.button_down.connect(func() -> void: isv.request_attack())
+		attack.button_down.connect(func() -> void:
+			isv.request_attack()
+			isv.attack_held = true)
+		attack.button_up.connect(func() -> void: isv.attack_held = false)
 	if sprint:
 		# One-Handed Mode: Sprint latches on a press (the thumb that sprints is the one that walks), and a second press lets go
 		sprint.button_down.connect(func() -> void: isv.set_joy_run_held(not isv.is_joy_run_held() if _one_handed() else true))
@@ -1728,6 +1733,10 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 			UIManager.toggle(&"inventory")) as Button
 	bag.icon = preload("res://assets/ui/ui_backpack.svg")
 	anchored.call(bag, 352.0, 232.0)
+	var bench := mk.call("BtnWorkbench", LocalizationManager.t("WORKBENCH_TITLE"), send.call(&"workbench")) as Button
+	bench.add_theme_font_size_override("font_size", 12)
+	bench.clip_text = true
+	anchored.call(bench, 352.0, 308.0)
 	for icon_button: Button in [reload, dodge, bag]:
 		icon_button.add_theme_constant_override("icon_max_width", 36)  # a 128 px icon must not grow the button past its slot
 		icon_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1738,7 +1747,7 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 func _rest_touch_controls() -> void:
 	var buttons: Array = []
 	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel",
-			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory"]:
+			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]:
 		var button := get_node_or_null("BottomRight/" + button_name) as Button
 		if button == null:
 			continue

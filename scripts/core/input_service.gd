@@ -35,6 +35,8 @@ var _interact_released: bool = false
 
 var _joy_active: bool = false
 var _joy_dir: Vector2 = Vector2.ZERO
+## The touch attack button is held: sustained fire on a phone (a tap elsewhere on the screen is not a shot).
+var attack_held: bool = false
 var _joy_run_held: bool = false
 var _joy_stealth_toggled: bool = false
 var _stealth_pressed: bool = false
