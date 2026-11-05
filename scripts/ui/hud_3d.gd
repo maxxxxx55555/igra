@@ -147,7 +147,8 @@ func _ready() -> void:
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
-	enemy_name_label.add_theme_font_size_override("font_size", 22)
+	enemy_name_label.add_theme_font_override("font", ThemeProvider.heading_font())
+	enemy_name_label.add_theme_font_size_override("font_size", 28)
 	enemy_name_label.add_theme_color_override("font_color", Color(0.752941, 0.223529, 0.168627))
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
@@ -233,11 +234,11 @@ func _setup_nv_poll() -> void:
 ## in the PR. DOT (BLEED/BURN/POISON) and SLOW are real on the player: the HUD
 ## reads the same `status_fx.active` the tick loop writes.
 const _STATUS_ICONS: Dictionary = {
-	EnemyRosterData.Status.BLEED: ["🩸", Color(0.752941, 0.223529, 0.168627), "res://assets/textures/ui/status_bleed.png"],
-	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
-	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
-	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
-	EnemyRosterData.Status.STUN: ["💫", Color(0.788, 0.635, 0.290), "res://assets/textures/ui/status_stun.png"],
+	EnemyRosterData.Status.BLEED: ["", Color(0.752941, 0.223529, 0.168627), "res://assets/textures/ui/status_bleed.png"],
+	EnemyRosterData.Status.BURN: ["", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
+	EnemyRosterData.Status.POISON: ["", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
+	EnemyRosterData.Status.SLOW: ["", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
+	EnemyRosterData.Status.STUN: ["", Color(0.788, 0.635, 0.290), "res://assets/textures/ui/status_stun.png"],
 }
 const _STATUS_ICON_SIZE: float = 32.0
 
@@ -1702,11 +1703,13 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 		return b
 	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
 	anchored.call(jump, 48.0, 232.0)
-	var flash := mk.call("BtnFlash", "☀", func() -> void: isv.request_flashlight()) as Button
+	var flash := mk.call("BtnFlash", "", func() -> void: isv.request_flashlight()) as Button
+	flash.icon = preload("res://assets/ui/ui_flashlight.svg")
 	anchored.call(flash, 124.0, 232.0)
 	# Стробоскоп (GDD §3.1) — отдельная кнопка, на ПК это клавиша C.
 	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
-	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
+	var strobe := mk.call("BtnStrobe", LocalizationManager.t("TOUCH_STROBE"), func() -> void: _request_strobe()) as Button
+	strobe.add_theme_font_size_override("font_size", 16)
 	anchored.call(strobe, 200.0, 232.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
 	var wheel := mk.call("BtnWheel", "◎", _on_touch_wheel_pressed) as Button
@@ -1737,11 +1740,10 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 			UIManager.toggle(&"inventory")) as Button
 	bag.icon = preload("res://assets/ui/ui_backpack.svg")
 	anchored.call(bag, 352.0, 232.0)
-	var bench := mk.call("BtnWorkbench", LocalizationManager.t("WORKBENCH_TITLE"), send.call(&"workbench")) as Button
-	bench.add_theme_font_size_override("font_size", 12)
-	bench.clip_text = true
+	var bench := mk.call("BtnWorkbench", LocalizationManager.t("TOUCH_CRAFT"), send.call(&"workbench")) as Button
+	bench.add_theme_font_size_override("font_size", 16)
 	anchored.call(bench, 352.0, 308.0)
-	for icon_button: Button in [reload, dodge, bag]:
+	for icon_button: Button in [reload, dodge, bag, flash]:
 		icon_button.add_theme_constant_override("icon_max_width", 36)  # a 128 px icon must not grow the button past its slot
 		icon_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_rest_touch_controls()

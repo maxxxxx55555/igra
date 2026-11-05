@@ -127,7 +127,7 @@ One deletion is a judgment, not a fact: `SaveSystem.get_all_slots_info` (`core/s
 | `scripts/gameplay/hiding_spot.gd`@101 | `is_occupied` | hiding_spot is the file the repository rule was written for | CLAUDE.md:16, README.md:126 |
 | `scripts/hiding/hiding_spot.gd`@31 | `get_detection_multiplier` | hiding_spot is the file the repository rule was written for | CLAUDE.md:16, README.md:126 |
 | `scripts/hiding/hiding_spot.gd`@34 | `get_hide_duration` | hiding_spot is the file the repository rule was written for | CLAUDE.md:16, README.md:126 |
-| `scripts/lighting/light_grid.gd`@40 | `unregister_light` | the lifecycle pair of `register_light` (`scripts/lighting/light_grid.gd:28`) | docs/GDD.md:423 |
+| `scripts/lighting/light_grid.gd`@40 | `unregister_light` | the lifecycle pair of `register_light` (`scripts/lighting/light_grid.gd:26`) | docs/GDD.md:423 |
 | `scripts/monetization/ad_service.gd`@151 | `interstitial_cooldown_left` | AdService and its stub are the wired monetization surface (the SDK key is an owner row) | PLAN.md:1073, README.md:41, RELEASE_CHECKLIST.md:121 |
 | `scripts/monetization/stub_crazy_games.gd`@31 | `was_initialized` | AdService and its stub are the wired monetization surface (the SDK key is an owner row) | PLAN.md:1073, README.md:41, RELEASE_CHECKLIST.md:121 |
 | `scripts/multiplayer/lan_discovery.gd`@85 | `get_found_hosts` | LAN co-op is a shipped feature of two autoloads (needs two peers to test) | docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204 |

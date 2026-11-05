@@ -102,7 +102,7 @@ func _load_defaults() -> void:
 	_settings["high_contrast"] = false
 	_settings["auto_aim"] = false
 	_settings["arachnophobia"] = false
-	_settings["objective_markers"] = true
+	_settings["objective_markers"] = false  # off by default: the owner's rules leave finding things to the player
 	_settings["touch_sensitivity"] = 1.0
 	_settings["touch_tuning_preset"] = 1  # Default
 	_settings["touch_calibration_done"] = false

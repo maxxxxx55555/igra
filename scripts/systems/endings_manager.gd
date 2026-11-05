@@ -8,11 +8,11 @@ enum Ending { LIGHT, HOPE, SURVIVOR, DARK, TRUTH }
 ## из 13 языков игрок видел русский. Здесь лежат ключи, а строки берутся
 ## из локализации в get_ending_data().
 const ENDING_DATA: Dictionary = {
-	"light":    {"title": "ENDING_LIGHT_TITLE",    "desc": "ENDING_LIGHT_DESC",    "color": Color(1.0, 0.85, 0.4)},
-	"hope":     {"title": "ENDING_HOPE_TITLE",     "desc": "ENDING_HOPE_DESC",     "color": Color(0.6, 0.8, 1.0)},
-	"survivor": {"title": "ENDING_SURVIVOR_TITLE", "desc": "ENDING_SURVIVOR_DESC", "color": Color(0.8, 0.6, 0.6)},
-	"dark":     {"title": "ENDING_DARK_TITLE",     "desc": "ENDING_DARK_DESC",     "color": Color(0.62, 0.45, 0.70)},
-	"truth":    {"title": "ENDING_TRUTH_TITLE",    "desc": "ENDING_TRUTH_DESC",    "color": Color(1.0, 0.5, 0.2)},
+	"light":    {"title": "ENDING_LIGHT_TITLE",    "desc": "ENDING_LIGHT_DESC",    "color": Color("#c9a24a")},
+	"hope":     {"title": "ENDING_HOPE_TITLE",     "desc": "ENDING_HOPE_DESC",     "color": Color("#d8d5cc")},
+	"survivor": {"title": "ENDING_SURVIVOR_TITLE", "desc": "ENDING_SURVIVOR_DESC", "color": Color("#8a8a85")},
+	"dark":     {"title": "ENDING_DARK_TITLE",     "desc": "ENDING_DARK_DESC",     "color": Color("#8a7338")},
+	"truth":    {"title": "ENDING_TRUTH_TITLE",    "desc": "ENDING_TRUTH_DESC",    "color": Color("#c0392b")},
 }
 
 ## P2 (FINAL INTEGRATION wave): GAMEFEEL V2 delivered one sting per ending
