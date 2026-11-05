@@ -282,7 +282,7 @@ art"); no pure `#000`/`#fff` texels remain (verified 0).
 | Path | Origin | License | Attribution | Notes |
 |---|---|---|---|---|
 | `store/feature-graphic.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 1024×500 sRGB. Permanent-night city, one brass streetlamp cone; title overlay. Palette-clamped, 684,630 B. |
-| `store/icon-512.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 512×512 sRGB. Streetlamp-head crest emblem on night sky. Palette-clamped, 300,965 B. |
+| `store/icon-512.png` | Since 2026-11-05 (Session 39d): derived from the menu art `assets/ui/menu_city.png` (Gemini, the v7 slot table below) by `tools/gen_adaptive_icon.py`, deterministic (the crest of the Arena image generation it replaces is in the git history) | Project-owned AI output; no third-party rights | none required | 512×512 RGBA, opaque. The sodium lamp, its light cone and the wet street of the menu art in the owner's reference look; clamped to `[16,216]`. The same picture is `assets/store/play_icon_512.png` (the legacy launcher icon) and `assets/ui/icon.png` (the project and Windows icon). |
 
 ## Added 2026-09-10 — mega final pass: audio gap re-attempt (Task 1)
 
@@ -341,8 +341,8 @@ distinct class from in-game textures (asset_pipeline: "skip grain on store art")
 
 ## Added 2026-09-10 — GOLD MASTER v2: Android adaptive-icon layers (store/icon-adaptive/**)
 
-Derived deterministically from `store/icon-512.png` by
-`tools/gen_adaptive_icon.py` (re-run on any 512-master change). No new
+Since 2026-11-05 (Session 39d) derived deterministically from the menu art `assets/ui/menu_city.png` (Gemini, the v7 slot table below) by
+`tools/gen_adaptive_icon.py`, which also writes the 512 icons; before that, from `store/icon-512.png` as this paragraph says. No new
 source art: the shipped crest resampled into the inner 66% safe zone,
 per-channel values clamped to `[16,216]` (~`#101418`..`#d8d2c4`), paired
 with a flat `#141b24` (STYLE_GUIDE "panel") opaque background. Verified:
@@ -352,8 +352,8 @@ in range; 0 pure `#000`/`#fff` texels (`gen_adaptive_icon.py --check`).
 
 | Path | Origin | License | Attribution | Notes |
 |---|---|---|---|---|
-| `store/icon-adaptive/foreground_1080x1080.png` | Derived from `store/icon-512.png` (in-house master), Pillow, deterministic | Project-owned; no third-party rights | none required | 1080×1080 RGBA. Adaptive-icon foreground, crest in 66% safe zone on transparent field, clamped palette. |
-| `store/icon-adaptive/background_1080x1080.png` | Generated flat colour, Pillow | Project-owned; no third-party rights | none required | 1080×1080 RGBA opaque. Adaptive-icon background, flat `#141b24`. |
+| `store/icon-adaptive/foreground_1080x1080.png` | Pillow, deterministic (`tools/gen_adaptive_icon.py`) | Project-owned; no third-party rights | none required | 1080×1080 RGBA, fully transparent since Session 39d: the picture is the background. |
+| `store/icon-adaptive/background_1080x1080.png` | Derived from the menu art `assets/ui/menu_city.png` (Gemini, the v7 slot table below), Pillow, deterministic | Project-owned AI output; no third-party rights | none required | 1080×1080 RGBA opaque. The lamp, its cone and the puddle; the inner 66.7% every launcher mask shows holds the lamp head; clamped to `[16,216]`. |
 
 ## Audit checklist (run each asset pass)
 

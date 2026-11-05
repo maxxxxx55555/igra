@@ -1,13 +1,15 @@
 # Android adaptive icon — export layers
 
-Two layers, both 1080x1080, derived deterministically from
-`store/icon-512.png` by `tools/gen_adaptive_icon.py` (re-run it if the
-512 master changes):
+Two layers, both 1080x1080, derived deterministically from the menu art
+`assets/ui/menu_city.png` (Gemini, `docs/ASSET_LICENSES.md`) by
+`tools/gen_adaptive_icon.py`, which also writes the three 512 icons
+(`store/icon-512.png`, `assets/store/play_icon_512.png`,
+`assets/ui/icon.png`) from the same picture:
 
 | File | Role | Notes |
 |---|---|---|
-| `foreground_1080x1080.png` | adaptive icon foreground | RGBA. The 512 crest scaled into the inner 66% safe zone, centred, on a fully transparent field. Per-channel values clamped to `[16,216]` (~`#101418`..`#d8d2c4`) so there is no pure `#000`/`#fff` texel. |
-| `background_1080x1080.png` | adaptive icon background | RGBA, fully opaque. Flat STYLE_GUIDE "panel" `#141b24`. |
+| `foreground_1080x1080.png` | adaptive icon foreground | RGBA, fully transparent: the picture is the background. |
+| `background_1080x1080.png` | adaptive icon background | RGBA, fully opaque. The lamp, its light cone and the puddle of the menu art; the inner 66.7% that every mask shows holds the lamp head. Per-channel values clamped to `[16,216]` (~`#101418`..`#d8d2c4`) so there is no pure `#000`/`#fff` texel. |
 
 ## Wiring (Godot 4.7 Android export preset)
 
@@ -22,9 +24,8 @@ launcher_icons/adaptive_background_432x432="res://store/icon-adaptive/background
 Godot downscales these to the 432 slot on export; supplying 1080 keeps
 the source crisp. `launcher_icons/main_192x192` (the legacy square
 launcher icon) stays on `res://assets/store/play_icon_512.png`. Android
-composites fg over bg and crops to the device mask shape (circle /
-squircle / rounded square); the 66% safe zone keeps the crest fully
-visible under every mask.
+crops the background to the device mask shape (circle / squircle /
+rounded square).
 
 Play Console's own 512x512 store icon is a separate upload — use
 `store/icon-512.png` there, unchanged.
