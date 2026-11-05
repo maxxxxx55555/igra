@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-**Update 2026-10-31 (Session 38, the visual redo): THE bundle to upload is now version code 16 (the last section of this file: 109,770,553 bytes, sha256 `03f920fb…`), which ships the facade textures that versions 13 and 14 lacked, the redone facades with window openings and balconies and the soft light cones; versions 15, 14, 13, 12, 11, 10, 9 and 8 are superseded, do not upload them. Nothing has run on a phone.**
+**Update 2026-11-05 (Session 39b): THE bundle to upload is now version code 17 (the last section of this file: 109,566,486 bytes, sha256 `b57d242f…`), English and Russian only, with the swarm fixes; versions 16, 15, 14, 13, 12, 11, 10, 9 and 8 are superseded, do not upload them. Nothing has run on a phone.**
 
 **Update 2026-10-29 (Session 38, v8 FINAL pass, superseded by the update above): the bundle to upload was version code 12 (the last section of this file: 95,698,020 bytes, sha256 `57184330…`), which adds the redrawn night sky, the streetlight hardware, the one-row objectives panel, the pack's empty cells and the slab tones to version code 11; versions 11, 10, 9 and 8 are superseded, do not upload them.**
 
@@ -255,3 +255,10 @@ already works without it). Music generation is excluded by owner decision.
 - **Checks** (`docs/artifacts/rc16/proofs/s38_export13_5dc31619.out`): `aab_check` PASS (version code 16 at `:12`, no ad SDK `:18`, 37 integrity files `:19`, no missing reference `:20`, 0 hits of the two secret values in 2493 entries `:21`, signer matches the recorded certificate `:23`; against version code 15: 0 entries gone, 7 new, 12 with other bytes `:24`; PASS `:44`), 0 packed files that are not the game (`:50`), `release_export_check` PASS (`:52`), `export_refs_check` 508 shipped files and 0 violations (`:55`).
 - **Windows build:** `build/windows/LastStreetlight.exe`, 220,844,976 bytes, sha256 `e058f95ac3f5e2bcb2c1e8dca0773de2e37302148cb25044245a0cac924cb7a9` (rows 443 to 445: exported, booted under the guard, booted with a fresh profile, exit 0 and 0 ERROR lines). Both files are copied to `..\_BACKUPS\2026-10-31_vcode16\` with equal sha256.
 - **Upload:** the steps of `docs/STORE_SUBMISSION.md` section 7. The bundles of versions 14 and 15 are kept in `.qa_logs/bundles/` (`tls_s38_vcode14.aab`, `tls_s38_vcode15.aab`). Nobody has booted any of these bundles on a device.
+
+## Signed AAB (version code 17, 2026-11-05, Session 39b: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **109,566,486 bytes (104.5 MiB)**, sha256 `b57d242f6767b74c844a4b6f3c9c5ca0ba9bc4014b865a16787a72b93b75a287`, version code 17, versionName 1.0.1, launch ledger row 460 (`s39_export14_93544dc3`) from the clean head `93544dc3` (0 tracked changes before and after the export, printed in the proof). English and Russian only. It replaces version code 16 (never uploaded).
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export14_93544dc3.out`): `aab_check` PASS (version code 17, no ad SDK, 37 integrity files, no missing reference, 0 secret hits, signer matches), `release_export_check` PASS, `export_refs_check` 508 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 220,243,776 bytes, sha256 `39583bc8a36bdf6594eae6e609b6066836b86788b979ea6a3bebe0a2c5076a2a` (rows 461 to 463: exported, booted under the guard, booted with a fresh profile, exit 0).
+- **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env` builds and checks `main` in its own work folder. Nobody has booted this bundle on a device.

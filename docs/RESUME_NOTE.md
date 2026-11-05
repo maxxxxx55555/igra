@@ -1,5 +1,11 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 39b, 2026-11-05; no tag): read this block first
+
+**State.** `build/tls.aab` is version code 17 (109,566,486 bytes, sha256 `b57d242f…`, English and Russian, `docs/RELEASE_ARTIFACTS.md` last section); every gate is green on the branch `pass/swarm-final` (pull request 46, merged by the agent if the permission classifier lets it). **Release status: BLOCKED** on a run on a phone and the owner's store steps.
+
+**The owner does (in this order):** (1) if pull request 46 is still open, merge it (`gh pr merge 46 --merge`); (2) upload `build/tls.aab` to Internal testing and play twenty minutes on a phone: lock the phone and answer a call during play (the pause screen must be there on return), press Back in a run and in the menu, the touch buttons, the 30 fps Medium default, the street at night; then shoot the store screenshots on the phone; (3) the Play Console forms with `docs/STORE_SUBMISSION.md` (the listing now names two languages); (4) a copy of `.signing/` off this machine and the keys of the three ignored setup scripts rotated if real; (5) the delete command of `docs/CLEANUP_LEDGER.md` section 13 (and `release/finish-20261101`, merged); (6) the open design items of `docs/artifacts/councils/expert_swarm_20261105.txt` (difficulty step, respawn point, economy, art). To rebuild: `powershell -NoProfile -ExecutionPolicy Bypass -File tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env`. The downloaded `Igra-Final-Release (1).ps1` is not needed.
+
 ## Current continuation — 2026-11-02
 
 The current-main release entrypoint is `tools/release/Finish-IgraRelease.ps1`. This pass integrates the version-16 branch with facade, audio, resource-lifetime, menu and touch-safe-area fixes. Read `docs/RELEASE_FINISH_20261102.md` for the actual validation and remaining acceptance limits. Use the latest eight committed store captures from runtime `756a4f2`; older captures are preserved under `docs/stills/archive/`. Exact reference-art fidelity, physical-phone acceptance and store submission remain incomplete. Earlier NEXT-ROW blocks below are historical records, not the current action list.

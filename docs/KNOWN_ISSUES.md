@@ -1,5 +1,9 @@
 ﻿# Known issues
 
+## OPEN (2026-11-05, Session 39b, the expert swarm): what the six expert reviewers left open
+
+- Every OPEN row of `docs/artifacts/councils/expert_swarm_20261105.txt` with its reason. The ones a player meets first: no run on a phone yet (frame rate, touch feel, the touch floor of about 3 mm, the INTERNET permission of the export template); a death returns the player to the district entry; a difficulty step at gas_station and police before the rifle; the first shop purchase comes late; doors, cabinets and the generator have no sound (no signal carries them and their files are left out of the export); three button looks across the menus; the boss and the victory skyline need art.
+
 ## OPEN (2026-10-31, Session 38, the visual redo and the Opus review): what the redone world look and the review left
 
 - **The store frames are desktop captures** (R2, R17 of `docs/artifacts/councils/opus_council_20261031.txt`): no touch HUD, the High tier, the tutorial box over the middle; replace them with captures from a phone after the device pass.
