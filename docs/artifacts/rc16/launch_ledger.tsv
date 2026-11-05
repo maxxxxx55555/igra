@@ -530,3 +530,4 @@ n	utc	head	id	exit	command
 529	20261105T120246Z	ef729ffa	s39_winboot4_fresh_ef729ffa	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_ef729ffa')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_ef729ffa' -type f | wc -l)"
 530	20261105T131326Z	e75c9e90	s39_store17_e75c9e9	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 531	20261105T131454Z	2a18f522	s39_all13_2a18f522	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+532	20261105T134052Z	089a9eb1	s39_store18_089a9eb	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
