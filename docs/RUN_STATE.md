@@ -16,7 +16,7 @@
 - skill|ponytail|the owner's /ponytail directive of 2026-11-05|S39B|ok (Skill tool; every fix kept to the smallest diff that removes the cause; the unwired UiSfx.back() was dropped as dead code)
 - skill|godot-style|the `.gd` edits of S39B (game_manager, ui_manager, endings, base_monster, save_system, quest_manager, shop_service, settings_manager, localization_manager, music_manager, player_3d, skill_button, tutorial_system, hud_3d, shop_layout, screens, toast_manager, splash, boot_loading, pre_loading, street_props)|S39B|applied by hand and by the fix bees' briefs (typed, no debug prints, English why-comments); lint_changed 0 findings
 - skill|ponytail-review|before the code commits of S39B|S39B|not callable in this session's list; replaced by the independent B-OPUS-FINAL review of the fix commits (one P0, six P2, fixed in `ca3703f6`)
-- skill|backup-first|the bundle and the Windows build the exports overwrote (ignored by git)|S39B|done by hand: `..\_BACKUPS6-11-05_vcode16\` holds version code 16 and both version code 17 builds with SHA256SUMS.txt
+- skill|backup-first|the bundle and the Windows build the exports overwrote (ignored by git)|S39B|done by hand: `..\_BACKUPS\2026-11-05_vcode16\` holds version code 16 and both version code 17 builds with SHA256SUMS.txt
 - skill|memory-keeper|end of S39B|S39B|ok (Skill tool; the dated entry of 2026-11-05 is in `opencode-memory.md`, the CLAUDE.md locale rule follows the cut to en and ru)
 
 ## Session 39 (2026-11-04): the owner's downloaded ChatGPT script, reviewed and not run; the CI repair of pull request 46
