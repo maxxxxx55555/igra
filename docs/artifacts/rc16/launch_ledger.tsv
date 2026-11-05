@@ -495,3 +495,5 @@ n	utc	head	id	exit	command
 494	20261105T090755Z	18471b5d	s39_audio4_18471b5d	1	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 495	20261105T090854Z	18471b5d	s39_botG_18471b5d	0	bash tools/qa_sim/autoplay_bot
 496	20261105T091637Z	18471b5d	s39_botH_18471b5d	0	bash tools/qa_sim/autoplay_bot
+497	20261105T092424Z	21974b7b	s39_all9_21974b7b	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+498	20261105T095051Z	21974b7b	s39_polish_fix	0	bash tools/qa_sim/user_data_guard.sh ./godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/release_polish_check_scene.tscn

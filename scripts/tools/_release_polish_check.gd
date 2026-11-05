@@ -68,6 +68,10 @@ func _check_lifecycle() -> void:
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	GameManager.play_time = 420.0
 	GameManager.notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+	_ok(GameManager.is_playing() and not get_tree().paused, "a QA launch keeps playing when the window loses focus")
+	QaLaunchGuard.qa_launch = false
+	GameManager.notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+	QaLaunchGuard.qa_launch = true
 	var data: Dictionary = SaveSystem._read_envelope(SaveSystem.SAVE_PATH)
 	_ok(GameManager.is_paused() and get_tree().paused and data.get("run", {}).get("play_time") == 420.0, "focus loss checkpoints and pauses")
 	GameManager.return_to_menu()

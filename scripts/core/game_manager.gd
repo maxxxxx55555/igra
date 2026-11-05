@@ -42,7 +42,8 @@ func _ready() -> void:
 	_change_state(GameState.MENU)
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+	# A windowed QA run keeps playing when the desktop takes its focus: the audio gate read a paused run (launch row 494).
+	if what == NOTIFICATION_APPLICATION_PAUSED or (what == NOTIFICATION_APPLICATION_FOCUS_OUT and not get_node("/root/QaLaunchGuard").qa_launch):
 		checkpoint_run()
 		_pause_with_screen()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
