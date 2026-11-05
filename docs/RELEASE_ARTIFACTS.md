@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-**Update 2026-11-05 (Session 39b): THE bundle to upload is now version code 17 (the last section of this file: 109,566,486 bytes, sha256 `b57d242f…`), English and Russian only, with the swarm fixes; versions 16, 15, 14, 13, 12, 11, 10, 9 and 8 are superseded, do not upload them. Nothing has run on a phone.**
+**Update 2026-11-05 (Session 39b): THE bundle to upload is now version code 17 (the last section of this file: 109,567,099 bytes, sha256 `4d52d8e3…`), English and Russian only, with the swarm fixes; versions 16, 15, 14, 13, 12, 11, 10, 9 and 8 are superseded, do not upload them. Nothing has run on a phone.**
 
 **Update 2026-10-29 (Session 38, v8 FINAL pass, superseded by the update above): the bundle to upload was version code 12 (the last section of this file: 95,698,020 bytes, sha256 `57184330…`), which adds the redrawn night sky, the streetlight hardware, the one-row objectives panel, the pack's empty cells and the slab tones to version code 11; versions 11, 10, 9 and 8 are superseded, do not upload them.**
 
@@ -258,7 +258,7 @@ already works without it). Music generation is excluded by owner decision.
 
 ## Signed AAB (version code 17, 2026-11-05, Session 39b: THE BUNDLE OF THE PASS)
 
-- **Built:** `build/tls.aab`, **109,566,486 bytes (104.5 MiB)**, sha256 `b57d242f6767b74c844a4b6f3c9c5ca0ba9bc4014b865a16787a72b93b75a287`, version code 17, versionName 1.0.1, launch ledger row 460 (`s39_export14_93544dc3`) from the clean head `93544dc3` (0 tracked changes before and after the export, printed in the proof). English and Russian only. It replaces version code 16 (never uploaded).
-- **Checks** (`docs/artifacts/rc16/proofs/s39_export14_93544dc3.out`): `aab_check` PASS (version code 17, no ad SDK, 37 integrity files, no missing reference, 0 secret hits, signer matches), `release_export_check` PASS, `export_refs_check` 508 shipped files and 0 violations.
-- **Windows build:** `build/windows/LastStreetlight.exe`, 220,243,776 bytes, sha256 `39583bc8a36bdf6594eae6e609b6066836b86788b979ea6a3bebe0a2c5076a2a` (rows 461 to 463: exported, booted under the guard, booted with a fresh profile, exit 0).
+- **Built:** `build/tls.aab`, **109,567,099 bytes (104.5 MiB)**, sha256 `4d52d8e3239e4cfc3da5f04938eef66310c4af62d440095f19f10e1e15410ac3`, version code 17, versionName 1.0.1, launch ledger row 471 (`s39_export15_edfeea87`) from the clean head `edfeea87`, after the release review's Back and pause fixes (an earlier build of `93544dc3`, row 460, is superseded) (0 tracked changes before and after the export, printed in the proof). English and Russian only. It replaces version code 16 (never uploaded).
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export15_edfeea87.out`): `aab_check` PASS (version code 17, no ad SDK, 37 integrity files, no missing reference, 0 secret hits, signer matches), `release_export_check` PASS, `export_refs_check` 508 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 220,244,432 bytes, sha256 `8f16979416fa501c1ae7d41bebb2347cba97a97ae5198918c40b9ad1fcb530b5` (rows 472 to 474: exported, booted under the guard, booted with a fresh profile, exit 0).
 - **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env` builds and checks `main` in its own work folder. Nobody has booted this bundle on a device.
