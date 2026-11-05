@@ -481,3 +481,7 @@ n	utc	head	id	exit	command
 480	20261105T073400Z	0ef90a37	s39_audio3_0ef90a37	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 481	20261105T073455Z	0ef90a37	s39_botE_0ef90a37	0	bash tools/qa_sim/autoplay_bot
 482	20261105T074155Z	0ef90a37	s39_botF_0ef90a37	0	bash tools/qa_sim/autoplay_bot
+483	20261105T074912Z	b3f3d185	s39_export16_b3f3d185	0	bash .qa_logs/s39_export_vc17.sh
+484	20261105T075127Z	b3f3d185	s39_winexport3_b3f3d185	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
+485	20261105T075217Z	b3f3d185	s39_winboot3_b3f3d185	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+486	20261105T075252Z	b3f3d185	s39_winboot3_fresh_b3f3d185	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"

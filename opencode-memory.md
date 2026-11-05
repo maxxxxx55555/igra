@@ -224,3 +224,8 @@
 - Changed: the other agent's release-finish branch merged after three reviews; eleven story contradictions fixed in six languages and then the game cut to English and Russian; six expert reviewers and three fix bees fixed the phone pause with no Resume, Android Back, an ending gap, monster and shop faults, settings ranges, sounds, skill cards, touch targets and the boot waits; version code 17 built from a clean head; the release script loads the signing file.
 - Lessons: a fix bee can break the export by preloading a file the export filter leaves out (export_refs_check caught it), and a ducker on a bus that already holds an effect breaks the bus graph gate: run the full battery after every swarm wave; a tool run by another agent can leave CRLF over LF blobs with a stale index stat, so `git status` looks clean while hash tools read other bytes; the frame runner needs TLS_CAPTURE_HASH; the press kit generator writes CRLF over an index that may be CRLF or LF (check `git ls-files --eol`).
 - Owner side: `docs/RESUME_NOTE.md`, the Session 39b block.
+
+## 2026-11-05 Session 39c, the polish wave and the final version code 17 (Claude Opus 5.5)
+- Changed: one flat Plate A button kit on every screen, the do-nothing skins and the starter bundle out of the shop, darker facades and props, a backdrop for the daily card; the final bundle of version code 17 built from `b3f3d185`.
+- Lessons: a palette token change reaches every scene that hard-codes the old value (the HUD quick slots, THEME1's ring), so keep the tokens and change the kit; an art director bee on the frames catches what no gate measures (the facade stain pattern, empty panels).
+- Owner side: merge pull request 46, a phone run, the Play Console (`docs/RESUME_NOTE.md`).

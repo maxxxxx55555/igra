@@ -1,5 +1,7 @@
 ﻿# Known issues
 
+## OPEN (2026-11-05, Session 39c, the art director): `docs/artifacts/councils/art_director_20261105.txt` lists seven art items a store visitor notices (the High-tier facade stain pattern, the boss and the victory art, the skill tree's empty panel, the shop's empty third, the dim button edge, store frames with the tutorial box); none is a defect a gate sees.
+
 ## OPEN (2026-11-05, Session 39b, the expert swarm): what the six expert reviewers left open
 
 - Every OPEN row of `docs/artifacts/councils/expert_swarm_20261105.txt` with its reason. The ones a player meets first: no run on a phone yet (frame rate, touch feel, the touch floor of about 3 mm, the INTERNET permission of the export template); a death returns the player to the district entry; a difficulty step at gas_station and police before the rifle; the first shop purchase comes late; doors, cabinets and the generator have no sound (no signal carries them and their files are left out of the export); three button looks across the menus; the boss and the victory skyline need art.
