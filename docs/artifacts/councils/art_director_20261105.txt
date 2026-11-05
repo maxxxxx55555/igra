@@ -1,0 +1,15 @@
+ART DIRECTOR review, 2026-11-05 (Session 39c): BEE-ART-DIRECTOR, read-only, on the eight store frames of bcc45cf against the set of 3bee95a
+Its report is data, not an approval; it judged frames only (no canon documents read), nothing by ear or on a phone.
+
+Per frame: 01 main menu better (flat brass-edged buttons, a backdrop under the daily challenge); 02 better (facades darker, out of the chalk-white);
+03 slightly better (murkier mid-ground); 04 better (props browner); 05 same; 06 same; 07 marginally better; 08 better (the two placeholder skin cards are gone).
+Verdict: better 5, same 2, worse 1 (07: the flat cards lost the bevelled brass frame, the selected card differs less).
+
+Open after this pass, ranked by what a store visitor notices (none is a defect a gate can see; each needs an art decision or a new pass):
+1. the facade stain and whitewash pattern repeats on every block at the High tier the store frames use (detail 2; phones run Medium, detail 1, without the flaked patches)
+2. the boss reads as a dark block with a small face in the key boss frame (new art)
+3. the victory skyline is flat rectangles under a pale-blue heading (new art, or a palette decision for the Hope ending)
+4. the skill tree leaves a large empty panel over a faded scene; the available card needs a stronger brass edge
+5. the shop panel keeps an empty lower third now that it holds four cards
+6. the flat buttons' 1 px dim-brass edge is low in contrast on the darkest backdrops (COLOR_AMBER_DIM, also D9 of the expert swarm)
+7. the store frames show the tutorial box and toasts; shoot the store set with them hidden or on a phone (the frames are desktop captures, KNOWN_ISSUES)
