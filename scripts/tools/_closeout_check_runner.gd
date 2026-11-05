@@ -446,6 +446,15 @@ func _check_visibility_and_hiding() -> void:
 	_ok(is_equal_approx(dark.x, 3.0) and is_equal_approx(dark.y, 1.0), "S02 light off halves it and the dark caps it at 3 m (%s)" % str(dark))
 	_player.set("current_state", _player.State.CROUCH)
 	_ok(is_equal_approx(monster._sight_ranges().x, 1.5), "S02 crouching with the light off: 1.5 m")
+	_player.set("current_state", _player.State.RUN)
+	var cell := Vector2i(floori(_player.global_position.x / LightGrid.CELL_SIZE), floori(_player.global_position.z / LightGrid.CELL_SIZE))
+	var glow: Variant = LightGrid._grid.get(cell)
+	LightGrid._grid[cell] = 1.0
+	_ok(is_equal_approx(monster._sight_ranges().x, 3.6), "S02 a lit lamp over a running player lifts the dark cap (%.1f m)" % monster._sight_ranges().x)
+	if glow == null:
+		LightGrid._grid.erase(cell)
+	else:
+		LightGrid._grid[cell] = glow
 	_player.set("current_state", _player.State.WALK)
 	_player.set("flashlight_enabled", true)
 	# S04: a hiding spot hides, and lets the player out on the street side

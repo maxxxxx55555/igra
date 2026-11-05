@@ -12,8 +12,45 @@ const ARM: Array[Vector3] = [
 	Vector3(0.0, 3.95, 0.0), Vector3(0.0, 4.28, 0.0), Vector3(0.07, 4.43, 0.0), Vector3(0.22, 4.51, 0.0),
 	Vector3(0.45, 4.55, 0.0), Vector3(0.75, 4.54, 0.0), Vector3(1.0, 4.5, 0.0), Vector3(1.16, 4.44, 0.0),
 ]
+const WIRE_TOP := Vector3(0.0, 4.3, 0.0)
+const WIRE_REACH := 26.0
+const WIRE_STEPS := 10
 static var _mesh: ArrayMesh = null
 static var _material: StandardMaterial3D = null
+static var _wire_material: StandardMaterial3D = null
+
+## The overhead wires of the owner's reference: every pole strung to its two nearest neighbours within reach, sagging at the middle,
+## as 1 px lines in one mesh (one draw call a district); null when no two poles are in reach.
+static func wire_mesh(spots: Array[Vector3]) -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_LINES)
+	var strung: Dictionary = {}
+	for i: int in spots.size():
+		var near: Array = []
+		for j: int in spots.size():
+			var d: float = spots[i].distance_to(spots[j])
+			if j != i and d > 4.0 and d < WIRE_REACH:
+				near.append([d, j])
+		near.sort_custom(func(x: Array, y: Array) -> bool: return x[0] < y[0])
+		for pick: Array in near.slice(0, 2):
+			var key := Vector2i(mini(i, pick[1]), maxi(i, pick[1]))
+			if strung.has(key):
+				continue
+			strung[key] = true
+			var a: Vector3 = spots[i] + WIRE_TOP
+			var b: Vector3 = spots[int(pick[1])] + WIRE_TOP
+			var sag: float = 0.04 * float(pick[0])
+			for s: int in WIRE_STEPS:
+				for t: float in [float(s) / WIRE_STEPS, float(s + 1) / WIRE_STEPS]:
+					st.add_vertex(a.lerp(b, t) - Vector3(0.0, sag * 4.0 * t * (1.0 - t), 0.0))
+	return st.commit() if not strung.is_empty() else null
+
+static func wire_material() -> StandardMaterial3D:
+	if _wire_material == null:
+		_wire_material = StandardMaterial3D.new()
+		_wire_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_wire_material.albedo_color = Color("#0b0d10")
+	return _wire_material
 
 static func pole_mesh() -> ArrayMesh:
 	if _mesh == null:

@@ -594,7 +594,9 @@ func _sight_ranges() -> Vector2:
 		var vis: float = player_ref.get_visibility_scale()
 		vrange *= vis
 		prange *= vis
-		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS:
+		# the dark hides a player whose own light is off, but not one who stands in the pool of a lit lamp
+		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS \
+				and not LightGrid.is_lit(player_ref.global_position):
 			vrange = minf(vrange, DARK_SIGHT_CAP)
 			prange = minf(prange, DARK_SIGHT_CAP)
 	return Vector2(vrange, prange)

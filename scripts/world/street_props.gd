@@ -234,6 +234,12 @@ func _build_streetlight_multimesh() -> void:
 	pole_mmi.multimesh = pole_mm
 	pole_mmi.material_override = _HARDWARE.material()
 	add_child(pole_mmi)
+	var wires := MeshInstance3D.new()
+	wires.name = "StreetWires"
+	wires.mesh = _HARDWARE.wire_mesh(_lamp_local_positions)
+	wires.material_override = _HARDWARE.wire_material()
+	wires.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(wires)
 	var lamp_mmi := MultiMeshInstance3D.new()
 	lamp_mmi.name = "StreetlightLampsBatched"
 	lamp_mmi.multimesh = lamp_mm

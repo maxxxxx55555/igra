@@ -20,6 +20,8 @@ func _check_district(id: StringName) -> void:
 	var blocks := root.find_child("Blocks", true, false) as MultiMeshInstance3D
 	_expect(blocks != null and blocks.multimesh.instance_count > 40 and blocks.multimesh.use_custom_data, "%s missing recessed facade shell metadata" % id)
 	_expect(root.find_child("StreetlightConesBatched", true, false) == null, "%s duplicates existing lamp cones" % id)
+	var wires := root.find_child("StreetWires", true, false) as MeshInstance3D
+	_expect(wires != null and wires.mesh != null and wires.mesh.get_surface_count() == 1, "%s has no overhead wires between its poles" % id)
 	var frontage := root.find_child("FacadeFrontage", true, false) as Node3D
 	_expect(frontage != null, "%s missing street-level architectural frontage" % id)
 	if frontage != null:
