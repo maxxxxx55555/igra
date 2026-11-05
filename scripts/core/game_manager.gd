@@ -42,12 +42,34 @@ func _ready() -> void:
 	_change_state(GameState.MENU)
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+	# A windowed QA run keeps playing when the desktop takes its focus: the audio gate read a paused run (launch row 494).
+	if what == NOTIFICATION_APPLICATION_PAUSED or (what == NOTIFICATION_APPLICATION_FOCUS_OUT and not get_node("/root/QaLaunchGuard").qa_launch):
 		checkpoint_run()
-		pause_game()
+		_pause_with_screen()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if current_state == GameState.MENU:
+			_menu_back()
+		else:
+			UIManager.back()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		checkpoint_run()
 		get_tree().quit()
+
+## Back in the menus: the main menu asks to quit, the quit question answers No, the other menu screens return to the main menu; the boot and loading screens ignore it.
+func _menu_back() -> void:
+	var scene: Node = get_tree().current_scene
+	var path: String = scene.scene_file_path if scene != null else ""
+	if path == Routes.MENU:
+		Routes.goto("res://scenes/ui/confirm_quit.tscn")
+	elif path in ["res://scenes/ui/confirm_quit.tscn", Routes.SETTINGS, Routes.DIFFICULTY, Routes.CREDITS]:
+		Routes.to_menu()
+
+## The onboarding overlay pauses the tree itself and unpauses it when done: a pause screen under it would be left over a running world.
+func _pause_with_screen() -> void:
+	if not is_playing() or get_tree().paused:
+		return
+	UIManager.open(&"pause")
+	pause_game()
 
 func checkpoint_run() -> void:
 	if current_state in [GameState.PLAYING, GameState.PAUSED]:

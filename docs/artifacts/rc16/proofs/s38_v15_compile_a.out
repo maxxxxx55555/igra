@@ -1,0 +1,9 @@
+# proof s38_v15_compile_a
+# utc 20261030T231445Z
+# head 668a0832 (uncommitted paths: 21)
+# env none
+# cmd bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 180
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

@@ -82,6 +82,9 @@ const EXPORT_FILENAME: String = "tls_save_export.json"
 ## file instead, the same reason its other checks use _SLOT=97 instead of a
 ## real slot - this must never be able to touch a developer's actual save.
 func _export_path(filename: String = EXPORT_FILENAME) -> String:
+	# Explicit paths let callers choose a destination, including disposable QA storage.
+	if filename.is_absolute_path():
+		return filename
 	return OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(filename)
 
 func export_save_to_file(src_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:
@@ -358,6 +361,9 @@ func save_all() -> void:
 
 ## Settings > Auto-save: the timer, the milestone saves and the district-entry save go through here.
 func autosave() -> void:
+	# A deferred call after a hardcore death must not recreate the wiped save.
+	if not GameManager.current_state in [GameManager.GameState.PLAYING, GameManager.GameState.PAUSED]:
+		return
 	if bool(SettingsManager.get_setting("autosave", true)):
 		_save()
 
@@ -387,7 +393,9 @@ func _save() -> void:
 		"run_id": _run_id,
 		"run": GameManager.run_data(),
 	}
-	_write_atomic(SAVE_PATH, payload)
+	# A full disk fails the write without a word: the player must know the run is not saved.
+	if not _write_atomic(SAVE_PATH, payload):
+		EventBus.toast_requested.emit(LocalizationManager.t("SAVE_FAILED_STORAGE"), "danger")
 
 func load_all() -> bool:
 	var data := _read_validated(SAVE_PATH)

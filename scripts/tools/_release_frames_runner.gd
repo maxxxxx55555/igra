@@ -7,6 +7,12 @@ func _capture(frame: String, _half: bool) -> void:
 	if frame not in FRAMES:
 		return
 	print("[release-frames] capture begin " + frame)
+	# Store shots show the world and the HUD, not the first-run hint box or the reward toasts.
+	for node_name: String in ["TutorialHint", "ToastStack", "NoticeLabel", "Toast", "DistrictBanner"]:
+		var item := get_tree().root.find_child(node_name, true, false) as CanvasItem
+		if item != null:
+			item.visible = false
+			item.self_modulate.a = 0.0  # UIManager shows its Toast again on the next notice
 	var hash_: String = OS.get_environment("TLS_CAPTURE_HASH")
 	if hash_.is_empty():
 		printerr("[release-frames] committed runtime hash required")

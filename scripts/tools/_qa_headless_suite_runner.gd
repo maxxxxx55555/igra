@@ -507,12 +507,16 @@ func _p2l_import_save_survives_next_autosave() -> void:
 	# now, so force a fresh write first or the exported snapshot won't
 	# actually match `original`.
 	SaveSystem.save_all()
-	if not SaveSystem.export_save_to_file():
+	# Keep the user's real Downloads export untouched, even in an isolated QA profile.
+	var export_name := "user://tls_save_export_TESTONLY.json"
+	if not SaveSystem.export_save_to_file(SaveSystem.SAVE_PATH, export_name):
 		_fail("P2l export_save_to_file failed")
 		return
 	wallet.add(777)
 	SaveSystem.save_all()
-	if not SaveSystem.import_save_from_file():
+	var imported: bool = SaveSystem.import_save_from_file(SaveSystem.SAVE_PATH, export_name)
+	DirAccess.remove_absolute(export_name)
+	if not imported:
 		_fail("P2l import_save_from_file failed")
 		wallet.from_dict({"coins": original})
 		SaveSystem.save_all()
@@ -902,13 +906,13 @@ func _p3_save_load_lang() -> void:
 	if not SaveSystem.has_save():
 		_fail("P3 save_all() produced no save")
 		return
-	LocalizationManager.set_language("de")
+	LocalizationManager.set_language("ru")
 	var l1 := SaveSystem.load_all()
-	LocalizationManager.set_language("fr")
+	LocalizationManager.set_language("en")
 	var l2 := SaveSystem.load_all()
 	LocalizationManager.set_language("en")
 	if not l1 or not l2:
-		_fail("P3 load_all() failed after save (mid-load lang switch): de=%s fr=%s" % [l1, l2])
+		_fail("P3 load_all() failed after save (mid-load lang switch): ru=%s en=%s" % [l1, l2])
 	_log("P3 save/load round-trip with language switch OK")
 
 # ── P4 ────────────────────────────────────────────────────────────────

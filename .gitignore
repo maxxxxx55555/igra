@@ -93,6 +93,8 @@ tools/autopilot_report/
 *.jks
 *.p12
 release.env
+# Local machine setup scripts at the repository root: they may hold provider keys (Session 38, the Opus review, R11), never commit.
+/*.ps1
 docs/stills/playthrough/V_t*.jpg
 
 # Secret-shaped names (Session 20 sweep): none is tracked today, in any commit; these lines keep it so.

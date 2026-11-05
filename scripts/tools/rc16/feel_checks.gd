@@ -344,7 +344,7 @@ static func _tutorial(r: Node) -> void:
 	var lang0: String = LocalizationManager.current_lang
 	LocalizationManager.set_language("en")
 	var english: String = label.text
-	LocalizationManager.set_language("de")
+	LocalizationManager.set_language("ru")
 	await r.get_tree().process_frame
 	var german: String = label.text
 	LocalizationManager.set_language(lang0)

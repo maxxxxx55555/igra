@@ -23,6 +23,8 @@ const SNAPSHOT_SUFFIX := ".qa_snapshot"
 const SUBDIRS: Array[String] = ["", "saves/"]
 const MANIFEST := "manifest.json"
 
+## A QA launch; GameManager keeps it playing when the desktop takes the window's focus.
+var qa_launch: bool = false
 var _owned_snapshot: String = ""
 
 func _enter_tree() -> void:
@@ -37,11 +39,11 @@ func _enter_tree() -> void:
 	var base := OS.get_user_data_dir()
 	var snap := base + SNAPSHOT_SUFFIX
 	var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
-	var qa := _is_qa_launch()
+	qa_launch = _is_qa_launch()
 	# Owner, rc14: QA runs must be silent. Deferred so it lands after GameManager
 	# unmutes Master in its _ready. Each bus meters its own output, so
 	# audio_truth_gate still measures Music while nothing reaches the speakers.
-	if qa:
+	if qa_launch:
 		AudioServer.set_bus_mute.call_deferred(0, true)
 	# Leftovers that can never hold owner data: an interrupted copy (.tmp, never
 	# renamed) and an interrupted discard (a copy whose manifest was already
@@ -66,7 +68,7 @@ func _enter_tree() -> void:
 				print("[qa-guard] restored the profile left by an interrupted QA run")
 			else:
 				_block("could not restore %s (%d mismatch(es)); the copy is kept" % [snap, bad])
-	if guarded or not qa or DirAccess.dir_exists_absolute(snap):
+	if guarded or not qa_launch or DirAccess.dir_exists_absolute(snap):
 		return
 	if snapshot(base, snap, OS.get_process_id()):
 		_owned_snapshot = snap

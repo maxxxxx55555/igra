@@ -36,11 +36,7 @@ assets/audio/music/music_battle.wav	8e0701a3a2ee	c6308ec0294f	*no_frame_hears_au
 assets/audio/music/music_boss_dark.wav	7f2cd752c29b	151575c446c2	*no_frame_hears_audio*
 assets/audio/music/music_combat.ogg	5b9a2e91c369	c0b3b6207002	*no_frame_hears_audio*
 assets/audio/music/music_tension.wav	22121c1c20ce	0494e5f4c6c5	*no_frame_hears_audio*
-data/i18n/de.json	a93811277900	fe63658483f8	*no_frame_shows_the_credits*
 data/i18n/en.json	36ee6dd8736d	b783731cfa96	*no_frame_shows_the_credits*
-data/i18n/es.json	53570a15dac2	83ac7dba5fe2	*no_frame_shows_the_credits*
-data/i18n/fr.json	2e45d4841247	d4bbad3ebfec	*no_frame_shows_the_credits*
-data/i18n/pt_BR.json	535275978fb3	3165fe89b39f	*no_frame_shows_the_credits*
 data/i18n/ru.json	8990e1940b95	1676a5401863	*no_frame_shows_the_credits*
 scripts/systems/music_manager.gd	36b8dfb18b3b	261a22cf82b9	*no_frame_hears_audio*
 scripts/world/soviet_signs.gd	9479ebec3a6d	290168856fbb	*no_kept_frame_shows_a_hospital_or_substation_sign*

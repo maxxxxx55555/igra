@@ -22,10 +22,10 @@ const KIT := {
 
 const LOOK := {
 	"wreck": [Color(0.14, 0.15, 0.16), "rusted_metal", 1.4],
-	"pallets": [Color(0.33, 0.24, 0.14), "plywood", 0.9],
+	"pallets": [Color("#3a2c20"), "plywood", 0.9],
 	"pipes": [Color(0.27, 0.18, 0.14), "rusted_metal", 1.1],
 	"cabinet": [Color(0.19, 0.22, 0.21), "rusted_metal", 0.7],
-	"barrier": [Color(0.40, 0.33, 0.21), "plywood", 0.75],
+	"barrier": [Color("#4a3828"), "plywood", 0.75],
 	"tyres": [Color(0.055, 0.055, 0.06), "", 0.7],
 	"sacks": [Color(0.18, 0.16, 0.12), "cracked_concrete", 0.75],
 	"shrub": [Color(0.10, 0.085, 0.07), "", 0.8],
@@ -63,7 +63,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 ## A second, sparser layer on the walk itself: a service cabinet, a stack of pipes, sandbags or a barrier
 ## every few metres. These keep the camera's foreground readable without touching a route or an interaction.
 func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiMeshInstance3D) -> void:
-	var kinds: Array[String] = ["barrier", "pallets", "pipes", "sacks", "tyres", "cabinet", "shrub", "wreck"]
+	var kinds: Array[String] = ["pallets", "pipes", "sacks", "tyres", "shrub"]  # low things only: a car, a cabinet or a barrier on the walk would be walked through, the layer has no collision
 	var batches: Dictionary = {}
 	var places: Dictionary = {}
 	var chance: float = 0.12 if low else 0.28

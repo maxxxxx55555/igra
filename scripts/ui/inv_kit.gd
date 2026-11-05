@@ -2,15 +2,15 @@ extends RefCounted
 ## The component kit of the visual recovery brief (Plate A and the palette of its section 04): flat rectangles with a 1 px aged-brass edge and no cut corners, and the states of a slot, a tab and
 ## an action in one place, so the inventory and the screens after it read as one family. The screens keep ThemeProvider for fonts and for the controls they do not restyle.
 
-const BG := Color("#080E10")
-const PANEL := Color("#121A1B")
-const RAISED := Color("#1C2423")
-const EDGE := Color("#655332")
+const BG := ThemeProvider.COLOR_BG_DARK
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const RAISED := ThemeProvider.COLOR_BG_PANEL2
+const EDGE := ThemeProvider.COLOR_BORDER
 const EDGE_DIM := Color("#2B332F")
-const AMBER := Color("#C58A2D")
-const TEXT := Color("#D7CCB6")
-const TEXT_DIM := Color("#A89F8D")
-const DANGER := Color("#A43C2B")
+const AMBER := ThemeProvider.COLOR_AMBER
+const TEXT := ThemeProvider.COLOR_TEXT
+const TEXT_DIM := ThemeProvider.COLOR_TEXT_DIM
+const DANGER := ThemeProvider.COLOR_DANGER
 
 static func box(fill: Color, edge: Color = EDGE, width: int = 1, radius: int = 0, pad: float = 0.0) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
@@ -63,7 +63,8 @@ static func style_button(button: Button, kind: StringName, active: bool = false)
 	button.add_theme_stylebox_override("hover", hover)
 	button.add_theme_stylebox_override("pressed", pressed)
 	button.add_theme_stylebox_override("hover_pressed", pressed)
-	button.add_theme_stylebox_override("focus", normal)
+	var focus := box(Color(0.0, 0.0, 0.0, 0.0), AMBER, 2)
+	button.add_theme_stylebox_override("focus", focus)
 	button.add_theme_stylebox_override("disabled", disabled)
 	button.add_theme_color_override("font_color", color)
 	button.add_theme_color_override("font_hover_color", AMBER if kind != &"tab" else (AMBER if active else TEXT))

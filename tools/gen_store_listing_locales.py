@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 LISTING = ROOT / "store" / "listing.md"
 BEGIN = "<!-- BEGIN GENERATED 6-LOCALE BLOCK -->"
 END = "<!-- END GENERATED 6-LOCALE BLOCK -->"
-LOCALES = ["en", "ru", "es", "de", "fr", "pt_BR"]
+LOCALES = ["en", "ru"]
 NAMES = {
     "en": "English", "ru": "Русский", "es": "Español", "de": "Deutsch",
     "fr": "Français", "it": "Italiano", "pt_BR": "Português (BR)", "tr": "Türkçe",

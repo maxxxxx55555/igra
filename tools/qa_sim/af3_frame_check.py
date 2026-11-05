@@ -34,7 +34,7 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 NAME = re.compile(r"^(?P<state>[\w-]+?)_(?P<label>before|after)_(?P<hash>[0-9a-f]{7,40})_(?P<utc>\d{8}T\d{6}Z)\.(?:png|jpg)$")
-RUNTIME_PREFIXES = ("scripts/", "scenes/", "assets/", "data/", "addons/", "android/", "localization/", "components/", "content/", "store/icon-adaptive/")
+RUNTIME_PREFIXES = ("scripts/", "scenes/", "assets/", "data/", "addons/", "android/", "localization/", "components/", "content/", "store/icon-adaptive/", "shaders/")
 RUNTIME_FILES = ("project.godot", "export_presets.cfg", "default_bus_layout.tres")
 NOT_RUNTIME = ("scripts/tools/", "scenes/tools/")
 MTIME_SLACK_S = 15 * 60

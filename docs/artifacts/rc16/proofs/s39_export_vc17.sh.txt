@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Session 39 export of version code 17 (the merged release-finish work, the preload poll guards and the story corrections):
+# the release-signed Android bundle of the head that ships and its checks. The tree must be clean of tracked changes at the
+# start and at the end (both printed), so the proof shows the source revision; a copy of this script is committed with the proof.
+cd /c/Users/Maxsim/Desktop/TLS_Build || exit 2
+GODOT=/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe
+BUNDLETOOL=/c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build/9336c20a-62a0-4605-a162-f3764ec7895b/scratchpad/bundletool/bundletool-all-1.18.3.jar
+step() { n="$1"; shift; echo "# STEP $n $(date +%H:%M:%S)"; "$@"; echo "# STEP $n rc=$? $(date +%H:%M:%S)"; }
+tracked() { git status --porcelain --untracked-files=no 2>/dev/null; }
+echo "# source $(git rev-parse HEAD)"
+echo "# tracked changes before: $(tracked | wc -l)"
+tracked | head -5
+if [ -n "$(tracked)" ]; then echo "# REFUSED: tracked changes before the export"; exit 3; fi
+mkdir -p build .qa_logs/bundles
+rm -f build/tls.aab
+set -a
+. .signing/release.env
+set +a
+if [ "$TLS_RELEASE_STOREPASS" = "$TLS_RELEASE_KEYPASS" ]; then echo "store and key password: the same"; else echo "store and key password: DIFFER"; fi
+export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$(pwd -W)/.signing/tls-release.keystore"
+export GODOT_ANDROID_KEYSTORE_RELEASE_USER="tls_release"
+export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$TLS_RELEASE_STOREPASS"
+export BUNDLETOOL_JAR="$BUNDLETOOL"
+echo "# STEP export_android $(date +%H:%M:%S)"
+"$GODOT" --headless --path . --export-release Android build/tls.aab > .qa_logs/s39_export_android_vc17.log 2>&1 &
+GP=$!
+prev=-1
+same=0
+while kill -0 $GP 2>/dev/null; do
+	if [ -f build/tls.aab ]; then
+		sz=$(stat -c %s build/tls.aab)
+		if [ "$sz" = "$prev" ]; then same=$((same + 1)); else same=0; prev=$sz; fi
+	fi
+	if [ "$same" -ge 3 ]; then
+		powershell.exe -NoProfile -Command "\$env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-17.0.20.8-hotspot'; & 'C:\Users\Maxsim\Desktop\TLS_Build\android\build\gradlew.bat' --stop" > .qa_logs/s39_gradle_stop_vc17.log 2>&1
+		break
+	fi
+	sleep 5
+done
+wait $GP
+echo "# STEP export_android rc=$? $(date +%H:%M:%S)"
+git restore --source=HEAD -- default_bus_layout.tres 2>/dev/null
+echo "bundle: $(stat -c %s build/tls.aab) bytes sha256 $(sha256sum build/tls.aab | cut -c1-64)"
+step aab_check python tools/qa_sim/aab_check.py build/tls.aab --secrets --against .qa_logs/bundles/tls_s38_vcode16.aab
+step release_export_check python tools/qa_sim/release_export_check.py --aab build/tls.aab
+step export_refs python tools/qa_sim/export_refs_check.py --bundle build/tls.aab
+unset GODOT_ANDROID_KEYSTORE_RELEASE_PATH GODOT_ANDROID_KEYSTORE_RELEASE_USER GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD TLS_RELEASE_STOREPASS TLS_RELEASE_KEYPASS
+cp build/tls.aab .qa_logs/bundles/tls_s39_vcode17.aab
+echo "# tracked changes after: $(tracked | wc -l)"
+tracked | head -5
+echo "# STEP done"

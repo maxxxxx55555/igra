@@ -33,6 +33,7 @@ var _slot_items: Array = _SLOT_ITEMS.duplicate()
 var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
+var _safe_area_inset: Vector4 = Vector4.ZERO
 var _battery_ad_button: Button = null
 var _vignette_default_color: Color
 ## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
@@ -720,7 +721,7 @@ func _apply_touch_visibility() -> void:
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
 func _apply_button_size() -> void:
-	var factor := maxf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0)
+	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0, 2.0)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
 		if cluster != null:
@@ -741,6 +742,8 @@ func _place_action_cluster(factor: float) -> void:
 	cluster.anchor_left = 0.0 if left else 1.0
 	cluster.anchor_right = cluster.anchor_left
 	cluster.offset_left = (_JOYSTICK_W + _ACTION_W) * factor + _ONE_HAND_GAP if left else 0.0
+	# Reflow chooses a new side, but must keep the safe margin already applied.
+	cluster.offset_left += _safe_area_inset.x if left else -_safe_area_inset.z
 	cluster.offset_right = cluster.offset_left
 
 func _one_handed() -> bool:
@@ -805,21 +808,20 @@ func _add_status_backing() -> void:
 	move_child(backing, top_left.get_index())
 
 func _apply_safe_area() -> void:
-	var inset := UiScale.insets(get_viewport().get_visible_rect().size)
+	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size))
+
+## Slides each edge of the corner controls by the inset of the side its anchor is on (an offset counts from its anchor): a fixed control keeps its size, a stretched one gives up the margin.
+func _inset_controls(inset: Vector4) -> void:
 	if inset == Vector4.ZERO:
 		return
-	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter"]:
+	_safe_area_inset += inset
+	for path in ["TopLeft", "TopRight", "BtnPause", "AmmoCounter", "BottomLeft", "BottomRight", "BottomCenter"]:
 		var ctrl := get_node_or_null(path) as Control
 		if ctrl != null:
-			ctrl.offset_left += inset.x
-			ctrl.offset_right -= inset.z
-			ctrl.offset_top += inset.y
-	for path in ["BottomLeft", "BottomRight", "BottomCenter"]:
-		var ctrl := get_node_or_null(path) as Control
-		if ctrl != null:
-			ctrl.offset_left += inset.x
-			ctrl.offset_right -= inset.z
-			ctrl.offset_bottom -= inset.w
+			ctrl.offset_left += lerpf(inset.x, -inset.z, ctrl.anchor_left)
+			ctrl.offset_right += lerpf(inset.x, -inset.z, ctrl.anchor_right)
+			ctrl.offset_top += lerpf(inset.y, -inset.w, ctrl.anchor_top)
+			ctrl.offset_bottom += lerpf(inset.y, -inset.w, ctrl.anchor_bottom)
 	var backing := get_node_or_null("StatusBacking") as Control
 	if backing != null:
 		backing.position += Vector2(inset.x, inset.y)
@@ -1523,7 +1525,7 @@ func _add_battery_ad_button() -> void:
 	# Long locales (ru/fr ~2x the EN length) overflow a fixed 150px button —
 	# wrap to a second line instead of spilling past the edge.
 	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	btn.custom_minimum_size = Vector2(150, 40)
+	btn.custom_minimum_size = Vector2(150.0, UiScale.min_touch())
 	btn.position = Vector2(BAR_W + 52.0, -12.0)  # beside the segments: below them it sat on the health row
 	btn.pressed.connect(func() -> void:
 		btn.disabled = true

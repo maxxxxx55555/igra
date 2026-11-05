@@ -153,6 +153,7 @@ func _build_log_header() -> void:
 	_log_toggle.name = "LogToggle"
 	_log_toggle.focus_mode = Control.FOCUS_NONE
 	_log_toggle.add_theme_font_size_override("font_size", 12)
+	_log_toggle.custom_minimum_size = Vector2(UiScale.min_touch() * 1.5, UiScale.min_touch())
 	_log_toggle.pressed.connect(_toggle_log)
 	_log_toggle.self_modulate.a = _LOG_REST
 	_header.add_child(_log_toggle)

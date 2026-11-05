@@ -90,7 +90,7 @@ static func _tutorial_hint_language(r: Node) -> void:
 	tut.call("_show_step")
 	var label := tut.find_child("HintText", true, false) as Label
 	var english: String = label.text
-	LocalizationManager.set_language("de")
+	LocalizationManager.set_language("ru")
 	await r.get_tree().process_frame
 	var german: String = tut.tr("TUT_CROUCH")
 	r._ok(english != german and label.text == german,

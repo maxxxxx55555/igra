@@ -40,8 +40,8 @@ static func _streets(r: Node) -> void:
 	var road := ((builder.get("_road_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var walk := ((builder.get("_sidewalk_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var paint := dash.material as ShaderMaterial
-	var shaded: bool = road != null and walk != null and paint != null and road.shader.resource_path == _ROAD and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
-	r._ok(dash.size.x <= 1.5 and dash.size.z <= 0.3 and shaded, "SOV1 the lane marking is a dash of %.2f m by %.2f m and the road, the sidewalk and the paint use the road shader (shaded %s)" % [dash.size.x, dash.size.z, shaded])
+	var shaded: bool = road != null and walk != null and paint != null and road.shader.resource_path == "res://shaders/wet_asphalt_puddles.gdshader" and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
+	r._ok(dash.size.x <= 1.5 and dash.size.z <= 0.3 and shaded, "SOV1 the lane marking is a dash of %.2f m by %.2f m and the asphalt wears the wet-asphalt shader of the owner's plan and the sidewalk and the paint the road shader (shaded %s)" % [dash.size.x, dash.size.z, shaded])
 	builder.queue_free()
 
 static func _skyline(r: Node) -> void:
@@ -60,9 +60,13 @@ static func _skyline(r: Node) -> void:
 	var boxes: Array[Transform3D] = []
 	var tints: Array[Color] = []
 	var rng := RandomNumberGenerator.new()
-	sky.call("_dress_block", rng, Transform3D.IDENTITY, Vector3(10.0, 15.0, 10.0), Color(0.1, 0.1, 0.12), 1.0, boxes, tints)
-	r._ok(mat != null and mat.shader.resource_path == _FACADE and boxes.size() >= 21 and tints.size() == boxes.size() and low == 0.0 and high == 2.0,
-		"SOV2 the blocks use the facade shader, a block gets %d roof boxes and balconies, and the detail follows the graphics tier (Low %.0f, High %.0f)" % [boxes.size(), low, high])
+	var customs: Array[Color] = []
+	var frontage := sky.get_node("FacadeFrontage")
+	var rails_before: int = (frontage.get("_metal") as Array).size()
+	sky.call("_dress_block", rng, Transform3D.IDENTITY, Vector3(10.0, 15.0, 10.0), Color(0.1, 0.1, 0.12), 1.0, boxes, tints, customs)
+	var rail_parts: int = (frontage.get("_metal") as Array).size() - rails_before
+	r._ok(mat != null and mat.shader.resource_path == _FACADE and boxes.size() >= 21 and tints.size() == boxes.size() and customs.size() == boxes.size() and rail_parts >= 200 and low == 0.0 and high == 2.0,
+		"SOV2 the blocks use the facade shader, a block gets %d roof boxes and balconies, each carrying its block for the shader, with %d balcony rails, and the detail follows the graphics tier (Low %.0f, High %.0f)" % [boxes.size(), rail_parts, low, high])
 	sky.queue_free()
 
 static func _halo(r: Node) -> void:

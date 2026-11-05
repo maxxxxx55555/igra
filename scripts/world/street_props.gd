@@ -234,6 +234,12 @@ func _build_streetlight_multimesh() -> void:
 	pole_mmi.multimesh = pole_mm
 	pole_mmi.material_override = _HARDWARE.material()
 	add_child(pole_mmi)
+	var wires := MeshInstance3D.new()
+	wires.name = "StreetWires"
+	wires.mesh = _HARDWARE.wire_mesh(_lamp_local_positions)
+	wires.material_override = _HARDWARE.wire_material()
+	wires.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(wires)
 	var lamp_mmi := MultiMeshInstance3D.new()
 	lamp_mmi.name = "StreetlightLampsBatched"
 	lamp_mmi.multimesh = lamp_mm
@@ -335,13 +341,10 @@ func _build_prop_multimesh() -> void:
 		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
-			_prop_material("", Color(0.075, 0.066, 0.056), 0.95, 0.0), "TreeTrunksBatched")
+			_prop_material("", Color(0.05, 0.05, 0.055), 0.95, 0.0), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
 		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
-		cone_mat.emission_enabled = true
-		cone_mat.emission = Color(0.706, 0.271, 0.184)
-		cone_mat.emission_energy_multiplier = 0.25
 		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, cone_mat, "ConesBatched")
 
 ## The prop meshes are centred on their origin: lift each so it rests on the ground.

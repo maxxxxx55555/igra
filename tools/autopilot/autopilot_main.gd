@@ -11,7 +11,7 @@ extends Node
 const REPORT_DIR := "res://tools/autopilot_report"
 const REPORT := REPORT_DIR + "/report.txt"
 const LOCALES: PackedStringArray = [
-	"de", "en", "es", "fr", "pt_BR", "ru",
+	"en", "ru",
 ]
 
 var _lines: Array[String] = []

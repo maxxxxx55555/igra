@@ -1314,7 +1314,7 @@ func _check_map() -> void:
 # ── the play-through's flip to English after a retry: a fresh profile's settings said "en" whatever the screen showed ──
 func _check_language_survives_a_save() -> void:
 	var shown: String = LocalizationManager.current_lang
-	var other := "de" if shown != "de" else "fr"
+	var other := "ru" if shown != "ru" else "en"
 	LocalizationManager.set_language(other)
 	_ok(SettingsManager.to_dict()["language"] == other, "LANG1 a save written while the game shows %s carries %s (not the settings default)" % [other, SettingsManager.to_dict()["language"]])
 	SettingsManager.save_to_cfg()

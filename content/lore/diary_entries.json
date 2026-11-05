@@ -31,7 +31,7 @@
       "i18n_keys": { "title": "WORLD_DIARY_K3_TITLE", "text": "WORLD_DIARY_K3_TEXT" },
       "en": {
         "title": "Keeper's Diary — Backwards",
-        "text": "Decided. The drinker finds the grid through the lamps that can burn; a dismantled lamp is a door walled shut. Order 14,208: dismantle 219, suburbs, transformer to the center. I kept the light for forty years. Now I keep it backwards. Forgive me, streets."
+        "text": "Decided. The drinker finds the grid through the lamps that can burn; a dismantled lamp is a door walled shut. Order 14,208: dismantle all 219, suburbs, transformers to the center. I kept the light for forty years. Now I keep it backwards. Forgive me, streets."
       },
       "reveal": { "district": "park", "min_stage": 1 }
     },

@@ -1,6 +1,7 @@
 extends Control
 class_name SkillTreeUI
 
+@onready var scrim: ColorRect = $Scrim
 @onready var tree_tabs: TabContainer = $MarginContainer/VBoxContainer/TreeTabs
 @onready var skill_points_label: Label = $MarginContainer/VBoxContainer/SkillPointsLabel
 @onready var close_button: Button = $MarginContainer/VBoxContainer/CloseButton
@@ -8,6 +9,7 @@ class_name SkillTreeUI
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = ThemeProvider.build_theme()
+	scrim.color = Color(ThemeProvider.COLOR_BG_DARK, 0.6)
 	skill_points_label.add_theme_font_override("font", ThemeProvider.heading_font())
 	SkillTreeManager.skill_unlocked.connect(_refresh)
 	EventBus.settings_changed.connect(_on_settings_changed)

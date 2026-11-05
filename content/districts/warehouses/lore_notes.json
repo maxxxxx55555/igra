@@ -88,7 +88,7 @@
       "i18n_keys": { "title": "LORE_WAREHOUSES_07_TITLE", "text": "LORE_WAREHOUSES_07_TEXT" },
       "en": {
         "title": "Loader's Cassette — Names",
-        "text": "A cassette labelled \"G.\" in the break-room player. G. is practising names the way other men practise prayers — Roma, the twins from bay four, Katya's brother — the men whose lockers the belt counted. He keeps the list because the ones who collect know names, so a name is the only thing that still means something. Softer, then: \"They stood at the quarantine cage for an hour on the third night. Three of them, quiet, heads tilted like they were reading the tags. They knew my name before I said it. The belt knew it first, and a belt has no business knowing a name. Whatever is in that cage, it is not hardware. Hardware does not remember who loaded it — it was only ever on loan to us.\""
+        "text": "A cassette labelled \"G.\" in the break-room player. G. is practising names the way other men practise prayers — Roma, the twins from bay four, Katya's father — the men whose lockers the belt counted. He keeps the list because the ones who collect know names, so a name is the only thing that still means something. Softer, then: \"They stood at the quarantine cage for an hour on the third night. Three of them, quiet, heads tilted like they were reading the tags. They knew my name before I said it. The belt knew it first, and a belt has no business knowing a name. Whatever is in that cage, it is not hardware. Hardware does not remember who loaded it — it was only ever on loan to us.\""
       },
       "location_hint": "Cassette in the break-room player (z_break_room)",
       "min_stage": 2,

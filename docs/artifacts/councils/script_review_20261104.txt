@@ -1,0 +1,43 @@
+SCRIPT-REVIEW: the owner's downloaded file "Igra-Final-Release (1).ps1", 2026-11-04 (queen only; nothing in it was executed)
+Request of the owner: check the file and, if it is right, run it in PowerShell and save the changes. Verdict: REVIEWED, NOT RUN. Reasons are in section 4.
+
+1. The file (read from disk, Get-Item / Get-FileHash / Zone.Identifier)
+size 58,750,478 bytes (481,780 lines, the longest 479 characters), created 2026-11-04 17:14 UTC, UTF-8 with BOM, not signed (Authenticode NotSigned),
+sha256 7D799A6F8AB853A10E798DE5DD6760FDB961BEA3988DDD63949AF8C90A372401,
+Zone.Identifier: ZoneId=3, ReferrerUrl https://chatgpt.com/ (a file made by an AI chat, downloaded to Downloads).
+
+2. Structure (python over the text; the embedded files were decoded into a scratch folder and read as data)
+lines 1-204     header, parameters, bootstrap (job folder under %USERPROFILE%\IgraReleaseJobs, winget installs on demand)
+lines 205-433   $OwnerPack: the owner's MEGA_PROMPT v10 as a here-string (written as MEGA_PACK.md; declared sha256 382e4e8f... checked by the file itself)
+lines 438-5381  $Payloads: 17 files in base64; every declared sha256 equals the sha256 of the decoded bytes (checked): runner.py (1580 lines), production.py, quality.py, device_smoke.py,
+                three selftests, seed-ui-check.gd, native-wrapper.ps1, PRODUCTION_GUIDE.md, EXECUTION_CONTRACT.md, four json files, recovery-patch.json (177,481 bytes)
+lines 5385-481719  references.zip in base64: 42,869,959 bytes, sha256 4ad61348... equals the declared value; 15 PNG members (R01-R13 reference plates, N01 and N02 rejected shots), no unsafe member path
+lines 481720-481779  writes references.zip, installs Git, gh and Python if missing, creates a venv, runs: python runner.py --job <job>
+
+3. What it does (embedded runner.py, read by search and in the parts quoted; not every one of its 1580 lines was read)
+defaults: -FinalizeMain true, -PublishRelease true, -InstallMissing true (param block, lines 91-94); -LoginGitHub, -SweepMergedBranches, -OpenPlayConsole off.
+clone "https://github.com/maxxxxx55555/igra.git" into the job folder (the owner's checkout is not touched), branch from origin/main, run a local agent on the prompt:
+  claude -p --output-format stream-json --verbose --permission-mode acceptEdits [--allowedTools ...]; codex exec --sandbox workspace-write; opencode; pi.
+apply recovery-patch.json (guarded, see 5), build with the repository's tools/release/pipeline.py (the file and the five names the runner needs exist in the repo),
+push the branch, gh pr create, gh pr merge --merge --match-head-commit after green CI, push a tag, gh release create --draft, upload the AAB, gh release edit --draft=false.
+with -SweepMergedBranches it deletes merged remote branches with --force-with-lease. It never submits the store forms and says so; it stops BLOCKED on a missing device or tool.
+signing values of .signing/release.env are parsed by the runner (marked "orchestrator-only"); the environment it gives its children drops the three keystore variables and every TLS_, QA_ and GIT_ variable (line 275 of the decoded runner.py),
+secret-looking values are collected for redaction (line 277), signing-stage output is redacted before a persistent log (comments at lines 901 and 961), the independent reviewer is told not to access signing credentials (line 1025);
+the values reach only the export stage (lines 897-898).
+found: no shell=True, eval, exec, os.system, socket, ctypes, registry, scheduled task or Defender exclusion; network targets are GitHub through git and gh, and the Play Console page on -OpenPlayConsole.
+
+4. Why the agent did not run it
+a) rule: a file from an untrusted source (an AI chat download, unsigned) is not executed by the agent even when asked; the owner can run it.
+b) the defaults merge a pull request to main and publish a GitHub release of a bundle that no one has run on a phone (Release status is INCOMPLETE); the records keep that step for the owner.
+c) the job starts from origin/main = 0dec1ff5, which does not hold pull request 46: the export_presets.cfg of 0dec1ff5 still names assets/textures/pbr/{cracked_concrete,panel_facade,painted_brick,ceramic_tile}_* 3 times each,
+   so a bundle built there leaves the facade textures out again (Opus review R1); its gates are those of main, without the stricter export_refs_check of pull request 46.
+d) it repeats the pass this session ran with the same prompt (it hands the MEGA_PROMPT to another agent), takes hours, about 1.3 GB of export templates and the owner's agent quota.
+
+5. recovery-patch.json (5 files, base commit 0dec1ff5, each with before and after sha256 and the whole new file)
+files: scripts/systems/settings_manager.gd, scripts/ui/hud_3d.gd, scripts/ui/inv_kit.gd, scripts/ui/theme_provider.gd, scripts/ui/ui_scale.gd. All five "before" hashes equal the files of 0dec1ff5.
+on the pass branch inv_kit.gd, theme_provider.gd and ui_scale.gd still match; hud_3d.gd and settings_manager.gd differ (the HUD safe-area slide and the phone default of pull request 46), so production.py would answer ADAPT_REQUIRED there.
+content (diff against 0dec1ff5): UiScale.touch_button_scale(value) clamps to 0.667..1.5 and maps non-finite values to 1.0, used by hud_3d.gd and settings_manager.gd (2 changed lines each; the slider of scripts/ui/settings_screen.gd:181 runs 0.8..1.5);
+InvKit takes its palette from ThemeProvider and draws an amber 2 px focus frame on buttons; ThemeProvider takes the InvKit palette (10 colour tokens) and drops the textured button skins (_load_tex, _btn_stylebox, btn_tex_*) for flat rectangles.
+assessment: small and sane; the finite guard and the focus frame are improvements, the flat buttons change every menu and need new store frames and a new bundle, so the patch is NOT applied: an owner decision (RUN_STATE S39-FIT).
+
+6. Not verified: that every line of runner.py, quality.py and device_smoke.py does only what the search and the quoted parts show; any run of the file; the 15 reference images were counted, not judged.

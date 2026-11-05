@@ -44,7 +44,7 @@ SHORT_STRING_FLOOR = 12
 # under 3x).
 SHORT_STRING_RATIO_CAP = 3.0
 BASE_LOCALE = "en"
-SUPPORTED = ["ru", "en", "es", "de", "fr", "pt_BR"]
+SUPPORTED = ["ru", "en"]
 
 SCRIPT_RANGES = {
     "cjk": (0x4E00, 0x9FFF),

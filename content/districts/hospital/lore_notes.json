@@ -101,7 +101,7 @@
       "i18n_keys": { "title": "LORE_HOSPITAL_08_TITLE", "text": "LORE_HOSPITAL_08_TEXT" },
       "en": {
         "title": "Morgue Ledger, Last Page",
-        "text": "Columns for name, ward, time, drawer. The last page keeps the names and abandons the rest. \"Night three: eleven admitted below, nine accounted for at dawn. Drawers were closed from the inside. I am not writing 'deceased' any more, I am writing 'left', and the difference is the whole of my report. Whoever reads this: they are not something that came instead of them. They are them. Turn your lamp off before you open the last row.\""
+        "text": "Columns for name, ward, time, drawer. The last page keeps the names and abandons the rest. \"Night three: eleven admitted below, nine accounted for at dawn. Drawers were opened from the inside. I am not writing 'deceased' any more, I am writing 'left', and the difference is the whole of my report. Whoever reads this: they are not something that came instead of them. They are them. Turn your lamp off before you open the last row.\""
       },
       "location_hint": "Ledger on the attendant's desk, morgue (z_morgue)",
       "min_stage": 3,

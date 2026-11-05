@@ -1,0 +1,77 @@
+EXPERT SWARM, 2026-11-05 (Session 39): six read-only expert reviewers on the version code 17 head, then three fix bees and the queen
+Reviewers: BEE-DESIGN (UX/UI), BEE-VISUAL (environment art and rendering), BEE-AUDIO (music and sound), BEE-PLAY (playability), BEE-LOGIC (gameplay code and QA), BEE-RETENTION (store and first session).
+Their reports are data, not approvals. Each finding was confirmed in the code by a fix bee or the queen before a change; nothing below was judged by ear or on a phone (HC-7; no device here).
+Disposition: FIXED <commit> or OPEN <why>. Commits: fe291cad logic, d5af011b + 8769eaf4 audio, 5df205b3 UI, 2f02cb56 boot and cones, dd9078b2 two languages, 70b436af frames.
+
+LOGIC
+L1 P0 phone pause (call, lock, Alt-Tab) left a frozen world with no Resume | FIXED fe291cad: the pause screen opens with the pause
+L2 P1 Android Back quit at once (quit_on_go_back default) | FIXED fe291cad: Back pauses a run, asks to quit from the menu
+L3 P1 all districts and 50-99 % documents matched no ending | FIXED fe291cad: Hope covers documents below 100 %
+L4 P1 a monster in its attack kept hitting at a hidden player | FIXED fe291cad
+L5 P1 a monster made while the player hides did not know it | FIXED fe291cad
+L6 P1 removed languages still selectable or stored | FIXED dd9078b2
+L7 P1 a hand-edited settings file skipped the setters' ranges | FIXED fe291cad (a bad number keeps the value it replaced)
+L8 P2 the shop sold an upgrade a blueprint had applied | FIXED fe291cad
+L9 P2 a bundle granted contents already owned | FIXED fe291cad
+L10 P2 quest completion called a missing auto_save | FIXED fe291cad
+L11 P2 a stunned or dying monster still landed its hit | FIXED fe291cad
+L12 P2 a deferred autosave after a hardcore death could bring the save back | FIXED fe291cad
+
+AUDIO (music: 25 tracks, -18.0 LUFS, SD 0.06 LU, 36 loops with no seam over the limit, every trigger mapped: MUSIC NEEDED none)
+A2 pickups play a synthesized beep while recorded loot sounds exist | OPEN: the recorded files sit in assets/audio/sfx/interact/, which the export leaves out (export_refs_check failed when they were used); the change was taken back in 8769eaf4
+A3 the low battery had no sound | FIXED d5af011b (one cue when the battery crosses the flicker threshold)
+A5 the battle bed played under the death cue | FIXED d5af011b (fades out; the bed comes back on respawn through set_mood)
+A6 the weather layers were not ducked | OPEN: the Environment bus already holds an effect and the bus graph gate A01 wants one; taken back in 8769eaf4
+A1 doors, cabinets, generator, fuses and workbench have no sound | OPEN: no signal carries those actions, and their files are left out of the export
+A4 no distinct back sound | OPEN: a helper with no caller is dead code (not shipped)
+A7 six sfx files more than 3 LU from their family median | OPEN: a re-level needs new audio passes
+A8 music sits 4 LU under the old -14 LUFS directive | OPEN: owner decision, the beds are consistent with each other
+A9 no duck on the pause screen | OPEN: optional
+
+UI (DESIGN)
+D1 skill cards with 10-14 px text | FIXED 5df205b3 (13-16 px, 240x220 card)
+D2 the requirement text at 3.4:1 | FIXED 5df205b3 (#e8695a, about 5.5:1)
+D3 locked cards looked like available ones | FIXED 5df205b3 (dimmed)
+D4 the tutorial Skip, the LOG toggle and the battery ad button under the touch floor | FIXED 5df205b3
+D7 the shop's Close and Buy buttons at 44 px | FIXED 5df205b3
+D10 long requirement lines without wrap | already wrapped (no change)
+D5 two shop skins with placeholder icons | OPEN: R10 of the Opus review, the owner decides whether the skins stay
+D6 three button looks (textured menu pills, flat shop, flat skill tree) | OPEN: a global theme change needs new frames and its own review
+D8 the daily challenge lines have no backdrop over the menu photo | OPEN
+D9 dim brass text at 4.2:1 and faint panel edges | OPEN
+
+VISUAL
+V10 traffic cones glowed in every power stage | FIXED 2f02cb56
+V1 facade walls read pale and bright against the black sky | OPEN: FACADE_GAIN is calibrated by the density gates; changing it needs that sweep again
+V2 the boss reads as a striped capsule | OPEN: needs new art
+V3 orange log and crate props outshine the street | OPEN
+V4 cream blobs at a lamp base | OPEN: not identified
+V5 4 % of windows lit in the DARK stage | OPEN: the canon does not settle it
+V6 untextured tree trunks | OPEN
+V7 the victory skyline is flat | OPEN: needs new art
+V8 the menu backdrop is a painted image in another style | OPEN: owner art
+V9 the frame called day_full shows night | OPEN: the world has no day (GDD); the name is the runner's
+
+PLAYABILITY
+P9 nothing shows on return from a call | FIXED with L1
+P3 the 48 px touch floor is about 3 mm on a phone | OPEN: needs a device read (KNOWN_ISSUES)
+P1 a difficulty step at gas_station and police before the rifle | OPEN: a balance change needs the sims and a play test
+P2 a death sends the player back to the district entry | OPEN: design decision
+P4 look sensitivity 0.004 rad/px (about 1570 px for a full turn) | OPEN: needs a phone to tune
+P5 tutorial steps without a timeout, Skip ends the whole tutorial | OPEN
+P6 the first shop purchase comes around district 4 | OPEN: economy change needs the sims
+P7 the ad revive shares the hourly cooldown | OPEN: no ad SDK ships
+P8 the GDD (8-12 h) and the sim (about 5-7 h) disagree on length | OPEN: canon decision
+P10 primitives per frame above the canon (PF4) | OPEN: needs a phone
+
+RETENTION
+R1 the listing promised six languages | FIXED dd9078b2
+R2 four languages were still in the build | FIXED dd9078b2
+R3 about 7.5 s of fixed waits before the menu | FIXED 2f02cb56 (skippable splash, faster bar)
+R4 Play with a save asks to start over | not real: a Continue button exists when a save exists (main_menu.gd _ensure_continue)
+R5 a full disk fails silently | OPEN: needs a new localized notice
+R6 nothing was run on a phone | OPEN: blocker of the release
+R7 30 fps on Medium may feel choppy | OPEN: needs a phone
+R8 the 4096x2048 sky and the 2048 map are large | OPEN
+R9 INTERNET permission without a network feature | OPEN: needs a device check of the export template
+R10 first-run touch calibration not shown | OPEN

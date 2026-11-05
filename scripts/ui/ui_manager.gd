@@ -132,21 +132,22 @@ func fly_pickup_icon(world_pos: Vector3, texture: Texture2D) -> void:
 
 func is_hud_blocked() -> bool:
 	return (not _open_blocking.is_empty()) or (not GameManager.is_playing())
+## Escape on a keyboard and Back on Android: an open pause screen resumes, else the top closable screen (codex, map, workbench) closes, else a run pauses.
+## A closable screen closes before the pause opens: the pause over an open Codex stacked two blocking screens and the codex kept hiding the HUD after Continue.
+func back() -> void:
+	if _is_open(&"pause"):
+		close(&"pause")
+		GameManager.resume_game()
+	elif _topmost_closable() != &"":
+		close(_topmost_closable())
+	elif GameManager.is_playing():
+		open(&"pause")
+		GameManager.pause_game()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.is_action_pressed("ui_pause"):
-			if _is_open(&"pause"):
-				close(&"pause")
-				GameManager.resume_game()
-			elif _topmost_closable() != &"":
-				# Escape сначала закрывает открытый справочник/карту. Раньше он
-				# сразу открывал паузу поверх «Кодекса»: два блокирующих экрана
-				# накладывались, а после «Продолжить» кодекс оставался висеть и
-				# продолжал прятать HUD.
-				close(_topmost_closable())
-			elif GameManager.is_playing():
-				open(&"pause")
-				GameManager.pause_game()
+			back()
 		elif event.is_action_pressed("photo_mode"):
 			_photo.toggle()
 		elif event.is_action_pressed("city_map_toggle"):
@@ -179,6 +180,9 @@ func open(id: StringName) -> void:
 	var scr: Control = _get_screen(id)
 	if scr == null:
 		return
+	# A screen made earlier keeps its old place in the layer: raise it, or it opens beneath the one in front.
+	if scr.get_parent() == _layer:
+		_layer.move_child(scr, -1)
 	_cancel_fade_out(scr)
 	var was_open: bool = scr.visible
 	scr.visible = true

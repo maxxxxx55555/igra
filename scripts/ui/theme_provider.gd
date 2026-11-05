@@ -6,13 +6,13 @@
 class_name ThemeProvider
 extends RefCounted
 
-# ── Цветовые токены (docs/ART_UI_STYLE.md) ─────────────────────────────
+# One palette (owner canon 2026-10-29): inventory, shop, menus and HUD read these tokens; InvKit takes them too.
 const COLOR_BG_DARK   := Color("#060f13")   # bg-deep (owner canon 2026-10-29, docs/STYLE_GUIDE.md section 8)
 const COLOR_BG_PANEL  := Color("#0f1314")   # panel
 const COLOR_BG_PANEL2 := Color("#1c1e1d")   # panel-hover (чуть светлее)
 const COLOR_BORDER    := Color("#5a4a2a")   # panel-edge: the 1 px bronze of the canon
 const COLOR_AMBER     := Color("#c9a24a")   # brass — акцент, активное
-const COLOR_AMBER_DIM := Color("#8a7338")   # brass-dim — неактивное
+const COLOR_AMBER_DIM := Color("#9e8645")   # brass-dim — неактивное
 const COLOR_AMBER_HI  := Color("#d8d5cc")   # bone — заголовки
 const COLOR_TEXT      := Color("#d8d5cc")   # bone-text
 const COLOR_TEXT_DIM  := Color("#8a8a85")   # steel-text
@@ -38,25 +38,6 @@ static func _bold(base: Font) -> Font:
 	f.base_font = base
 	f.variation_embolden = HEADING_EMBOLDEN
 	return f
-
-static func _load_tex(path: String) -> Texture2D:
-	return load(path) if ResourceLoader.exists(path) else null
-
-## Кнопочный chrome kit (256x64, chamfer уже вырезан в самой текстуре).
-## margin=16 — вне зоны 5-12px, где ERROR_LOG зафиксировал дрейф каёмки
-## на 9-slice срезе; 16 держит края чисто и оставляет плоский центр.
-static func _btn_stylebox(tex: Texture2D) -> StyleBoxTexture:
-	var sb := StyleBoxTexture.new()
-	sb.texture = tex
-	sb.texture_margin_left = 16.0
-	sb.texture_margin_right = 16.0
-	sb.texture_margin_top = 16.0
-	sb.texture_margin_bottom = 16.0
-	sb.content_margin_left = 14.0
-	sb.content_margin_right = 14.0
-	sb.content_margin_top = 8.0
-	sb.content_margin_bottom = 8.0
-	return sb
 
 static var _heading: Font
 
@@ -128,18 +109,6 @@ static func build_theme() -> Theme:
 	theme.set_stylebox("focus", "Button", btn_focus)
 	theme.set_stylebox("disabled", "Button", btn_d)
 	theme.set_stylebox("focus", "LineEdit", btn_focus)
-	# P2.3: реальные текстуры поверх StyleBoxFlat выше, если ассеты на месте
-	# (остальной chrome kit — panel/tooltip/slot — оставлен на StyleBoxFlat,
-	# см. комментарий у _btn_stylebox()).
-	var btn_tex_n := _load_tex("res://assets/textures/ui/btn_tex_normal.png")
-	var btn_tex_h := _load_tex("res://assets/textures/ui/btn_tex_hover.png")
-	var btn_tex_p := _load_tex("res://assets/textures/ui/btn_tex_pressed.png")
-	var btn_tex_d := _load_tex("res://assets/textures/ui/btn_tex_disabled.png")
-	if btn_tex_n != null and btn_tex_h != null and btn_tex_p != null and btn_tex_d != null:
-		theme.set_stylebox("normal", "Button", _btn_stylebox(btn_tex_n))
-		theme.set_stylebox("hover", "Button", _btn_stylebox(btn_tex_h))
-		theme.set_stylebox("pressed", "Button", _btn_stylebox(btn_tex_p))
-		theme.set_stylebox("disabled", "Button", _btn_stylebox(btn_tex_d))
 	theme.set_color("font_color", "Button", COLOR_TEXT)
 	theme.set_color("font_hover_color", "Button", COLOR_AMBER_HI)
 	theme.set_color("font_disabled_color", "Button", COLOR_TEXT_DIM)

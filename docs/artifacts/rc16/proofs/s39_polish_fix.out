@@ -1,0 +1,6 @@
+# proof s39_polish_fix
+# utc 20261105T095051Z
+# head 21974b7b (uncommitted paths: 22)
+# env none
+# cmd bash tools/qa_sim/user_data_guard.sh ./godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/release_polish_check_scene.tscn
+# EXIT=0

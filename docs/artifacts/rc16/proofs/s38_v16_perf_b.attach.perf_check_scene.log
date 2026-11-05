@@ -1,0 +1,32 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[perf] district=suburbs draw_calls=115 primitives=135365 objects_in_frame=326
+[perf] draw calls frame by frame after the player spawned: [110, 120, 117, 115, 115, 115, 115, 115, 115, 115]
+[perf] breakdown of 115 draw calls in suburbs, calls saved by hiding each node: 54 Main3D/WorldRuntime (Node3D) 131948 primitives | 44 Main3D/HUD (CanvasLayer) 1681 primitives | 40 district_suburbs/Props (Node3D) 102644 primitives | 18 Main3D/MultiplayerManager (Node3D) 48904 primitives | 12 district_suburbs/StreetBuilder (Node3D) 29520 primitives | 6 district_suburbs/@Area3D@204 (Area3D) 408 primitives | 5 Main3D/PostProcessOverlay (CanvasLayer) 318 primitives | 4 Main3D/ToastManager (CanvasLayer) 340 primitives | 2 district_suburbs/@Node3D@226 (Node3D) 312 primitives | 2 district_suburbs/@Area3D@205 (Area3D) 312 primitives | 2 district_suburbs/@Area3D@206 (Area3D) 312 primitives | 2 district_suburbs/@Area3D@207 (Area3D) 312 primitives | 2 district_suburbs/DocumentPickup (Area3D) 312 primitives | 2 district_suburbs/@Area3D@208 (Area3D) 312 primitives
+[perf] suburbs steady draw_calls=113 (everything shown again, after the breakdown)
+[perf] mean over 300 frames: gpu_ms=12.07 render_cpu_ms=0.84 process_ms=18.74 physics_ms=1.66
+[perf] median 16.67 ms, worst 18.1 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=11.66 render_cpu_ms=3.28 process_ms=26.41 physics_ms=1.84
+[perf] median 12.50 ms, worst 39.7 ms, slow frames (index:ms, over max(3 x median, 25 ms)): 60:40
+[perf] mean over 300 frames: gpu_ms=11.46 render_cpu_ms=1.29 process_ms=14.72 physics_ms=2.16
+[perf] median 12.50 ms, worst 15.4 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=11.47 render_cpu_ms=1.32 process_ms=14.86 physics_ms=1.96
+[perf] median 12.50 ms, worst 13.8 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] suburbs frame_p95_ms=13.33 interval_p95_ms=18.06 texture_mem_mib=134.8 video_mem_mib=219.2
+[perf] suburbs static_memory_mib=104.4 particles_emitting=94 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=13.72 render_cpu_ms=1.43 process_ms=17.15 physics_ms=1.47
+[perf] median 14.78 ms, worst 16.3 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=14.00 render_cpu_ms=1.55 process_ms=19.16 physics_ms=1.62
+[perf] median 15.00 ms, worst 23.0 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] mean over 300 frames: gpu_ms=13.66 render_cpu_ms=1.47 process_ms=18.93 physics_ms=1.53
+[perf] median 14.58 ms, worst 16.1 ms, slow frames (index:ms, over max(3 x median, 25 ms)): none
+[perf] district=power_station draw_calls=118 primitives=199065 objects_in_frame=291 frame_p95_ms=15.15
+[perf] budget D1<200: 115; D11<350: 118; p95<=33 ms: 13.33 and 15.15; video memory<=512 MiB: 219.2; over budget: []
+[perf] DONE fails=0
+ERROR: Texture with GL ID of 160: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 166: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 9 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

@@ -1,228 +1,11 @@
 {
  "_contract": "Machine-readable. terms: the core words of the game and the dictionary key that says each in the 13 locales (read from data/i18n, not translated here). cognates: English values that a locale repeats on purpose, with the locales; a new identical value fails tools/qa_sim/i18n_placeholder_fuzz.py. latin_ok: keys whose value stays Latin in the non-Latin locales. Written by that tool.",
  "cognates": {
-  "%.1f kg (x%d)": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "%d / %d photos": [
-   "fr"
-  ],
-  "AUDIO": [
-   "de",
-   "es",
-   "fr"
-  ],
-  "Action": [
-   "fr"
-  ],
-  "Alcohol": [
-   "es"
-  ],
-  "Audio": [
-   "de",
-   "es",
-   "fr"
-  ],
-  "Auto": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Bonus: x%.1f": [
-   "de"
-  ],
-  "Brute": [
-   "fr"
-  ],
-  "Cable": [
-   "es"
-  ],
-  "Cables": [
-   "es"
-  ],
-  "Codex": [
-   "fr"
-  ],
-  "Collection": [
-   "fr"
-  ],
-  "Combat": [
-   "fr"
-  ],
-  "Cyan": [
-   "de",
-   "fr"
-  ],
-  "DOCUMENTS": [
-   "fr"
-  ],
-  "Danger": [
-   "fr"
-  ],
-  "Deuteranopia": [
-   "pt_BR"
-  ],
-  "Document": [
-   "fr"
-  ],
-  "Documents": [
-   "fr"
-  ],
-  "Endurance": [
-   "fr"
-  ],
-  "Exploration": [
-   "fr"
-  ],
-  "Filter": [
-   "de"
-  ],
-  "Filter: %s": [
-   "de"
-  ],
-  "Holster": [
-   "de"
-  ],
-  "Hospital": [
-   "es",
-   "pt_BR"
-  ],
-  "Illumination": [
-   "fr"
-  ],
-  "Journal": [
-   "fr"
-  ],
   "Last Streetlight": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR",
    "ru"
-  ],
-  "Marat": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Metal": [
-   "es",
-   "pt_BR"
-  ],
-  "Normal": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Notes": [
-   "fr"
-  ],
-  "Park": [
-   "de"
-  ],
-  "Petrov": [
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Photos": [
-   "fr"
-  ],
-  "Protanopia": [
-   "pt_BR"
-  ],
-  "RADAR": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Radio": [
-   "de",
-   "es",
-   "fr"
-  ],
-  "Rare": [
-   "fr"
-  ],
-  "Regeneration": [
-   "de"
-  ],
-  "Rifle": [
-   "es",
-   "pt_BR"
-  ],
-  "SECRETS": [
-   "fr"
-  ],
-  "SLOT ": [
-   "de"
-  ],
-  "SPRINT": [
-   "de"
-  ],
-  "Server: %s : %d": [
-   "de"
-  ],
-  "Speedrunner": [
-   "de"
-  ],
-  "Sprinter": [
-   "de"
-  ],
-  "Status": [
-   "de",
-   "pt_BR"
-  ],
-  "Textures": [
-   "fr"
-  ],
-  "Transistor": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
-  ],
-  "Tritanopia": [
-   "pt_BR"
-  ],
-  "Type": [
-   "fr"
-  ],
-  "Ultra": [
-   "de",
-   "es",
-   "fr",
-   "pt_BR"
   ],
   "VSync": [
-   "es",
-   "fr",
-   "pt_BR",
    "ru"
-  ],
-  "Wanderer": [
-   "de"
-  ],
-  "Wind": [
-   "de"
-  ],
-  "XP: x%.2f": [
-   "de",
-   "es",
-   "pt_BR"
-  ],
-  "cable": [
-   "es"
-  ],
-  "document": [
-   "fr"
   ]
  },
  "latin_ok": [
@@ -236,440 +19,280 @@
   "achievements": {
    "key": "ACHIEVEMENTS_TITLE",
    "locales": {
-    "de": "Errungenschaften",
     "en": "Achievements",
-    "es": "Logros",
-    "fr": "Succès",
-    "pt_BR": "Conquistas",
     "ru": "Достижения"
    }
   },
   "battery": {
    "key": "ITEM_BATTERY",
    "locales": {
-    "de": "Batterie",
     "en": "Battery",
-    "es": "Batería",
-    "fr": "Pile",
-    "pt_BR": "Bateria",
     "ru": "Батарейка"
    }
   },
   "codex": {
    "key": "CODEX_TITLE",
    "locales": {
-    "de": "Kompendium",
     "en": "Codex",
-    "es": "Compendio",
-    "fr": "Codex",
-    "pt_BR": "Compêndio",
     "ru": "Кодекс"
    }
   },
   "coins": {
    "key": "hud_coins",
    "locales": {
-    "de": "Münzen",
     "en": "Coins",
-    "es": "Monedas",
-    "fr": "Pièces",
-    "pt_BR": "Moedas",
     "ru": "Монеты"
    }
   },
   "colorblind mode": {
    "key": "Colorblind Mode",
    "locales": {
-    "de": "Farbenblind-Modus",
     "en": "Colorblind Mode",
-    "es": "Modo daltónico",
-    "fr": "Mode daltonien",
-    "pt_BR": "Modo daltônico",
     "ru": "Режим для дальтоников"
    }
   },
   "continue": {
    "key": "continue",
    "locales": {
-    "de": "Fortsetzen",
     "en": "Continue",
-    "es": "Continuar",
-    "fr": "Continuer",
-    "pt_BR": "Continuar",
     "ru": "Продолжить"
    }
   },
   "daily challenge": {
    "key": "DAILY_CHALLENGE_TITLE",
    "locales": {
-    "de": "Tägliche Herausforderung",
     "en": "Daily Challenge",
-    "es": "Desafío diario",
-    "fr": "Défi quotidien",
-    "pt_BR": "Desafio diário",
     "ru": "Ежедневное задание"
    }
   },
   "difficulty": {
    "key": "SCR_SLOZHNOST",
    "locales": {
-    "de": "Schwierigkeit",
     "en": "Difficulty",
-    "es": "Dificultad",
-    "fr": "Difficulté",
-    "pt_BR": "Dificuldade",
     "ru": "Сложность"
    }
   },
   "easy": {
    "key": "diff_easy",
    "locales": {
-    "de": "Leicht",
     "en": "Easy",
-    "es": "Fácil",
-    "fr": "Facile",
-    "pt_BR": "Fácil",
     "ru": "Легко"
    }
   },
   "flashlight": {
    "key": "SCR_FONARIK",
    "locales": {
-    "de": "Taschenlampe",
     "en": "Flashlight",
-    "es": "Linterna",
-    "fr": "Lampe torche",
-    "pt_BR": "Lanterna",
     "ru": "Фонарик"
    }
   },
   "hard": {
    "key": "diff_hard",
    "locales": {
-    "de": "Schwer",
     "en": "Hard",
-    "es": "Difícil",
-    "fr": "Difficile",
-    "pt_BR": "Difícil",
     "ru": "Тяжело"
    }
   },
   "hardcore mode": {
    "key": "Hardcore Mode",
    "locales": {
-    "de": "Hardcore-Modus",
     "en": "Hardcore Mode",
-    "es": "Modo hardcore",
-    "fr": "Mode hardcore",
-    "pt_BR": "Modo hardcore",
     "ru": "Хардкорный режим"
    }
   },
   "health": {
    "key": "CHAR_HEALTH",
    "locales": {
-    "de": "Gesundheit",
     "en": "Health",
-    "es": "Salud",
-    "fr": "Santé",
-    "pt_BR": "Saúde",
     "ru": "Здоровье"
    }
   },
   "inventory": {
    "key": "KEY_INVENTORY",
    "locales": {
-    "de": "Inventar",
     "en": "Inventory",
-    "es": "Inventario",
-    "fr": "Inventaire",
-    "pt_BR": "Inventário",
     "ru": "Инвентарь"
    }
   },
   "language": {
    "key": "Language",
    "locales": {
-    "de": "Sprache",
     "en": "Language",
-    "es": "Idioma",
-    "fr": "Langue",
-    "pt_BR": "Idioma",
     "ru": "Язык"
    }
   },
   "level": {
    "key": "STATS_LEVEL",
    "locales": {
-    "de": "Stufe",
     "en": "Level",
-    "es": "Nivel",
-    "fr": "Niveau",
-    "pt_BR": "Nível",
     "ru": "Уровень"
    }
   },
   "load": {
    "key": "BTN_LOAD",
    "locales": {
-    "de": "Laden",
     "en": "Load",
-    "es": "Cargar",
-    "fr": "Charger",
-    "pt_BR": "Carregar",
     "ru": "Загрузить"
    }
   },
   "map": {
    "key": "MAP_TITLE",
    "locales": {
-    "de": "Karte",
     "en": "Map",
-    "es": "Mapa",
-    "fr": "Carte",
-    "pt_BR": "Mapa",
     "ru": "Карта"
    }
   },
   "medkit": {
    "key": "ITEM_MEDKIT",
    "locales": {
-    "de": "Verbandskasten",
     "en": "Medkit",
-    "es": "Botiquín",
-    "fr": "Trousse de soins",
-    "pt_BR": "Kit médico",
     "ru": "Аптечка"
    }
   },
   "music": {
    "key": "SCR_MUZYKA",
    "locales": {
-    "de": "Musik",
     "en": "Music",
-    "es": "Música",
-    "fr": "Musique",
-    "pt_BR": "Música",
     "ru": "Музыка"
    }
   },
   "new game": {
    "key": "new_game",
    "locales": {
-    "de": "Neues Spiel",
     "en": "New Game",
-    "es": "Nueva partida",
-    "fr": "Nouvelle partie",
-    "pt_BR": "Novo jogo",
     "ru": "Новая игра"
    }
   },
   "new game plus": {
    "key": "NEW_GAME_PLUS",
    "locales": {
-    "de": "Neues Spiel+",
     "en": "New Game+",
-    "es": "Nueva Partida+",
-    "fr": "Nouvelle Partie+",
-    "pt_BR": "Novo Jogo+",
     "ru": "Новая игра+"
    }
   },
   "noise": {
    "key": "CHAR_NOISE",
    "locales": {
-    "de": "Lärm",
     "en": "Noise",
-    "es": "Ruido",
-    "fr": "Bruit",
-    "pt_BR": "Ruído",
     "ru": "Шум"
    }
   },
   "noise bomb": {
    "key": "ITEM_NOISE_BOMB",
    "locales": {
-    "de": "Lärmbombe",
     "en": "Noise Bomb",
-    "es": "Bomba de ruido",
-    "fr": "Bombe sonore",
-    "pt_BR": "Bomba de ruído",
     "ru": "Шумовая бомба"
    }
   },
   "normal": {
    "key": "diff_normal",
    "locales": {
-    "de": "Normal",
     "en": "Normal",
-    "es": "Normal",
-    "fr": "Normal",
-    "pt_BR": "Normal",
     "ru": "Нормально"
    }
   },
   "photo mode": {
    "key": "PHOTO_MODE",
    "locales": {
-    "de": "Fotomodus",
     "en": "Photo Mode",
-    "es": "Modo foto",
-    "fr": "Mode photo",
-    "pt_BR": "Modo foto",
     "ru": "Фоторежим"
    }
   },
   "pistol": {
    "key": "ITEM_PISTOL",
    "locales": {
-    "de": "Pistole",
     "en": "Pistol",
-    "es": "Pistola",
-    "fr": "Pistolet",
-    "pt_BR": "Pistola",
     "ru": "Пистолет"
    }
   },
   "quests": {
    "key": "CODEX_TAB_QUESTS",
    "locales": {
-    "de": "Aufträge",
     "en": "Quests",
-    "es": "Misiones",
-    "fr": "Quêtes",
-    "pt_BR": "Missões",
     "ru": "Задания"
    }
   },
   "quit": {
    "key": "menu_quit",
    "locales": {
-    "de": "Beenden",
     "en": "Quit",
-    "es": "Salir",
-    "fr": "Quitter",
-    "pt_BR": "Sair",
     "ru": "Выход"
    }
   },
   "reload": {
    "key": "KEY_RELOAD",
    "locales": {
-    "de": "Nachladen",
     "en": "Reload",
-    "es": "Recargar",
-    "fr": "Recharger",
-    "pt_BR": "Recarregar",
     "ru": "Перезарядка"
    }
   },
   "resume": {
    "key": "BTN_RESUME",
    "locales": {
-    "de": "Fortsetzen",
     "en": "Resume",
-    "es": "Continuar",
-    "fr": "Reprendre",
-    "pt_BR": "Continuar",
     "ru": "Продолжить"
    }
   },
   "rifle": {
    "key": "ITEM_RIFLE",
    "locales": {
-    "de": "Gewehr",
     "en": "Rifle",
-    "es": "Rifle",
-    "fr": "Fusil",
-    "pt_BR": "Rifle",
     "ru": "Винтовка"
    }
   },
   "save": {
    "key": "BTN_SAVE",
    "locales": {
-    "de": "Speichern",
     "en": "Save",
-    "es": "Guardar",
-    "fr": "Sauvegarder",
-    "pt_BR": "Salvar",
     "ru": "Сохранить"
    }
   },
   "settings": {
    "key": "MAIN_SETTINGS",
    "locales": {
-    "de": "Einstellungen",
     "en": "Settings",
-    "es": "Ajustes",
-    "fr": "Paramètres",
-    "pt_BR": "Configurações",
     "ru": "Настройки"
    }
   },
   "shop": {
    "key": "shop",
    "locales": {
-    "de": "Laden",
     "en": "Shop",
-    "es": "Tienda",
-    "fr": "Boutique",
-    "pt_BR": "Loja",
     "ru": "Магазин"
    }
   },
   "shotgun": {
    "key": "ITEM_SHOTGUN",
    "locales": {
-    "de": "Schrotflinte",
     "en": "Shotgun",
-    "es": "Escopeta",
-    "fr": "Fusil à pompe",
-    "pt_BR": "Espingarda",
     "ru": "Дробовик"
    }
   },
   "stamina": {
    "key": "CHAR_STAMINA",
    "locales": {
-    "de": "Ausdauer",
     "en": "Stamina",
-    "es": "Resistencia",
-    "fr": "Endurance",
-    "pt_BR": "Vigor",
     "ru": "Выносливость"
    }
   },
   "stealth": {
    "key": "KEY_STEALTH",
    "locales": {
-    "de": "Schleichen",
     "en": "Stealth",
-    "es": "Sigilo",
-    "fr": "Furtivité",
-    "pt_BR": "Furtividade",
     "ru": "Скрытность"
    }
   },
   "subtitles": {
    "key": "Subtitles",
    "locales": {
-    "de": "Untertitel",
     "en": "Subtitles",
-    "es": "Subtítulos",
-    "fr": "Sous-titres",
-    "pt_BR": "Legendas",
     "ru": "Субтитры"
    }
   },
   "workbench": {
    "key": "WORKBENCH_TITLE",
    "locales": {
-    "de": "Werkbank",
     "en": "Workbench",
-    "es": "Banco de trabajo",
-    "fr": "Établi",
-    "pt_BR": "Bancada",
     "ru": "Верстак"
    }
   }

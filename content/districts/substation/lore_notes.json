@@ -62,7 +62,7 @@
       "i18n_keys": { "title": "LORE_SUBSTATION_05_TITLE", "text": "LORE_SUBSTATION_05_TEXT" },
       "en": {
         "title": "Vault Order — Breaker 9, Unmapped",
-        "text": "Clipped to the vault breaker's own frame, where only the man with the key would ever read it: the wiring order that built what Marat traced. Twelve years before the blackout — breaker 9, wired off-plan, fed from the park line and the hospital sub-feed both, metering drums with the second coil wound to pay current back down the line. The day foreman's stamp across it: REFUSED. Below, the disposition that actually happened: \"Night shift takes it.\" Below that, the clipping someone pasted here years later, the council denying the program by name in print — the denial that names what it denies. And last, the night foreman's hand: \"It was never a fault. A fault does not need its own breaker.\""
+        "text": "Clipped to the vault breaker's own frame, where only the man with the key would ever read it: the wiring order that built what Marat traced. Nine years before the blackout — breaker 9, wired off-plan, fed from the park line and the hospital sub-feed both, metering drums with the second coil wound to pay current back down the line. The day foreman's stamp across it: REFUSED. Below, the disposition that actually happened: \"Night shift takes it.\" Below that, the clipping someone pasted here years later, the council denying the program by name in print — the denial that names what it denies. And last, the night foreman's hand: \"It was never a fault. A fault does not need its own breaker.\""
       },
       "location_hint": "Clipped to the breaker 9 frame inside the vault (z_switchgear_vault)",
       "min_stage": 2,
@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_SUBSTATION_06_TITLE", "text": "LORE_SUBSTATION_06_TEXT" },
       "en": {
         "title": "Photo: The Boneyard Count",
-        "text": "A photograph of the lamp boneyard behind the east fence, taken from the control-room window at dusk: rows of dismantled streetlight housings stacked like firewood, brass shells sorted from iron, every stack tagged with wire and a paper slip naming a suburbs street. In the foreground, the chalk tally board, and the tally is in a hand like a ruled line — the same hand that signed the grid's own orders forty years running. Two hundred and nineteen, and then more rows past the count, still being stacked. On the back: \"He does not hide them. He stages them. Whatever he is building at the center, it is built out of our own lamps.\""
+        "text": "A photograph of the lamp boneyard behind the east fence, taken from the control-room window at night: rows of dismantled streetlight housings stacked like firewood, brass shells sorted from iron, every stack tagged with wire and a paper slip naming a suburbs street. In the foreground, the chalk tally board, and the tally is in a hand like a ruled line — the same hand that signed the grid's own orders forty years running. Two hundred and nineteen, and then more rows past the count, still being stacked. On the back: \"He does not hide them. He stages them. Whatever he is building at the center, it is built out of our own lamps.\""
       },
       "location_hint": "Taped to the control-room window frame (z_lamp_boneyard)",
       "min_stage": 2,

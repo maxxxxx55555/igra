@@ -1,0 +1,8 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[menu-lifecycle] OK menu is detached before deferred layout runs
+[menu-lifecycle] OK detached menu keeps its layout position
+[menu-lifecycle] OK detached menu keeps its layout size
+[menu-lifecycle] OK detached menu keeps its layout scale
+[menu-lifecycle] OK live menu still fits its viewport
+[menu-lifecycle] DONE fails=0

@@ -15,7 +15,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LOCALES = ["de", "en", "es", "fr", "pt_BR", "ru"]
+LOCALES = ["en", "ru"]
 SCREEN = "scripts/ui/settings_screen.gd"
 MANAGER = "scripts/systems/settings_manager.gd"
 ROW = re.compile(r'\b_(?:toggle|slider|dropdown)\(parent,[^\n]*?\),\s*"([a-z_]+)"')

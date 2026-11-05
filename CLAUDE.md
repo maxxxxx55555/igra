@@ -16,7 +16,7 @@ Installed (`.specify/`, `.claude/skills/speckit-*`) — owner asked to always us
 - Never delete a file unless proven dead *and* not a planned feature (lesson: `hiding_spot.gd`).
 - Zero shipped: TODO, FIXME, commented-out code, debug prints, BOM.
 - Autoloads via `/root`; `PROCESS_MODE_ALWAYS` on anything that runs while paused. An autoload script must not name a world class (`DistrictSceneFactory` did it): it moves the compile order and a `preload`ed scene came out empty (rc16, `e32fa77`).
-- Full i18n, 6 locales (en, ru, de, es, fr, pt_BR), every user-facing string.
+- Full i18n, 2 locales (en, ru; the owner cut de, es, fr and pt_BR on 2026-11-05), every user-facing string.
 - Small English imperative commits; push every 2-3.
 
 ## Validation gates — run after every change
@@ -36,7 +36,7 @@ Headless scene smoke: `tools/scene_smoke.gd`.
 `godot-docs` (grep on any API doubt) · `godot-demo-projects` · `escoria` (quest patterns) · `godot-open-rpg` (architecture) · `ink` (narrative)
 
 ## Already done — do not redo
-Launch, RPC-on-self, StyleBoxFlat scenes, NoiseLabel tscn, FadeTransition pause freeze, death signal, hiding_spot restore, medkit/battery, monster vision vs visibility, doors/keys API, HUD badge refresh + bar overlap, blackout, save-slot district parity, autosave order, ScreenShake, finale reachability, tutorial CanvasLayer, emissive windows guard, double photo-mode, save/load round-trip. AppLovin MAX ad SDK is integrated in `..\refs\` and wired behind `AdService` (real SDK key still needed, see `docs/store/HUMAN_CHECKLIST.md`). Permanent boot-flow gate exists (`scenes/tools/boot_check_scene.tscn`, wired into `tools/check.sh`).
+Launch, RPC-on-self, StyleBoxFlat scenes, NoiseLabel tscn, FadeTransition pause freeze, death signal, hiding_spot restore, medkit/battery, monster vision vs visibility, doors/keys API, HUD badge refresh + bar overlap, blackout, save-slot district parity, autosave order, ScreenShake, finale reachability, tutorial CanvasLayer, emissive windows guard, double photo-mode, save/load round-trip. AppLovin MAX ad SDK is integrated in `..\refs\` and wired behind `AdService` (real SDK key still needed, see `docs/store/HUMAN_CHECKLIST.md`). Permanent boot-flow gate exists (`scenes/tools/boot_check_scene.tscn`, wired into `tools/check.sh`). The owner's plan shader (module 1.1, wet asphalt with puddles) lives verbatim at `shaders/wet_asphalt_puddles.gdshader` on the asphalt (`scripts/world/street_builder.gd` `_surface`, SOV1); keep it where the plan put it.
 
 ## Corrected this session (TRUTH WAVE) — was claimed done, actually wasn't
 `reset_all()`/"XP reset" was listed as done but `SaveSystem.reset_all()` never actually called `XpManager.reset()` or `SkillTreeManager.reset()` — a fresh New Game kept the previous playthrough's level/XP/skill points on the same save profile. Fixed; see `docs/KNOWN_ISSUES.md` and `docs/PLANS.md` for the full trace. Lesson: an "already done" claim here should point at a real test/gate, not just a past commit message.

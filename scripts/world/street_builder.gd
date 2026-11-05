@@ -43,6 +43,7 @@ const GENERATOR_FUEL: StringName = &"gas_canister"
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
+const _PUDDLES := preload("res://shaders/wet_asphalt_puddles.gdshader")
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
@@ -81,7 +82,7 @@ func _make_marking_mesh() -> BoxMesh:
 func _make_curb_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, 0.17, 0.22)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
 	return m
 
 func _make_damage_mesh() -> BoxMesh:
@@ -93,6 +94,15 @@ func _make_damage_mesh() -> BoxMesh:
 ## One surface of the street: its texture (none for the paint), its mean albedo in linear light, the texture's mean luminance and the kind of wear it carries (`surface` of the road shader: 1 slabs, 2 asphalt); `detail` follows the graphics tier.
 func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
+	if surface > 1.5:
+		# the owner's plan, module 1.1: the asphalt wears the wet-asphalt shader with its puddles; the tint over the texture's
+		# mean luminance keeps the old brightness of the dry asphalt (the uniform is an sRGB colour)
+		mat.shader = _PUDDLES
+		mat.set_shader_parameter("albedo_tex", load(texture_path))
+		mat.set_shader_parameter("normal_tex", load("res://assets/textures/pbr/wet_asphalt_normal.png"))
+		mat.set_shader_parameter("roughness_tex", load("res://assets/textures/pbr/wet_asphalt_rough.png"))
+		mat.set_shader_parameter("asphalt_color", Color(tint.x / mean_lum, tint.y / mean_lum, tint.z / mean_lum).linear_to_srgb())
+		return mat
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):
 		mat.set_shader_parameter("tex", load(texture_path))
@@ -204,10 +214,13 @@ func _fill_sidewalks() -> void:
 					t.origin = pos + (Vector3(0, 0, off) if r.dir == "h" else Vector3(off, 0, 0))
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
-					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					if s == 0:
 						_create_collision(t.origin, r, steps, &"concrete")
+					if _on_crossing(s):
+						continue
+					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					idx += 1
+	_sidewalk_mm.multimesh.visible_instance_count = idx
 
 ## Разметка идёт со своим шагом, а не с шагом плитки дороги, и лежит над дорогой на MARKING_LIFT.
 func marking_origin(road: Dictionary, step: int) -> Vector3:
@@ -229,15 +242,19 @@ func _fill_markings() -> void:
 			_marking_mm.multimesh.set_instance_transform(idx, t)
 			idx += 1
 
+## Whether the tile of step `s` lies on the carriageway of a cross street (one every grid_spacing along a road): the walk and the kerb stop there, so no tile lies flush on the asphalt of the crossing.
+func _on_crossing(s: int) -> bool:
+	var along: float = float(s) * tile_size - (LEGACY_HALF_TILE - tile_size * 0.5)
+	return absf(along - roundf(along / grid_spacing) * grid_spacing) < road_width * 0.5 + tile_size * 0.5
+
 ## Raised kerbs separate the road from the walk on every block edge; the gaps at crossings read as
 ## dropped kerbs and keep the old visual road grid from looking like one poured slab.
 func _fill_curbs() -> void:
 	var xforms: Array[Transform3D] = []
-	var crossing := maxi(1, int(round(grid_spacing / tile_size)))
 	for r in roads:
 		var steps := int(r.length / tile_size)
 		for s in range(steps):
-			if s % crossing == 0:
+			if _on_crossing(s):
 				continue
 			var pos: Vector3 = road_step_pos(r, s)
 			for side in [-1.0, 1.0]:

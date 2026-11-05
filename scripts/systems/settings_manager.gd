@@ -4,8 +4,10 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## строит список по SUPPORTED, а индекс выбранного пункта хранит в
 ## _settings["language"], который здесь ищется через LANGUAGES.find(). При разном
 ## порядке сохранённый индекс указывал на чужой язык.
-const LANGUAGES := ["ru", "en", "es", "de", "fr", "pt_BR"]
+const LANGUAGES := ["ru", "en"]
 const CFG_PATH := "user://settings.cfg"
+const _FLOAT_RANGES: Dictionary = {"sensitivity": Vector2(0.05, 4.0), "deadzone": Vector2(0.0, 0.9), "hud_opacity": Vector2(0.0, 1.0), "button_size": Vector2(0.5, 2.0), "render_scale": Vector2(0.5, 1.0), "draw_distance": Vector2(10.0, 500.0), "touch_sensitivity": Vector2(0.5, 2.0)}
+const _INT_RANGES: Dictionary = {"crouch_input": Vector2i(0, 2), "colorblind": Vector2i(0, 3), "text_size": Vector2i(0, 2), "shadows": Vector2i(0, 2), "textures": Vector2i(0, 2), "effects": Vector2i(0, 2)}
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
 
@@ -81,13 +83,15 @@ func _load_defaults() -> void:
 	_settings["hud_opacity"] = 1.0
 	_settings["button_size"] = 1.0
 	_settings["show_minimap"] = false
-	_settings["graphics_tier"] = 1 if OS.has_feature("mobile") else 2  # Medium on a fresh phone, High on desktop
-	_settings["resolution"] = 1     # 1080p
+	var tier: int = 1 if OS.has_feature("mobile") else 2  # Medium on a fresh phone, High on desktop: the tier and the settings it sets agree
+	var preset: Dictionary = GRAPHICS_TIERS[tier]
+	_settings["graphics_tier"] = tier
+	_settings["resolution"] = preset["resolution"]
 	_settings["vsync"] = true
-	_settings["fps_cap"] = 1        # 60
-	_settings["shadows"] = 2        # High
-	_settings["textures"] = 2       # High
-	_settings["effects"] = 2        # High
+	_settings["fps_cap"] = preset["fps"]
+	_settings["shadows"] = preset["shadows"]
+	_settings["textures"] = preset["textures"]
+	_settings["effects"] = preset["effects"]
 	_settings["draw_distance"] = 70.0
 	_settings["master"] = 0.8
 	_settings["music"] = 0.7
@@ -648,22 +652,54 @@ func to_dict() -> Dictionary:
 	return {"volumes": _volumes.duplicate(), "language": get_language(), "settings": _settings.duplicate()}
 
 func from_dict(d: Dictionary) -> void:
-	var v: Dictionary = d.get("volumes", {}) as Dictionary
+	var raw_volumes: Variant = d.get("volumes", {})
+	var v: Dictionary = raw_volumes if raw_volumes is Dictionary else {}
 	for b in BUSES:
-		_volumes[b] = clampf(float(v.get(b, 1.0)), 0.0, 1.0)
+		var level: Variant = v.get(b, 1.0)
+		_volumes[b] = clampf(float(level), 0.0, 1.0) if (level is float or level is int) and is_finite(float(level)) else 1.0
 		_apply(b)
 	# Only override the live language if the payload actually carries one —
 	# an older save (or a game save missing the field) must not silently
 	# reset a player's chosen language to English.
 	if d.has("language") and String(d["language"]) != "":
-		_language = String(d["language"])
+		var lang := String(d["language"])
+		# A language the game no longer ships (de, es, fr, pt_BR until 2026-11-05) reads as English.
+		_language = lang if lang in LANGUAGES else "en"
 		_apply_locale(_language)
-	var s: Dictionary = d.get("settings", {}) as Dictionary
+	var raw_settings: Variant = d.get("settings", {})
+	var s: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	var before: Dictionary = _settings.duplicate()
 	for key in s:
 		_settings[key] = s[key]
+	# A stored number outside its setter's range is clamped; a value that is not a finite number keeps the value it replaced.
+	for key: String in _FLOAT_RANGES:
+		if _settings.has(key):
+			var num: Variant = _settings[key]
+			if (num is float or num is int) and is_finite(float(num)):
+				var bounds: Vector2 = _FLOAT_RANGES[key]
+				_settings[key] = clampf(float(num), bounds.x, bounds.y)
+			elif before.has(key):
+				_settings[key] = before[key]
+			else:
+				_settings.erase(key)
+	for key: String in _INT_RANGES:
+		if _settings.has(key):
+			var num: Variant = _settings[key]
+			if (num is float or num is int) and is_finite(float(num)):
+				var bounds: Vector2i = _INT_RANGES[key]
+				_settings[key] = clampi(int(num), bounds.x, bounds.y)
+			elif before.has(key):
+				_settings[key] = before[key]
+			else:
+				_settings.erase(key)
 	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
+	# The button size also keeps the touch floor of its setter.
+	if _settings.has("button_size"):
+		_settings["button_size"] = maxf(float(_settings["button_size"]), UiScale.min_touch() / 72.0)
 	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
 	_settings["hardcore"] = _settings.get("hardcore", false) is bool and _settings["hardcore"]
+	# The stored index of the language list could point past the two languages left: it follows the live language.
+	_settings["language"] = maxi(LANGUAGES.find(get_language()), 0)
 	_InputRemap.apply(_settings.get("keybinds", {}) as Dictionary)
 	# Re-apply accessibility effects from the loaded config (deferred: the
 	# root theme / enemy nodes may not exist yet at load time).

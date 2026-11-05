@@ -17,7 +17,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LOCALES = ["en", "de", "es", "fr", "pt_BR", "ru"]
+LOCALES = ["en", "ru"]
 SCRIPT = {"ru": r"[Ѐ-ӿ]"}
 SPEC = re.compile(r"%[-+0#]*\d*(?:\.\d+)?[sdifxXc]|\{\w+\}")
 SPACE_FLAG = re.compile(r"%[ ]\w")
@@ -120,9 +120,7 @@ def findings(data, calls, allowed):
 def main(argv):
     if "--demo" in argv:
         data = {loc: {"A": "x %s y", "B": "z"} for loc in LOCALES}
-        data["de"]["A"] = "x y"
-        data["fr"]["B"] = "zz"
-        data["es"]["B"] = "z"
+        data["ru"]["A"] = "x y"
         calls = [("scripts/a.gd", 3, "tf", "A", 2), ("scripts/a.gd", 4, "t", "NOPE", None)]
         bad = findings(data, calls, {"latin_ok": [], "cognates": {}})
         kinds = {b.split(" ", 1)[0] for b in bad}

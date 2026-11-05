@@ -35,7 +35,7 @@
       "ref": {"kind": "ending", "id": "darkness", "code_id": "dark"},
       "trigger": "EndingsManager.ending_reached(dark) — content id 'darkness' maps to CODE ending id 'dark' (ACH_15 Darkness)",
       "i18n_key": "CAPTION_MOMENT_ENDING_DARKNESS",
-      "en": {"text": "Last night. I blew the lamps out myself. Forgive me. It was the only way to starve it."}
+      "en": {"text": "Last night. The lamps went out and I could not relight them. Forgive me."}
     },
     {
       "id": "moment_ng_plus",
@@ -70,7 +70,7 @@
       "ref": {"kind": "lore_note", "id": "doc_blackout_news", "code_id": "doc_blackout_news"},
       "trigger": "EventBus.document_unlocked(doc_blackout_news)",
       "i18n_key": "CAPTION_MOMENT_DOC_BLACKOUT_NEWS",
-      "en": {"text": "The last paper says one day. It has been years. Somebody tore the date out — hope or mercy."}
+      "en": {"text": "The last paper says one day. It has been months. Somebody tore the date out — hope or mercy."}
     },
     {
       "id": "moment_doc_first_death",
@@ -156,7 +156,7 @@
       "ref": {"kind": "district", "id": "substation"},
       "title_key": "DISTRICT_NAME_SUBSTATION",
       "i18n_key": "CAPTION_GALLERY_SUBSTATION",
-      "en": {"text": "Marat walked in here and never walked out. Mind the hum."}
+      "en": {"text": "Marat walked in here and kept walking east. Mind the hum."}
     },
     {
       "id": "gallery_power_station",

@@ -20,12 +20,16 @@ static func install(screen: Control, column: VBoxContainer) -> void:
 	fit(screen, column)
 
 static func fit(screen: Control, column: VBoxContainer) -> void:
+	# Localization can queue a layout just before the router removes this screen.
+	if not screen.is_inside_tree() or screen.is_queued_for_deletion():
+		return
 	var viewport: Vector2 = screen.get_viewport_rect().size
 	var scale: float = clampf(viewport.y / 900.0, 0.65, 1.15)
 	var text_scale: float = SettingsManager.TEXT_SCALE[clampi(int(SettingsManager.get_setting("text_size", 1)), 0, 2)]
 	var inset: Vector4 = UiScale.insets(viewport)
-	var margin: float = maxf(24.0, viewport.x * 0.055) + inset.x
-	var usable_width: float = viewport.x - inset.x - inset.z - margin * 2.0
+	var edge: float = maxf(24.0, viewport.x * 0.055)
+	var margin: float = edge + inset.x
+	var usable_width: float = viewport.x - margin - edge - inset.z
 	var usable_height: float = viewport.y - inset.y - inset.w - 40.0
 	var width: float = minf(560.0 * scale, usable_width)
 	column.set_anchors_preset(Control.PRESET_TOP_LEFT)

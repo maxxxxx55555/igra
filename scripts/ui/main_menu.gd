@@ -170,6 +170,7 @@ func _install_daily_card(vb: VBoxContainer) -> void:
 		var card := VBoxContainer.new()
 		card.name = "DailyCard"
 		card.add_theme_constant_override("separation", 2)
+		card.draw.connect(func() -> void: card.draw_rect(Rect2(Vector2.ZERO, card.size), Color(ThemeProvider.COLOR_BG_DARK, 0.6)))
 		vb.add_child(card)
 		vb.move_child(card, 1)
 		var title := Label.new()
@@ -180,12 +181,12 @@ func _install_daily_card(vb: VBoxContainer) -> void:
 		var body := Label.new()
 		body.name = "Body"
 		body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		body.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		body.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		card.add_child(body)
 		var streak := Label.new()
 		streak.name = "Streak"
 		streak.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		streak.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		streak.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		card.add_child(streak)
 		for line in [title, body, streak]:
 			_legible(line)

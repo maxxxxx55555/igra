@@ -39,6 +39,8 @@ const FOG_AT: Array[Vector3] = [Vector3(-14.0, 0.0, -10.0), Vector3(12.0, 0.0, 2
 ## Where the bench stands from the power switch (the switch is at the corner of the middle block and the next).
 const REST_FROM_SWITCH := Vector3(6.0, 0.0, 5.0)
 const BRASS := Color("#c9a24a")
+## The sodium of the lamp light itself (the brass above stays the colour of the pools and the glow).
+const SODIUM := Color("#ffb36a")
 const LITTER_COLORS: Array[Color] = [Color(0.22, 0.23, 0.26), Color(0.30, 0.29, 0.26), Color(0.20, 0.16, 0.09), Color(0.09, 0.09, 0.10)]
 const LEAF_COLORS: Array[Color] = [Color(0.17, 0.15, 0.08), Color(0.12, 0.14, 0.08), Color(0.20, 0.13, 0.07)]
 const CRATE_COLOR := Color(0.22, 0.17, 0.11)
@@ -397,7 +399,7 @@ func _add_rest_spot() -> void:
 	lantern.add_child(rest_pool)
 	var lamp := OmniLight3D.new()
 	lamp.name = "RestLight"
-	lamp.light_color = BRASS
+	lamp.light_color = SODIUM
 	lamp.light_energy = LAMP_ENERGY
 	lamp.omni_range = LAMP_RANGE_M
 	lamp.shadow_enabled = false

@@ -36,7 +36,7 @@
       "reveal": { "district": "suburbs", "min_stage": 1 },
       "summary_en": "Ad-hoc watch rosters, door notes, shared canned food. The human layer of the first two districts: people keeping small lights and smaller kindnesses alive against the dark.",
       "i18n_keys": { "title": "WORLD_FACTION_WATCH_TITLE", "text": "WORLD_FACTION_WATCH_TEXT" },
-      "en": { "title": "Neighborhood Street Watch", "text": "Do not knock. We don't open doors after sunset anymore. Take the canned food from the step." }
+      "en": { "title": "Neighborhood Street Watch", "text": "Do not knock. We don't open doors after dark anymore. Take the canned food from the step." }
     },
     {
       "id": "faction_keepers",
