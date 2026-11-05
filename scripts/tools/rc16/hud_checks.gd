@@ -135,7 +135,8 @@ static func _map_charts_only_restored_light(r: Node) -> void:
 	var forged: bool = Cartography.charted_cells("suburbs").is_empty() and Cartography.charted_cells("nowhere").is_empty() and Cartography.charted_cells("park").size() == 1
 	var sb := StreetBuilder.new()
 	sb.grid_spacing = 40.0
-	var block: bool = map.is_block(sb, Cartography.cell_of(Vector3(40.0, 0.0, 40.0))) and not map.is_block(sb, Cartography.cell_of(Vector3(20.0, 0.0, 0.0)))
+	var ring: float = 1.5 * sb.grid_spacing + CitySkyline.RING_GAP
+	var block: bool = map.is_block(sb, Cartography.cell_of(Vector3(ring + 3.0, 0.0, 0.0))) and not map.is_block(sb, Cartography.cell_of(Vector3(40.0, 0.0, 40.0)))
 	sb.free()
 	Cartography.reset()
 	r._ok(fresh and unlit and kept and other_layout and forged and block,

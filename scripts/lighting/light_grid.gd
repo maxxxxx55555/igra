@@ -8,6 +8,8 @@ const CELL_SIZE: float = 4.0
 
 var _lights: Dictionary = {}
 var _grid: Dictionary = {}
+## Lamps register in batches (a district's 48 at a stage change): the grid is rebuilt once, on the next frame or query.
+var _dirty: bool = false
 var _flashlights: Array[SpotLight3D] = []
 
 func _ready() -> void:
@@ -35,15 +37,14 @@ func register_light(n: Node3D) -> void:
 		"intensity": _intensity_of(n),
 	}
 	_lights[n.get_instance_id()] = data
-	_rebuild_grid()
+	_dirty = true
 
 func unregister_light(n: Node3D) -> void:
 	var id := n.get_instance_id()
-	if _lights.has(id):
-		_lights.erase(id)
 	if n is SpotLight3D:
 		_flashlights.erase(n)
-	_rebuild_grid()
+	if _lights.erase(id):
+		_dirty = true
 
 func _range_of(n: Node3D) -> float:
 	if n is OmniLight3D:
@@ -60,7 +61,7 @@ func _intensity_of(n: Node3D) -> float:
 	return 1.0
 
 func _process(_delta: float) -> void:
-	var dirty: bool = false
+	var dirty: bool = _dirty
 	for id in _lights.keys():
 		var data: Dictionary = _lights[id]
 		# a freed light is dropped before any cast: casting a freed object is an engine error
@@ -73,6 +74,7 @@ func _process(_delta: float) -> void:
 		_rebuild_grid()
 
 func _rebuild_grid() -> void:
+	_dirty = false
 	_grid.clear()
 	var cs: float = CELL_SIZE
 	for id in _lights.keys():
@@ -98,6 +100,8 @@ func _rebuild_grid() -> void:
 	grid_rebuilt.emit()
 
 func cell_brightness(world_pos: Vector3) -> float:
+	if _dirty:
+		_rebuild_grid()
 	var key: Vector2i = Vector2i(int(floor(world_pos.x / CELL_SIZE)), int(floor(world_pos.z / CELL_SIZE)))
 	return float(_grid.get(key, 0.0))
 

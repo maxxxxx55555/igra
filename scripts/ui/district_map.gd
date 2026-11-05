@@ -85,7 +85,7 @@ func _zoom_by(factor: float) -> void:
 	_canvas.queue_redraw()
 
 func _on_canvas_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and (event as InputEventMouseMotion).button_mask & MOUSE_BUTTON_MASK_LEFT:
+	if event is InputEventMouseMotion and (event as InputEventMouseMotion).button_mask & MOUSE_BUTTON_MASK_LEFT and event.device != InputEvent.DEVICE_ID_EMULATION:
 		_pan += (event as InputEventMouseMotion).relative
 		_canvas.queue_redraw()
 	elif event is InputEventScreenDrag:
@@ -122,16 +122,10 @@ func _draw_canvas() -> void:
 			var b := a + (Vector2(0, px) if side.x != 0 else Vector2(px, 0))
 			_canvas.draw_line(a, b, BUILDING_EDGE, maxf(1.0, px * 0.12))
 
-## Whether a cell's centre lies inside one of the 3 by 3 building blocks of the district's street grid.
+## Whether a cell's centre lies in the ring of buildings round the district (the 3 by 3 lots inside it are open, walkable ground).
 static func is_block(sb: Node, cell: Vector2i) -> bool:
-	var g: float = float(sb.get("grid_spacing"))
-	var inner: float = g * 0.5 - float(sb.get("road_width")) * 0.5 - float(sb.get("sidewalk_width"))
 	var at := (Vector2(cell) + Vector2(0.5, 0.5)) * Cartography.CELL
-	for cx: int in [-1, 0, 1]:
-		for cz: int in [-1, 0, 1]:
-			if absf(at.x - cx * g) <= inner and absf(at.y - cz * g) <= inner:
-				return true
-	return false
+	return maxf(absf(at.x), absf(at.y)) > 1.5 * float(sb.get("grid_spacing")) + CitySkyline.RING_GAP
 
 func _open_travel() -> void:
 	UIManager.close(&"district_map")

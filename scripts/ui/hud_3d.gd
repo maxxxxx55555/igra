@@ -1129,7 +1129,11 @@ func _process_noise_vignette(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
-	_show_enemy_bar(monster_id, -1.0)
+	# a monster charging out of the dark is not named: only one the player can see gets the bar (the owner's rules)
+	for e: Node in get_tree().get_nodes_in_group("enemies"):
+		if e.get("monster_id") == monster_id and e.has_method("is_perceptible") and e.is_perceptible():
+			_show_enemy_bar(monster_id, -1.0)
+			return
 
 func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 	_show_enemy_bar(monster_id, ratio)
@@ -1723,9 +1727,9 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 	var melee := mk.call("BtnMelee", LocalizationManager.t("TOUCH_MELEE"), send.call(&"melee")) as Button
 	melee.add_theme_font_size_override("font_size", 16)
 	anchored.call(melee, 124.0, 308.0)
-	var uv := mk.call("BtnUV", "UV", send.call(&"uv_toggle")) as Button
+	var uv := mk.call("BtnUV", LocalizationManager.t("TOUCH_UV"), send.call(&"uv_toggle")) as Button
 	anchored.call(uv, 200.0, 308.0)
-	var dodge := mk.call("BtnDodge", "", func() -> void: isv.request_dodge(isv.get("_joy_dir"))) as Button
+	var dodge := mk.call("BtnDodge", "", func() -> void: isv.request_dodge(isv.get_move_dir())) as Button
 	dodge.icon = preload("res://assets/textures/ui/btn_dodge_128.png")
 	anchored.call(dodge, 276.0, 308.0)
 	var bag := mk.call("BtnInventory", "", func() -> void:

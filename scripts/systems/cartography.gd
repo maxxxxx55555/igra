@@ -8,8 +8,6 @@ extends Node
 const CELL: float = 2.0
 ## How far a lit street can be made out from where the player stands.
 const SEE_RANGE: float = 28.0
-## Half the angle the player looks across: a cell behind the player is not seen.
-const VIEW_HALF_ANGLE: float = 1.1345  # 65 degrees
 const TICK: float = 0.5
 ## Bounded sampling: at most this many cells are tested (two rays each) per pass.
 const CELLS_PER_TICK: int = 48
@@ -23,6 +21,7 @@ const GROUND_LIFT: float = 0.15
 
 var _charted: Dictionary = {}  # district id (String) -> {Vector2i: true}
 var _timer: float = 0.0
+var _next_lamp: int = 0
 
 func _process(delta: float) -> void:
 	_timer -= delta
@@ -46,19 +45,26 @@ func survey() -> void:
 	var space := cam.get_world_3d().direct_space_state
 	var eye := cam.global_position
 	var ahead := -cam.global_transform.basis.z
+	var lamps := get_tree().get_nodes_in_group(&"streetlights")
 	var budget := CELLS_PER_TICK
-	for lamp: Node in get_tree().get_nodes_in_group(&"streetlights"):
-		# only a lamp the player's restoration powered: an authored always-on lamp is not the player's doing
-		if budget <= 0 or not bool(lamp.get("_on")) or bool(lamp.get("force_on")):
+	# the lamps take turns, so the cells a wall hides from one lamp do not starve the others
+	for k: int in lamps.size():
+		var lamp := lamps[(_next_lamp + k) % lamps.size()] as Node3D
+		if budget <= 0:
+			break
+		# only a lamp the player's restoration powered (an authored always-on lamp is not the player's doing); the light
+		# budget may hide the light itself far from the camera, so the lamp's own power state decides, not the light's
+		if lamp == null or not lamp.is_visible_in_tree() or not bool(lamp.get("_on")) or bool(lamp.get("force_on")):
 			continue
 		var glow := lamp.get_node_or_null("Glow") as OmniLight3D
-		if glow == null or not glow.is_visible_in_tree() or glow.light_energy <= 0.01:
+		if glow == null or glow.light_energy <= 0.01:
 			continue
 		var head := glow.global_position
-		var reach := glow.omni_range
-		if Vector2(head.x - eye.x, head.z - eye.z).length() > SEE_RANGE + reach:
+		var reach := _ground_reach(lamp, glow, head.y - origin.y)
+		var foot := Vector3(head.x, origin.y, head.z)
+		if Vector2(foot.x - eye.x, foot.z - eye.z).length() > SEE_RANGE + reach or ahead.dot(foot - eye) < -reach:
 			continue
-		var centre := cell_of(head - origin)
+		var centre := cell_of(foot - origin)
 		var span := ceili(reach / CELL)
 		for dx: int in range(-span, span + 1):
 			for dz: int in range(-span, span + 1):
@@ -66,14 +72,23 @@ func survey() -> void:
 				if budget <= 0 or cells.has(cell):
 					continue
 				var ground := origin + Vector3((cell.x + 0.5) * CELL, GROUND_LIFT, (cell.y + 0.5) * CELL)
-				if Vector2(ground.x - head.x, ground.z - head.z).length() > reach:
+				if Vector2(ground.x - foot.x, ground.z - foot.z).length() > reach:
 					continue
-				var to_cell := ground - eye
-				if to_cell.length() > SEE_RANGE or ahead.angle_to(to_cell) > VIEW_HALF_ANGLE:
+				if eye.distance_to(ground) > SEE_RANGE or not cam.is_position_in_frustum(ground):
 					continue
 				budget -= 1
 				if _clear(space, head, ground) and _clear(space, eye, ground):
 					cells[cell] = true
+	_next_lamp = (_next_lamp + 1) % maxi(lamps.size(), 1)
+
+## How far from its foot a lamp lights the ground: where its glow's sphere meets the ground, or its spot's pool, whichever is
+## wider (the glow hangs about 4.2 m up, so its range alone overstated the pool).
+func _ground_reach(lamp: Node, glow: OmniLight3D, height: float) -> float:
+	var reach := sqrt(maxf(glow.omni_range * glow.omni_range - height * height, 0.0))
+	var spot := lamp.get_node_or_null("SpotLight") as SpotLight3D
+	if spot != null and spot.light_energy > 0.01:
+		reach = maxf(reach, height * tan(deg_to_rad(spot.spot_angle)))
+	return reach
 
 func _clear(space: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> bool:
 	return space.intersect_ray(PhysicsRayQueryParameters3D.create(from, to)).is_empty()
@@ -106,7 +121,8 @@ func to_dict() -> Dictionary:
 ## only the map's memory is dropped (never the inventory, progression or quests).
 func from_dict(data: Variant) -> void:
 	_charted.clear()
-	if not (data is Dictionary) or int(data.get("rev", -1)) != LAYOUT_REV or not (data.get("districts") is Dictionary):
+	var rev: Variant = data.get("rev") if data is Dictionary else null
+	if not (rev is int or rev is float) or int(rev) != LAYOUT_REV or not (data.get("districts") is Dictionary):
 		return
 	var pg := get_node_or_null("/root/PowerGrid")
 	for district: Variant in data["districts"]:
