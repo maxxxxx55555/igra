@@ -504,3 +504,5 @@ n	utc	head	id	exit	command
 503	20261105T101408Z	7ef8de0a	s39_perf5_7ef8de0a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
 504	20261105T101508Z	7ef8de0a	s39_touch5_7ef8de0a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
 505	20261105T101522Z	7ef8de0a	s39_audio5_7ef8de0a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+506	20261105T102300Z	1f9c9f04	s39_store11_1f9c9f0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+507	20261105T102526Z	03e4d3b0	s39_store12_03e4d3b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
