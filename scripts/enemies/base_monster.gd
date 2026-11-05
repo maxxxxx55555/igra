@@ -574,6 +574,8 @@ func _can_see_player() -> bool:
 
 ## GDD §7 / S02: without a light in a dark district a monster notices the player from 3 m at most.
 const DARK_SIGHT_CAP: float = 3.0
+## The light grid's brightness that counts as standing in a lamp's pool: a dim lamp of the partial stage still lights its own cell.
+const LIT_POOL: float = 0.12
 
 ## Vision and peripheral range after the player's visibility and the low_profile skill.
 func _sight_ranges() -> Vector2:
@@ -594,7 +596,9 @@ func _sight_ranges() -> Vector2:
 		var vis: float = player_ref.get_visibility_scale()
 		vrange *= vis
 		prange *= vis
-		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS:
+		# the dark hides a player whose own light is off, but not one who stands in the pool of a lit lamp
+		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS \
+				and not LightGrid.is_lit(player_ref.global_position, LIT_POOL):
 			vrange = minf(vrange, DARK_SIGHT_CAP)
 			prange = minf(prange, DARK_SIGHT_CAP)
 	return Vector2(vrange, prange)
