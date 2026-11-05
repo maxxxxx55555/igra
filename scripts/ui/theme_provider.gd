@@ -6,17 +6,17 @@
 class_name ThemeProvider
 extends RefCounted
 
-# Shared reference palette: inventory, menus and HUD use the same token values.
-const COLOR_BG_DARK   := Color("#080E10")   # bg-deep (owner canon 2026-10-29, docs/STYLE_GUIDE.md section 8)
-const COLOR_BG_PANEL  := Color("#121A1B")   # panel
-const COLOR_BG_PANEL2 := Color("#1C2423")   # panel-hover (чуть светлее)
-const COLOR_BORDER    := Color("#655332")   # panel-edge: the 1 px bronze of the canon
-const COLOR_AMBER     := Color("#C58A2D")   # brass — акцент, активное
-const COLOR_AMBER_DIM := Color("#8E6B35")   # brass-dim — неактивное
-const COLOR_AMBER_HI  := Color("#D7CCB6")   # bone — заголовки
-const COLOR_TEXT      := Color("#D7CCB6")   # bone-text
-const COLOR_TEXT_DIM  := Color("#A89F8D")   # steel-text
-const COLOR_DANGER    := Color("#A43C2B")   # ember
+# One palette (owner canon 2026-10-29): inventory, shop, menus and HUD read these tokens; InvKit takes them too.
+const COLOR_BG_DARK   := Color("#060f13")   # bg-deep (owner canon 2026-10-29, docs/STYLE_GUIDE.md section 8)
+const COLOR_BG_PANEL  := Color("#0f1314")   # panel
+const COLOR_BG_PANEL2 := Color("#1c1e1d")   # panel-hover (чуть светлее)
+const COLOR_BORDER    := Color("#5a4a2a")   # panel-edge: the 1 px bronze of the canon
+const COLOR_AMBER     := Color("#c9a24a")   # brass — акцент, активное
+const COLOR_AMBER_DIM := Color("#8a7338")   # brass-dim — неактивное
+const COLOR_AMBER_HI  := Color("#d8d5cc")   # bone — заголовки
+const COLOR_TEXT      := Color("#d8d5cc")   # bone-text
+const COLOR_TEXT_DIM  := Color("#8a8a85")   # steel-text
+const COLOR_DANGER    := Color("#c0392b")   # ember
 
 const FONT_SIZE_BODY: int = 16
 const SCROLLBAR_MARGIN: float = 5.0
