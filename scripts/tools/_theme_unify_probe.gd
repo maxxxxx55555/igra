@@ -1,8 +1,7 @@
 extends Node
-## THEME UNIFICATION P0.4 proof: instantiates the real main_menu.tscn and
-## hud_3d.tscn (no test doubles) and reads live, inherited styleboxes on
-## real Button/Panel nodes - proves the chrome kit is now actually visible
-## on screens that previously fell back to a different theme.
+## THEME UNIFICATION proof: instantiates the real main_menu.tscn and hud_3d.tscn (no test doubles) and reads live,
+## inherited styleboxes on real Button/Panel nodes. Since 2026-11-05 the buttons are the flat Plate A kit of the owner's
+## visual recovery brief (square corners, a 1 px brass edge), the same on every screen, instead of the textured chamfer kit.
 
 func _ready() -> void:
 	call_deferred("_run")
@@ -15,8 +14,8 @@ func _run() -> void:
 	var btn: Button = menu.get_node("VBox/Play")
 	var sb := btn.get_theme_stylebox("normal", "Button")
 	print("[theme-unify] main_menu Play button stylebox = ", sb.get_class())
-	if sb is StyleBoxTexture:
-		print("[theme-unify] texture = ", (sb as StyleBoxTexture).texture.resource_path)
+	if _plate_a(sb):
+		print("[theme-unify] flat Plate A button, edge ", (sb as StyleBoxFlat).border_color.to_html(false))
 	else:
 		bad += 1
 	menu.queue_free()
@@ -27,8 +26,8 @@ func _run() -> void:
 	var pause_btn: Button = hud.get_node("BtnPause")
 	var sb2 := pause_btn.get_theme_stylebox("normal", "Button")
 	print("[theme-unify] hud_3d BtnPause stylebox = ", sb2.get_class())
-	if sb2 is StyleBoxTexture:
-		print("[theme-unify] texture = ", (sb2 as StyleBoxTexture).texture.resource_path)
+	if _plate_a(sb2):
+		print("[theme-unify] flat Plate A button, edge ", (sb2 as StyleBoxFlat).border_color.to_html(false))
 	else:
 		bad += 1
 	var slot0: Panel = hud.find_child("Slot0", true, false) as Panel
@@ -45,3 +44,7 @@ func _run() -> void:
 
 	print("[theme-unify] DONE bad=", bad)
 	get_tree().quit(bad)
+
+func _plate_a(sb: StyleBox) -> bool:
+	var flat := sb as StyleBoxFlat
+	return flat != null and flat.corner_radius_top_left == 0 and flat.border_width_top > 0
