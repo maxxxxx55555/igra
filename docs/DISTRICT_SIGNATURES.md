@@ -42,7 +42,7 @@ Sources: `PARTS` (`scripts/world/district_landmark.gd:24`), `PALETTES` (`scripts
 - **S-1, the three pairs of the mood** (suburbs and residential, warehouses and industrial, substation and power_station): a per-district grade so that the pair
   differs at a glance. Spec, each a value of `THEMES` and no code: residential ambient `#16151c` with the accent `#e9b36a` (a violet-grey room light against the
   suburbs' green); industrial ambient `#1c130e` (a soot-orange cast against the warehouses' brown); power_station ambient `#14181c` (a blue steel against the
-  substation's neutral grey). It is not changed in this pass because the accent is also the colour of the district on the map (`get_district_color`, `scripts/ui/minimap.gd:295`),
+  substation's neutral grey). It is not changed in this pass because the accent is also the colour of the district on the city minimap (`get_district_color`; the minimap was removed by the owner's map rules of 2026-11-05),
   and the owner should see the three pairs on a phone before the map changes colour.
 - **S-2, god rays through windows.** A shaft of additive quads in front of every lit window is a draw-call and a fill-rate cost on a phone (`docs/VFX_BUDGET.md`);
   the volumetric fog of the engine is not available in the compatibility renderer the game ships with. A baked shaft per landmark (3 quads) is the cheapest first step: owner decision.

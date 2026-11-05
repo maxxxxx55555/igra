@@ -101,7 +101,7 @@ is the quiet machine, not the change.
 | 17 | Shader warm-up | — | None: no warm-up or precompile code anywhere. Compatibility compiles each material variant on first use | code scan | STATIC; the first-use hitch is NEEDS-GODOT-RECONFIRM |
 | 18 | Polygons per district | < 50K | **1.34 M** primitives per frame in D1 and in D11 (rc14, §0): about 27x the budget | perf probe (§0) | MEASURED rc14, **OVER** |
 | 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:276-277`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:252-254`) | project.godot, player | CONFIG |
-| 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:282`) | project.godot | CONFIG |
+| 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:283`) | project.godot | CONFIG |
 
 ## 2. Re-measure list for Local, in this order
 
