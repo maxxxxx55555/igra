@@ -475,3 +475,4 @@ n	utc	head	id	exit	command
 474	20261105T011807Z	edfeea87	s39_winboot2_fresh_edfeea87	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
 475	20261105T070213Z	76e9019a	s39_all5_76e9019a	3	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 476	20261105T071846Z	7a7e1c33	s39_all6_7a7e1c33	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+477	20261105T073125Z	bcc45cf3	s39_store4_bcc45cf3	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
