@@ -464,3 +464,8 @@ n	utc	head	id	exit	command
 463	20261105T001337Z	93544dc3	s39_winboot_fresh_93544dc3	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
 464	20261105T003918Z	ca3703f6	s39_all4_ca3703f6	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 465	20261105T005517Z	3bee95a8	s39_store3_3bee95a8	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+466	20261105T005629Z	3b7550ad	s39_perf2_3b7550ad	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+467	20261105T005728Z	3b7550ad	s39_touch2_3b7550ad	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+468	20261105T005745Z	3b7550ad	s39_audio2_3b7550ad	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+469	20261105T005841Z	3b7550ad	s39_botC_3b7550ad	0	bash tools/qa_sim/autoplay_bot
+470	20261105T010611Z	3b7550ad	s39_botD_3b7550ad	0	bash tools/qa_sim/autoplay_bot
