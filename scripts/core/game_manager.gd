@@ -46,16 +46,26 @@ func _notification(what: int) -> void:
 		checkpoint_run()
 		_pause_with_screen()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		if is_playing():
-			_pause_with_screen()
-		elif current_state == GameState.MENU:
-			Routes.goto("res://scenes/ui/confirm_quit.tscn")
+		if current_state == GameState.MENU:
+			_menu_back()
+		else:
+			UIManager.back()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		checkpoint_run()
 		get_tree().quit()
 
+## Back in the menus: the main menu asks to quit, the quit question answers No, the other menu screens return to the main menu; the boot and loading screens ignore it.
+func _menu_back() -> void:
+	var scene: Node = get_tree().current_scene
+	var path: String = scene.scene_file_path if scene != null else ""
+	if path == Routes.MENU:
+		Routes.goto("res://scenes/ui/confirm_quit.tscn")
+	elif path in ["res://scenes/ui/confirm_quit.tscn", Routes.SETTINGS, Routes.DIFFICULTY, Routes.CREDITS]:
+		Routes.to_menu()
+
+## The onboarding overlay pauses the tree itself and unpauses it when done: a pause screen under it would be left over a running world.
 func _pause_with_screen() -> void:
-	if not is_playing():
+	if not is_playing() or get_tree().paused:
 		return
 	UIManager.open(&"pause")
 	pause_game()

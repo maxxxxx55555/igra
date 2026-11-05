@@ -471,7 +471,8 @@ func _evaluate() -> void:
 		target = Mood.BATTLE
 	elif nearest <= TENSION_RANGE:
 		target = Mood.TENSION
-	if target != mood:
+	# A revive keeps the mood but the death fade stopped the bed.
+	if target != mood or not _active.playing:
 		set_mood(target)
 
 func _nearest_enemy_distance() -> float:

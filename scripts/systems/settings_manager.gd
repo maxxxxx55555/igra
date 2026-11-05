@@ -7,7 +7,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 const LANGUAGES := ["ru", "en"]
 const CFG_PATH := "user://settings.cfg"
 const _FLOAT_RANGES: Dictionary = {"sensitivity": Vector2(0.05, 4.0), "deadzone": Vector2(0.0, 0.9), "hud_opacity": Vector2(0.0, 1.0), "button_size": Vector2(0.5, 2.0), "render_scale": Vector2(0.5, 1.0), "draw_distance": Vector2(10.0, 500.0), "touch_sensitivity": Vector2(0.5, 2.0)}
-const _INT_RANGES: Dictionary = {"crouch_input": Vector2i(0, 2), "colorblind": Vector2i(0, 3), "text_size": Vector2i(0, 2), "shadow_quality": Vector2i(0, 2), "texture_quality": Vector2i(0, 2), "effects_quality": Vector2i(0, 2)}
+const _INT_RANGES: Dictionary = {"crouch_input": Vector2i(0, 2), "colorblind": Vector2i(0, 3), "text_size": Vector2i(0, 2), "shadows": Vector2i(0, 2), "textures": Vector2i(0, 2), "effects": Vector2i(0, 2)}
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
 
@@ -693,6 +693,9 @@ func from_dict(d: Dictionary) -> void:
 			else:
 				_settings.erase(key)
 	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
+	# The button size also keeps the touch floor of its setter.
+	if _settings.has("button_size"):
+		_settings["button_size"] = maxf(float(_settings["button_size"]), UiScale.min_touch() / 72.0)
 	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
 	_settings["hardcore"] = _settings.get("hardcore", false) is bool and _settings["hardcore"]
 	# The stored index of the language list could point past the two languages left: it follows the live language.

@@ -29,7 +29,7 @@ func buy(id: StringName) -> void:
 	var item := get_item(id)
 	if item == null:
 		return
-	if item.kind != ShopItem.Kind.COIN_PACK and is_owned(id):
+	if item.kind != ShopItem.Kind.COIN_PACK and (is_owned(id) or (item.kind == ShopItem.Kind.BUNDLE and item.bundle_contents.all(is_owned))):
 		EventBus.inventory_notice.emit(LocalizationManager.t("SHOP_ALREADY_OWNED"))
 		return
 	match item.kind:
