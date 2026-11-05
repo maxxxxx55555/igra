@@ -335,7 +335,7 @@ func _build_prop_multimesh() -> void:
 		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
-			_prop_material("", Color(0.075, 0.066, 0.056), 0.95, 0.0), "TreeTrunksBatched")
+			_prop_material("", Color(0.05, 0.05, 0.055), 0.95, 0.0), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
 		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
