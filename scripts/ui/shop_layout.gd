@@ -1,10 +1,10 @@
 extends RefCounted
 ## The shop uses a reading-width panel and keeps its close action outside the catalog.
 
-const ROW := 190.0
+const ROW := 200.0
 const GAP := 12.0
 ## Header, the coin line above the grid and the Close row below it (screens.gd SHOP_TOP, SHOP_CLOSE_ZONE, card chrome).
-const CHROME := 180.0
+const CHROME := 190.0
 
 static func extent(viewport: Vector2) -> Vector2:
 	var width: float = minf(1100.0, viewport.x - 48.0)
