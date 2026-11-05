@@ -305,7 +305,11 @@ func _draw() -> void:
 			var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
 			if label != "":
 				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
-	draw_texture_rect(_ARROW_TEX, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)
+	# the arrow turns with the player's look (-Z ahead, +Z drawn downwards), as on the radar
+	var me := get_tree().get_first_node_in_group("player") as Node3D
+	draw_set_transform(center, -me.rotation.y if me != null else 0.0)
+	draw_texture_rect(_ARROW_TEX, Rect2(Vector2(-8, -8), Vector2(16, 16)), false)
+	draw_set_transform(Vector2.ZERO)
 	for m in _markers:
 		var mp := center + (m - pp) * SCALE
 		# Off-disc markers are clamped to the rim instead of being dropped: the

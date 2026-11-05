@@ -70,7 +70,8 @@ const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
 const BALCONIES := {&"suburbs": 0.30, &"residential": 0.35, &"hospital": 0.12, &"school": 0.08, &"police": 0.10}
 const WIN_BONE := Color(0.85, 0.82, 0.77)
 ## Share of windows lit per power stage: DARK, PARTIAL, STREETS, FULL.
-const STAGE_LIT: Array[float] = [0.04, 0.26, 0.44, 0.62]
+## A dark district has no grid power, so no window is lit (the owner's plan, Session 39e; it was 0.04).
+const STAGE_LIT: Array[float] = [0.0, 0.26, 0.44, 0.62]
 ## Per district: [min height, max height, min width, max width, share of empty lots].
 const STYLE := {
 	&"suburbs": [6.0, 9.0, 8.0, 11.0, 0.25],

@@ -5,6 +5,8 @@ extends Control
 @export var world_range_m: float = 20.0
 
 var _player: Node3D = null
+var _streets: Node3D = null
+const ROAD_COLOR := Color(0.24, 0.25, 0.26, 0.9)
 var _entities: Array[Dictionary] = []
 ## Live enemy positions, refilled by _scan_entities() every frame.
 var _enemy_positions: Array[Vector3] = []
@@ -54,6 +56,8 @@ func _process(delta: float) -> void:
 func _find_player() -> void:
 	if not _player or not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player") as Node3D
+	if not is_instance_valid(_streets):
+		_streets = get_tree().get_first_node_in_group(&"street_builder") as Node3D
 
 func _scan_entities() -> void:
 	_entities.clear()
@@ -119,15 +123,24 @@ func _draw() -> void:
 	draw_arc(center, radar_radius_px, 0.0, TAU, 48, Color(0.541, 0.451, 0.220), 2.0)
 	# игрок — brass точка
 	draw_circle(center, 3.0, Color(0.788, 0.635, 0.290))
-	var angle := _player.rotation.y
-	var tri := PackedVector2Array([
-		center + Vector2(cos(angle) * 6.0, sin(angle) * 6.0),
-		center + Vector2(cos(angle + 2.5) * 3.0, sin(angle + 2.5) * 3.0),
-		center + Vector2(cos(angle - 2.5) * 3.0, sin(angle - 2.5) * 3.0),
-	])
+	var ahead := facing(_player.rotation.y)
+	var tri := PackedVector2Array([center + ahead * 6.0, center + ahead.rotated(2.5) * 3.0, center + ahead.rotated(-2.5) * 3.0])
 	draw_colored_polygon(tri, Color(0.788, 0.635, 0.290))
 	var scale_f := radar_radius_px / world_range_m
 	var clip_radius := radar_radius_px - 4.0
+	# the streets of the district round the player: the road centrelines of its 3 by 3 block grid, as wide as the road
+	if is_instance_valid(_streets):
+		var g: float = float(_streets.get("grid_spacing"))
+		var road_px: float = float(_streets.get("road_width")) * scale_f
+		var rel := _streets.global_position - pp
+		for k: int in 4:
+			var at: float = (float(k) - 1.5) * g
+			for ends: Array in [[Vector2(at, -1.5 * g), Vector2(at, 1.5 * g)], [Vector2(-1.5 * g, at), Vector2(1.5 * g, at)]]:
+				var a: Vector2 = center + (Vector2(rel.x, rel.z) + ends[0]) * scale_f
+				var b: Vector2 = center + (Vector2(rel.x, rel.z) + ends[1]) * scale_f
+				var seg := clip_to_disc(a, b, center, clip_radius - road_px * 0.5)
+				if seg.size() == 2:
+					draw_line(seg[0], seg[1], ROAD_COLOR, road_px)
 
 	# Draw non-enemy entities (lights, interactives, props)
 	for ent in _entities:
@@ -157,3 +170,20 @@ func _draw() -> void:
 	var tick_positions := [Vector2(center.x, 0.05 * size.y), Vector2(center.x, 0.95 * size.y), Vector2(0.05 * size.x, center.y), Vector2(0.95 * size.x, center.y)]
 	for t in tick_positions:
 		draw_rect(Rect2(t.x - 1, t.y - 4, 2, 8), Color(0.541, 0.451, 0.220))
+
+## Where the player looks on this north-up disc: -Z is ahead and +Z is drawn downwards.
+static func facing(yaw: float) -> Vector2:
+	return Vector2(-sin(yaw), -cos(yaw))
+
+## The part of the segment a-b inside the disc of centre c and radius r, or nothing.
+static func clip_to_disc(a: Vector2, b: Vector2, c: Vector2, r: float) -> PackedVector2Array:
+	var d := b - a
+	var f := a - c
+	var qa := d.dot(d)
+	var qb := 2.0 * f.dot(d)
+	var disc := qb * qb - 4.0 * qa * (f.dot(f) - r * r)
+	if qa < 0.000001 or disc <= 0.0:
+		return PackedVector2Array()
+	var t0 := clampf((-qb - sqrt(disc)) / (2.0 * qa), 0.0, 1.0)
+	var t1 := clampf((-qb + sqrt(disc)) / (2.0 * qa), 0.0, 1.0)
+	return PackedVector2Array([a + d * t0, a + d * t1]) if t1 > t0 else PackedVector2Array()

@@ -387,15 +387,18 @@ func _update_light_exposure(delta: float) -> void:
 	if not fl or not fl.visible or fl.light_energy <= 0.1:
 		_is_in_flashlight = false
 		return
-	var to_monster: Vector3 = global_position - player_ref.global_position
-	var dist: float = to_monster.length()
-	# Winnability: убрано требование «цель в конусе по углу». Автоплей-бот
-	# не управляет обзором (его _face зеркалит yaw), и P2 Архитектора —
-	# «урон только под фонарём» — становился непроходимым: фонарь включён,
-	# батарея есть, дистанция в норме, но конус смотрел в сторону.
-	# Дистанция + включённый фонарь остаются честным гейтом.
-	_is_in_flashlight = dist < fl.spot_range
+	# the beam must reach the monster, point at it (its cone) and not be shaded by a wall; the bots aim by yaw since rc14
+	var to_monster: Vector3 = global_position + Vector3(0.0, 1.0, 0.0) - fl.global_position
+	_is_in_flashlight = to_monster.length() < fl.spot_range and (-fl.global_transform.basis.z).angle_to(to_monster) <= deg_to_rad(fl.spot_angle) \
+			and _beam_reaches(fl.global_position, to_monster)
 	_handle_light_reaction(delta)
+
+## Nothing but this monster between the lens and its body.
+func _beam_reaches(from: Vector3, to_monster: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(from, from + to_monster)
+	query.exclude = [(player_ref as CollisionObject3D).get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.collider == self
 
 func _handle_light_reaction(delta: float) -> void:
 	if not _is_in_flashlight:
