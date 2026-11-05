@@ -9,7 +9,7 @@
 //   detail   : 0 the plain tile (Low tier), 1 patches, 2 adds the slab joints or the repair rectangles (`surface`), damp patches and chipped paint.
 //   surface  : 1 paving flags of 0.5 m in a running bond (each its own tone, joints, cracks), 2 asphalt (dark rectangles where it was repaired), 0 neither.
 //   paint    : 1 for the lane dashes (chips, never damp).
-//   damp     : how much of the road reads wet (darker, and smoother down to 0.6: the style guide keeps every surface matte, nothing is glossy).
+//   damp     : how much of the road reads wet (darker, and smoother down to 0.48: the style guide keeps every surface matte, nothing is glossy).
 //   tint_b, mix_b : a second tint in large patches (the dead grass and bare earth of a courtyard, the ground plane of the skyline); 0 for the street.
 shader_type spatial;
 
@@ -105,6 +105,6 @@ void fragment() {
 		}
 	}
 	ALBEDO = c * (1.0 - 0.3 * wet);
-	ROUGHNESS = mix(0.92, 0.6, wet);
+	ROUGHNESS = mix(0.8, 0.48, wet);
 	SPECULAR = 0.35 + 0.2 * wet;
 }

@@ -6,7 +6,7 @@ extends Node3D
 const _CONE := preload("res://assets/shaders/lamp_cone.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 ## The strength of the cone by power stage (DARK, PARTIAL, STREETS, FULL).
-const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.5, 0.9, 1.3]
+const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.6, 1.1, 1.6]
 ## The cone is a cylinder this wide at the ground and this wide at the lamp head.
 const CONE_FOOT_RADIUS_M: float = 2.2
 const CONE_HEAD_RADIUS_M: float = 0.1
