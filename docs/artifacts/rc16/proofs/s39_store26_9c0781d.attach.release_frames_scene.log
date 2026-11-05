@@ -1,0 +1,25 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[release-frames] capture begin 01_main_menu
+[release-frames] frame 01_main_menu result=0
+[final] facing 28 of 96 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.55655, -8.0), player at (-8.0, 0.859892, -8.0) hp=100.0, paused=false
+[release-frames] capture begin 03_district_night_dark
+[release-frames] frame 03_district_night_dark result=0
+[release-frames] capture begin 02_district_day_full
+[release-frames] frame 02_district_day_full result=0
+[release-frames] capture begin 07_skill_tree
+[release-frames] frame 07_skill_tree result=0
+[release-frames] capture begin 08_shop
+[release-frames] frame 08_shop result=0
+[final] 04 camera /root/Main3D/Camera3D at (-2.091267, 2.555535, 9.377198), player at (-2.091267, 0.859355, 9.377198) hp=100.0, paused=false
+[release-frames] capture begin 04_combat
+[release-frames] frame 04_combat result=0
+[final] 05 camera /root/Main3D/Camera3D at (-7.843202, 2.563444, -5.473045), player at (-7.843202, 0.860205, -5.473045) hp=100.0, paused=false
+[final] 05 boss at (-7.533546, 1.2, -0.482643)
+[release-frames] capture begin 05_boss
+[release-frames] frame 05_boss result=0
+[release-frames] capture begin 06_victory_ngplus
+[release-frames] frame 06_victory_ngplus result=0
+[final] DONE frames=18
