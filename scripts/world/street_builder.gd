@@ -49,6 +49,7 @@ const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
 
 func _ready() -> void:
+	add_to_group(&"street_builder")  # the radar draws the streets of the district from its grid
 	_ensure_mm()
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))

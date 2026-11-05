@@ -387,15 +387,18 @@ func _update_light_exposure(delta: float) -> void:
 	if not fl or not fl.visible or fl.light_energy <= 0.1:
 		_is_in_flashlight = false
 		return
-	var to_monster: Vector3 = global_position - player_ref.global_position
-	var dist: float = to_monster.length()
-	# Winnability: убрано требование «цель в конусе по углу». Автоплей-бот
-	# не управляет обзором (его _face зеркалит yaw), и P2 Архитектора —
-	# «урон только под фонарём» — становился непроходимым: фонарь включён,
-	# батарея есть, дистанция в норме, но конус смотрел в сторону.
-	# Дистанция + включённый фонарь остаются честным гейтом.
-	_is_in_flashlight = dist < fl.spot_range
+	# the beam must reach the monster, point at it (its cone) and not be shaded by a wall; the bots aim by yaw since rc14
+	var to_monster: Vector3 = global_position + Vector3(0.0, 1.0, 0.0) - fl.global_position
+	_is_in_flashlight = to_monster.length() < fl.spot_range and (-fl.global_transform.basis.z).angle_to(to_monster) <= deg_to_rad(fl.spot_angle) \
+			and _beam_reaches(fl.global_position, to_monster)
 	_handle_light_reaction(delta)
+
+## Nothing but this monster between the lens and its body.
+func _beam_reaches(from: Vector3, to_monster: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(from, from + to_monster)
+	query.exclude = [(player_ref as CollisionObject3D).get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.collider == self
 
 func _handle_light_reaction(delta: float) -> void:
 	if not _is_in_flashlight:
@@ -574,6 +577,8 @@ func _can_see_player() -> bool:
 
 ## GDD §7 / S02: without a light in a dark district a monster notices the player from 3 m at most.
 const DARK_SIGHT_CAP: float = 3.0
+## The light grid's brightness that counts as standing in a lamp's pool: a dim lamp of the partial stage still lights its own cell.
+const LIT_POOL: float = 0.12
 
 ## Vision and peripheral range after the player's visibility and the low_profile skill.
 func _sight_ranges() -> Vector2:
@@ -594,7 +599,9 @@ func _sight_ranges() -> Vector2:
 		var vis: float = player_ref.get_visibility_scale()
 		vrange *= vis
 		prange *= vis
-		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS:
+		# the dark hides a player whose own light is off, but not one who stands in the pool of a lit lamp
+		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS \
+				and not LightGrid.is_lit(player_ref.global_position, LIT_POOL):
 			vrange = minf(vrange, DARK_SIGHT_CAP)
 			prange = minf(prange, DARK_SIGHT_CAP)
 	return Vector2(vrange, prange)

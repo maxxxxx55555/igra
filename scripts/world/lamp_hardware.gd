@@ -62,6 +62,12 @@ static func pole_mesh() -> ArrayMesh:
 		_frustum(st, Vector3(0.0, 1.5, 0.0), Vector3(0.0, 4.0, 0.0), 0.0647, 0.042, 12, STEEL, STEEL, false)
 		for collar: Array in [[0.7, 0.09, 0.05], [2.4, 0.058, 0.04], [3.92, 0.056, 0.06]]:
 			_frustum(st, Vector3(0.0, float(collar[0]), 0.0), Vector3(0.0, float(collar[0]) + float(collar[2]), 0.0), float(collar[1]), float(collar[1]), 12, STEEL_LIGHT, STEEL_LIGHT, true)
+		# the wire cage of the owner's reference, round the pole under the arm
+		for k: int in 8:
+			var rod := Vector3(cos(TAU * k / 8.0), 0.0, sin(TAU * k / 8.0)) * 0.13
+			_frustum(st, rod + Vector3(0.0, 2.55, 0.0), rod + Vector3(0.0, 3.05, 0.0), 0.006, 0.006, 3, RUST, STEEL, false)
+		for band: float in [2.55, 2.8, 3.05]:
+			_frustum(st, Vector3(0.0, band - 0.006, 0.0), Vector3(0.0, band + 0.006, 0.0), 0.133, 0.133, 12, STEEL_LIGHT, STEEL_LIGHT, false)
 		for i in ARM.size() - 1:
 			var radius_a := lerpf(0.036, 0.026, float(i) / float(ARM.size() - 1))
 			var radius_b := lerpf(0.036, 0.026, float(i + 1) / float(ARM.size() - 1))

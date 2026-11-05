@@ -16,6 +16,7 @@ static func run(r: Node) -> void:
 		return
 	_battery_is_segments(r, hud)
 	_one_map_in_play(r, hud)
+	_radar_reads_true(r)
 	_touch_only_buttons(r, hud)
 	await _tracker_is_on_screen(r)
 	await _trailer_mode_is_clean(r)
@@ -102,6 +103,16 @@ static func _safe_area_survives_touch_settings(r: Node, hud: Node) -> void:
 	r._ok(bad.is_empty(), "HUDSAFE2 touch resizing and handedness keep the cut-out margin (9 layouts, problems %s)" % [bad])
 
 ## HUDP3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
+## HUDP12: the radar's arrow points where the player looks (it pointed 90 degrees off) and a street is clipped to the disc.
+static func _radar_reads_true(r: Node) -> void:
+	var radar := preload("res://scripts/ui/radar.gd")
+	var ahead: Vector2 = radar.facing(0.0)
+	var left: Vector2 = radar.facing(PI * 0.5)
+	var seg: PackedVector2Array = radar.clip_to_disc(Vector2(-100.0, 5.0), Vector2(100.0, 5.0), Vector2.ZERO, 13.0)
+	var outside: PackedVector2Array = radar.clip_to_disc(Vector2(-100.0, 20.0), Vector2(100.0, 20.0), Vector2.ZERO, 13.0)
+	r._ok(ahead.is_equal_approx(Vector2(0.0, -1.0)) and left.is_equal_approx(Vector2(-1.0, 0.0)) and seg.size() == 2 and is_equal_approx(seg[0].x, -12.0) and is_equal_approx(seg[1].x, 12.0) and outside.is_empty(),
+		"HUDP12 the radar arrow follows the look (ahead %s, a quarter turn left %s) and a street crosses the disc from %s to %s" % [ahead, left, seg[0] if seg.size() == 2 else Vector2.INF, seg[1] if seg.size() == 2 else Vector2.INF])
+
 static func _one_map_in_play(r: Node, hud: Node) -> void:
 	r._playing()
 	UIManager.call("_sync_minimap")

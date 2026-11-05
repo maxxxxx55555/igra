@@ -63,12 +63,12 @@ func _process(_delta: float) -> void:
 	var dirty: bool = false
 	for id in _lights.keys():
 		var data: Dictionary = _lights[id]
-		var n: Node3D = data["node"] as Node3D
-		if not is_instance_valid(n):
+		# a freed light is dropped before any cast: casting a freed object is an engine error
+		if not is_instance_valid(data["node"]):
 			_lights.erase(id)
 			dirty = true
 			continue
-		data["pos"] = n.global_position
+		data["pos"] = (data["node"] as Node3D).global_position
 	if dirty:
 		_rebuild_grid()
 
@@ -78,8 +78,9 @@ func _rebuild_grid() -> void:
 	for id in _lights.keys():
 		var data: Dictionary = _lights[id]
 		var pos: Vector3 = data["pos"]
-		var rng_v: float = float(data["range"]) * float(data["intensity"])
-		if rng_v <= 0.01:
+		# a lamp's pool reaches its range on the ground under it: the distance is taken across the ground, the energy weighs the brightness
+		var rng_v: float = float(data["range"])
+		if rng_v <= 0.01 or float(data["intensity"]) <= 0.01:
 			continue
 		var min_x: int = int(floor((pos.x - rng_v) / cs))
 		var max_x: int = int(ceil((pos.x + rng_v) / cs))
@@ -88,7 +89,7 @@ func _rebuild_grid() -> void:
 		for cx in range(min_x, max_x + 1):
 			for cz in range(min_z, max_z + 1):
 				var cp: Vector3 = Vector3(float(cx) * cs + cs * 0.5, 0.0, float(cz) * cs + cs * 0.5)
-				var d: float = cp.distance_to(pos)
+				var d: float = Vector2(cp.x - pos.x, cp.z - pos.z).length()
 				if d > rng_v:
 					continue
 				var fall: float = clamp(1.0 - d / rng_v, 0.0, 1.0)

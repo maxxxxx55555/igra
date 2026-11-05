@@ -110,3 +110,8 @@ func _update_light(stage: int = -1) -> void:
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
 		glow.light_energy = 0.0
+	# the stealth math asks the light grid whether the player stands in a lit pool (base_monster.gd _sight_ranges)
+	if _on:
+		LightGrid.register_light(glow)
+	else:
+		LightGrid.unregister_light(glow)

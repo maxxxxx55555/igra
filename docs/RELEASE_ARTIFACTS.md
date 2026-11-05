@@ -269,3 +269,10 @@ already works without it). Music generation is excluded by owner decision.
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export18_ef729ffa.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 216,964,032 bytes, sha256 `eeedf8d044ac88f17deeac714ff162e3b29328a2e2400ba4ddf3c9a4956d8f8d` (rows 527 to 529: exported, booted under the guard, booted with a fresh profile, exit 0).
 - **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env` builds and checks `main` in its own work folder. Nobody has booted this bundle on a device.
+
+## Signed AAB (version code 17 rebuilt, 2026-11-05, Session 39e: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,367,736 bytes (102.4 MiB)**, sha256 `6b9b675f709731d9506ce92c32aca44da9f8aa274aa7d5351317287db7b69554`, version code 17, versionName 1.0.1, launch ledger row 539 (`s39_export19_ddd3c5ad`) from the clean head `ddd3c5ad` (0 tracked changes before and after the export). The lit-pool stealth rule and the lamp cage on top of Session 39d. It replaces the build of row 526 (never uploaded).
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export19_ddd3c5ad.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 216,966,560 bytes, sha256 `da1879ce7a0a9a7af2a33e18849e539492b03248e73ad6f83bd324c6b607bc8a` (rows 540 to 542: exported, booted under the guard, booted with a fresh profile, exit 0).
+- **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env`. Nobody has booted this bundle on a device.

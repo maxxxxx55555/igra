@@ -446,6 +446,26 @@ func _check_visibility_and_hiding() -> void:
 	_ok(is_equal_approx(dark.x, 3.0) and is_equal_approx(dark.y, 1.0), "S02 light off halves it and the dark caps it at 3 m (%s)" % str(dark))
 	_player.set("current_state", _player.State.CROUCH)
 	_ok(is_equal_approx(monster._sight_ranges().x, 1.5), "S02 crouching with the light off: 1.5 m")
+	_player.set("current_state", _player.State.RUN)
+	var cell := Vector2i(floori(_player.global_position.x / LightGrid.CELL_SIZE), floori(_player.global_position.z / LightGrid.CELL_SIZE))
+	var glow: Variant = LightGrid._grid.get(cell)
+	LightGrid._grid[cell] = 1.0
+	_ok(is_equal_approx(monster._sight_ranges().x, 3.6), "S02 a lit pool over a running player lifts the dark cap (%.1f m)" % monster._sight_ranges().x)
+	if glow == null:
+		LightGrid._grid.erase(cell)
+	else:
+		LightGrid._grid[cell] = glow
+	var pool := OmniLight3D.new()
+	pool.omni_range = 4.0
+	pool.light_energy = 0.5
+	add_child(pool)
+	pool.global_position = Vector3(5002.0, 4.2, 5002.0)
+	LightGrid.register_light(pool)
+	var in_pool: bool = LightGrid.is_lit(Vector3(5002.0, 0.0, 5002.0), monster.LIT_POOL)
+	var beside: bool = LightGrid.is_lit(Vector3(5010.0, 0.0, 5002.0), monster.LIT_POOL)
+	LightGrid.unregister_light(pool)
+	pool.queue_free()
+	_ok(in_pool and not beside and not LightGrid.is_lit(Vector3(5002.0, 0.0, 5002.0), monster.LIT_POOL), "S02 a dim lamp 4.2 m up lights the grid cell under it and not the next one")
 	_player.set("current_state", _player.State.WALK)
 	_player.set("flashlight_enabled", true)
 	# S04: a hiding spot hides, and lets the player out on the street side
