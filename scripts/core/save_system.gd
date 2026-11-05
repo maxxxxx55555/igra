@@ -393,7 +393,9 @@ func _save() -> void:
 		"run_id": _run_id,
 		"run": GameManager.run_data(),
 	}
-	_write_atomic(SAVE_PATH, payload)
+	# A full disk fails the write without a word: the player must know the run is not saved.
+	if not _write_atomic(SAVE_PATH, payload):
+		EventBus.toast_requested.emit(LocalizationManager.t("SAVE_FAILED_STORAGE"), "danger")
 
 func load_all() -> bool:
 	var data := _read_validated(SAVE_PATH)
