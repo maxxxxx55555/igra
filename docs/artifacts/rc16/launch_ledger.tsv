@@ -489,3 +489,4 @@ n	utc	head	id	exit	command
 488	20261105T084712Z	144fae24	s39_store5_144fae24	1	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 489	20261105T084837Z	144fae24	s39_store6_144fae24	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 490	20261105T085028Z	3fb46a5e	s39_all8_3fb46a5e	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+491	20261105T090436Z	31a82da1	s39_store7_31a82da1	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
