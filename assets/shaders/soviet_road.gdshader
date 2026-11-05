@@ -6,10 +6,12 @@
 // Uniforms:
 //   tint     : the tile's mean albedo, linear.
 //   mean_lum : the mean luminance of `tex`, so the texture only varies the tint around its mean (1.0 with no texture).
-//   detail   : 0 the plain tile (Low tier), 1 patches, 2 adds the slab joints or the repair rectangles (`surface`), damp patches and chipped paint.
+//   detail   : 0 the plain tile (Low tier), 1 patches, the damp patches and the puddles, 2 adds the slab joints or the repair rectangles
+//              (`surface`) and chipped paint.
 //   surface  : 1 paving flags of 0.5 m in a running bond (each its own tone, joints, cracks), 2 asphalt (dark rectangles where it was repaired), 0 neither.
 //   paint    : 1 for the lane dashes (chips, never damp).
-//   damp     : how much of the road reads wet (darker, and smoother down to 0.48: the style guide keeps every surface matte, nothing is glossy).
+//   damp     : how much of the road reads wet (darker, and smoother down to 0.48); from 0.25 up, the heart of a damp patch on the road or the
+//              sidewalk holds standing water: a near-mirror with a slow ripple that a lamp draws its streak on (the owner's reference, Session 39d).
 //   tint_b, mix_b : a second tint in large patches (the dead grass and bare earth of a courtyard, the ground plane of the skyline); 0 for the street.
 shader_type spatial;
 
@@ -75,6 +77,7 @@ void fragment() {
 	float g = clamp(grain, 0.3, 2.2);
 	vec3 c = tint * g;
 	float wet = 0.0;
+	float puddle = 0.0;
 	if (detail > 0.5) {
 		float blotch = vnoise(v_xz * 0.35);
 		c *= 0.78 + 0.5 * blotch;
@@ -101,10 +104,18 @@ void fragment() {
 				c *= 1.0 - 0.22 * crack_net(v_xz, aa);
 			}
 			c *= 1.0 - 0.5 * paint * smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
-			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);
+		}
+		float sheet = vnoise(v_xz * 0.21 + vec2(11.0, 4.0));
+		wet = smoothstep(0.58, 0.76, sheet) * damp * (1.0 - paint);
+		puddle = smoothstep(0.76, 0.82, sheet) * step(0.25, damp) * (1.0 - paint) * step(0.5, surface);
+		if (puddle > 0.001) {
+			vec2 rp = v_xz * 2.6 + vec2(0.13, 0.09) * TIME;
+			float r0 = vnoise(rp);
+			vec3 tilt = vec3(vnoise(rp + vec2(0.4, 0.0)) - r0, 0.0, vnoise(rp + vec2(0.0, 0.4)) - r0) * 0.2 * puddle;
+			NORMAL = normalize(NORMAL + (VIEW_MATRIX * vec4(tilt, 0.0)).xyz);
 		}
 	}
-	ALBEDO = c * (1.0 - 0.3 * wet);
-	ROUGHNESS = mix(0.8, 0.48, wet);
-	SPECULAR = 0.35 + 0.2 * wet;
+	ALBEDO = c * (1.0 - 0.3 * wet) * (1.0 - 0.55 * puddle);
+	ROUGHNESS = mix(mix(0.8, 0.48, wet), 0.06, puddle);
+	SPECULAR = 0.35 + 0.2 * wet + 0.4 * puddle;
 }

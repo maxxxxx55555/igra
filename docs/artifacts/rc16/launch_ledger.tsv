@@ -513,3 +513,4 @@ n	utc	head	id	exit	command
 512	20261105T104216Z	8ad30976	s39_perf7_8ad30976	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
 513	20261105T104354Z	8ad30976	s39_botI_8ad30976	0	bash tools/qa_sim/autoplay_bot
 514	20261105T105052Z	8ad30976	s39_botJ_8ad30976	0	bash tools/qa_sim/autoplay_bot
+515	20261105T105757Z	65e64438	s39_export17_65e64438	0	bash .qa_logs/s39_export_vc17.sh

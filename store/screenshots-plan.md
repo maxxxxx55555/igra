@@ -23,7 +23,7 @@ phone shot, a 7″-tablet 16:9 variant can be cropped from the same run.
 | 5 | Restored world, nobody home | gas_station forecourt · `z_pump_island` / `z_forecourt` | gas_station restored FULL | Canopy sodium pools on the empty wet forecourt, dead pump displays, thin fog, the queue road dark beyond. Working station, no people. | EN · HUD off |
 | 6 | The mystery inside | industrial · `z_workshop_b` (bench by the sorting line) | industrial DARK onward | A single overhead burning full and warm over an empty bench; the dark plant around it. Unsettling, silent, no operator. | EN · HUD off |
 | 7 | The ending — the last streetlight | power_station gate · `z_station_gate` + `z_cooling_towers` | power_station restored FULL (final district) | Wide from the cooling-tower gantry: towers lit from below, the gate lamp burning at the foot with the hand truck and the bowl of food (note 08). Hopeful close. | EN · HUD off |
-| 8 | Scope & localization | In-game Map / Progress screen | Most districts restored | The 11-district chain map, most rings lit and one dark — proves scale and continuity. A companion crop may show Options → Language listing the 13 locales. | EN (+ optional RU copy) |
+| 8 | Scope & localization | In-game Map / Progress screen | Most districts restored | The 11-district chain map, most rings lit and one dark — proves scale and continuity. A companion crop may show Options → Language with its two locales, English and Russian. | EN (+ optional RU copy) |
 
 Notes for the owner
 - Shots 1/2/5/7 are the "money" light-vs-dark frames — if any one must be perfect, it is #1.
