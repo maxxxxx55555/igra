@@ -515,3 +515,4 @@ n	utc	head	id	exit	command
 514	20261105T105052Z	8ad30976	s39_botJ_8ad30976	0	bash tools/qa_sim/autoplay_bot
 515	20261105T105757Z	65e64438	s39_export17_65e64438	0	bash .qa_logs/s39_export_vc17.sh
 516	20261105T110645Z	a4b418b4	s39_store13_a4b418b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+517	20261105T111618Z	3844f05c	s39_store14_3844f05	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300

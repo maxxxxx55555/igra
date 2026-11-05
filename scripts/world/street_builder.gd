@@ -43,6 +43,7 @@ const GENERATOR_FUEL: StringName = &"gas_canister"
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
+const _PUDDLES := preload("res://shaders/wet_asphalt_puddles.gdshader")
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
@@ -93,6 +94,15 @@ func _make_damage_mesh() -> BoxMesh:
 ## One surface of the street: its texture (none for the paint), its mean albedo in linear light, the texture's mean luminance and the kind of wear it carries (`surface` of the road shader: 1 slabs, 2 asphalt); `detail` follows the graphics tier.
 func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
+	if surface > 1.5:
+		# the owner's plan, module 1.1: the asphalt wears the wet-asphalt shader with its puddles; the tint over the texture's
+		# mean luminance keeps the old brightness of the dry asphalt (the uniform is an sRGB colour)
+		mat.shader = _PUDDLES
+		mat.set_shader_parameter("albedo_tex", load(texture_path))
+		mat.set_shader_parameter("normal_tex", load("res://assets/textures/pbr/wet_asphalt_normal.png"))
+		mat.set_shader_parameter("roughness_tex", load("res://assets/textures/pbr/wet_asphalt_rough.png"))
+		mat.set_shader_parameter("asphalt_color", Color(tint.x / mean_lum, tint.y / mean_lum, tint.z / mean_lum).linear_to_srgb())
+		return mat
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):
 		mat.set_shader_parameter("tex", load(texture_path))

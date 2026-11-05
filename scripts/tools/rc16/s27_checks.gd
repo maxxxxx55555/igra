@@ -40,8 +40,8 @@ static func _streets(r: Node) -> void:
 	var road := ((builder.get("_road_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var walk := ((builder.get("_sidewalk_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var paint := dash.material as ShaderMaterial
-	var shaded: bool = road != null and walk != null and paint != null and road.shader.resource_path == _ROAD and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
-	r._ok(dash.size.x <= 1.5 and dash.size.z <= 0.3 and shaded, "SOV1 the lane marking is a dash of %.2f m by %.2f m and the road, the sidewalk and the paint use the road shader (shaded %s)" % [dash.size.x, dash.size.z, shaded])
+	var shaded: bool = road != null and walk != null and paint != null and road.shader.resource_path == "res://shaders/wet_asphalt_puddles.gdshader" and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
+	r._ok(dash.size.x <= 1.5 and dash.size.z <= 0.3 and shaded, "SOV1 the lane marking is a dash of %.2f m by %.2f m and the asphalt wears the wet-asphalt shader of the owner's plan and the sidewalk and the paint the road shader (shaded %s)" % [dash.size.x, dash.size.z, shaded])
 	builder.queue_free()
 
 static func _skyline(r: Node) -> void:
