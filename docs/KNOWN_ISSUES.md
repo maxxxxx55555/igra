@@ -1,5 +1,7 @@
 ﻿# Known issues
 
+## OPEN (2026-11-05, Session 39d): the music is not all from Gemini as the owner asked; the Gemini app in the browser pane is signed out and no Chrome with Claude in Chrome is connected, so no track was generated in this session (`docs/RUN_STATE.md` S39D-BLOCKED). Of the art director's seven items, the store frames (7) and the skill tree and shop panels (4, 5) are done; the High-tier facade stain pattern (1), the boss and victory art (2, 3) and the dim button edge (6) stay open. The audit of the owner's plan (`docs/RUN_STATE.md` S39D-PLAN) leaves open: fire escapes on the facades, a cage on the lamp, a 3D hum on lit lamps, light exposure in the visibility math (`LightGrid` is never filled) and seeded randomness in the monster FSM.
+
 ## OPEN (2026-11-05, Session 39c, the art director): `docs/artifacts/councils/art_director_20261105.txt` lists seven art items a store visitor notices (the High-tier facade stain pattern, the boss and the victory art, the skill tree's empty panel, the shop's empty third, the dim button edge, store frames with the tutorial box); none is a defect a gate sees.
 
 ## OPEN (2026-11-05, Session 39b, the expert swarm): what the six expert reviewers left open
