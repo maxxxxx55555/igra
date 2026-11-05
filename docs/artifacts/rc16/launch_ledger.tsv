@@ -506,3 +506,10 @@ n	utc	head	id	exit	command
 505	20261105T101522Z	7ef8de0a	s39_audio5_7ef8de0a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 506	20261105T102300Z	1f9c9f04	s39_store11_1f9c9f0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 507	20261105T102526Z	03e4d3b0	s39_store12_03e4d3b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+508	20261105T102636Z	8ad30976	s39_all11_8ad30976	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+509	20261105T103917Z	8ad30976	s39_perf6_8ad30976	1	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+510	20261105T104043Z	8ad30976	s39_touch6_8ad30976	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+511	20261105T104101Z	8ad30976	s39_audio6_8ad30976	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+512	20261105T104216Z	8ad30976	s39_perf7_8ad30976	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+513	20261105T104354Z	8ad30976	s39_botI_8ad30976	0	bash tools/qa_sim/autoplay_bot
+514	20261105T105052Z	8ad30976	s39_botJ_8ad30976	0	bash tools/qa_sim/autoplay_bot
