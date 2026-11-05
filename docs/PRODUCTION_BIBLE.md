@@ -6,6 +6,18 @@ mechanics/numbers — this file exists so a new wave doesn't have to
 re-derive canon from scratch or from screenshots. **Every future wave
 reads this file first**, per the rule added to `CLAUDE.md`.
 
+## 0. The owner's final rules (2026-11-05 and 06) — read before anything below
+
+These override older canon in this file, `docs/GDD.md` and the owner's earlier prompts (`IGRA_FINAL_RELEASE_PROMPT (1).md` in the owner's Downloads is the full brief).
+
+- **Languages:** two, English and Russian; German, Spanish, French and Brazilian Portuguese were cut on 2026-11-05 (there were 13 earlier). Every user-facing string exists in both.
+- **First person and permanent night:** the 3D first-person camera stays; the city is always night and power restoration (DARK, PARTIAL, STREETS, FULL) is the progression. The main menu's street picture stays.
+- **Darkness:** an unpowered district is very dark: no grid-powered window, facade or lamp light, and the fog carries almost no light of its own, so the player walks by the flashlight, sound and remembered landmarks. A restored lamp makes a warm local pool; a restored street is a chain of pools and shadows, never daylight.
+- **The map:** one map, and it shows architecture only (charted streets, paths and building edges). A place is charted only where a lamp the player's restoration powered lights the ground and the player saw it from where they stood; the flashlight, walking, waiting or a monster chart nothing, and charted places stay charted. No enemy, NPC, item, loot, quest, lamp, route, pin, radio ping or player arrow is ever drawn: items are found by exploring. No radar and no minimap. District travel is its own list of districts already open.
+- **What the HUD may reveal:** the reticle tint, the enemy bar and the auto-aim react only to a monster the player can see (in the flashlight's beam or in a lit pool).
+- **Controls:** every action a key does has a visible button on a touch screen (move, look, attack, melee, reload, interact, sprint, crouch, jump, dodge, flashlight, UV, strobe, quick wheel, inventory, map, pause).
+- **Releases:** a status is READY only on evidence (gates, captures, a phone run); everything is integrated into `main` through checked pull requests, and branches are cleaned only after the release.
+
 ## 1. Pillars
 
 1. **Light vs. dark is the whole game.** No day/night cycle — it's
