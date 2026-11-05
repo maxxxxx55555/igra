@@ -7,10 +7,11 @@ func _capture(frame: String, _half: bool) -> void:
 	if frame not in FRAMES:
 		return
 	print("[release-frames] capture begin " + frame)
-	# Store shots show the world and the HUD, not the first-run hint box.
-	var hint := get_tree().root.find_child("TutorialHint", true, false) as CanvasItem
-	if hint != null:
-		hint.visible = false
+	# Store shots show the world and the HUD, not the first-run hint box or the reward toasts.
+	for node_name: String in ["TutorialHint", "ToastStack", "NoticeLabel"]:
+		var item := get_tree().root.find_child(node_name, true, false) as CanvasItem
+		if item != null:
+			item.visible = false
 	var hash_: String = OS.get_environment("TLS_CAPTURE_HASH")
 	if hash_.is_empty():
 		printerr("[release-frames] committed runtime hash required")
