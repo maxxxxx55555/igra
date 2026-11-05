@@ -550,3 +550,4 @@ n	utc	head	id	exit	command
 549	20261105T152424Z	309c3592	s39_audio10_309c3592	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 550	20261105T152535Z	309c3592	s39_botO_309c3592	0	bash tools/qa_sim/autoplay_bot
 551	20261105T153234Z	309c3592	s39_botP_309c3592	0	bash tools/qa_sim/autoplay_bot
+552	20261105T154049Z	5c640848	s39_export20_5c640848	0	bash .qa_logs/s39_export_vc17.sh
