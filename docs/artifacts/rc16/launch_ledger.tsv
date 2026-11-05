@@ -543,3 +543,4 @@ n	utc	head	id	exit	command
 542	20261105T142231Z	ddd3c5ad	s39_winboot5_fresh_ddd3c5ad	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_ddd3c5ad')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_ddd3c5ad' -type f | wc -l)"
 543	20261105T145259Z	d87d590f	s39_store19_d87d590	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 544	20261105T145814Z	8ddaed0f	s39_store20_8ddaed0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+545	20261105T150128Z	f8c74310	s39_store21_f8c7431	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
