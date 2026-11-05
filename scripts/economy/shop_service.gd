@@ -1,13 +1,11 @@
 extends Node
+## The two survivor skins and the starter bundle left the catalog on 2026-11-05: they tinted only the 2D player_visual.gd, which the first-person game never shows.
 const CATALOG: Array = [
 	# IAP-паки монет (донат) исключены — донат и реклама отключены.
 	preload("res://data/shop/upgrade_flashlight_brightness.tres"),
 	preload("res://data/shop/upgrade_flashlight_battery.tres"),
 	preload("res://data/shop/upgrade_backpack_capacity.tres"),
 	preload("res://data/shop/upgrade_backpack_slots.tres"),
-	preload("res://data/shop/skin_survivor_ashen.tres"),
-	preload("res://data/shop/skin_survivor_rust.tres"),
-	preload("res://data/shop/bundle_starter.tres"),
 ]
 var _by_id: Dictionary = {}
 var _owned: Dictionary = {}
