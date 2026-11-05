@@ -34,15 +34,6 @@ func _ready() -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	# the ending stands on the lit street of the Gemini art, darkened under its card (the main menu's look; it was a flat skyline)
-	var art := TextureRect.new()
-	art.texture = preload("res://assets/textures/screens_v2/loading_street.png")
-	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	art.modulate = Color(0.55, 0.55, 0.55)
-	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(art)
 	var vb: VBoxContainer = _LAYOUT.build(self)
 
 	_title = Label.new()
