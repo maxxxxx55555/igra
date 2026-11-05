@@ -17,6 +17,7 @@ static func run(r: Node) -> void:
 	_battery_is_segments(r, hud)
 	_one_map_in_play(r, hud)
 	_map_charts_only_restored_light(r)
+	_touch_covers_actions(r, hud)
 	_touch_only_buttons(r, hud)
 	await _tracker_is_on_screen(r)
 	await _trailer_mode_is_clean(r)
@@ -139,6 +140,35 @@ static func _map_charts_only_restored_light(r: Node) -> void:
 	Cartography.reset()
 	r._ok(fresh and unlit and kept and other_layout and forged and block,
 		"HUDP12 the map: a new game is uncharted (%s), no powered lamp charts nothing (%s), a save keeps its cells (%s), another layout's memory is dropped (%s), forged cells are refused (%s), blocks are told from streets (%s)" % [fresh, unlit, kept, other_layout, forged, block])
+
+## HUDP13: every keyboard action has a visible touch button (the owner's final rules): reload, melee, UV, dodge and the
+## inventory join the jump, flashlight, strobe and quick-wheel buttons, inside the screen and clear of each other.
+static func _touch_covers_actions(r: Node, hud: Node) -> void:
+	var names: Array[String] = ["BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory"]
+	var built: bool = hud.get_node_or_null("BottomRight/BtnReload") == null
+	if built:
+		hud.call("_add_side_buttons", InputService, true)
+	var view := Rect2(Vector2.ZERO, r.get_viewport().get_visible_rect().size)
+	var rects: Array[Rect2] = []
+	var bad: Array[String] = []
+	for button_name: String in names:
+		var button := hud.get_node_or_null("BottomRight/" + button_name) as Control
+		if button == null:
+			bad.append(button_name + " missing")
+			continue
+		var rect := button.get_global_rect()
+		if not view.encloses(rect):
+			bad.append(button_name + " off the screen")
+		for other: Rect2 in rects:
+			if other.intersects(rect):
+				bad.append(button_name + " overlaps")
+		rects.append(rect)
+	if built:
+		for button_name: String in names:
+			var button := hud.get_node_or_null("BottomRight/" + button_name)
+			if button != null:
+				button.free()
+	r._ok(bad.is_empty(), "HUDP13 every action has a touch button inside the screen and apart (%d buttons): %s" % [names.size(), bad])
 
 ## HUDP5: the Map and Pause buttons are touch controls; on a keyboard the map has its key and the pause button only rests dim.
 static func _touch_only_buttons(r: Node, hud: Node) -> void:

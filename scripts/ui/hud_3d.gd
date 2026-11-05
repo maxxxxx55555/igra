@@ -1671,8 +1671,9 @@ func _pulse_interact_button(on: bool) -> void:
 ## правому нижнему углу, а размер берётся из TOUCH_BTN (палец ~48-64 px).
 const TOUCH_BTN: Vector2 = Vector2(64, 64)
 
-func _add_side_buttons(isv: Node) -> void:
-	if not has_touch_ui():
+## force builds them on a keyboard too: the HUD check lays them out without a touch screen.
+func _add_side_buttons(isv: Node, force: bool = false) -> void:
+	if not has_touch_ui() and not force:
 		return
 	var anchored := func(node: Control, from_right: float, from_bottom: float) -> void:
 		node.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1702,13 +1703,42 @@ func _add_side_buttons(isv: Node) -> void:
 	var wheel := mk.call("BtnWheel", "◎", _on_touch_wheel_pressed) as Button
 	anchored.call(wheel, 276.0, 232.0)
 	wheel.button_up.connect(_on_touch_wheel_released)
+	# the owner's final rules: every action the keyboard has gets a visible button (reload, melee, UV, dodge besides its gesture,
+	# the inventory); an action button sends the action itself, so the player's own handler runs as for a key
+	var send := func(action: StringName) -> Callable:
+		return func() -> void:
+			for down: bool in [true, false]:
+				var ev := InputEventAction.new()
+				ev.action = action
+				ev.pressed = down
+				Input.parse_input_event(ev)
+	var reload := mk.call("BtnReload", "", send.call(&"reload")) as Button
+	reload.icon = preload("res://assets/ui/ui_ammo.svg")
+	anchored.call(reload, 48.0, 308.0)
+	var melee := mk.call("BtnMelee", LocalizationManager.t("TOUCH_MELEE"), send.call(&"melee")) as Button
+	melee.add_theme_font_size_override("font_size", 16)
+	anchored.call(melee, 124.0, 308.0)
+	var uv := mk.call("BtnUV", "UV", send.call(&"uv_toggle")) as Button
+	anchored.call(uv, 200.0, 308.0)
+	var dodge := mk.call("BtnDodge", "", func() -> void: isv.request_dodge(isv.get("_joy_dir"))) as Button
+	dodge.icon = preload("res://assets/textures/ui/btn_dodge_128.png")
+	anchored.call(dodge, 276.0, 308.0)
+	var bag := mk.call("BtnInventory", "", func() -> void:
+		if GameManager.is_playing():
+			UIManager.toggle(&"inventory")) as Button
+	bag.icon = preload("res://assets/ui/ui_backpack.svg")
+	anchored.call(bag, 352.0, 232.0)
+	for icon_button: Button in [reload, dodge, bag]:
+		icon_button.add_theme_constant_override("icon_max_width", 36)  # a 128 px icon must not grow the button past its slot
+		icon_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_rest_touch_controls()
 
 ## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full
 ## under the thumb (docs/HUD_PLAN.md rows 18 and 23).
 func _rest_touch_controls() -> void:
 	var buttons: Array = []
-	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel",
+			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory"]:
 		var button := get_node_or_null("BottomRight/" + button_name) as Button
 		if button == null:
 			continue
