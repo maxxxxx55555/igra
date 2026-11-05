@@ -463,3 +463,4 @@ n	utc	head	id	exit	command
 462	20261105T001300Z	93544dc3	s39_winboot_93544dc3	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 463	20261105T001337Z	93544dc3	s39_winboot_fresh_93544dc3	0	bash -c tmp=$(mktemp -d); APPDATA="$(cygpath -w "$tmp")" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find "$tmp" -type f | wc -l)"; rm -rf "$tmp"
 464	20261105T003918Z	ca3703f6	s39_all4_ca3703f6	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+465	20261105T005517Z	3bee95a8	s39_store3_3bee95a8	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
