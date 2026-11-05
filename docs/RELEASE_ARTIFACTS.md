@@ -283,3 +283,9 @@ already works without it). Music generation is excluded by owner decision.
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export21_3f69da98.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 216,967,488 bytes, sha256 `ac9994f17eb8b39ea626ad50f1e77f9227045d0e53a3baf4793ce0ff5ba94c00` (rows 555 to 557: exported, booted under the guard, booted with a fresh profile, exit 0).
 - **Rebuild:** `tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env`. Nobody has booted this bundle on a device.
+
+## Signed AAB (version code 17 rebuilt, 2026-11-05, Session 39g: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,361,510 bytes**, sha256 `13b9abfe91ac2d498c3664a55a980c219de7741865143563b2379469df95c34c`, version code 17, from the clean head `0be2e65a` (0 tracked changes before and after): the restored-light map, the visibility rule and the prop tint on top of Session 39f. It replaces the build of row 554 (never uploaded). Release status NOT READY (`docs/RUN_STATE.md` S39G).
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export22_0be2e65a.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 216,960,608 bytes, sha256 `aea6768a8815336a8d6d509443a1705bca4fa5877df704387562852f846cb89b` (boots under the guard and with a fresh profile, exit 0).

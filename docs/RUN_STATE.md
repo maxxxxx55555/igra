@@ -1,5 +1,31 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 39g (2026-11-05): the owner's final release prompt; the restored-light map; no HUD leak of an unseen monster
+
+**NEXT-ROW (S39G): the owner's `IGRA_FINAL_RELEASE_PROMPT (1).md` (Downloads) replaces the earlier prompts. Its decisions 5 to 7 (one map that shows only the architecture the player's restored light lets them see, and no tracker of any kind) and its HUD leak rule are implemented on `feat/restored-light-map`; most of its world, interface, control and audio scope is not. Release status: NOT READY.**
+
+Current state of the prompt's gates (NOT_STARTED, IN_PROGRESS, IMPLEMENTED, VERIFIED, BLOCKED; IMPLEMENTED is not VERIFIED):
+
+| Gate | Status | Evidence or next action |
+|---|---|---|
+| Baseline and source | VERIFIED | `main` at `a2b77ae6`, pull request 51 merged as `41993c59` (the screen art, compatible with decision 4); work on `feat/restored-light-map`; no branch deleted |
+| Map: new game, false triggers, content, persistence | VERIFIED (headless) | `scripts/systems/cartography.gd`; HUDP3 and HUDP12 in the closeout: uncharted at start, no powered lamp charts nothing, a save keeps its cells, another layout's memory is dropped, forged cells are refused; the radar, the minimap, the radio's marker producer and its signal are deleted |
+| Map: restoration (light plus observed coverage) | IMPLEMENTED | a cell is charted after a lamp-to-cell ray and an eye-to-cell ray inside the view; no capture of the Map screen yet (the shot tool's scenario kept the menu) |
+| Map: campaign | IMPLEMENTED | the travel list is its own screen without the illustrated city and lists only open districts; bots 6 of 6 (rows 564 and 565) |
+| Visibility (HUD) | VERIFIED (headless) | `BaseMonster.is_perceptible` (beam or lit pool) gates the reticle, the enemy bar and the auto-aim; S04b and C03 |
+| World quality | IN_PROGRESS | the street props' tint (`urban_set_dressing.gd`; the cream sacks and bright pallets of the prompt); the urban kit, fire escapes, facade variants, monster and boss art: NOT_STARTED |
+| UI and controls | NOT_STARTED | the inventory composition, the HUD's warmth text and LOG button, the action matrix, touch aim and reload |
+| Audio | NOT_STARTED / BLOCKED | interaction cues not wired; the Gemini music is blocked (the Gemini app is signed out in the browser pane) |
+| Performance | VERIFIED (desktop) | 104 draw calls, p95 12.96 and 15.01 ms, 218.1 MiB (rows 561 to 563); no phone |
+| Packaging | VERIFIED (desktop) | version code 17, `build/tls.aab` 107,361,510 bytes, sha256 `13b9abfe91ac2d498c3664a55a980c219de7741865143563b2379469df95c34c`, from `0be2e65a`; the Windows build boots twice (rows 566 to 569) |
+| Device | BLOCKED | no Android device here |
+
+- S39G-GATES: the battery of `eb0ed574` (row 560): 102 of 102, closeout `DONE checks=634 fails=0`.
+**Skill log (S39G; skill|trigger|phase|outcome):**
+- skill|ponytail|the owner's /ponytail with the final release prompt|S39G|ok (one autoload and one screen replace three map paths; the shared visibility test serves the reticle and the auto-aim)
+- skill|godot-style|the `.gd` edits of S39G|S39G|applied; lint_changed 0 findings
+- skill|speckit-specify|the prompt's feature-sized map wave|S39G|not available as a Skill in this session (not in the skill list); the wave followed the prompt's own contract and the closeout checks instead
+
 ## Session 39f (2026-11-05): the screens and the endings on the main menu's art, version code 17 rebuilt
 
 **NEXT-ROW (S39F): the owner keeps the main menu (the street of `assets/ui/menu_city.png`) and asked for the rest of the presentation to match it. Pull request 50 (Session 39e) is in `main` (`a2b77ae6`). Version code 17 is rebuilt from `3f69da98`. Release status stays BLOCKED: the Gemini music (signed out), a run on a phone, the Play Console.**
