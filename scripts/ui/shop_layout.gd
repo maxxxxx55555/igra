@@ -1,8 +1,19 @@
 extends RefCounted
 ## The shop uses a reading-width panel and keeps its close action outside the catalog.
 
+const ROW := 190.0
+const GAP := 12.0
+## Header, the coin line above the grid and the Close row below it (screens.gd SHOP_TOP, SHOP_CLOSE_ZONE, card chrome).
+const CHROME := 180.0
+
 static func extent(viewport: Vector2) -> Vector2:
-	return Vector2(minf(1100.0, viewport.x - 48.0), minf(820.0, viewport.y - 48.0))
+	var width: float = minf(1100.0, viewport.x - 48.0)
+	var count: int = 0
+	for kind in [ShopItem.Kind.UPGRADE, ShopItem.Kind.SKIN, ShopItem.Kind.BUNDLE]:
+		count += ShopService.catalog_by_kind(kind).size()
+	var rows: int = maxi(1, ceili(count / (2.0 if width - 40.0 >= 600.0 else 1.0)))
+	var height: float = rows * ROW + (rows - 1) * GAP + CHROME
+	return Vector2(width, minf(height, minf(820.0, viewport.y - 48.0)))
 
 static func fit(data: Dictionary, viewport: Vector2) -> void:
 	var size: Vector2 = extent(viewport)

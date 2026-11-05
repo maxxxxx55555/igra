@@ -73,6 +73,15 @@ func refresh() -> void:
 			else:
 				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")
 	modulate.a = 0.6 if disabled and level == 0 else 1.0
+	for state in ["normal", "disabled"]:
+		if disabled and level == 0:
+			remove_theme_stylebox_override(state)
+			continue
+		var edge := get_theme_stylebox(state).duplicate() as StyleBoxFlat
+		if edge != null:
+			edge.border_color = ThemeProvider.COLOR_AMBER
+			edge.set_border_width_all(2)
+			add_theme_stylebox_override(state, edge)
 
 func _on_pressed() -> void:
 	if not self.disabled:
