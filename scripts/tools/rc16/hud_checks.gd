@@ -16,7 +16,7 @@ static func run(r: Node) -> void:
 		return
 	_battery_is_segments(r, hud)
 	_one_map_in_play(r, hud)
-	_radar_reads_true(r)
+	_map_charts_only_restored_light(r)
 	_touch_only_buttons(r, hud)
 	await _tracker_is_on_screen(r)
 	await _trailer_mode_is_clean(r)
@@ -102,30 +102,43 @@ static func _safe_area_survives_touch_settings(r: Node, hud: Node) -> void:
 	hud.call("_apply_button_size")
 	r._ok(bad.is_empty(), "HUDSAFE2 touch resizing and handedness keep the cut-out margin (9 layouts, problems %s)" % [bad])
 
-## HUDP3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
-## HUDP12: the radar's arrow points where the player looks (it pointed 90 degrees off) and a street is clipped to the disc.
-static func _radar_reads_true(r: Node) -> void:
-	var radar := preload("res://scripts/ui/radar.gd")
-	var ahead: Vector2 = radar.facing(0.0)
-	var left: Vector2 = radar.facing(PI * 0.5)
-	var seg: PackedVector2Array = radar.clip_to_disc(Vector2(-100.0, 5.0), Vector2(100.0, 5.0), Vector2.ZERO, 13.0)
-	var outside: PackedVector2Array = radar.clip_to_disc(Vector2(-100.0, 20.0), Vector2(100.0, 20.0), Vector2.ZERO, 13.0)
-	r._ok(ahead.is_equal_approx(Vector2(0.0, -1.0)) and left.is_equal_approx(Vector2(-1.0, 0.0)) and seg.size() == 2 and is_equal_approx(seg[0].x, -12.0) and is_equal_approx(seg[1].x, 12.0) and outside.is_empty(),
-		"HUDP12 the radar arrow follows the look (ahead %s, a quarter turn left %s) and a street crosses the disc from %s to %s" % [ahead, left, seg[0] if seg.size() == 2 else Vector2.INF, seg[1] if seg.size() == 2 else Vector2.INF])
-
+## HUDP3: one map, and it tracks nothing: the HUD has no radar and UIManager no minimap; the Map is the screen of charted architecture.
 static func _one_map_in_play(r: Node, hud: Node) -> void:
 	r._playing()
-	UIManager.call("_sync_minimap")
-	var off: bool = not (UIManager.get("_minimap") as Control).visible
-	SettingsManager.set_setting("show_minimap", true)
-	var on: bool = (UIManager.get("_minimap") as Control).visible
-	SettingsManager.set_setting("show_minimap", false)
-	var radar := hud.get_node_or_null("TopRight/RadarFrame/Radar") as Control
-	var frame := hud.get_node_or_null("TopRight/RadarFrame") as Control
-	var seated: bool = radar != null and frame != null and radar.get_global_rect().is_equal_approx(frame.get_global_rect())
-	var caption := hud.get_node_or_null("TopRight/RadarLabel") as Control
-	r._ok(off and on and seated and caption != null and not caption.visible,
-		"HUDP3 one map in play: the minimap is off by default (%s) and on by its setting (%s), the radar fills its frame (%s), no RADAR caption" % [off, on, seated])
+	var no_radar: bool = hud.find_child("Radar*", true, false) == null
+	var no_minimap: bool = UIManager.get("_minimap") == null and UIManager.get("_layer").find_child("Minimap", true, false) == null
+	var screen: bool = UIManager.SCREENS.get(&"district_map", "") == "res://scripts/ui/district_map.gd"
+	r._ok(no_radar and no_minimap and screen, "HUDP3 one map that tracks nothing: no radar (%s), no minimap (%s), the Map opens the charted architecture (%s)" % [no_radar, no_minimap, screen])
+
+## HUDP12: the map charts only what a restored lamp lights and the player sees (the owner's rules of 2026-11-05).
+static func _map_charts_only_restored_light(r: Node) -> void:
+	var map := preload("res://scripts/ui/district_map.gd")
+	Cartography.reset()
+	var fresh: bool = Cartography.charted_cells("suburbs").is_empty()
+	# no lamp the player powered: a pass charts nothing, whatever the flashlight, the walk or the wait
+	var held: Array[Node] = []
+	for lamp: Node in r.get_tree().get_nodes_in_group(&"streetlights"):
+		if bool(lamp.get("_on")):
+			lamp.set("_on", false)
+			held.append(lamp)
+	for i: int in 4:
+		Cartography.survey()
+	var unlit: bool = Cartography.to_dict()["districts"].values().all(func(cells: Array) -> bool: return cells.is_empty())
+	for lamp: Node in held:
+		lamp.set("_on", true)
+	Cartography.from_dict({"rev": Cartography.LAYOUT_REV, "districts": {"suburbs": [0, 0, -3, 2]}})
+	var kept: bool = Cartography.charted_cells("suburbs").has(Vector2i(-3, 2)) and Cartography.to_dict()["districts"]["suburbs"].size() == 4
+	Cartography.from_dict({"rev": Cartography.LAYOUT_REV + 1, "districts": {"suburbs": [0, 0]}})
+	var other_layout: bool = Cartography.charted_cells("suburbs").is_empty()
+	Cartography.from_dict({"rev": Cartography.LAYOUT_REV, "districts": {"suburbs": ["x", 0], "nowhere": [0, 0], "park": [0, 0, 9999, 0]}})
+	var forged: bool = Cartography.charted_cells("suburbs").is_empty() and Cartography.charted_cells("nowhere").is_empty() and Cartography.charted_cells("park").size() == 1
+	var sb := StreetBuilder.new()
+	sb.grid_spacing = 40.0
+	var block: bool = map.is_block(sb, Cartography.cell_of(Vector3(40.0, 0.0, 40.0))) and not map.is_block(sb, Cartography.cell_of(Vector3(20.0, 0.0, 0.0)))
+	sb.free()
+	Cartography.reset()
+	r._ok(fresh and unlit and kept and other_layout and forged and block,
+		"HUDP12 the map: a new game is uncharted (%s), no powered lamp charts nothing (%s), a save keeps its cells (%s), another layout's memory is dropped (%s), forged cells are refused (%s), blocks are told from streets (%s)" % [fresh, unlit, kept, other_layout, forged, block])
 
 ## HUDP5: the Map and Pause buttons are touch controls; on a keyboard the map has its key and the pause button only rests dim.
 static func _touch_only_buttons(r: Node, hud: Node) -> void:
@@ -334,7 +347,7 @@ static func _layout_holds(r: Node, hud: Node) -> void:
 				var label := hud.get(name_) as Label
 				if label == null or label.get_minimum_size().x > CAPTION_W:  # a Label grows to its text, so the designed width is the bound
 					bad.append("%s/%d %s %s" % [lang, size_idx, name_, label.get_minimum_size().x if label != null else -1.0])
-			for path: String in ["TopLeft", "TopRight/RadarFrame", "BottomCenter"]:
+			for path: String in ["TopLeft", "TopRight", "BottomCenter"]:
 				var cluster := hud.get_node_or_null(path) as Control
 				if cluster == null or not view.encloses(cluster.get_global_rect()):
 					bad.append("%s/%d %s outside the screen" % [lang, size_idx, path])

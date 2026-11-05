@@ -412,6 +412,11 @@ func _handle_light_reaction(delta: float) -> void:
 func _is_in_light() -> bool:
 	return _is_in_flashlight
 
+## Whether the player can see this monster: in the flashlight's beam (range, cone, unshaded) or standing in a lit pool.
+## The reticle, the enemy bar and the auto-aim ask it, so none of them reveals what the dark hides (the owner's rules of 2026-11-05).
+func is_perceptible() -> bool:
+	return _is_in_flashlight or LightGrid.is_lit(global_position, LIT_POOL)
+
 func _state_idle(delta: float) -> void:
 	velocity = Vector3.ZERO
 	_idle_timer -= delta

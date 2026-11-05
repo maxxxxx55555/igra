@@ -25,9 +25,8 @@ var loot_key: String = ""
 const _PICKUP_BLIP := preload("res://assets/audio/sfx/ui_hover.wav")
 
 func _ready() -> void:
-	# WAVE 6 P4: nothing ever added pickups to this group - radar.gd's
-	# minimap pickup blips (a live gameplay feature) and _game_test_3d.gd's
-	# own check were both silently reading an always-empty group.
+	# WAVE 6 P4: nothing ever added pickups to this group, so _game_test_3d.gd's own check read an always-empty group
+	# (no map shows pickups: the owner's map rules of 2026-11-05).
 	add_to_group("pickups")
 	body_entered.connect(_on_body_entered)
 	monitorable = true

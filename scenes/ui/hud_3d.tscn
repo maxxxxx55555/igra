@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_heart.svg" id="3_heart"]
@@ -32,13 +32,6 @@ corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_left = 0
 corner_radius_bottom_right = 0
-
-[sub_resource type="StyleBoxFlat" id="style_radar"]
-bg_color = Color(0.0, 0.0, 0.0, 0.0)
-border_width_left = 0
-border_width_right = 0
-border_width_top = 0
-border_width_bottom = 0
 
 [node name="HUD3D" type="CanvasLayer"]
 layer = 20
@@ -274,10 +267,6 @@ offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="RadarLabel" type="Label" parent="TopRight"]
-visible = false
-text = "РАДАР"
-
 [node name="BtnPause" type="Button" parent="."]
 custom_minimum_size = Vector2(36, 36)
 offset_left = 0.0
@@ -296,10 +285,6 @@ grow_horizontal = 0
 icon = ExtResource("6_pause")
 expand_icon = true
 text = ""
-
-[node name="RadarFrame" type="Panel" parent="TopRight"]
-custom_minimum_size = Vector2(164, 164)
-theme_override_styles/panel = SubResource("style_radar")
 
 [node name="BottomCenter" type="HBoxContainer" parent="."]
 anchors_preset = 7

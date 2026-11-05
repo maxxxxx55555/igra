@@ -186,6 +186,8 @@ func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
 			continue
 		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
 			continue
+		if e.has_method("is_perceptible") and not e.is_perceptible():
+			continue  # the aim does not bend toward a monster the dark hides
 		var to_e: Vector3 = _aim_point(e as Node3D) - from_pos
 		if to_e.length() > range or to_e.length() < 0.01:
 			continue

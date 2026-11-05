@@ -181,7 +181,6 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 	_slider(parent, LocalizationManager.t("Button Size"), "button_size", 0.8, 1.5, 0.05,
 		func(v: float) -> void: SettingsManager.set_button_size(v))
 
-	_toggle(parent, LocalizationManager.t("Minimap"), "show_minimap")
 
 	# FINAL HARDENING PASS: one-tap preset over sensitivity+deadzone+haptics
 	# (SettingsManager.TOUCH_TUNING_PRESETS) - the sliders below still work

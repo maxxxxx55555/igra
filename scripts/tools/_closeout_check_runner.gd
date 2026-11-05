@@ -406,8 +406,12 @@ func _check_weapons() -> void:
 	SettingsManager.set_setting("auto_aim", false)
 	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line), "C03 auto-aim off leaves the aim alone")
 	SettingsManager.set_setting("auto_aim", true)
+	# the owner's rules of 2026-11-05: the aim leans only toward a monster the player can see (here, one in the beam)
+	mark.set("_is_in_flashlight", true)
 	var aimed: Vector3 = pistol._apply_auto_aim(from, off_line)
-	_ok(aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster")
+	_ok(aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster it can see")
+	mark.set("_is_in_flashlight", false)
+	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line) or LightGrid.is_lit(mark.global_position, BaseMonster.LIT_POOL), "C03 auto-aim does not lean toward a monster the dark hides")
 	SettingsManager.set_setting("auto_aim", false)
 	# the HUD's two weapon slots
 	var hud := _main.get_node_or_null("HUD")
@@ -446,6 +450,15 @@ func _check_visibility_and_hiding() -> void:
 	_ok(is_equal_approx(dark.x, 3.0) and is_equal_approx(dark.y, 1.0), "S02 light off halves it and the dark caps it at 3 m (%s)" % str(dark))
 	_player.set("current_state", _player.State.CROUCH)
 	_ok(is_equal_approx(monster._sight_ranges().x, 1.5), "S02 crouching with the light off: 1.5 m")
+	var lit_cells: Dictionary = LightGrid._grid
+	LightGrid._grid = {}
+	monster.set("_is_in_flashlight", false)
+	var in_dark: bool = monster.is_perceptible()
+	monster.set("_is_in_flashlight", true)
+	var in_beam: bool = monster.is_perceptible()
+	monster.set("_is_in_flashlight", false)
+	LightGrid._grid = lit_cells
+	_ok(not in_dark and in_beam, "S04b the HUD and the auto-aim see a monster only in the beam or a lit pool: in the dark %s, in the beam %s" % [in_dark, in_beam])
 	_player.set("current_state", _player.State.RUN)
 	var cell := Vector2i(floori(_player.global_position.x / LightGrid.CELL_SIZE), floori(_player.global_position.z / LightGrid.CELL_SIZE))
 	var glow: Variant = LightGrid._grid.get(cell)

@@ -76,7 +76,6 @@ func _ready() -> void:
 	_apply_safe_area()
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
-	_fix_radar_anchor()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
 	hp_fill.color = Color(0.752941, 0.223529, 0.168627)
 	stam_fill.color = Color(0.373, 0.541, 0.306)
@@ -121,7 +120,6 @@ func _ready() -> void:
 		if _bat_caption: _bat_caption.text = LocalizationManager.t("HUD_BATTERY"))
 	_setup_number_fonts()
 	_setup_slot_placeholders()
-	_setup_radar()
 	_setup_button_feedback()
 	_apply_text_outlines()
 	_finish_rows(hp_ratio, bat_ratio)
@@ -593,6 +591,8 @@ func _poll_aim_target() -> void:
 			continue
 		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
 			continue
+		if e.has_method("is_perceptible") and not e.is_perceptible():
+			continue
 		var to_enemy: Vector3 = (e as Node3D).global_position - from
 		var dist: float = to_enemy.length()
 		if dist > _AIM_RANGE or dist < 0.01:
@@ -766,13 +766,6 @@ func _install_joystick() -> void:
 	joy.mouse_filter = Control.MOUSE_FILTER_STOP
 	ring.add_child(joy)
 
-func _fix_radar_anchor() -> void:
-	var tr := get_node_or_null("TopRight") as Control
-	if tr == null:
-		return
-	tr.grow_vertical = Control.GROW_DIRECTION_END
-	tr.offset_bottom = tr.offset_top + tr.get_combined_minimum_size().y
-
 ## THEME UNIFICATION P0: hud_3d.tscn's root is a CanvasLayer, not a
 ## Control, so it has no .theme property of its own and can't inherit one
 ## from an ancestor Window either (confirmed empirically: Window.theme
@@ -844,9 +837,6 @@ func _localize_static_labels() -> void:
 	if vis_caption != null:
 		vis_caption.text = LocalizationManager.t("HUD_VISIBILITY")
 	_apply_ammo_caption()
-	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
-	if radar_label != null:
-		radar_label.text = LocalizationManager.t("HUD_RADAR")
 	var map_button := get_node_or_null("MapButton") as Button
 	if map_button != null:
 		map_button.text = LocalizationManager.t("MAP_TITLE")
@@ -1954,22 +1944,8 @@ func _add_map_button() -> void:
 
 func _on_map_btn() -> void:
 	if UIManager and UIManager.has_method("open"):
-		UIManager.open(&"city_map")
+		UIManager.open(&"district_map")
 
-func _setup_radar() -> void:
-	var frame := $TopRight/RadarFrame
-	if not frame:
-		return
-	for c in frame.get_children():
-		c.queue_free()
-	var radar_script = load("res://scripts/ui/radar.gd")
-	if not radar_script:
-		return
-	var radar := Control.new()
-	radar.set_script(radar_script)
-	radar.name = "Radar"
-	frame.add_child(radar)
-	radar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)  # radar.gd's own offsets sat it 16 px off its frame
 
 ## The prompt fades in when something is in reach and out when it is not (docs/HUD_PLAN.md row 14); it is hidden once it is gone.
 func _on_interact_available(avail: bool) -> void:

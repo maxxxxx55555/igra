@@ -83,7 +83,6 @@ signal purchase_success(item_id: String)
 signal puzzle_solved(puzzle_id: StringName, district_id: StringName)
 signal puzzle_started(puzzle_id: String)
 signal quest_completed(quest_id: String)
-signal radar_marker_added(position: Vector2)
 signal secret_found(secret_id: String)
 ## Снимок в фоторежиме сохранён. Нужен ежедневкам типа photo_subject.
 signal photo_captured(path: String)
