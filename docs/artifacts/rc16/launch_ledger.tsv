@@ -603,3 +603,6 @@ n	utc	head	id	exit	command
 602	20261106T143338Z	cab7a5d2	s39_monsters2_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
 603	20261106T143655Z	cab7a5d2	s39_monsters3_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
 604	20261106T143831Z	cab7a5d2	s39_monsters4_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
+605	20261106T144313Z	602d77d8	s39_perf14_602d77d8	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+606	20261106T144429Z	602d77d8	s39_store32_602d77d	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+607	20261106T144706Z	9c96c4bd	s39_store33_9c96c4b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
