@@ -51,6 +51,18 @@ between the black streets you have not reached and the ones you have
 already saved is the whole shape of the game. Light is the reward, not
 just a tool.
 
+THE DARK IS REALLY DARK
+An unpowered district is pitch black: no glowing windows, no helpful
+haze. You walk it by your flashlight and by sound, and a monster you
+have not caught in your beam or under a lamp stays unseen: no marker,
+no name, no crosshair cue.
+
+A MAP THAT ONLY KNOWS WHAT YOU LIT
+Your map draws streets and buildings, and only where a lamp you
+restored lit them and you saw them. It never shows a monster, an item
+or even you: every battery, part and secret has to be found by
+exploring.
+
 WHAT'S INSIDE
 - 11 districts, relit one at a time and reached from the city map
 - 11 enemy types — ten hunters and the Architect — each with its own senses, weaknesses, and behaviour
@@ -67,7 +79,9 @@ hunts you, your only way to see, and the thing that gives you away every
 time you switch it on.
 
 CONTROLS
-Touch: virtual joystick plus action buttons, with a double-tap dodge.
+Touch: a virtual joystick and a button for every action (fire, reload,
+melee, UV, dodge, flashlight, inventory, crafting, map), plus a
+double-tap dodge.
 PC: WASD and mouse — same game, same save file; export or import it
 between devices, no account, no server.
 
@@ -94,6 +108,18 @@ Made with AI help: part of the music (Google Lyria), the painted menu, screen ba
 между чёрными улицами, куда ты ещё не дошёл, и уже спасёнными — это вся
 форма игры. Свет здесь не просто инструмент, а награда.
 
+ТЬМА ЗДЕСЬ НАСТОЯЩАЯ
+Район без тока — кромешная тьма: ни светящихся окон, ни спасительной
+дымки. Ты идёшь по нему с фонарём и на слух, а чудовище, которое не
+попало в луч или под фонарь, остаётся невидимым: ни метки, ни имени,
+ни подсказки прицела.
+
+КАРТА ЗНАЕТ ТОЛЬКО ТО, ЧТО ТЫ ОСВЕТИЛ
+Карта рисует улицы и здания — и только там, где их осветил фонарь,
+который ты вернул к жизни, и где ты их увидел. На ней никогда нет ни
+чудовищ, ни предметов, ни тебя самого: каждую батарею, деталь и тайник
+нужно найти самому.
+
 ЧТО ВНУТРИ
 - 11 районов, которые зажигаются по одному: переходы — через карту города
 - 11 типов врагов — десять охотников и Архитектор, у каждого свои чувства, слабости и поведение
@@ -110,8 +136,9 @@ Made with AI help: part of the music (Google Lyria), the painted menu, screen ba
 раз, когда ты его включаешь.
 
 УПРАВЛЕНИЕ
-Сенсорное: виртуальный джойстик и кнопки действий, уклонение двойным
-касанием. ПК: WASD и мышь — та же игра, тот же файл сохранения;
+Сенсорное: виртуальный джойстик и кнопка для каждого действия (огонь,
+перезарядка, удар, УФ, уклонение, фонарь, инвентарь, крафт, карта),
+уклонение и двойным касанием. ПК: WASD и мышь — та же игра, тот же файл сохранения;
 экспортируй и импортируй его между устройствами — без аккаунта и
 сервера.
 
@@ -129,7 +156,7 @@ Made with AI help: part of the music (Google Lyria), the painted menu, screen ba
 
 ### EN
 - One blackout city — 11 districts to relight one at a time, and every one you save stays lit.
-- Light is the reward: every street you save stays lit. Your map is your trophy.
+- Pitch-black streets walked by flashlight and sound; the map draws only the buildings your restored light revealed, never a monster or an item.
 - Your flashlight is your gun, your eyes, and your death sentence — every beam gives you away.
 - Ten kinds of hunter and the Architect, each with its own senses and weaknesses. Learn them or feed them.
 - 5 endings. How much of the city — and how much of the truth — will you bring back?
@@ -139,7 +166,7 @@ Made with AI help: part of the music (Google Lyria), the painted menu, screen ba
 
 ### RU
 - Город во тьме — 11 районов: выбираешь следующий на карте и зажигаешь его.
-- Свет — награда: каждая спасённая улица остаётся освещённой. Твоя карта — твой трофей.
+- Кромешная тьма, по которой идёшь с фонарём и на слух; карта рисует только здания, открытые твоим светом, — ни чудовищ, ни предметов.
 - Твой фонарь — оружие, глаза и смертный приговор: каждый луч тебя выдаёт.
 - Десять видов охотников и Архитектор, у каждого свои чувства и слабости. Изучи их — или стань добычей.
 - 5 концовок. Сколько города — и сколько правды — ты вернёшь?
