@@ -170,7 +170,9 @@ func _install_daily_card(vb: VBoxContainer) -> void:
 		var card := VBoxContainer.new()
 		card.name = "DailyCard"
 		card.add_theme_constant_override("separation", 2)
-		card.draw.connect(func() -> void: card.draw_rect(Rect2(Vector2.ZERO, card.size), Color(ThemeProvider.COLOR_BG_DARK, 0.6)))
+		card.draw.connect(func() -> void:
+			card.draw_rect(Rect2(Vector2.ZERO, card.size), Color(ThemeProvider.COLOR_BG_DARK, 0.6))
+			card.draw_rect(Rect2(Vector2.ZERO, card.size), ThemeProvider.COLOR_BORDER, false, 1.0))
 		vb.add_child(card)
 		vb.move_child(card, 1)
 		var title := Label.new()
@@ -188,8 +190,15 @@ func _install_daily_card(vb: VBoxContainer) -> void:
 		streak.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		streak.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		card.add_child(streak)
-		for line in [title, body, streak]:
+		for line: Label in [title, body, streak]:
 			_legible(line)
+			var inset := StyleBoxEmpty.new()
+			inset.content_margin_left = 12.0
+			inset.content_margin_right = 12.0
+			inset.content_margin_top = 6.0 if line == title else 0.0
+			inset.content_margin_bottom = 6.0 if line == streak else 0.0
+			line.add_theme_stylebox_override(&"normal", inset)
+		title.add_theme_font_override(&"font", ThemeProvider.heading_font())
 	_refresh_daily_card(vb)
 
 func _refresh_daily_card(vb: VBoxContainer) -> void:
@@ -271,13 +280,27 @@ func _layout_menu() -> void:
 ## which one actually starts a run - "Continue" resumes the exact save,
 ## "Play" is the only path to a fresh NG+ run (and now confirms before it
 ## resets progress, see _on_play_pressed()).
+## The action the player most likely wants stands out from the column: Continue when there is a save, else Play.
+func _mark_primary(button: Button) -> void:
+	var box := button.get_theme_stylebox(&"normal").duplicate() as StyleBoxFlat
+	if box == null:
+		return
+	box.bg_color = ThemeProvider.COLOR_BG_PANEL2
+	box.border_color = ThemeProvider.COLOR_AMBER
+	button.add_theme_stylebox_override(&"normal", box)
+	button.add_theme_color_override(&"font_color", ThemeProvider.COLOR_AMBER)
+
 func _apply_ngp_status(vb: Node) -> void:
 	var play_btn := vb.get_node_or_null("Play") as Button
 	var continue_btn := vb.get_node_or_null("Continue") as Button
 	var ng := NewGamePlus.get_current_ng_plus() if NewGamePlus else 0
 	if play_btn != null:
+		# beside Continue, Play starts over (it asks first): it says so
 		play_btn.text = LocalizationManager.tf("NGP_NEW_GAME_ACTION", [ng]) if ng > 0 \
-			else LocalizationManager.t(String(LABELS["Play"]))
+			else LocalizationManager.t("new_game" if continue_btn != null else String(LABELS["Play"]))
+	var primary := continue_btn if continue_btn != null else play_btn
+	if primary != null:
+		_mark_primary(primary)
 	if continue_btn != null and ng > 0:
 		continue_btn.text = LocalizationManager.t("NGP_CONTINUE_SAVED")
 	var status := get_node_or_null("NGPStatus") as Label

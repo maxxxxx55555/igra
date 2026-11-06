@@ -43,6 +43,7 @@ func _ready() -> void:
 		quad_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		quad_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		quad_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		quad_mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
 		quad_mat.vertex_color_use_as_albedo = true
 		quad_mat.albedo_texture = MOTE_TEXTURE
 		quad_mat.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES

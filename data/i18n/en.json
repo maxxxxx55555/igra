@@ -311,6 +311,7 @@
   "NG_PLUS_STAT_PLAYER_DMG": "Player Damage: x%.2f",
   "NG_PLUS_STAT_XP": "XP: x%.2f",
   "NOT_ENOUGH_COINS": "Not enough coins",
+  "SHOP_NEED_MORE": "need %d more",
   "NO_SAVE": "No save file",
   "No active quests": "No active quests",
   "Not enough skill points": "Not enough skill points",

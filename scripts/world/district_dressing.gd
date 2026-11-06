@@ -268,6 +268,7 @@ func _soft(color: Color, add: bool) -> StandardMaterial3D:
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	if add:
 		mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
 	mat.albedo_texture = _LANDMARK.glow_texture()
 	mat.albedo_color = color
 	return mat

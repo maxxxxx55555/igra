@@ -48,7 +48,7 @@ text = "Cost: 1 SP"
 horizontal_alignment = 1
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.3725, 0.5412, 0.3059, 1)
+theme_override_colors/font_color = Color(0.6196, 0.5255, 0.2706, 1)
 
 [node name="LevelLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2

@@ -49,7 +49,7 @@ static func _initial_vitals(r: Node) -> void:
 static func _thermal(r: Node, hud: Node) -> void:
 	var id := StringName(DistrictManager.current_district)
 	var stage: int = PowerGrid.get_stage(id)
-	var badge: Label = hud.get_node_or_null("StatusRow/ThermalComfort") as Label
+	var badge: Label = hud.get_node_or_null("TopLeft/Bat/ThermalComfort") as Label
 	var states: Array[StringName] = [&"cold", &"warming", &"warming", &"warm"]
 	var correct: bool = badge != null
 	for value: int in states.size():
@@ -57,6 +57,18 @@ static func _thermal(r: Node, hud: Node) -> void:
 		correct = correct and PowerGrid.get_thermal_comfort(id) == states[value]
 		correct = correct and badge != null and badge.get("comfort_state") == states[value] and not badge.text.is_empty()
 	r._ok(correct, "THERMAL1 district stages drive the localized cold/cool/warm badge without a survival timer")
+	# the badge shares the battery caption's line: in both languages and every state the two fit apart within the bar
+	var font: Font = badge.get_theme_font("font") if badge != null else null
+	var room: Array[String] = []
+	for lang: String in ["en", "ru"]:
+		var words: Dictionary = LocalizationManager._read_json(LocalizationManager.LANG_DIR + lang + ".json")
+		for key: String in ["THERMAL_COLD", "THERMAL_WARMING", "THERMAL_WARM"]:
+			var line: String = "%s: %s" % [words.get("THERMAL_LABEL", ""), words.get(key, "")]
+			var used: float = 12.0 + font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, 18).x if font != null else INF
+			used += font.get_string_size(str(words.get("HUD_BATTERY", "")), HORIZONTAL_ALIGNMENT_LEFT, -1, 18).x if font != null else 0.0
+			if used > preload("res://scripts/ui/hud_3d.gd").BAR_W:
+				room.append("%s %s %.0f" % [lang, key, used])
+	r._ok(badge != null and room.is_empty(), "THERMAL2 the warmth line fits beside the BATTERY caption in en and ru: %s" % [room])
 	PowerGrid._set_stage_direct(id, stage)
 
 static func _wheel(r: Node, hud: Node) -> void:

@@ -182,6 +182,7 @@ static func build(district_id: StringName, at: Vector3) -> Node3D:
 	halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	halo_mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
 	halo_mat.albedo_texture = glow_texture()
 	halo_mat.albedo_color = Color(GLOW_COLOR, 0.0)
 	root.set_meta(&"glow", glow_mat)

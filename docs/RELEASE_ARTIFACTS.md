@@ -295,3 +295,9 @@ already works without it). Music generation is excluded by owner decision.
 - **Built:** `build/tls.aab`, **107,362,855 bytes**, sha256 `932699bbe5fa2600802b7303d84f7f2440213897c5dd27791d801ea4c9b31c40`, version code 17, from the clean head `4830c6ff`: the dark city, the touch controls and the agent team's fixes on top of Session 39g. Release status NOT READY.
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export23_4830c6ff.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 216,962,144 bytes, sha256 `a9d7eca36f4872645564d1c4a6d11c313173279db4eeb7b8c504647c3e8397f7` (boots under the guard and with a fresh profile, exit 0).
+
+## Signed AAB (version code 17 rebuilt, 2026-11-06, Session 39i: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,428,592 bytes**, sha256 `173ff50dd71fdc499f6257fc510abed6ea8eb8975b482ba7d11f3be40f9cf44b`, version code 17, from the clean head `c7082dd9`: the composed HUD, the interaction sounds and the styled menus on top of Session 39h. Release status NOT READY.
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export24_c7082dd9.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 217,046,072 bytes, sha256 `f5ce80c824b5444aaf9f45d990bef1000f0cdc1b01d6b0bd56d2a883451fae00` (boots under the guard and with a fresh profile, exit 0).

@@ -137,6 +137,9 @@ func _prompt_for(node: Node) -> String:
 	return LocalizationManager.t("PROMPT_INTERACT")
 
 func _on_interact_requested() -> void:
+	# behind an open screen (the workbench, the map, the codex) the key belongs to that screen: it toggled the generator and replayed the bench
+	if UIManager.is_hud_blocked():
+		return
 	if _target == null or not is_instance_valid(_target):
 		return
 	if not _is_available(_target):

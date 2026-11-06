@@ -12,11 +12,13 @@ extends Node3D
 
 const PUZZLE_ID: String = "fuse_substation"
 const _Props := preload("res://scripts/art/prop_meshes.gd")
+const _SNAP_SFX := preload("res://assets/audio/sfx/interact/cable_connect.wav")
 
 var _body: StaticBody3D
 
 func _ready() -> void:
 	add_to_group("interactable")
+	EventBus.puzzle_solved.connect(_on_puzzle_solved)
 	var mesh := MeshInstance3D.new()
 	_Props.dress(mesh, "cable_box")
 	add_child(mesh)
@@ -28,6 +30,11 @@ func _ready() -> void:
 	cs.position = Vector3(0, 0.5, 0)
 	_body.add_child(cs)
 	add_child(_body)
+
+## The box itself answers its solved puzzle with the snap of the joined cables.
+func _on_puzzle_solved(id: StringName, _district: StringName) -> void:
+	if String(id) == PUZZLE_ID:
+		AudioManager.play_sound_3d(_SNAP_SFX, global_position, -6.0, &"Environment")
 
 func can_interact() -> bool:
 	var ps := get_node_or_null("/root/PuzzleSystem")

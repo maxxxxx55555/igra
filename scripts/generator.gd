@@ -24,6 +24,8 @@ signal fuel_empty()
 
 var _light: OmniLight3D
 const _Props := preload("res://scripts/art/prop_meshes.gd")
+const _START_SFX := preload("res://assets/audio/sfx/interact/generator_start.wav")
+const _STOP_SFX := preload("res://assets/audio/sfx/interact/generator_stop.wav")
 var _mesh: MeshInstance3D
 var _glow: StandardMaterial3D
 
@@ -90,12 +92,14 @@ func _activate() -> void:
 	is_active = true
 	if _light: _light.light_energy = 2.0
 	if _glow: _glow.emission_energy_multiplier = 1.2
+	AudioManager.play_sound_3d(_START_SFX, global_position, -6.0, &"Environment")
 	generator_activated.emit()
 
 func _deactivate() -> void:
 	is_active = false
 	if _light: _light.light_energy = 0.0
 	if _glow: _glow.emission_energy_multiplier = 0.0
+	AudioManager.play_sound_3d(_STOP_SFX, global_position, -6.0, &"Environment")
 	generator_deactivated.emit()
 
 func _on_fuel_empty() -> void:

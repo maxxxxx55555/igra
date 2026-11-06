@@ -115,11 +115,12 @@ func _build_screen(name: String) -> void:
 	card.add_child(border)
 	var inner := ColorRect.new()
 	inner.color = PANEL_COLOR
-	inner.size = Vector2(card_w - 2, card_h - 2)
-	inner.position = Vector2(1, 1)
+	# the panel fills the card inside an even 2 px brass frame (at 1 px in, 2 px short, the frame was 1 px on two sides and 5 on the others)
+	inner.size = Vector2(card_w, card_h)
+	inner.position = Vector2(2, 2)
 	inner.mouse_filter = Control.MOUSE_FILTER_PASS
 	border.add_child(inner)
-	_apply_card_bg_v2(inner, name, card_w - 2, card_h - 2)
+	_apply_card_bg_v2(inner, name, card_w, card_h)
 	var header_line := ColorRect.new()
 	header_line.color = BRASS
 	header_line.size = Vector2(card_w - 4, 2)
@@ -981,6 +982,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	header.add_theme_font_size_override("font_size", 22)
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
+	_shop_prices.clear()
 	# Каталог: ShopService (CoinWallet-магазин). IAP-паки (Kind.COIN_PACK) исключены — донат/реклама отключены.
 	var items: Array[Dictionary] = []
 	for it in ShopService.catalog_by_kind(ShopItem.Kind.UPGRADE) + ShopService.catalog_by_kind(ShopItem.Kind.SKIN) + ShopService.catalog_by_kind(ShopItem.Kind.BUNDLE):
@@ -1039,6 +1041,8 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		pl.add_theme_font_size_override("font_size", 20)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		column.add_child(pl)
+		if not ShopService.is_owned(it.id):
+			_shop_prices.append({"label": pl, "price": int(price)})
 		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(220, 44))
 		btn.custom_minimum_size = Vector2(220.0, UiScale.min_touch())
 		btn.add_theme_font_size_override("font_size", 22)
@@ -1047,7 +1051,22 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		column.add_child(btn)
 		if ShopService.is_owned(it.id):
 			_mark_owned(btn)
-	# Реклама отключена (кнопка удалена)
+	_tint_prices()
+
+var _shop_prices: Array[Dictionary] = []
+
+## A price the wallet cannot pay reads in ember with what is missing; the others stay brass.
+func _tint_prices() -> void:
+	var coins: int = CoinWallet.get_coins()
+	for entry: Dictionary in _shop_prices:
+		var pl := entry["label"] as Label
+		if not is_instance_valid(pl):
+			continue
+		var short: int = int(entry["price"]) - coins
+		pl.text = str(entry["price"]) + LocalizationManager.t("SCR_MONET")
+		if short > 0:
+			pl.text += "  " + LocalizationManager.tf("SHOP_NEED_MORE", [short])
+		pl.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER if short > 0 else ThemeProvider.COLOR_AMBER)
 
 func _mark_owned(btn: Button) -> void:
 	btn.disabled = true
@@ -1059,6 +1078,7 @@ func _on_buy(item_id: StringName, btn: Button) -> void:
 	var coins := find_child("ShopCoinHeader", true, false) as Label
 	if coins != null:
 		coins.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
+	_tint_prices()
 	if ShopService.is_owned(item_id):
 		_mark_owned(btn)
 		_show_toast(LocalizationManager.t("SCR_KUPLENO"))

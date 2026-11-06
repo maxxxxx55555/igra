@@ -182,6 +182,14 @@ func _where(frame: String) -> void:
 func _face(p: Node3D, at: Vector3) -> void:
 	p.look_at(Vector3(at.x, p.global_position.y, at.z), Vector3.UP)
 
+## Yaw and pitch toward a point: a crawler lies low, and a yaw-only frame left it under the view.
+func _aim(p: Node3D, at: Vector3) -> void:
+	_face(p, at)
+	var cam := get_viewport().get_camera_3d()
+	if cam != null:
+		var d := at - cam.global_position
+		p.set("_pitch", atan2(d.y, Vector2(d.x, d.z).length()))
+
 ## Street trees are collision-free MultiMesh instances, so a raycast never sees
 ## them: a sight line counts as blocked when a tree (its limbs spread about 1.2 m round it)
 ## stands within 1.8 m of it on the ground plane. The trees are the batch the street props name.
@@ -301,6 +309,7 @@ func _run() -> void:
 	RandomEvents.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	await get_tree().create_timer(3.0).timeout
 	_face_lamps(get_tree().get_first_node_in_group("player") as Node3D)
+	(get_tree().get_first_node_in_group("player") as Node3D).set("_pitch", deg_to_rad(-10.0))  # the flashlight's pool on the street, not the black sky
 	await get_tree().create_timer(0.3).timeout
 	_where("03")
 	await _shot("03_district_night_dark")
@@ -333,7 +342,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.6).timeout
 
 	# Combat: the nearest monster that is in the world (pooled ones are parked
-	# far below), the player 3 m from it and facing it, one hit for the flash.
+	# far below), the player 6 m from it and aiming at it, one hit for the flash.
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	var monster: Node3D = null
 	for m in get_tree().get_nodes_in_group("monsters"):
@@ -347,7 +356,7 @@ func _run() -> void:
 		return
 	var away := player.global_position - monster.global_position
 	away.y = 0.0
-	away = away.normalized() * 3.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 3.0)
+	away = away.normalized() * 6.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 6.0)  # at 3 m the crawler lay under the view or filled it from above
 	player.global_position = monster.global_position + away + Vector3(0.0, 0.5, 0.0)
 	_face(player, monster.global_position)
 	await get_tree().create_timer(0.6).timeout
@@ -355,6 +364,9 @@ func _run() -> void:
 		monster.take_damage(1.0)
 	# v10 N002: the hit flash of the WowDirector has faded after half a second; the frame before it was a white wash (6.5 % of its pixels at luma 235 or more)
 	await get_tree().create_timer(0.5).timeout
+	if is_instance_valid(monster):
+		_aim(player, monster.global_position + Vector3(0.0, 0.4, 0.0))
+		await get_tree().create_timer(0.25).timeout  # the pitch reaches the camera on a physics tick
 	_where("04")
 	await _shot("04_combat")
 	_hud_dump("combat")
@@ -376,6 +388,10 @@ func _run() -> void:
 		_fail("no player at the power station")
 		return
 	var boss: Node3D = FinaleDirector._boss
+	# the boss frame names the Architect: a monster nearer the reticle took the enemy bar (WATCHER)
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if m != boss and m is Node3D:
+			m.queue_free()  # parked, it kept the enemy bar
 	# Arrive healthy (the staged combat above cost HP; the low-HP vignette would
 	# tint the whole frame red) and 5 m from the Architect, facing it.
 	if player.has_method("heal"):
@@ -402,9 +418,8 @@ func _run() -> void:
 	# Let P1 run briefly: its brass energy balls (V02) light the fight.
 	await get_tree().create_timer(1.0).timeout
 	# The Architect moves in P1: aim again right before the shot.
-	_face(player, boss.global_position)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	_aim(player, boss.global_position + Vector3(0.0, 1.6, 0.0))  # in pitch too: the crawler's aim looked down
+	await get_tree().create_timer(0.25).timeout
 	_where("05")
 	print("[final] 05 boss at %s" % boss.global_position)
 	await _shot("05_boss")

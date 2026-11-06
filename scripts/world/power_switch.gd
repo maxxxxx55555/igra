@@ -33,6 +33,7 @@ const STAGE_MSG_KEYS: Array[String] = [
 ]
 
 const _Props := preload("res://scripts/art/prop_meshes.gd")
+const _CLUNK_SFX := preload("res://assets/audio/sfx/interact/fuse_box_close.wav")
 var _panel: MeshInstance3D
 var _glow: StandardMaterial3D
 var _light: OmniLight3D
@@ -170,6 +171,7 @@ func interact(_player: Node = null) -> void:
 
 func _on_repaired(stage: int) -> void:
 	_refresh_visual()
+	AudioManager.play_sound_3d(_CLUNK_SFX, global_position, -6.0, &"Environment")
 	EventBus.puzzle_solved.emit(StringName("switch_%s" % String(district_id)), district_id)
 	EventBus.inventory_notice.emit(
 		LocalizationManager.tf(STAGE_MSG_KEYS[clampi(stage, 1, 3)], [_district_name()]))

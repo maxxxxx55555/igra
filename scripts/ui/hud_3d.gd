@@ -245,10 +245,14 @@ const _STATUS_ICON_SIZE: float = 32.0
 var _status_row: HBoxContainer = null
 var _status_icons: Dictionary = {}  # {int: Control}
 
+## The warmth line rides on the battery caption's line, right-aligned to the bar: under the panel it floated alone and the touch Map button covered it.
 func _setup_thermal_comfort() -> void:
 	var badge: Label = preload("res://scripts/ui/hud_thermal_badge.gd").new()
 	badge.name = "ThermalComfort"
-	_status_row.add_child(badge)
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	badge.position = _bat_caption.position
+	badge.size = _bat_caption.size
+	$TopLeft/Bat.add_child(badge)
 
 func _setup_status_row() -> void:
 	_status_row = HBoxContainer.new()
@@ -798,8 +802,8 @@ func _add_status_backing() -> void:
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
-	backing.position = Vector2(26.0, 8.0)
-	backing.size = Vector2(276.0, 104.0)
+	backing.position = Vector2(8.0, 8.0)
+	backing.size = Vector2(300.0, 92.0)  # ends between the visibility bar and the noise caption: at 104 its edge crossed that caption
 	add_child(backing)
 	move_child(backing, top_left.get_index())
 
@@ -1973,13 +1977,14 @@ func _on_item_picked_up(item_id: StringName, _amount: int = 1) -> void:
 
 ## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
 ## covered the caption ("...ILITY" in docs/stills/tzverify frames).
-const _MAP_BUTTON_POS := Vector2(16, 216)
+## Beside the LOG toggle (toast_manager.gd COLUMN_TOP, 16 + its 72 + 8): the two buttons that open a screen share one row.
+const _MAP_BUTTON_POS := Vector2(96, 290)
 
 func _add_map_button() -> void:
 	var btn := Button.new()
 	btn.name = "MapButton"
 	btn.position = _MAP_BUTTON_POS
-	btn.size = Vector2(56, 40)
+	btn.size = Vector2(72, 48)
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	btn.add_theme_font_size_override("font_size", 16)
 	btn.text = LocalizationManager.t("MAP_TITLE")

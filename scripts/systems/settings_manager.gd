@@ -97,7 +97,7 @@ func _load_defaults() -> void:
 	_settings["sfx"] = 0.85
 	_settings["voice"] = 0.7
 	_settings["colorblind"] = 0
-	_settings["text_size"] = 1
+	_settings["text_size"] = 2 if DisplayServer.is_touchscreen_available() else 1  # a phone reads the HUD from arm's length
 	_settings["dyslexia_font"] = false
 	_settings["high_contrast"] = false
 	_settings["auto_aim"] = false

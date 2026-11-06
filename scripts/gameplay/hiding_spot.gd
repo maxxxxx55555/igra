@@ -13,6 +13,10 @@ class_name HidingSpot
 @export var exit_dir: Vector3 = Vector3(0.0, 0.0, 1.0)
 
 const _Meshes := preload("res://scripts/art/hiding_meshes.gd")
+const _OPEN_SFX := preload("res://assets/audio/sfx/interact/cabinet_open.wav")
+const _CLOSE_SFX := preload("res://assets/audio/sfx/interact/cabinet_close.wav")
+## The shells with a lid or a door creak; a bush or a dark corner takes the player in silently.
+const _CREAKING: Array[String] = ["locker", "dumpster", "car", "crate"]
 
 const TYPE_SIZES := {
 	"locker":   Vector3(0.9, 2.0, 0.7),
@@ -76,7 +80,12 @@ func enter(player: Node3D) -> bool:
 	var body := get_node_or_null("Body") as CollisionObject3D
 	if body != null and player is PhysicsBody3D:
 		(player as PhysicsBody3D).add_collision_exception_with(body)
+	_creak(_OPEN_SFX)
 	return true
+
+func _creak(stream: AudioStream) -> void:
+	if spot_type in _CREAKING:
+		AudioManager.play_sound_3d(stream, global_position, -6.0, &"Environment")
 
 func exit() -> void:
 	var player := _occupant
@@ -84,6 +93,7 @@ func exit() -> void:
 	_occupant = null
 	if player == null or not is_instance_valid(player):
 		return
+	_creak(_CLOSE_SFX)
 	var body := get_node_or_null("Body") as CollisionObject3D
 	if body != null and player is PhysicsBody3D:
 		(player as PhysicsBody3D).remove_collision_exception_with(body)

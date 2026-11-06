@@ -257,6 +257,7 @@ func _build_streetlight_multimesh() -> void:
 	_halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	_halo_mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
 	_halo_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	_halo_mat.albedo_texture = _GLOW_TEX.glow_texture()
 	_halo_mat.disable_receive_shadows = true
