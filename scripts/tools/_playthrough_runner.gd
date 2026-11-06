@@ -1245,10 +1245,8 @@ func _s_codex() -> void:
 	await get_tree().create_timer(0.5).timeout
 
 func _s_hud_buttons() -> void:
-	var minimap0: Variant = SettingsManager.get_setting("show_minimap", false)
-	SettingsManager.set_setting("show_minimap", true)  # off by default since the HUD pass; the '?' chip is a child of the minimap
 	await get_tree().process_frame
-	for text in [LocalizationManager.t("HUD_LOG_TOGGLE"), "?"]:
+	for text in [LocalizationManager.t("HUD_LOG_TOGGLE")]:
 		var button: Button = null
 		for b in _buttons(get_tree().root):
 			if b.text == text and b.is_visible_in_tree():
@@ -1262,7 +1260,6 @@ func _s_hud_buttons() -> void:
 		else:
 			await _click(button)
 		await get_tree().create_timer(0.4).timeout
-	SettingsManager.set_setting("show_minimap", minimap0)
 
 func _s_workbench() -> void:
 	UIManager.open(&"workbench")

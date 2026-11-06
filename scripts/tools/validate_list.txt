@@ -134,7 +134,6 @@ scripts/ui/journal_ui.gd
 scripts/ui/lobby_menu.gd
 scripts/ui/main_menu.gd
 scripts/ui/menu.gd
-scripts/ui/minimap.gd
 scripts/ui/new_game_plus_ui.gd
 scripts/ui/pause_menu.gd
 scripts/ui/photo_album.gd
@@ -143,7 +142,6 @@ scripts/ui/pre_loading.gd
 scripts/ui/puzzle_cables.gd
 scripts/ui/quest_journal.gd
 scripts/ui/quest_tracker_hud.gd
-scripts/ui/radar.gd
 scripts/ui/radio.gd
 scripts/ui/save_slot_entry.gd
 scripts/ui/save_slots_ui.gd

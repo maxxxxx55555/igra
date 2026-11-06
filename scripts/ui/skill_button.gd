@@ -59,7 +59,8 @@ func refresh() -> void:
 		self.disabled = level >= max_level
 		self.tooltip_text = LocalizationManager.t("SKILL_ALREADY_UNLOCKED")
 	else:
-		level_label.text = LocalizationManager.t("SKILL_LOCKED")
+		# a card the player can take says so (it read "Locked" while it was the one affordable card)
+		level_label.text = LocalizationManager.t("SKILL_AVAILABLE" if can_unlock else "SKILL_LOCKED")
 		self.disabled = not can_unlock
 		if not can_unlock:
 			var reqs = _skill_data.requires

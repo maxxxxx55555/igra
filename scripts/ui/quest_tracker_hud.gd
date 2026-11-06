@@ -8,14 +8,8 @@ const PANEL_WIDTH := 360
 const PANEL_HEIGHT := 224
 const MAX_ROWS := 1
 const PANEL_MARGIN := 20
-## Below the top-right maps, not just below the radar. The comment here used to
-## read "ниже миникарты" at 140, which was never true: the radar spans y 16..180
-## (radar.gd) and the bigger UIManager minimap y 16..236 (minimap.gd SIZE 220),
-## so the panel sat on top of both - they all live on UIManager's layer 10 and
-## this panel is added last, so it drew over the minimap and hid the minimap's
-## lower-left corner (96 px of overlap, including the legend chip/minimap.gd).
-## 236 + PANEL_MARGIN clears the taller disc, so the panel stays put whichever of
-## the two maps survives the pending "which top-right map wins" decision.
+## The top right held a radar and a minimap down to y 236; both went with the owner's map rules of 2026-11-05 (the Map is
+## its own screen now), and the panel keeps its place under the pause button.
 const PANEL_TOP := 252
 
 var _container: VBoxContainer
@@ -142,7 +136,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 
 	_container.visible = true
 
-	var show_markers := bool(SettingsManager.get_setting("objective_markers", true))
+	var show_markers := bool(SettingsManager.get_setting("objective_markers", false))
 
 	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
@@ -240,15 +234,13 @@ func _rotate_markers() -> void:
 ##     QuestManager.complete_objective() from the puzzle, not by node identity.
 ## The three types below do resolve: REPAIR through power_switch.district_id,
 ## SECRET through secret.secret_id, KILL through base_monster.monster_id.
+## Only a repair has a marker, and only when the player turns markers on: a secret or a monster is never pointed at (the
+## owner's rules of 2026-11-05: items and monsters are found by exploring).
 func _objective_position(quest: Dictionary) -> Variant:
 	var target := String(quest.get("target", ""))
 	match String(quest.get("type", "")):
 		"REPAIR":
 			return _nearest_with(&"interactable", &"district_id", target)
-		"SECRET":
-			return _nearest_secret()
-		"KILL":
-			return _nearest_enemy(target)
 	return null
 
 func _nearest_with(group: StringName, prop: StringName, value: String) -> Variant:
@@ -274,45 +266,7 @@ func _nearest_with(group: StringName, prop: StringName, value: String) -> Varian
 
 ## Secrets all share the quest target "secret", so the arrow points at the
 ## closest one still takeable.
-func _nearest_secret() -> Variant:
-	var player: Variant = _player_position()
-	if player == null:
-		return null
-	var best: Variant = null
-	var best_dist := INF
-	for n in get_tree().get_nodes_in_group("interactable"):
-		if not (n is Node3D) or not is_instance_valid(n) or not ("secret_id" in n):
-			continue
-		if n.has_method("can_interact") and not bool(n.call("can_interact")):
-			continue
-		var dist: float = (n as Node3D).global_position.distance_to(player)
-		if dist < best_dist:
-			best_dist = dist
-			best = (n as Node3D).global_position
-	return best
-
 ## Same substring rule quest_manager._on_enemy_killed uses, over living enemies.
-func _nearest_enemy(target: String) -> Variant:
-	if target == "":
-		return null
-	var player: Variant = _player_position()
-	if player == null:
-		return null
-	var best: Variant = null
-	var best_dist := INF
-	for e in get_tree().get_nodes_in_group("enemies"):
-		if not (e is Node3D) or not is_instance_valid(e) or not ("monster_id" in e):
-			continue
-		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
-			continue
-		if not String(e.get("monster_id")).contains(target):
-			continue
-		var dist: float = (e as Node3D).global_position.distance_to(player)
-		if dist < best_dist:
-			best_dist = dist
-			best = (e as Node3D).global_position
-	return best
-
 func _player_position() -> Variant:
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	if player == null or not is_instance_valid(player):

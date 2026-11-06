@@ -1,5 +1,7 @@
 ﻿# Known issues
 
+## OPEN (2026-11-06, Session 39h): on a phone, whether a second finger presses a HUD Button while a thumb holds the joystick is not verified (Godot turns only the first finger into a click; the touch probe presses buttons by signal). The design critique's remaining items: the HUD's warmth line and LOG button placement, the tab styling, the shop card frame, a primary button on the main menu (`docs/RUN_STATE.md` S39H-DESIGN).
+
 ## OPEN (2026-11-05, Session 39d): the music is not all from Gemini as the owner asked; the Gemini app in the browser pane is signed out and no Chrome with Claude in Chrome is connected, so no track was generated in this session (`docs/RUN_STATE.md` S39D-BLOCKED). Of the art director's seven items, the store frames (7) and the skill tree and shop panels (4, 5) are done; the High-tier facade stain pattern (1), the boss art (2; the victory art, 3, is the Gemini street since Session 39f) and the dim button edge (6) stay open. The audit of the owner's plan (`docs/RUN_STATE.md` S39D-PLAN) leaves open: fire escapes on the facades, a 3D hum on lit lamps and seeded randomness in the monster FSM (the cage on the lamp and the light exposure of a lamp's pool are done in Session 39e). The owner's release audit of Session 39e adds: the city atlas is a district list, not yet a navigational map (the radar now draws the local streets); the qoder review-only patch was not reviewed; the interaction sounds the expert swarm lists.
 
 ## OPEN (2026-11-05, Session 39c, the art director): `docs/artifacts/councils/art_director_20261105.txt` lists seven art items a store visitor notices (the High-tier facade stain pattern, the boss and the victory art, the skill tree's empty panel, the shop's empty third, the dim button edge, store frames with the tutorial box); none is a defect a gate sees.
@@ -292,7 +294,7 @@ scattered magenta/purple particle-like dots, and at least one object rendering a
 magenta/purple rings. The HUD (health/stamina/battery bars, radar, all text) renders perfectly
 clean and readable on top of it — this is a 3D-world-rendering-only problem, not a whole-engine
 or UI-layer problem. GPU: `ATI Technologies Inc. — AMD Radeon(TM) Graphics` (integrated),
-renderer: `gl_compatibility` (`project.godot:273-274`, used for both desktop and mobile presets).
+renderer: `gl_compatibility` (`project.godot:274-275`, used for both desktop and mobile presets).
 
 **Ruled out already**: not an import-cache issue (ran a full `--headless --import` immediately
 before capturing, zero texture-load errors in the capture log); not shader compile failures

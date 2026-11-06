@@ -59,7 +59,8 @@ const _FRONTAGE := preload("res://scripts/world/facade_frontage.gd")
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
 ## Lowered again so the walls sit below the lit ground, the canon's cold dark (the store frames read them as pale slabs); the sweep above stays as history.
-const FACADE_GAIN: Array[float] = [0.12, 0.15, 0.18, 0.22]
+## The facades' own glow by stage; an unpowered district keeps only a trace of it (it was 0.12: pale walls in the dark).
+const FACADE_GAIN: Array[float] = [0.03, 0.12, 0.18, 0.22]
 ## How much of the hue of a district's glow the concrete keeps: 1 is the palette's own, 0 a grey wall. The police and the park stood a saturated blue and green in the store frames of launch 8; the style guide says
 ## desaturated.
 const GLOW_HUE: float = 0.5

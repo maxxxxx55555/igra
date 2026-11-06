@@ -1,0 +1,17 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[audio-truth] driver=WASAPI output_device=Default devices=["Default", "Speaker (Realtek(R) Audio)"]
+[audio-truth] Master bus peak=-80.0dB (ceiling <=-1.5dB) muted for QA
+[audio-truth] music context before: mood=TENSION in_combat=false nearest_monster_m=20.6, after: mood=TENSION in_combat=false nearest_monster_m=20.6
+[audio-truth] music peak -9.4 dB at the sample of: MusicB music_tension.ogg -8.0 dB; Layer_ambient_dark layer_dark.ogg -12.0 dB; Layer_ambient_lit layer_lit.ogg -60.0 dB; Layer_threat_low layer_threat_low.ogg -23.4 dB; Layer_threat_high layer_threat_high.ogg -60.0 dB; Layer_action layer_action.ogg -60.0 dB
+[audio-truth] Music bus peak=-9.4dB (ceiling <=-1.5dB) ok
+[audio-truth] SFX bus peak=-29.8dB (ceiling <=-1.5dB) ok
+[audio-truth] Ambient bus peak=-28.2dB (ceiling <=-1.5dB) ok
+[audio-truth] PASS -- Music bus peak=-9.4dB (threshold >-45.0dB)
+[audio-truth] SFX peak=-29.8dB Ambient peak=-28.2dB (reported, not blocking -- best-effort footstep/hum trigger, see class comment)
+[audio-truth] threat meter=0.0 music_peak=-13.0dB stems={ "ambient_dark": -12.0, "ambient_lit": -60.0, "threat_low": -60.0, "threat_high": -60.0, "action": -60.0 }
+[audio-truth] threat meter=0.4 music_peak=-8.4dB stems={ "ambient_dark": -12.0, "ambient_lit": -60.0, "threat_low": -16.1, "threat_high": -60.0, "action": -60.0 }
+[audio-truth] threat meter=1.0 music_peak=-9.4dB stems={ "ambient_dark": -15.6, "ambient_lit": -60.0, "threat_low": -53.2, "threat_high": -12.3, "action": -27.3 }
+[audio-truth] PASS -- the stems cross over with the hunted level (calm { "ambient_dark": -12.0, "ambient_lit": -60.0, "threat_low": -60.0, "threat_high": -60.0, "action": -60.0 }, tense { "ambient_dark": -12.0, "ambient_lit": -60.0, "threat_low": -16.1, "threat_high": -60.0, "action": -60.0 }, combat { "ambient_dark": -15.6, "ambient_lit": -60.0, "threat_low": -53.2, "threat_high": -12.3, "action": -27.3 })
+[audio-truth] PASS overall

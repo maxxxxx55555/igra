@@ -9,6 +9,7 @@ const SCREENS: Dictionary = {
 	&"death":           "res://scripts/ui/death_screen.gd",
 	&"win":             "res://scripts/ui/win_screen.gd",
 	&"city_map":        "res://scripts/ui/city_map.gd",
+	&"district_map":    "res://scripts/ui/district_map.gd",
 	# Пять справочных разделов живут внутри одного экрана «Кодекс» с
 	# вкладками. Отдельные записи оставлены: старые вызовы open(&"journal")
 	# и т.п. перенаправляются в нужную вкладку через CODEX_TABS.
@@ -29,7 +30,7 @@ const SCREENS: Dictionary = {
 	&"collection":      "res://scripts/ui/collection_ui.gd",
 }
 const BLOCKING: Array = [&"main_menu", &"pause", &"settings", &"death", &"win",
-	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"inventory", &"photo", &"skill_tree", &"new_game_plus", &"help", &"collection"]
+	&"city_map", &"district_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"inventory", &"photo", &"skill_tree", &"new_game_plus", &"help", &"collection"]
 
 ## Старый id раздела -> вкладка «Кодекса». Экраны перечислены и в SCREENS,
 ## но открываются уже не поодиночке, а как вкладка общего экрана.
@@ -50,7 +51,6 @@ const _FADE_OUT_SEC: float = 0.15
 var _layer: CanvasLayer
 var _cache: Dictionary = {}
 var _open_blocking: Array = []
-var _minimap: Control
 var _weather_overlay: Control
 var _photo: Control
 var _quest_hud: Control
@@ -62,16 +62,12 @@ func _ready() -> void:
 	_layer = CanvasLayer.new()
 	_layer.layer = 10
 	add_child(_layer)
-	_minimap = _mk_overlay("res://scripts/ui/minimap.gd", "Minimap")
 	_weather_overlay = _mk_overlay("res://scripts/ui/weather_overlay.gd", "WeatherOverlay")
 	_photo = _mk_overlay("res://scripts/ui/photo_mode.gd", "PhotoMode")
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
 	_subtitles = _mk_overlay("res://scripts/ui/subtitle_manager.gd", "Subtitles")
 	EventBus.game_state_changed.connect(_on_game_state)
-	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
-		if key == "show_minimap":
-			_sync_minimap())
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
 	Routes.route_changed.connect(func(_path: String) -> void: close(&"main_menu"))
 	_on_game_state(GameManager.current_state)
@@ -135,7 +131,9 @@ func is_hud_blocked() -> bool:
 ## Escape on a keyboard and Back on Android: an open pause screen resumes, else the top closable screen (codex, map, workbench) closes, else a run pauses.
 ## A closable screen closes before the pause opens: the pause over an open Codex stacked two blocking screens and the codex kept hiding the HUD after Continue.
 func back() -> void:
-	if _is_open(&"pause"):
+	if is_instance_valid(_photo) and _photo.active:
+		_photo.toggle()  # the photo mode hides the HUD: Back leaves it first, a phone has no other way out
+	elif _is_open(&"pause"):
 		close(&"pause")
 		GameManager.resume_game()
 	elif _topmost_closable() != &"":
@@ -151,7 +149,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("photo_mode"):
 			_photo.toggle()
 		elif event.is_action_pressed("city_map_toggle"):
-			toggle(&"city_map")
+			toggle(&"district_map")
 		elif event.is_action_pressed("encyclopedia_toggle"):
 			toggle(&"encyclopedia")
 		elif event.is_action_pressed("journal_toggle"):
@@ -210,6 +208,9 @@ func close(id: StringName) -> void:
 		if _open_blocking.is_empty():
 			_set_hud(true)
 	EventBus.ui_screen_closed.emit(id)
+func toggle_photo() -> void:
+	_photo.toggle()
+
 func toggle(id: StringName) -> void:
 	if CODEX_TABS.has(id):
 		# Повторное нажатие той же клавиши закрывает «Кодекс», а нажатие
@@ -342,12 +343,6 @@ func _in_menu_scene() -> bool:
 
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
-## One map in play: the radar of the HUD. The city minimap is a setting, off by default (docs/HUD_PLAN.md row 7); the full map has its own key (city_map_toggle).
-func _sync_minimap() -> void:
-	if is_instance_valid(_minimap):
-		var settings := get_node_or_null("/root/SettingsManager")  # loaded after this autoload: absent on the first call, from _ready
-		_minimap.visible = GameManager.current_state == GameManager.GameState.PLAYING and settings != null and bool(settings.get_setting("show_minimap", false))
-
 func _on_game_state(state: int) -> void:
 	# Игровые накладки (трекер квестов, миникарта, погода) видны только в игре:
 	# в меню и на экранах смерти/победы они висели поверх кнопок.
@@ -355,7 +350,6 @@ func _on_game_state(state: int) -> void:
 	for n in [_quest_hud, _weather_overlay]:
 		if is_instance_valid(n):
 			n.visible = in_game
-	_sync_minimap()
 	match state:
 		GameManager.GameState.MENU:
 			# Если игрок уже НА сцене меню, второй экран поверх неё не нужен —

@@ -539,7 +539,9 @@ func _physics_process(delta: float) -> void:
 		elif hp > 0.0 and _since_hurt >= _REGEN_DELAY_SEC:
 			heal(_BASE_HP_REGEN_PER_SEC * delta)
 	visibility = get_visibility_scale()
-	if gameplay_active and Input.is_action_pressed("attack"):
+	# the held mouse button fires only while the mouse is captured (a touch never captures it, and the first finger's touches are
+	# emulated clicks); on a phone the attack button's own hold fires (InputService.attack_held)
+	if gameplay_active and ((Input.is_action_pressed("attack") and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED) or InputService.attack_held):
 		_hold_fire()
 	_tick_uv(delta)
 	if not can_move:
@@ -1000,7 +1002,7 @@ func _throw_noise_bomb() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event.is_action_pressed("attack"):
+	if event.is_action_pressed("attack") and event.device != InputEvent.DEVICE_ID_EMULATION:  # a tap on the look zone is not a shot
 		_on_attack_input()
 	if event.is_action_pressed("melee"):
 		_handle_attack()
@@ -1014,8 +1016,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_portable_workbench()
 	if event.is_action_pressed("flashlight_toggle"):
 		toggle_flashlight()
-	if event.is_action_pressed("interact"):
-		_try_inspect()
 	if event.is_action_pressed("strobe"):
 		trigger_strobe()
 
@@ -1129,18 +1129,6 @@ func _strobe_flash() -> void:
 		tw.tween_property(flashlight, "light_energy", base_energy * 3.0, 0.05)
 		tw.tween_property(flashlight, "light_energy", base_energy * 0.2, 0.05)
 	tw.tween_property(flashlight, "light_energy", base_energy, 0.1)
-
-func _try_inspect() -> void:
-	if not gameplay_active:
-		return
-	var inspectables := get_tree().get_nodes_in_group("inspectable")
-	for obj in inspectables:
-		if obj is Area3D and obj.has_method("try_inspect"):
-			var player_pos := global_position
-			var obj_pos: Vector3 = obj.global_position
-			if player_pos.distance_to(obj_pos) < 3.0:
-				if obj.try_inspect():
-					return
 
 
 ## The attack button fires the drawn weapon; with none drawn it is the melee combo (the "melee" key always is).

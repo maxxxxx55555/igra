@@ -31,6 +31,9 @@ const LOOK := {
 	"shrub": [Color(0.10, 0.085, 0.07), "", 0.8],
 }
 
+## The mean sRGB albedo of the PBR sets these props use (cracked_concrete, plywood, rusted_metal: 0.37 to 0.39, measured).
+const ALBEDO_SET_MEAN: float = 0.38
+
 var _rng := RandomNumberGenerator.new()
 var _mesh_cache: Dictionary = {}
 var _mat_cache: Dictionary = {}
@@ -153,6 +156,11 @@ func _material(kind: String) -> StandardMaterial3D:
 	mat.roughness = 0.88
 	mat.metallic = 0.08 if String(look[1]) == "rusted_metal" else 0.0
 	mat = _PBR.apply(mat, String(look[1]))
+	if mat.albedo_texture != null:
+		# PbrSets.apply resets the tint to white, and the set's albedo drew the sacks as cream blobs and the pallets bright
+		# (the owner's final rules name both): a tint over the texture keeps the look's colour as its mean
+		var tint: Color = look[0]
+		mat.albedo_color = Color(minf(tint.r / ALBEDO_SET_MEAN, 1.0), minf(tint.g / ALBEDO_SET_MEAN, 1.0), minf(tint.b / ALBEDO_SET_MEAN, 1.0))
 	_mat_cache[kind] = mat
 	return mat
 

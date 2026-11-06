@@ -71,7 +71,7 @@ SETS = [
         ("scripts/world/window_halos.gd", "const RENDER_PRIORITY: int = 5", "const RENDER_PRIORITY: int = 0", "V1B"),
         ("scripts/effects/vfx_burst.gd", "m.billboard_keep_scale = true", "m.billboard_keep_scale = false", "BURST1"),
         ("scripts/effects/dust_motes.gd", "quad_mat.billboard_keep_scale = true", "quad_mat.billboard_keep_scale = false", "MOTE1"),
-        ("scripts/systems/endings_manager.gd", "\"color\": Color(0.62, 0.45, 0.70)", "\"color\": Color(0.2, 0.1, 0.2)", "ENDC1"),
+        ("scripts/systems/endings_manager.gd", "\"color\": Color(\"#8a7338\")", "\"color\": Color(0.2, 0.1, 0.2)", "ENDC1"),
         ("scripts/world/story_props.gd", "const MAX_SCENES: int = 3", "const MAX_SCENES: int = 0", "STORY1"),
         ("scripts/systems/music_manager.gd", "turn * 0.618034", "turn * 0.0", "MUS5"),
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_high\"] = smoothstep(0.45, 0.85, _threat)\n", "\t_layer_target[\"threat_high\"] = 0.0\n", "MUS6"),

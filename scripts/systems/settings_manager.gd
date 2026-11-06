@@ -82,7 +82,6 @@ func _load_defaults() -> void:
 	_settings["crouch_input"] = 0
 	_settings["hud_opacity"] = 1.0
 	_settings["button_size"] = 1.0
-	_settings["show_minimap"] = false
 	var tier: int = 1 if OS.has_feature("mobile") else 2  # Medium on a fresh phone, High on desktop: the tier and the settings it sets agree
 	var preset: Dictionary = GRAPHICS_TIERS[tier]
 	_settings["graphics_tier"] = tier
@@ -103,7 +102,7 @@ func _load_defaults() -> void:
 	_settings["high_contrast"] = false
 	_settings["auto_aim"] = false
 	_settings["arachnophobia"] = false
-	_settings["objective_markers"] = true
+	_settings["objective_markers"] = false  # off by default: the owner's rules leave finding things to the player
 	_settings["touch_sensitivity"] = 1.0
 	_settings["touch_tuning_preset"] = 1  # Default
 	_settings["touch_calibration_done"] = false

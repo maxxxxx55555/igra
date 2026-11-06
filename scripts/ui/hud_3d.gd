@@ -76,7 +76,6 @@ func _ready() -> void:
 	_apply_safe_area()
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
-	_fix_radar_anchor()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
 	hp_fill.color = Color(0.752941, 0.223529, 0.168627)
 	stam_fill.color = Color(0.373, 0.541, 0.306)
@@ -121,7 +120,6 @@ func _ready() -> void:
 		if _bat_caption: _bat_caption.text = LocalizationManager.t("HUD_BATTERY"))
 	_setup_number_fonts()
 	_setup_slot_placeholders()
-	_setup_radar()
 	_setup_button_feedback()
 	_apply_text_outlines()
 	_finish_rows(hp_ratio, bat_ratio)
@@ -149,7 +147,8 @@ func _ready() -> void:
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
-	enemy_name_label.add_theme_font_size_override("font_size", 22)
+	enemy_name_label.add_theme_font_override("font", ThemeProvider.heading_font())
+	enemy_name_label.add_theme_font_size_override("font_size", 28)
 	enemy_name_label.add_theme_color_override("font_color", Color(0.752941, 0.223529, 0.168627))
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
@@ -235,11 +234,11 @@ func _setup_nv_poll() -> void:
 ## in the PR. DOT (BLEED/BURN/POISON) and SLOW are real on the player: the HUD
 ## reads the same `status_fx.active` the tick loop writes.
 const _STATUS_ICONS: Dictionary = {
-	EnemyRosterData.Status.BLEED: ["🩸", Color(0.752941, 0.223529, 0.168627), "res://assets/textures/ui/status_bleed.png"],
-	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
-	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
-	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
-	EnemyRosterData.Status.STUN: ["💫", Color(0.788, 0.635, 0.290), "res://assets/textures/ui/status_stun.png"],
+	EnemyRosterData.Status.BLEED: ["", Color(0.752941, 0.223529, 0.168627), "res://assets/textures/ui/status_bleed.png"],
+	EnemyRosterData.Status.BURN: ["", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
+	EnemyRosterData.Status.POISON: ["", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
+	EnemyRosterData.Status.SLOW: ["", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
+	EnemyRosterData.Status.STUN: ["", Color(0.788, 0.635, 0.290), "res://assets/textures/ui/status_stun.png"],
 }
 const _STATUS_ICON_SIZE: float = 32.0
 
@@ -593,6 +592,8 @@ func _poll_aim_target() -> void:
 			continue
 		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
 			continue
+		if e.has_method("is_perceptible") and not e.is_perceptible():
+			continue
 		var to_enemy: Vector3 = (e as Node3D).global_position - from
 		var dist: float = to_enemy.length()
 		if dist > _AIM_RANGE or dist < 0.01:
@@ -682,6 +683,8 @@ func _on_game_state(state: int) -> void:
 ## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
 ## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
 func _on_hud_visibility(v: bool) -> void:
+	if not v:
+		InputService.attack_held = false  # an overlay can swallow the button's release: no fire left held behind it
 	visible = v and (GameManager.is_playing() or GameManager.is_paused())
 	_sync_damage_indicator_visibility()
 
@@ -766,13 +769,6 @@ func _install_joystick() -> void:
 	joy.mouse_filter = Control.MOUSE_FILTER_STOP
 	ring.add_child(joy)
 
-func _fix_radar_anchor() -> void:
-	var tr := get_node_or_null("TopRight") as Control
-	if tr == null:
-		return
-	tr.grow_vertical = Control.GROW_DIRECTION_END
-	tr.offset_bottom = tr.offset_top + tr.get_combined_minimum_size().y
-
 ## THEME UNIFICATION P0: hud_3d.tscn's root is a CanvasLayer, not a
 ## Control, so it has no .theme property of its own and can't inherit one
 ## from an ancestor Window either (confirmed empirically: Window.theme
@@ -844,9 +840,6 @@ func _localize_static_labels() -> void:
 	if vis_caption != null:
 		vis_caption.text = LocalizationManager.t("HUD_VISIBILITY")
 	_apply_ammo_caption()
-	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
-	if radar_label != null:
-		radar_label.text = LocalizationManager.t("HUD_RADAR")
 	var map_button := get_node_or_null("MapButton") as Button
 	if map_button != null:
 		map_button.text = LocalizationManager.t("MAP_TITLE")
@@ -1137,7 +1130,11 @@ func _process_noise_vignette(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
-	_show_enemy_bar(monster_id, -1.0)
+	# a monster charging out of the dark is not named: only one the player can see gets the bar (the owner's rules)
+	for e: Node in get_tree().get_nodes_in_group("enemies"):
+		if e.get("monster_id") == monster_id and e.has_method("is_perceptible") and e.is_perceptible():
+			_show_enemy_bar(monster_id, -1.0)
+			return
 
 func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 	_show_enemy_bar(monster_id, ratio)
@@ -1638,7 +1635,10 @@ func _wire_action_buttons() -> void:
 	var stealth := $BottomRight/BtnStealth
 	var interact := $BottomRight/BtnInteract
 	if attack:
-		attack.button_down.connect(func() -> void: isv.request_attack())
+		attack.button_down.connect(func() -> void:
+			isv.request_attack()
+			isv.attack_held = true)
+		attack.button_up.connect(func() -> void: isv.attack_held = false)
 	if sprint:
 		# One-Handed Mode: Sprint latches on a press (the thumb that sprints is the one that walks), and a second press lets go
 		sprint.button_down.connect(func() -> void: isv.set_joy_run_held(not isv.is_joy_run_held() if _one_handed() else true))
@@ -1681,8 +1681,9 @@ func _pulse_interact_button(on: bool) -> void:
 ## правому нижнему углу, а размер берётся из TOUCH_BTN (палец ~48-64 px).
 const TOUCH_BTN: Vector2 = Vector2(64, 64)
 
-func _add_side_buttons(isv: Node) -> void:
-	if not has_touch_ui():
+## force builds them on a keyboard too: the HUD check lays them out without a touch screen.
+func _add_side_buttons(isv: Node, force: bool = false) -> void:
+	if not has_touch_ui() and not force:
 		return
 	var anchored := func(node: Control, from_right: float, from_bottom: float) -> void:
 		node.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1702,23 +1703,57 @@ func _add_side_buttons(isv: Node) -> void:
 		return b
 	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
 	anchored.call(jump, 48.0, 232.0)
-	var flash := mk.call("BtnFlash", "☀", func() -> void: isv.request_flashlight()) as Button
+	var flash := mk.call("BtnFlash", "", func() -> void: isv.request_flashlight()) as Button
+	flash.icon = preload("res://assets/ui/ui_flashlight.svg")
 	anchored.call(flash, 124.0, 232.0)
 	# Стробоскоп (GDD §3.1) — отдельная кнопка, на ПК это клавиша C.
 	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
-	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
+	var strobe := mk.call("BtnStrobe", LocalizationManager.t("TOUCH_STROBE"), func() -> void: _request_strobe()) as Button
+	strobe.add_theme_font_size_override("font_size", 16)
 	anchored.call(strobe, 200.0, 232.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
 	var wheel := mk.call("BtnWheel", "◎", _on_touch_wheel_pressed) as Button
 	anchored.call(wheel, 276.0, 232.0)
 	wheel.button_up.connect(_on_touch_wheel_released)
+	# the owner's final rules: every action the keyboard has gets a visible button (reload, melee, UV, dodge besides its gesture,
+	# the inventory); an action button sends the action itself, so the player's own handler runs as for a key
+	var send := func(action: StringName) -> Callable:
+		return func() -> void:
+			for down: bool in [true, false]:
+				var ev := InputEventAction.new()
+				ev.action = action
+				ev.pressed = down
+				Input.parse_input_event(ev)
+	var reload := mk.call("BtnReload", "", send.call(&"reload")) as Button
+	reload.icon = preload("res://assets/ui/ui_ammo.svg")
+	anchored.call(reload, 48.0, 308.0)
+	var melee := mk.call("BtnMelee", LocalizationManager.t("TOUCH_MELEE"), send.call(&"melee")) as Button
+	melee.add_theme_font_size_override("font_size", 16)
+	anchored.call(melee, 124.0, 308.0)
+	var uv := mk.call("BtnUV", LocalizationManager.t("TOUCH_UV"), send.call(&"uv_toggle")) as Button
+	anchored.call(uv, 200.0, 308.0)
+	var dodge := mk.call("BtnDodge", "", func() -> void: isv.request_dodge(isv.get_move_dir())) as Button
+	dodge.icon = preload("res://assets/textures/ui/btn_dodge_128.png")
+	anchored.call(dodge, 276.0, 308.0)
+	var bag := mk.call("BtnInventory", "", func() -> void:
+		if GameManager.is_playing():
+			UIManager.toggle(&"inventory")) as Button
+	bag.icon = preload("res://assets/ui/ui_backpack.svg")
+	anchored.call(bag, 352.0, 232.0)
+	var bench := mk.call("BtnWorkbench", LocalizationManager.t("TOUCH_CRAFT"), send.call(&"workbench")) as Button
+	bench.add_theme_font_size_override("font_size", 16)
+	anchored.call(bench, 352.0, 308.0)
+	for icon_button: Button in [reload, dodge, bag, flash]:
+		icon_button.add_theme_constant_override("icon_max_width", 36)  # a 128 px icon must not grow the button past its slot
+		icon_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_rest_touch_controls()
 
 ## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full
 ## under the thumb (docs/HUD_PLAN.md rows 18 and 23).
 func _rest_touch_controls() -> void:
 	var buttons: Array = []
-	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel",
+			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]:
 		var button := get_node_or_null("BottomRight/" + button_name) as Button
 		if button == null:
 			continue
@@ -1954,22 +1989,8 @@ func _add_map_button() -> void:
 
 func _on_map_btn() -> void:
 	if UIManager and UIManager.has_method("open"):
-		UIManager.open(&"city_map")
+		UIManager.open(&"district_map")
 
-func _setup_radar() -> void:
-	var frame := $TopRight/RadarFrame
-	if not frame:
-		return
-	for c in frame.get_children():
-		c.queue_free()
-	var radar_script = load("res://scripts/ui/radar.gd")
-	if not radar_script:
-		return
-	var radar := Control.new()
-	radar.set_script(radar_script)
-	radar.name = "Radar"
-	frame.add_child(radar)
-	radar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)  # radar.gd's own offsets sat it 16 px off its frame
 
 ## The prompt fades in when something is in reach and out when it is not (docs/HUD_PLAN.md row 14); it is hidden once it is gone.
 func _on_interact_available(avail: bool) -> void:

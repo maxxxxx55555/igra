@@ -33,6 +33,9 @@ func _build() -> void:
 	panel.modulate = Color(1, 1, 1, 0.0)  # начало tween
 	add_child(panel)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	# the list grew past the minimum height (skills, photo mode): it grows both ways and stays centred
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	_apply_panel_shader(panel)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 12)
@@ -64,6 +67,12 @@ func _build() -> void:
 	# The shop and the flashlight upgrades are cards of the Screens layer: coins have nothing to buy without them.
 	_btn(vb, LocalizationManager.t("SHOP_COINS"), func() -> void: _open_card("Shop"))
 	_btn(vb, LocalizationManager.t("CRAFT_UPGRADE"), func() -> void: _open_card("FlashlightUpgrade"))
+	# a phone has no T or P key: the skill tree and the photo mode open from here (the owner: every action has a button)
+	_btn(vb, LocalizationManager.t("SKILL_TREE_TITLE"), func() -> void: UIManager.open(&"skill_tree"))
+	_btn(vb, LocalizationManager.t("PHOTO_MODE"), func() -> void:
+		UIManager.close(&"pause")
+		GameManager.resume_game()
+		UIManager.toggle_photo())
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
 	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(_restart))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))

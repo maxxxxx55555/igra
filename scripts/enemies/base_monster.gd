@@ -63,6 +63,8 @@ var _slow_active: bool = false
 var _vision_lost_timer: float = 0.0
 var _light_exposure_timer: float = 0.0
 var _is_in_flashlight: bool = false
+## In the player's beam at any distance (the HUD may name it); _is_in_flashlight is the same inside the detect radius only.
+var _seen_in_beam: bool = false
 var _net_active: bool = false
 
 ## Сеть активна только при реальном подключении к пиру.
@@ -380,23 +382,25 @@ func _update_timers(delta: float) -> void:
 		_slow_active = false
 
 func _update_light_exposure(delta: float) -> void:
-	if not player_ref or not is_instance_valid(player_ref):
-		_is_in_flashlight = false
-		return
-	var fl: SpotLight3D = player_ref.get_node_or_null("ModelPivot/FlashlightPivot/Flashlight")
+	var near: bool = player_ref != null and is_instance_valid(player_ref)
+	var p := player_ref if near else get_tree().get_first_node_in_group("player") as Node3D
+	var fl: SpotLight3D = p.get_node_or_null("ModelPivot/FlashlightPivot/Flashlight") if p != null else null
 	if not fl or not fl.visible or fl.light_energy <= 0.1:
 		_is_in_flashlight = false
+		_seen_in_beam = false
 		return
 	# the beam must reach the monster, point at it (its cone) and not be shaded by a wall; the bots aim by yaw since rc14
 	var to_monster: Vector3 = global_position + Vector3(0.0, 1.0, 0.0) - fl.global_position
-	_is_in_flashlight = to_monster.length() < fl.spot_range and (-fl.global_transform.basis.z).angle_to(to_monster) <= deg_to_rad(fl.spot_angle) \
-			and _beam_reaches(fl.global_position, to_monster)
+	_seen_in_beam = to_monster.length() < fl.spot_range and (-fl.global_transform.basis.z).angle_to(to_monster) <= deg_to_rad(fl.spot_angle) \
+			and _beam_reaches(fl.global_position, to_monster, p)
+	_is_in_flashlight = _seen_in_beam and near
 	_handle_light_reaction(delta)
 
 ## Nothing but this monster between the lens and its body.
-func _beam_reaches(from: Vector3, to_monster: Vector3) -> bool:
+func _beam_reaches(from: Vector3, to_monster: Vector3, holder: Node3D) -> bool:
 	var query := PhysicsRayQueryParameters3D.create(from, from + to_monster)
-	query.exclude = [(player_ref as CollisionObject3D).get_rid()]
+	if holder is CollisionObject3D:
+		query.exclude = [(holder as CollisionObject3D).get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	return hit.is_empty() or hit.collider == self
 
@@ -411,6 +415,11 @@ func _handle_light_reaction(delta: float) -> void:
 
 func _is_in_light() -> bool:
 	return _is_in_flashlight
+
+## Whether the player can see this monster: in the flashlight's beam (range, cone, unshaded) or standing in a lit pool.
+## The reticle, the enemy bar and the auto-aim ask it, so none of them reveals what the dark hides (the owner's rules of 2026-11-05).
+func is_perceptible() -> bool:
+	return _seen_in_beam or LightGrid.is_lit(global_position, LIT_POOL)
 
 func _state_idle(delta: float) -> void:
 	velocity = Vector3.ZERO

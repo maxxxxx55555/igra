@@ -177,7 +177,6 @@ func _select_channel(idx: int) -> void:
 	EventBus.voice_line.emit(_transcript_label.text)
 	if ch.coords != null:
 		_coords_label.text = tr("RADIO_COORDINATES") + " X:" + str(ch.coords.x) + " Y:" + str(ch.coords.y)
-		EventBus.radar_marker_added.emit(ch.coords)
 	else:
 		_coords_label.text = ""
 

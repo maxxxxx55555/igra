@@ -244,3 +244,12 @@
 - Changed: the shop, the skill tree, the death and victory cards and the five endings stand on the Gemini art already in the project (the unused `death_loom` among it); the heading face is tracked a pixel; version code 17 rebuilt from `3f69da98`.
 - Lessons: look for the layer that wins before adding one (the win screen's own art sat under the layout's `EndingArt`, which a check pins to `ending_<id>.png`, so the fix was the five files, not a new node).
 - Owner side: enable SpriteCook or Design if wanted, sign in to Gemini for the music, a phone run, the Play Console.
+
+## 2026-11-05 Session 39g, the owner's final prompt: the restored-light map (Claude Opus 5.5)
+- Changed: the radar and the minimap (monster, item and radio blips, a player arrow) are deleted; `Cartography` charts 2 m cells a restored lamp lights and the player sees, saved per district with a layout revision; the Map is a north-up drawing of charted stone and building edges; the travel list lists only open districts; the reticle, the enemy bar and the auto-aim ignore a monster outside the beam and the lit pools; the props keep their dark tint over their PBR textures.
+- Lessons: a shared helper that resets a caller's colour (PbrSets.apply sets white) silently undoes art fixes downstream; check the final material, not the table.
+- Open (the prompt's gates): the urban kit and monster art, the inventory and HUD composition, the controls matrix, the interaction sounds, the Gemini music, a phone.
+
+## 2026-11-06 Session 39h, the dark city, the touch controls, the agent team (Claude Opus 5.5)
+- Changed: the fog light and the facade glow follow the power stage (a dark district is near-black); a touch button for every action and the pause menu routes; taps no longer fire; the code-review and design agents' fixes; the owner's rules in PRODUCTION_BIBLE section 0; version code 17 rebuilt from `4830c6ff`.
+- Lessons: an agent team pays when each agent has one read-only question (controls matrix, code review, design critique) and returns a ranked short list; a test that pins a behaviour (SH1's enabled Buy) outranks a reviewer's taste.

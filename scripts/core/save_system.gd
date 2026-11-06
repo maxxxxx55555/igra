@@ -377,6 +377,7 @@ func _save() -> void:
 		"power": PowerGrid.to_dict(),
 		"encyclopedia": Encyclopedia.to_dict(),
 		"progress": ProgressTracker.to_dict(),
+		"cartography": Cartography.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
@@ -408,6 +409,8 @@ func load_all() -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
+	# a save from before the map rules has no memory of restored light: it starts uncharted, nothing else changes
+	Cartography.from_dict(data.get("cartography", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
 	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
@@ -452,6 +455,7 @@ func reset_all() -> void:
 	_run_id = _new_run_id()
 	GameManager.reset_run()
 	PowerGrid.reset()
+	Cartography.reset()
 	UpgradeSystem.reset()
 	CoinWallet.from_dict({})
 	ShopService.from_dict({})
@@ -642,6 +646,7 @@ func save_slot(slot: int) -> bool:
 		"power": PowerGrid.to_dict(),
 		"encyclopedia": Encyclopedia.to_dict(),
 		"progress": ProgressTracker.to_dict(),
+		"cartography": Cartography.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
@@ -681,6 +686,8 @@ func load_slot(slot: int) -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
+	# a save from before the map rules has no memory of restored light: it starts uncharted, nothing else changes
+	Cartography.from_dict(data.get("cartography", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
 	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))

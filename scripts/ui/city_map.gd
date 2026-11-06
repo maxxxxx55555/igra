@@ -74,17 +74,6 @@ func _build() -> void:
 	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(720, 560)
 	add_child(panel)
-	# V2 SKIN WIRING P4: real isometric city backdrop under the district
-	# rows below (textless by design - rows/labels are the "engine overlay").
-	var map_bg_path := "res://assets/textures/maps_v2/city_iso_2048.png"
-	if ResourceLoader.exists(map_bg_path):
-		var map_bg := TextureRect.new()
-		map_bg.texture = load(map_bg_path)
-		map_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		map_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		map_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-		map_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		panel.add_child(map_bg)
 
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 10)
@@ -126,8 +115,10 @@ func _refresh() -> void:
 	if _title != null:
 		_title.text = LocalizationManager.tf("MAP_PROGRESS", [restored, CANON.size()])
 
+	# district travel lists only the destinations the player already knows (the owner's map rules): no locked name
 	for id in CANON:
-		_list.add_child(_make_row(id, pg, current))
+		if pg == null or pg.is_unlocked(id) or id == current:
+			_list.add_child(_make_row(id, pg, current))
 
 func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
 	var stage: int = pg.get_stage(id) if pg != null else 0
