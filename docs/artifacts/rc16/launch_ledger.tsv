@@ -586,3 +586,6 @@ n	utc	head	id	exit	command
 585	20261106T080417Z	63a83aea	s39_glowprobe_63a83ae	0	bash -c APPDATA='C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\probe_appdata' PROBE_OUT='C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\probe.png' timeout 60 godot_extracted/Godot_v4.7-stable_win64_console.exe --path 'C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\glow_probe' --resolution 640x360 -s probe.gd
 586	20261106T081238Z	afa2f276	s39_battery_afa2f276	2	bash tools/check.sh --all
 587	20261106T085111Z	c2e1a401	s39_battery_c2e1a401	1	bash tools/check.sh --all
+588	20261106T092125Z	0c7ff896	s39_store29_0c7ff89	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+589	20261106T092325Z	cd949329	s39_store30_cd94932	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+590	20261106T092521Z	7f670544	s39_store31_7f67054	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
