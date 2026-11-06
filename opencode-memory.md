@@ -257,3 +257,7 @@
 ## 2026-11-06 Session 39i, the composed HUD, the interaction sounds, the styled menus (Claude Opus 5.5)
 - Changed: the warmth line beside BATTERY (measured in both languages), LOG and Map side by side, the in-house interaction sounds wired, tabs in the canon's style, an even card frame, the menu's primary action; version code 17 rebuilt from `c7082dd9`.
 - Lessons: a `cd` into a subfolder moves the session's working directory and the relative guard hook then blocks every tool until the turn ends: use absolute paths or `git -C`; a check that measures text in both locales (THERMAL2) caught the Russian line before a frame did.
+
+## 2026-11-06 Session 39j, the monsters' hide and the export on the bundled JDK (Claude Opus 5.5)
+- Changed: a shared run-time noise hide on the monsters (mottled, lumpy, wet) instead of matt clay; the monster line-up and the store frames stage reliably; version code 17 rebuilt from `494db1b6` with Android Studio's JDK 21.
+- Lessons: a build machine can lose its JDK between two exports: read the export log's first ERROR before retrying; a frames runner that places things at fixed world coordinates goes stale when the districts are rebuilt: place relative to the spawn.

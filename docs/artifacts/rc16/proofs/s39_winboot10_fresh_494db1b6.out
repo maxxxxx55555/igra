@@ -1,0 +1,10 @@
+# proof s39_winboot10_fresh_494db1b6
+# utc 20261106T171531Z
+# head 494db1b6 (uncommitted paths: 18)
+# env none
+# cmd bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_494db1b6')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+exe exit 0
+# EXIT=0

@@ -301,3 +301,9 @@ already works without it). Music generation is excluded by owner decision.
 - **Built:** `build/tls.aab`, **107,428,592 bytes**, sha256 `173ff50dd71fdc499f6257fc510abed6ea8eb8975b482ba7d11f3be40f9cf44b`, version code 17, from the clean head `c7082dd9`: the composed HUD, the interaction sounds and the styled menus on top of Session 39h. Release status NOT READY.
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export24_c7082dd9.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 217,046,072 bytes, sha256 `f5ce80c824b5444aaf9f45d990bef1000f0cdc1b01d6b0bd56d2a883451fae00` (boots under the guard and with a fresh profile, exit 0).
+
+## Signed AAB (version code 17 rebuilt, 2026-11-06, Session 39j: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,429,566 bytes**, sha256 `f890ff6814413c6b8356e55bf7534c45a196c06522547f1a35c4d1d38c2bcd40`, version code 17, from the clean head `494db1b6`: the monsters' hide on top of Session 39i, built with Android Studio's bundled JDK 21 (JDK 17 was uninstalled from the machine). Release status NOT READY.
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export26_494db1b6.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 217,047,144 bytes, sha256 `11f11cce7d50d865b880064d8ec3f1dcb4927ea4ad62b268ebce4dc9bd588fae` (boots under the guard and with a fresh profile, exit 0).
