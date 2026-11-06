@@ -607,3 +607,4 @@ n	utc	head	id	exit	command
 606	20261106T144429Z	602d77d8	s39_store32_602d77d	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 607	20261106T144706Z	9c96c4bd	s39_store33_9c96c4b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 608	20261106T144845Z	60f5ee49	s39_battery_60f5ee49	0	bash tools/check.sh --all
+609	20261106T150544Z	9eaa3895	s39_botW_9eaa3895	0	bash tools/qa_sim/autoplay_bot
