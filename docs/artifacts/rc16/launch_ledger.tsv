@@ -594,3 +594,4 @@ n	utc	head	id	exit	command
 593	20261106T092807Z	aa471452	s39_audio13_aa471452	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 594	20261106T092927Z	aa471452	s39_botU_aa471452	0	bash tools/qa_sim/autoplay_bot
 595	20261106T093703Z	aa471452	s39_botV_aa471452	0	bash tools/qa_sim/autoplay_bot
+596	20261106T094449Z	88b4511f	s39_battery_88b4511f	0	bash tools/check.sh --all
