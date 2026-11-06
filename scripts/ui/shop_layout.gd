@@ -22,12 +22,12 @@ static func fit(data: Dictionary, viewport: Vector2) -> void:
 	card.size = size
 	card.position = (viewport - size) * 0.5
 	data.border.size = size + Vector2(4.0, 4.0)
-	data.inner.size = size - Vector2(2.0, 2.0)
+	data.inner.size = size
 	data.header_line.size.x = size.x - 4.0
 	data.title_lbl.size.x = size.x - 40.0
 	data.title_lbl.add_theme_font_size_override("font_size", 28)
 	data.content.size = size - Vector2(40.0, 100.0)
 	var close_button: Button = data.close_btn
 	close_button.size = Vector2(220.0, UiScale.min_touch())
-	close_button.position = Vector2((size.x - close_button.size.x) * 0.5, size.y - 48.0)
+	close_button.position = Vector2((size.x - close_button.size.x) * 0.5, size.y - 60.0)  # clear of the frame, below the catalog
 	close_button.add_theme_font_size_override("font_size", 22)

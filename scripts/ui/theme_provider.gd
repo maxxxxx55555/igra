@@ -160,4 +160,26 @@ static func _scale(theme: Theme, heading: Font, mono: Font) -> Theme:
 			theme.set_font(&"font", variation, scale[variation][1])
 	for state in ["focus", "disabled"]:
 		theme.set_stylebox(state, "OptionButton", theme.get_stylebox(state, "Button"))
+	# the tabs: the selected one stands on the panel fill over a brass rule, the others rest dark in steel (the engine's grey rounded tabs were the last default look)
+	var tab := StyleBoxFlat.new()
+	tab.bg_color = COLOR_BG_DARK
+	tab.border_color = COLOR_BORDER
+	tab.border_width_bottom = 2
+	tab.set_content_margin_all(10)
+	var tab_hover := tab.duplicate() as StyleBoxFlat
+	tab_hover.border_color = COLOR_AMBER_DIM
+	var tab_on := tab.duplicate() as StyleBoxFlat
+	tab_on.bg_color = COLOR_BG_PANEL
+	tab_on.border_color = COLOR_AMBER
+	for type: StringName in [&"TabBar", &"TabContainer"]:
+		theme.set_stylebox(&"tab_unselected", type, tab)
+		theme.set_stylebox(&"tab_disabled", type, tab)
+		theme.set_stylebox(&"tab_hovered", type, tab_hover)
+		theme.set_stylebox(&"tab_selected", type, tab_on)
+		theme.set_stylebox(&"tab_focus", type, theme.get_stylebox(&"focus", &"Button"))
+		theme.set_color(&"font_selected_color", type, COLOR_AMBER)
+		theme.set_color(&"font_hovered_color", type, COLOR_TEXT)
+		theme.set_color(&"font_unselected_color", type, COLOR_TEXT_DIM)
+	theme.set_font(&"font", &"TabContainer", heading)
+	theme.set_stylebox(&"panel", &"TabContainer", theme.get_stylebox(&"panel", &"PanelContainer"))
 	return theme

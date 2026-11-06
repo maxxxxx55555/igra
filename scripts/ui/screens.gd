@@ -115,11 +115,12 @@ func _build_screen(name: String) -> void:
 	card.add_child(border)
 	var inner := ColorRect.new()
 	inner.color = PANEL_COLOR
-	inner.size = Vector2(card_w - 2, card_h - 2)
-	inner.position = Vector2(1, 1)
+	# the panel fills the card inside an even 2 px brass frame (at 1 px in, 2 px short, the frame was 1 px on two sides and 5 on the others)
+	inner.size = Vector2(card_w, card_h)
+	inner.position = Vector2(2, 2)
 	inner.mouse_filter = Control.MOUSE_FILTER_PASS
 	border.add_child(inner)
-	_apply_card_bg_v2(inner, name, card_w - 2, card_h - 2)
+	_apply_card_bg_v2(inner, name, card_w, card_h)
 	var header_line := ColorRect.new()
 	header_line.color = BRASS
 	header_line.size = Vector2(card_w - 4, 2)

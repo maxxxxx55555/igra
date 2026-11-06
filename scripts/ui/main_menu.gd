@@ -271,13 +271,27 @@ func _layout_menu() -> void:
 ## which one actually starts a run - "Continue" resumes the exact save,
 ## "Play" is the only path to a fresh NG+ run (and now confirms before it
 ## resets progress, see _on_play_pressed()).
+## The action the player most likely wants stands out from the column: Continue when there is a save, else Play.
+func _mark_primary(button: Button) -> void:
+	var box := button.get_theme_stylebox(&"normal").duplicate() as StyleBoxFlat
+	if box == null:
+		return
+	box.bg_color = ThemeProvider.COLOR_BG_PANEL2
+	box.border_color = ThemeProvider.COLOR_AMBER
+	button.add_theme_stylebox_override(&"normal", box)
+	button.add_theme_color_override(&"font_color", ThemeProvider.COLOR_AMBER)
+
 func _apply_ngp_status(vb: Node) -> void:
 	var play_btn := vb.get_node_or_null("Play") as Button
 	var continue_btn := vb.get_node_or_null("Continue") as Button
 	var ng := NewGamePlus.get_current_ng_plus() if NewGamePlus else 0
 	if play_btn != null:
+		# beside Continue, Play starts over (it asks first): it says so
 		play_btn.text = LocalizationManager.tf("NGP_NEW_GAME_ACTION", [ng]) if ng > 0 \
-			else LocalizationManager.t(String(LABELS["Play"]))
+			else LocalizationManager.t("new_game" if continue_btn != null else String(LABELS["Play"]))
+	var primary := continue_btn if continue_btn != null else play_btn
+	if primary != null:
+		_mark_primary(primary)
 	if continue_btn != null and ng > 0:
 		continue_btn.text = LocalizationManager.t("NGP_CONTINUE_SAVED")
 	var status := get_node_or_null("NGPStatus") as Label
