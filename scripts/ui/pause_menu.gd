@@ -33,6 +33,9 @@ func _build() -> void:
 	panel.modulate = Color(1, 1, 1, 0.0)  # начало tween
 	add_child(panel)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	# the list grew past the minimum height (skills, photo mode): it grows both ways and stays centred
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	_apply_panel_shader(panel)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 12)
