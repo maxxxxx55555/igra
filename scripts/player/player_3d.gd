@@ -322,6 +322,7 @@ func _ready() -> void:
 	fd_quad.size = Vector2(0.08, 0.08)
 	var fd_mat := StandardMaterial3D.new()
 	fd_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	fd_mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
 	fd_mat.vertex_color_use_as_albedo = true
 	fd_quad.material = fd_mat
 	_footstep_dust_node.draw_pass_1 = fd_quad
