@@ -578,3 +578,7 @@ n	utc	head	id	exit	command
 577	20261106T012735Z	7dfb8f6b	s39_audio12_7dfb8f6b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 578	20261106T012841Z	7dfb8f6b	s39_botS_7dfb8f6b	0	bash tools/qa_sim/autoplay_bot
 579	20261106T013621Z	7dfb8f6b	s39_botT_7dfb8f6b	0	bash tools/qa_sim/autoplay_bot
+580	20261106T014417Z	4830c6ff	s39_export23_4830c6ff	0	bash .qa_logs/s39_export_vc17.sh
+581	20261106T014635Z	4830c6ff	s39_winexport8_4830c6ff	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
+582	20261106T014725Z	4830c6ff	s39_winboot8_4830c6ff	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+583	20261106T014801Z	4830c6ff	s39_winboot8_fresh_4830c6ff	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_4830c6ff')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_4830c6ff' -type f | wc -l)"

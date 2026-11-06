@@ -289,3 +289,9 @@ already works without it). Music generation is excluded by owner decision.
 - **Built:** `build/tls.aab`, **107,361,510 bytes**, sha256 `13b9abfe91ac2d498c3664a55a980c219de7741865143563b2379469df95c34c`, version code 17, from the clean head `0be2e65a` (0 tracked changes before and after): the restored-light map, the visibility rule and the prop tint on top of Session 39f. It replaces the build of row 554 (never uploaded). Release status NOT READY (`docs/RUN_STATE.md` S39G).
 - **Checks** (`docs/artifacts/rc16/proofs/s39_export22_0be2e65a.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
 - **Windows build:** `build/windows/LastStreetlight.exe`, 216,960,608 bytes, sha256 `aea6768a8815336a8d6d509443a1705bca4fa5877df704387562852f846cb89b` (boots under the guard and with a fresh profile, exit 0).
+
+## Signed AAB (version code 17 rebuilt, 2026-11-06, Session 39h: THE BUNDLE OF THE PASS)
+
+- **Built:** `build/tls.aab`, **107,362,855 bytes**, sha256 `932699bbe5fa2600802b7303d84f7f2440213897c5dd27791d801ea4c9b31c40`, version code 17, from the clean head `4830c6ff`: the dark city, the touch controls and the agent team's fixes on top of Session 39g. Release status NOT READY.
+- **Checks** (`docs/artifacts/rc16/proofs/s39_export23_4830c6ff.out`): `aab_check` PASS (version code 17, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations.
+- **Windows build:** `build/windows/LastStreetlight.exe`, 216,962,144 bytes, sha256 `a9d7eca36f4872645564d1c4a6d11c313173279db4eeb7b8c504647c3e8397f7` (boots under the guard and with a fresh profile, exit 0).
