@@ -573,3 +573,8 @@ n	utc	head	id	exit	command
 572	20261105T232140Z	9c0781dc	s39_store26_9c0781d	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 573	20261105T232251Z	7ff7dc28	s39_all18_7ff7dc28	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 574	20261106T012203Z	6c4d0b07	s39_store27_6c4d0b0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+575	20261106T012631Z	7dfb8f6b	s39_perf12_7dfb8f6b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+576	20261106T012721Z	7dfb8f6b	s39_touch12_7dfb8f6b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+577	20261106T012735Z	7dfb8f6b	s39_audio12_7dfb8f6b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+578	20261106T012841Z	7dfb8f6b	s39_botS_7dfb8f6b	0	bash tools/qa_sim/autoplay_bot
+579	20261106T013621Z	7dfb8f6b	s39_botT_7dfb8f6b	0	bash tools/qa_sim/autoplay_bot
