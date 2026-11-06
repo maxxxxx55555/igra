@@ -261,3 +261,7 @@
 ## 2026-11-06 Session 39j, the monsters' hide and the export on the bundled JDK (Claude Opus 5.5)
 - Changed: a shared run-time noise hide on the monsters (mottled, lumpy, wet) instead of matt clay; the monster line-up and the store frames stage reliably; version code 17 rebuilt from `494db1b6` with Android Studio's JDK 21.
 - Lessons: a build machine can lose its JDK between two exports: read the export log's first ERROR before retrying; a frames runner that places things at fixed world coordinates goes stale when the districts are rebuilt: place relative to the spawn.
+
+## 2026-11-06 Session 39k, the owner's rules in the store description (Claude Opus 5.5)
+- Changed: the store description (en, ru) and its bullets carry the owner's rules (darkness, the lit-architecture map, items found by exploring, a button for every action); the GDD no longer lists the radar and the minimap; larger skill cards; version code 17 rebuilt from `439e9ae2`.
+- Lessons: the guard hook reads `git push` followed anywhere by `-f` (an `rm -f` later in the same command) as a force push: keep a push in its own command.
