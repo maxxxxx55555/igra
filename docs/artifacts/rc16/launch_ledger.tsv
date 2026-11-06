@@ -572,3 +572,4 @@ n	utc	head	id	exit	command
 571	20261105T221948Z	8fa8a114	s39_all17_8fa8a114	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
 572	20261105T232140Z	9c0781dc	s39_store26_9c0781d	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 573	20261105T232251Z	7ff7dc28	s39_all18_7ff7dc28	1	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+574	20261106T012203Z	6c4d0b07	s39_store27_6c4d0b0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
