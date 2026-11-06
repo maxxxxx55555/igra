@@ -12,6 +12,8 @@ const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const STAMINA := Color("#5f8a4e")
 
 const Logic := preload("res://scripts/crafting/workbench_logic.gd")
+const _CRAFT_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_success.wav")
+const _FAIL_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_fail.wav")
 const RECIPES: Array[Dictionary] = Logic.RECIPES
 
 ## P2 (FINAL INTEGRATION wave): craft material icons -> ingredient chips
@@ -262,7 +264,12 @@ func _can_craft_qty(idx: int, qty: int) -> bool:
 	return idx >= 0 and idx < RECIPES.size() and Logic.can_craft(RECIPES[idx], qty)
 
 func _do_craft() -> void:
-	if _selected_recipe < 0 or not Logic.craft(RECIPES[_selected_recipe], _craft_qty): return
+	if _selected_recipe < 0:
+		return
+	if not Logic.craft(RECIPES[_selected_recipe], _craft_qty):
+		AudioManager.play_sfx(_FAIL_SFX, -8.0, &"UI")
+		return
+	AudioManager.play_sfx(_CRAFT_SFX, -6.0, &"UI")
 	var r := RECIPES[_selected_recipe]
 	# q_craft_items only advanced via crafting_manager.gd, which is never
 	# autoloaded/instantiated anywhere - the real crafting path (here)

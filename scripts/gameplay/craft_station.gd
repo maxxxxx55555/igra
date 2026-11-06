@@ -5,6 +5,7 @@ extends Node3D
 
 const SIZE := Vector3(1.4, 1.0, 0.8)
 const _Props := preload("res://scripts/art/prop_meshes.gd")
+const _OPEN_SFX := preload("res://assets/audio/sfx/interact/workbench_open.wav")
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -24,6 +25,7 @@ func can_interact() -> bool:
 	return true
 
 func interact(_player: Node) -> void:
+	AudioManager.play_sound_3d(_OPEN_SFX, global_position, -6.0, &"Environment")
 	UIManager.open(&"workbench")
 
 func interact_prompt() -> String:
