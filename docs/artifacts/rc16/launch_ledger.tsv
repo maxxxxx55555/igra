@@ -614,3 +614,9 @@ n	utc	head	id	exit	command
 613	20261106T171348Z	494db1b6	s39_winexport10_494db1b6	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
 614	20261106T171451Z	494db1b6	s39_winboot10_494db1b6	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 615	20261106T171531Z	494db1b6	s39_winboot10_fresh_494db1b6	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_494db1b6')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+616	20261106T173726Z	650aea44	s39_store34_650aea4	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+617	20261106T174255Z	e3dbf607	s39_battery_e3dbf607	0	bash tools/check.sh --all
+618	20261106T175618Z	439e9ae2	s39_export27_439e9ae2	0	bash .qa_logs/s39_export_vc17.sh
+619	20261106T175848Z	439e9ae2	s39_winexport11_439e9ae2	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
+620	20261106T175939Z	439e9ae2	s39_winboot11_439e9ae2	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+621	20261106T180016Z	439e9ae2	s39_winboot11_fresh_439e9ae2	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_439e9ae2')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"

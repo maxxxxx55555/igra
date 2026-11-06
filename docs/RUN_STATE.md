@@ -1,5 +1,17 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 39k (2026-11-06): the owner's rules in the store description, larger skill cards
+
+**NEXT-ROW (S39K): the owner asked to finish, to save everything and to put the new rules into the game's description. Done on `docs/owner-rules-listing`. Release status: NOT READY (open: sculpted monster and boss models, a phone-sized UI scale that needs a device, the Gemini music behind the owner's sign-in, SpriteCook behind `/mcp`, the two-finger phone check).**
+
+- S39K-LISTING (`650aea44`): the store's full description in English and Russian now carries the owner's rules: a pitch-black unpowered district walked by flashlight and sound, a monster unseen until the beam or a lamp catches it (no marker, name or crosshair cue), a map of only the streets and buildings the player's restored light revealed (no monster, item or player arrow), items found by exploring, a touch button for every action; the feature bullets say the same; `listing_audit.py` 2 locales, 0 findings. `docs/GDD.md` no longer lists the radar and the minimap as built (row 3.4 is marked removed by the owner's rule). `docs/PRODUCTION_BIBLE.md` section 0 already held the rules (Session 39h).
+- S39K-CARDS (`650aea44`, frames `e3dbf607`): the skill cards are 320 x 260 with type of 20, 16 and 14 (at 240 x 220 they filled a sixth of the panel).
+- S39K-EXPORT-SCRIPT: `.qa_logs/s39_export_vc17.sh` stops Gradle with Android Studio's bundled JDK 21, so the export needs no step by hand (its copy is in the proof of the export below).
+- S39K-GATES: `check.sh --all` 102 of 102 at `e3dbf607` (row 617); closeout 638 of 638.
+- S39K-EXPORT (rows 618 to 621): version code 17, `build/tls.aab` 107,429,525 bytes, sha256 `99acdaa7e04175cffae8fa6ddf44007517716717d814a869fcb09dec981aace6`, from `439e9ae2`, `aab_check` PASS (jar verified, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations; `build/windows/LastStreetlight.exe` 217,047,144 bytes, sha256 `54d3aa2d29705d840b6d7696e08baf33b2bdac189ec9c6f92e825f137ddc4281`, boots twice. Backups in `_BACKUPS/2026-11-06_s39k` with SHA256SUMS.
+**Skill log (S39K; skill|trigger|phase|outcome):**
+- skill|ponytail|the owner's request of 2026-11-06|S39K|ok
+
 ## Session 39j (2026-11-06): the monsters' hide, steadier store frames, the export on the bundled JDK
 
 **NEXT-ROW (S39J): the owner asked to continue. Done on `art/monster-hide`: the monsters stop reading as tan clay, the store frames stage the same way every run, the bundle is rebuilt. Release status: NOT READY (open: sculpted monster and boss models, a phone-sized UI scale that needs a device, the Gemini music behind the owner's sign-in, SpriteCook behind `/mcp`, the two-finger phone check).**

@@ -1,5 +1,7 @@
 ﻿# Known issues
 
+## CLOSED (2026-11-06, Session 39k): the export script's Gradle stop named the uninstalled JDK 17 (Session 39j); it now names Android Studio's bundled JDK 21 and the export runs without a step by hand. The store description holds the owner's rules (`docs/RUN_STATE.md` S39K-LISTING).
+
 ## OPEN (2026-11-06, Session 39j): JDK 17 is no longer installed on the build machine; the Android export runs on Android Studio's bundled JDK 21 (the editor setting points at it) and `.qa_logs/s39_export_vc17.sh` still stops Gradle with the old JDK 17 path, so its Gradle stop has to be run by hand with the bundled JDK until the script is renewed. The monsters are procedural ring meshes with a shared hide (`docs/RUN_STATE.md` S39J-MONSTERS): sculpted models remain open.
 
 ## OPEN (2026-11-06, Session 39i): the phone check of Session 39h stays open (a second finger on a HUD Button while a thumb holds the joystick). Closed in Session 39i: the warmth line, the LOG and Map placement, the tab style, the shop card frame and the menu's primary button (`docs/RUN_STATE.md` S39I-HUD, S39I-UI), and the interaction sounds are wired (S39I-SOUND). Still open: the monster and boss models, a phone-sized UI scale beyond the largest text step (it needs a device) and the Gemini music (the owner's sign-in).

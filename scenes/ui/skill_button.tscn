@@ -10,7 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
-custom_minimum_size = Vector2(240, 220)
+custom_minimum_size = Vector2(320, 260)
 theme_type_variation = "skill"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -26,7 +26,7 @@ theme_override_constants/separation = 4
 layout_mode = 2
 text = "Skill Name"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.7882, 0.6353, 0.2902, 1)
 autowrap_mode = 3
 
@@ -34,7 +34,7 @@ autowrap_mode = 3
 layout_mode = 2
 text = "Skill description goes here"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.541176, 0.541176, 0.521569, 1)
 autowrap_mode = 3
 
@@ -47,7 +47,7 @@ layout_mode = 2
 text = "Cost: 1 SP"
 horizontal_alignment = 1
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.6196, 0.5255, 0.2706, 1)
 
 [node name="LevelLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
@@ -55,14 +55,14 @@ layout_mode = 2
 text = "Level: 0/3"
 horizontal_alignment = 1
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.7882, 0.6353, 0.2902, 1)
 
 [node name="ReqLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Requires: ..."
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.9098, 0.4118, 0.3529, 1)
 autowrap_mode = 3
 visible = true
