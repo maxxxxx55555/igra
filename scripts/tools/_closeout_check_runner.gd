@@ -1378,6 +1378,25 @@ func _check_hud_corner() -> void:
 		if map_button != null and (c as Control).get_global_rect().intersects(map_button.get_global_rect()):
 			map_hits.append(String((c as Control).name))
 	_ok(map_button != null and map_hits.is_empty(), "HUD1b the touch Map button covers neither the stat panel nor the LOG button (%s)" % ", ".join(map_hits))
+	# the interact key behind an open screen belongs to that screen: the thing in reach (a generator, the workbench) is not used
+	var interactor := get_tree().root.find_child("Interactor", true, false)
+	var behind_screen: int = -1
+	var stand_in := Node3D.new()
+	var probe := GDScript.new()
+	probe.source_code = "extends Node3D\nvar used := 0\nfunc can_interact() -> bool:\n\treturn true\nfunc interact() -> void:\n\tused += 1\n"
+	probe.reload()
+	stand_in.set_script(probe)
+	add_child(stand_in)
+	if interactor != null:
+		interactor.set("_target", stand_in)
+		UIManager.open(&"workbench")
+		interactor.call("_on_interact_requested")
+		behind_screen = int(stand_in.get("used"))
+		UIManager.close(&"workbench")
+		interactor.set("_target", stand_in)
+		interactor.call("_on_interact_requested")
+	_ok(behind_screen == 0 and int(stand_in.get("used")) == 1, "INT1 the interact key behind an open workbench uses nothing in reach; with it closed it does (%d then %d)" % [behind_screen, int(stand_in.get("used"))])
+	stand_in.queue_free()
 
 # ── the play-through's Retry: the respawn (half health, the battery it died with) went to the dead player of the scene
 #    being left, and the reloaded scene started with full health and a full battery ──

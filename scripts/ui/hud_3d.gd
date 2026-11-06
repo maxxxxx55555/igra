@@ -803,7 +803,7 @@ func _add_status_backing() -> void:
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
 	backing.position = Vector2(8.0, 8.0)
-	backing.size = Vector2(300.0, 104.0)
+	backing.size = Vector2(300.0, 92.0)  # ends between the visibility bar and the noise caption: at 104 its edge crossed that caption
 	add_child(backing)
 	move_child(backing, top_left.get_index())
 
