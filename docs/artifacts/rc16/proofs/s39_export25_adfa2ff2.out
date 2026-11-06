@@ -1,0 +1,69 @@
+# proof s39_export25_adfa2ff2
+# utc 20261106T151351Z
+# head adfa2ff2 (uncommitted paths: 13)
+# env none
+# cmd bash .qa_logs/s39_export_vc17.sh
+# source adfa2ff2069d882a8300cde858ac4d24677dabf5
+# tracked changes before: 0
+store and key password: the same
+# STEP export_android 18:13:53
+# STEP export_android rc=1 18:14:19
+stat: cannot stat 'build/tls.aab': No such file or directory
+sha256sum: build/tls.aab: No such file or directory
+bundle:  bytes sha256 
+# STEP aab_check 18:14:19
+manifest bundletool failed (rc 1)
+Traceback (most recent call last):
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\aab_check.py", line 234, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\aab_check.py", line 226, in main
+    bad = facts(args.bundle, args.secrets, args.bundletool)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\aab_check.py", line 154, in facts
+    data = path.read_bytes()
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python311\Lib\pathlib.py", line 1050, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python311\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'build\\tls.aab'
+# STEP aab_check rc=1 18:14:21
+# STEP release_export_check 18:14:21
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+Traceback (most recent call last):
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\release_export_check.py", line 133, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\release_export_check.py", line 119, in main
+    found = aab_findings(aab)
+            ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\release_export_check.py", line 46, in aab_findings
+    with zipfile.ZipFile(path) as z:
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python311\Lib\zipfile.py", line 1286, in __init__
+    self.fp = io.open(file, filemode)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'build\\tls.aab'
+# STEP release_export_check rc=1 18:14:21
+# STEP export_refs 18:14:21
+Traceback (most recent call last):
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\export_refs_check.py", line 213, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\tools\qa_sim\export_refs_check.py", line 199, in main
+    names = set(zipfile.ZipFile(sys.argv[sys.argv.index("--bundle") + 1]).namelist()) if "--bundle" in sys.argv else None
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python311\Lib\zipfile.py", line 1286, in __init__
+    self.fp = io.open(file, filemode)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'build/tls.aab'
+# STEP export_refs rc=1 18:14:22
+cp: cannot stat 'build/tls.aab': No such file or directory
+# tracked changes after: 0
+# STEP done
+# EXIT=0

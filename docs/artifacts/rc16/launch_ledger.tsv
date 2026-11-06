@@ -608,3 +608,5 @@ n	utc	head	id	exit	command
 607	20261106T144706Z	9c96c4bd	s39_store33_9c96c4b	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
 608	20261106T144845Z	60f5ee49	s39_battery_60f5ee49	0	bash tools/check.sh --all
 609	20261106T150544Z	9eaa3895	s39_botW_9eaa3895	0	bash tools/qa_sim/autoplay_bot
+610	20261106T151351Z	adfa2ff2	s39_export25_adfa2ff2	0	bash .qa_logs/s39_export_vc17.sh
+611	20261106T151628Z	adfa2ff2	s39_export26_adfa2ff2	3	bash .qa_logs/s39_export_vc17.sh
