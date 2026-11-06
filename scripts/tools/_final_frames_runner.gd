@@ -342,7 +342,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.6).timeout
 
 	# Combat: the nearest monster that is in the world (pooled ones are parked
-	# far below), the player 3 m from it and facing it, one hit for the flash.
+	# far below), the player 6 m from it and aiming at it, one hit for the flash.
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	var monster: Node3D = null
 	for m in get_tree().get_nodes_in_group("monsters"):
@@ -356,7 +356,7 @@ func _run() -> void:
 		return
 	var away := player.global_position - monster.global_position
 	away.y = 0.0
-	away = away.normalized() * 3.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 3.0)
+	away = away.normalized() * 6.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 6.0)  # at 3 m the crawler lay under the view or filled it from above
 	player.global_position = monster.global_position + away + Vector3(0.0, 0.5, 0.0)
 	_face(player, monster.global_position)
 	await get_tree().create_timer(0.6).timeout
@@ -391,8 +391,7 @@ func _run() -> void:
 	# the boss frame names the Architect: a monster nearer the reticle took the enemy bar (WATCHER)
 	for m in get_tree().get_nodes_in_group("monsters"):
 		if m != boss and m is Node3D:
-			m.process_mode = Node.PROCESS_MODE_DISABLED
-			(m as Node3D).global_position.y -= 100.0
+			m.queue_free()  # parked, it kept the enemy bar
 	# Arrive healthy (the staged combat above cost HP; the low-HP vignette would
 	# tint the whole frame red) and 5 m from the Architect, facing it.
 	if player.has_method("heal"):
