@@ -1,0 +1,10 @@
+# proof s39_glowprobe_63a83ae
+# utc 20261106T080417Z
+# head 63a83aea (uncommitted paths: 15)
+# env none
+# cmd bash -c APPDATA='C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\probe_appdata' PROBE_OUT='C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\probe.png' timeout 60 godot_extracted/Godot_v4.7-stable_win64_console.exe --path 'C:\Users\Maxsim\AppData\Local\Temp\claude\ce14fac8e731cdfb\3f1a5466-5ddb-43de-a6fb-4dd3484782d1\scratchpad\glow_probe' --resolution 640x360 -s probe.gd
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+PROBE saved (640, 360)
+# EXIT=0
