@@ -1,0 +1,10 @@
+# proof s39_export26_adfa2ff2
+# utc 20261106T151628Z
+# head adfa2ff2 (uncommitted paths: 15)
+# env none
+# cmd bash .qa_logs/s39_export_vc17.sh
+# source adfa2ff2069d882a8300cde858ac4d24677dabf5
+# tracked changes before: 1
+ M docs/artifacts/rc16/launch_ledger.tsv
+# REFUSED: tracked changes before the export
+# EXIT=3

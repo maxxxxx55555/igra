@@ -10,7 +10,6 @@ const BATCHES: Array = [
 	["shadow", "watcher", "sharpshooter", "boss_architect"],
 ]
 const GAP: float = 1.9
-const AHEAD_Z: float = 14.0
 ## 4.5 m from the line-up, the eyes a little above the monsters' waists.
 const VIEW := {"at": Vector3(-8.0, 0.1, 18.5), "look": Vector3(-8.0, 1.2, 14.0), "pitch": -0.04, "stage": 3, "light": false}
 
@@ -21,13 +20,20 @@ func _run() -> void:
 	_raise(&"suburbs", 3)
 	await _transition(&"suburbs", "look")
 	_freeze_monsters()
-	_place(VIEW)
+	# the line-up stands on the spawn's street, 4.5 m ahead: the fixed world spot of session 36 is inside the rebuilt blocks now
+	var player := _player_node()
+	var base: Vector3 = player.global_position
+	var fwd := -player.global_transform.basis.z
+	fwd.y = 0.0
+	fwd = fwd.normalized()
+	var right := fwd.cross(Vector3.UP)
+	_place({"at": base, "look": base + fwd * 4.5 + Vector3(0.0, 1.2, 0.0), "pitch": VIEW["pitch"], "stage": 3, "light": false})
 	_flashlight(_player_node(), false)
 	await get_tree().create_timer(3.0).timeout
 	for batch in BATCHES.size():
 		var row: Array[Node3D] = []
 		for i in (BATCHES[batch] as Array).size():
-			row.append(_stand(BATCHES[batch][i], Vector3(-8.0 + (i - 1.5) * GAP, 0.0, AHEAD_Z)))
+			row.append(_stand(BATCHES[batch][i], base + fwd * 4.5 + right * (i - 1.5) * GAP, atan2(fwd.x, fwd.z)))
 		await get_tree().create_timer(1.0).timeout
 		await _both("monsters_" + "abc"[batch])
 		for monster in row:
@@ -44,13 +50,13 @@ func _frame(state: String) -> void:
 	print("[lframes] frame %s" % file)
 
 ## One monster on the street at `at`, facing the player, in the peak of its stride, its AI and physics off.
-func _stand(scene: String, at: Vector3) -> Node3D:
+func _stand(scene: String, at: Vector3, yaw: float) -> Node3D:
 	var monster := (load("res://scenes/enemies/%s_3d.tscn" % scene) as PackedScene).instantiate() as Node3D
 	monster.set("_music_started", true)
 	get_tree().current_scene.add_child(monster)
 	var capsule := (monster.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D
 	monster.global_position = at + Vector3(0.0, capsule.height * 0.5 + 0.02, 0.0)
-	monster.rotation.y = PI
+	monster.rotation.y = yaw  # facing the camera
 	monster.set_physics_process(false)
 	monster.set_process(false)
 	monster.set("velocity", Vector3(0.0, 0.0, -float(monster.get("chase_speed"))))

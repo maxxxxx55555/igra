@@ -359,6 +359,7 @@ func _run() -> void:
 	away = away.normalized() * 6.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 6.0)  # at 3 m the crawler lay under the view or filled it from above
 	player.global_position = monster.global_position + away + Vector3(0.0, 0.5, 0.0)
 	_face(player, monster.global_position)
+	monster.set_physics_process(false)  # it held still: at chase speed it reached the camera before the shot
 	await get_tree().create_timer(0.6).timeout
 	if is_instance_valid(monster) and monster.has_method("take_damage"):
 		monster.take_damage(1.0)
@@ -418,8 +419,15 @@ func _run() -> void:
 	# Let P1 run briefly: its brass energy balls (V02) light the fight.
 	await get_tree().create_timer(1.0).timeout
 	# The Architect moves in P1: aim again right before the shot.
+	# the finale spawns more monsters: clear them again and drop the bar the last one held, so only the Architect can take it
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if m != boss:
+			m.queue_free()
+	var hud := get_tree().root.find_child("HUD", true, false)
+	if hud != null:
+		hud.set("_enemy_bar_hold", 0.0)
 	_aim(player, boss.global_position + Vector3(0.0, 1.6, 0.0))  # in pitch too: the crawler's aim looked down
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.6).timeout
 	_where("05")
 	print("[final] 05 boss at %s" % boss.global_position)
 	await _shot("05_boss")

@@ -1,5 +1,17 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 39j (2026-11-06): the monsters' hide, steadier store frames, the export on the bundled JDK
+
+**NEXT-ROW (S39J): the owner asked to continue. Done on `art/monster-hide`: the monsters stop reading as tan clay, the store frames stage the same way every run, the bundle is rebuilt. Release status: NOT READY (open: sculpted monster and boss models, a phone-sized UI scale that needs a device, the Gemini music behind the owner's sign-in, SpriteCook behind `/mcp`, the two-finger phone check).**
+
+- S39J-MONSTERS (`602d77d8`, the line-up fix in the same commit): under the flashlight the dark monster bodies read as tan clay; they now share a run-time noise hide (a mottled albedo from 0.3 to 1 of the tint and a lumpy normal map, triplanar so the ring meshes show no seam) at roughness 0.5, so in the beam a body shows wet highlights on dark skin and out of it a silhouette (no light of its own: the owner's darkness rule holds). The monster line-up stands on the spawn street: the fixed spot of session 36 was inside the rebuilt blocks, so its frames showed no monster.
+- S39J-FRAMES (`9c96c4bd`, `60f5ee49`): the store frames hold the crawler still 6 m away (at chase speed it reached the camera before the shot) and clear the finale's other monsters before the Architect's shot, so the bar names the Architect.
+- S39J-GATES: `check.sh --all` 102 of 102 at `60f5ee49` (row 608); perf over budget none (98 draw calls, p95 22.2 ms, row 605); bots 3 of 3 new seeds won (3, 19, 101), 0 softlocks (row 609).
+- S39J-EXPORT (rows 610 to 615): the first export stopped because JDK 17 (Eclipse Adoptium) had been uninstalled from this machine since the 13:00 build; the editor's `export/android/java_sdk_path` now names Android Studio's bundled JDK 21 (`C:\Program Files\Android\Android Studio\jbr`; the previous settings file is backed up in `_BACKUPS/2026-11-06_s39i`), and the export script's Gradle stop, which still names JDK 17, was done by hand with the bundled JDK. Version code 17, `build/tls.aab` 107,429,566 bytes, sha256 `f890ff6814413c6b8356e55bf7534c45a196c06522547f1a35c4d1d38c2bcd40`, from `494db1b6`, `aab_check` PASS (jar verified, signer matches), `release_export_check` PASS, `export_refs_check` 509 shipped files and 0 violations; `build/windows/LastStreetlight.exe` 217,047,144 bytes, sha256 `11f11cce7d50d865b880064d8ec3f1dcb4927ea4ad62b268ebce4dc9bd588fae`, boots twice. Backups in `_BACKUPS/2026-11-06_s39j` with SHA256SUMS.
+**Skill log (S39J; skill|trigger|phase|outcome):**
+- skill|godot-style|the `.gd` edits of S39J|S39J|applied; lint_changed 0 findings
+- skill|backup-first|the editor settings before the JDK repoint|S39J|ok (copy in `_BACKUPS/2026-11-06_s39i`)
+
 ## Session 39i (2026-11-06): the composed HUD, the interaction sounds, the styled menus
 
 **NEXT-ROW (S39I): the owner asked again to finish everything to release and save it in `main`. Done on `ui/hud-composition`: the rest of the design critique, the interaction sounds, the release cycle. Release status: NOT READY (open: the monster and boss models, the Gemini music behind the owner's sign-in, SpriteCook behind `/mcp`, a phone for the two-finger check; the owner's store steps).**

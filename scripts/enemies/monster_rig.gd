@@ -9,6 +9,29 @@ const WINDUP: float = 0.4
 const STRIKE: float = 0.1
 const RECOVER: float = 0.3
 const COLLAPSE_SEC: float = 0.75
+
+static var _skins: Array[NoiseTexture2D] = []
+
+## The monsters' shared hide: one smooth simplex noise as a mottled dark ramp (albedo) and as a normal map, made once at run time (no file to ship).
+static func _skin(index: int) -> NoiseTexture2D:
+	if _skins.is_empty():
+		var noise := FastNoiseLite.new()
+		noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+		noise.frequency = 0.02
+		noise.fractal_octaves = 4
+		var ramp := Gradient.new()
+		ramp.set_color(0, Color(0.3, 0.3, 0.3))
+		for as_normal: bool in [false, true]:
+			var tex := NoiseTexture2D.new()
+			tex.width = 256
+			tex.height = 256
+			tex.seamless = true
+			tex.as_normal_map = as_normal
+			tex.bump_strength = 6.0
+			tex.color_ramp = null if as_normal else ramp
+			tex.noise = noise
+			_skins.append(tex)
+	return _skins[index]
 const FLINCH_OUT: float = 0.07
 const FLINCH_BACK: float = 0.12
 const FLINCH_M: float = 0.08
@@ -71,7 +94,13 @@ func build(monster: Node3D, id: StringName) -> void:
 	_mat = StandardMaterial3D.new()
 	_mat.albedo_color = _look["tint"]
 	_mat.vertex_color_use_as_albedo = true  # the sockets of a skull are a darker vertex colour (monster_meshes.gd); a hit flash copies the material, so it keeps them
-	_mat.roughness = 0.9
+	_mat.roughness = 0.5  # wet: under the flashlight a dark body shows highlights instead of a matt clay tan
+	# a hide instead of clay: a mottled albedo (0.3 to 1 of the tint) and a lumpy surface, triplanar so the ring meshes show no seam
+	_mat.albedo_texture = _skin(0)
+	_mat.normal_enabled = true
+	_mat.normal_texture = _skin(1)
+	_mat.uv1_triplanar = true
+	_mat.uv1_scale = Vector3.ONE * 1.6
 	_mat.rim_enabled = true  # a dark body in a dark street reads by its edge against the lamps
 	_mat.rim = 0.3
 	_mat.rim_tint = 0.4
