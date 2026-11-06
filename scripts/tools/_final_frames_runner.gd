@@ -366,7 +366,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.5).timeout
 	if is_instance_valid(monster):
 		_aim(player, monster.global_position + Vector3(0.0, 0.4, 0.0))
-		await get_tree().process_frame
+		await get_tree().create_timer(0.25).timeout  # the pitch reaches the camera on a physics tick
 	_where("04")
 	await _shot("04_combat")
 	_hud_dump("combat")
@@ -419,9 +419,8 @@ func _run() -> void:
 	# Let P1 run briefly: its brass energy balls (V02) light the fight.
 	await get_tree().create_timer(1.0).timeout
 	# The Architect moves in P1: aim again right before the shot.
-	_face(player, boss.global_position)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	_aim(player, boss.global_position + Vector3(0.0, 1.6, 0.0))  # in pitch too: the crawler's aim looked down
+	await get_tree().create_timer(0.25).timeout
 	_where("05")
 	print("[final] 05 boss at %s" % boss.global_position)
 	await _shot("05_boss")
