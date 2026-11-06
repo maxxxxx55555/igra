@@ -8,7 +8,7 @@ func _capture(frame: String, _half: bool) -> void:
 		return
 	print("[release-frames] capture begin " + frame)
 	# Store shots show the world and the HUD, not the first-run hint box or the reward toasts.
-	for node_name: String in ["TutorialHint", "ToastStack", "NoticeLabel", "Toast", "DistrictBanner"]:
+	for node_name: String in ["TutorialHint", "ToastStack", "NoticeLabel", "Toast", "DistrictBanner", "LogHeader"]:
 		var item := get_tree().root.find_child(node_name, true, false) as CanvasItem
 		if item != null:
 			item.visible = false

@@ -73,7 +73,7 @@ func refresh() -> void:
 				req_label.text = LocalizationManager.tf("SKILL_REQUIRES", [", ".join(req_names)])
 			else:
 				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")
-	modulate.a = 0.6 if disabled and level == 0 else 1.0
+	modulate.a = 0.85 if disabled and level == 0 else 1.0  # at 0.6 the Requires line fell under 3:1
 	for state in ["normal", "disabled"]:
 		if disabled and level == 0:
 			remove_theme_stylebox_override(state)

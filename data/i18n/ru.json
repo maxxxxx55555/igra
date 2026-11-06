@@ -311,6 +311,7 @@
   "NG_PLUS_STAT_PLAYER_DMG": "Урон игрока: x%.2f",
   "NG_PLUS_STAT_XP": "Опыт: x%.2f",
   "NOT_ENOUGH_COINS": "Недостаточно монет",
+  "SHOP_NEED_MORE": "не хватает %d",
   "NO_SAVE": "Нет сохранения",
   "No active quests": "Нет активных заданий",
   "Not enough skill points": "Недостаточно очков навыков",
