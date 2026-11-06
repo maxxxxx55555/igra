@@ -1,0 +1,9 @@
+# proof s39_monsters3_cab7a5d2
+# utc 20261106T143655Z
+# head cab7a5d2 (uncommitted paths: 18)
+# env TLS_FRAMES_HASH=cab7a5d2c 
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
+  user-data guard: 13 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/monster_frames_scene.tscn rc=0 (log: .qa_logs/monster_frames_scene.log)
+  user-data guard: 13 file(s) restored byte-identical
+# EXIT=0

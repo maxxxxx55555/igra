@@ -599,3 +599,7 @@ n	utc	head	id	exit	command
 598	20261106T100144Z	c7082dd9	s39_winexport9_c7082dd9	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
 599	20261106T100234Z	c7082dd9	s39_winboot9_c7082dd9	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
 600	20261106T100310Z	c7082dd9	s39_winboot9_fresh_c7082dd9	0	bash -c APPDATA="$(cygpath -w 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_c7082dd9')" timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"; echo "fresh profile files: $(find 'C:/Users/Maxsim/AppData/Local/Temp/claude/ce14fac8e731cdfb/3f1a5466-5ddb-43de-a6fb-4dd3484782d1/scratchpad/fresh_profile_c7082dd9' -type f | wc -l)"
+601	20261106T143028Z	cab7a5d2	s39_monsters1_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
+602	20261106T143338Z	cab7a5d2	s39_monsters2_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
+603	20261106T143655Z	cab7a5d2	s39_monsters3_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
+604	20261106T143831Z	cab7a5d2	s39_monsters4_cab7a5d2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
