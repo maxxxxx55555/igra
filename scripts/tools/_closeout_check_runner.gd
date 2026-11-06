@@ -1371,6 +1371,13 @@ func _check_hud_corner() -> void:
 		if control.is_visible_in_tree() and control.get_global_rect().intersects(log_button.get_global_rect()):
 			covered.append(String(control.name))
 	_ok(covered.is_empty(), "HUD1 the message-log button covers nothing in the stat panel (%s)" % ", ".join(covered))
+	# the touch Map button sits beside it: it too must cover no row of the panel, nor the LOG button
+	var map_button := _main.get_node("HUD").get_node_or_null("MapButton") as Control
+	var map_hits: Array[String] = []
+	for c in corner.find_children("*", "Control", true, false) + [log_button]:
+		if map_button != null and (c as Control).get_global_rect().intersects(map_button.get_global_rect()):
+			map_hits.append(String((c as Control).name))
+	_ok(map_button != null and map_hits.is_empty(), "HUD1b the touch Map button covers neither the stat panel nor the LOG button (%s)" % ", ".join(map_hits))
 
 # ── the play-through's Retry: the respawn (half health, the battery it died with) went to the dead player of the scene
 #    being left, and the reloaded scene started with full health and a full battery ──
