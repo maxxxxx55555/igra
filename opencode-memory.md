@@ -253,3 +253,7 @@
 ## 2026-11-06 Session 39h, the dark city, the touch controls, the agent team (Claude Opus 5.5)
 - Changed: the fog light and the facade glow follow the power stage (a dark district is near-black); a touch button for every action and the pause menu routes; taps no longer fire; the code-review and design agents' fixes; the owner's rules in PRODUCTION_BIBLE section 0; version code 17 rebuilt from `4830c6ff`.
 - Lessons: an agent team pays when each agent has one read-only question (controls matrix, code review, design critique) and returns a ranked short list; a test that pins a behaviour (SH1's enabled Buy) outranks a reviewer's taste.
+
+## 2026-11-06 Session 39i, the composed HUD, the interaction sounds, the styled menus (Claude Opus 5.5)
+- Changed: the warmth line beside BATTERY (measured in both languages), LOG and Map side by side, the in-house interaction sounds wired, tabs in the canon's style, an even card frame, the menu's primary action; version code 17 rebuilt from `c7082dd9`.
+- Lessons: a `cd` into a subfolder moves the session's working directory and the relative guard hook then blocks every tool until the turn ends: use absolute paths or `git -C`; a check that measures text in both locales (THERMAL2) caught the Russian line before a frame did.
