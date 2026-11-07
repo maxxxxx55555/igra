@@ -121,3 +121,26 @@ absorb, because Session 23 had already written each one from the code (the Jules
 | `origin/dsh/work` | empty branch created by another agent and never used; tip `3ca44bb` | no commit of its own, nothing to absorb | deleted: empty and unused (tip `3ca44bb`, an ancestor of `main`); owner-authorized in the v10.0.0-close prompt (C4) |
 | `origin/close/v10.0.0` | the v10.0.0-close pass branch: the five battery rows closed (frames re-shot, cites fixed, proof regenerated, strays deleted) | the PR into protected `main` is the landing | kept: the close pass's branch until its PR merges; the pull requests #28 and #29 merged and the tip is an ancestor of `main`, so the branch is deleted once the owner runs the command of `docs/CLEANUP_LEDGER.md` section 13 |
 | `origin/land/v10.0.0` | the landing branch of Session 30: `pass/v10.0.0-ship` plus the two engine-gate alignments and the land evidence | the pass itself; the PR into protected `main` is the landing | kept until the PR merges into `main`; then `main` names the same commit; the pull requests #22 to #25 merged, so the branch is deleted once the owner runs the command of `docs/CLEANUP_LEDGER.md` section 13 |
+
+## 8. Session 40 (2026-11-07): the seven feature branches of the integration pass
+
+The owner asked for every branch to be analysed, for the redundant ones to be removed and for anything still needed to be landed in `main`. Read after
+`git fetch --prune origin`, with `git rev-list --count origin/main..<branch>` and `git merge-base --is-ancestor <branch> origin/main` for each ref.
+
+**Result: nothing was left to absorb.** All seven feature branches have 0 commits ahead of `origin/main` and are ancestors of it: every change they ever
+held is already in `main` (they were merged by pull requests #32 to #38 and no pull request is open on any of them). `origin/gh-pages` is the only branch
+with commits of its own (2), and it stays: it hosts the privacy-policy page that the store listing links to, which is not game code. The integration
+branch of this pass carries the new work and is landed by its own PR into protected `main`.
+
+The seven were deleted on 2026-11-07 under that directive. Their tips are recorded here so any of them can be restored with
+`git push origin <tip>:refs/heads/<branch>`; all seven commits remain reachable from `main` itself, so no history or file was lost.
+
+| Branch | What it held | State of its artifacts | Disposition |
+|---|---|---|---|
+| `origin/art/monster-hide` | Session 39j: the monsters' hide and the export on the bundled JDK; tip `6a2c4fd6d47b95635472c64d01f764f858daac60` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/docs/owner-rules-listing` | Session 39k: the owner's rules in the store description; tip `71a1ac897f5461b3d9093d0a3d9e30bd898a46d4` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/feat/dark-and-controls` | Session 39h: the dark city, the touch controls and the agent team's fixes; tip `de1dd2e6218a2962d9c4808e5c38db4745cf6fa6` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/feat/restored-light-map` | Session 39g: the release prompt's map and visibility gates; tip `1a4c621d34a507051581d6a98af341c21e4fb57c` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/fix/lit-pool-stealth` | Session 39e: the lit pool, the beam rule, the street radar and version code 17; tip `9c73860b2d31318516d03fb4dcf7c35f42f434a4` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/ui/hud-composition` | Session 39i: the composed HUD, interaction sounds and styled menus; tip `f8ebb9faf5844f202bbf5108fab75e27233f1bad` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
+| `origin/ui/screen-art-backdrops` | Session 39f: the screens and endings on the main menu's art; tip `a7cb26b9bc9b853cff9b8d4ee5c8a292ea1ff7e5` | 0 commits ahead of `main`; an ancestor of it | deleted: fully merged, nothing unique; owner-authorized in the 2026-11-07 release directive |
