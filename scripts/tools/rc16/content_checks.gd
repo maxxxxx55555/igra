@@ -91,7 +91,15 @@ static func _ct7_pinch_zooms_the_camera(r: Node) -> void:
 	await r.get_tree().create_timer(0.4).timeout
 	_touch(player, 1, true, mid + Vector2(150.0, 0.0))
 	_drag(player, 1, mid + Vector2(250.0, 0.0), Vector2(100.0, 0.0))
-	r._ok(absf(player.rotation.y - yaw0) > 0.005 and absf(float(cam.call("get_zoom_factor")) - zoom_out) < 0.01, "CT7 a finger that lands long after the first looks around and does not zoom")
+	# Touch look ownership (Session 39h): the first finger claims the look, so a late
+	# second finger is too old to form a pinch and must neither zoom nor steal the
+	# look. The owning finger still turns the view. Assert all three, not just "no zoom".
+	var late_no_zoom: bool = absf(float(cam.call("get_zoom_factor")) - zoom_out) < 0.01
+	var late_no_steal: bool = is_equal_approx(player.rotation.y, yaw0)
+	_drag(player, 0, mid - Vector2(150.0, 0.0), Vector2(100.0, 0.0))
+	var owner_looks: bool = absf(player.rotation.y - yaw0) > 0.005
+	r._ok(late_no_zoom and late_no_steal and owner_looks,
+		"CT7 a late second finger neither zooms nor steals the look, and the owning first finger still turns the view (no zoom %s, no steal %s, owner looks %s)" % [late_no_zoom, late_no_steal, owner_looks])
 	_touch(player, 0, false, mid - Vector2(150.0, 0.0))
 	_touch(player, 1, false, mid + Vector2(250.0, 0.0))
 	cam.set("_zoom", 1.0)

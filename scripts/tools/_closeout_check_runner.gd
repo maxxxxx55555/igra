@@ -402,8 +402,10 @@ func _check_weapons() -> void:
 	var hp1: float = float(target.get("hp"))
 	shotgun.fire(center + Vector3(0.0, 0.0, 3.0), toward)
 	_ok(float(target.get("hp")) < hp1, "G25 the shotgun's pellets hurt at close range (%.1f -> %.1f)" % [hp1, float(target.get("hp"))])
-	# C03: auto-aim leans toward a living monster near the line of fire, only when the setting is on
-	var mark := _monster("crawler_3d", FAR + Vector3(30.0, 0.0, 0.0))
+	# C03: auto-aim leans toward a living monster near the line of fire, only when the setting is on.
+	# The fixture stands on the same empty flat as RcPerception's VIS checks: no district geometry
+	# or streetlight can occlude the eye line or light the mark from outside the beam.
+	var mark := _monster("crawler_3d", Cartography.district_origin() + Vector3(900.0, 0.0, 900.0))
 	await get_tree().physics_frame
 	var mark_center := (mark.get_node("CollisionShape3D") as Node3D).global_position
 	from = mark_center + Vector3(0.0, 0.0, 6.0)
@@ -412,12 +414,26 @@ func _check_weapons() -> void:
 	SettingsManager.set_setting("auto_aim", false)
 	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line), "C03 auto-aim off leaves the aim alone")
 	SettingsManager.set_setting("auto_aim", true)
-	# the owner's rules of 2026-11-05: the aim leans only toward a monster the player can see (here, one in the beam)
+	# The owner's rules of 2026-11-05: the aim leans only toward a monster the player
+	# can actually perceive (camera frustum + rendered light + clear eye line). A bare
+	# _seen_in_beam flag is no longer enough: stand a check camera on the mark so the
+	# "seen" branch is a real perception case, then put the previous camera back.
+	var prev_cam := get_viewport().get_camera_3d()
+	var check_cam := Camera3D.new()
+	check_cam.fov = 90.0
+	add_child(check_cam)
+	check_cam.look_at_from_position(mark.global_position + Vector3(0.0, 1.6, 6.0), mark.global_position + Vector3(0.0, 1.0, 0.0))
+	check_cam.make_current()
 	mark.set("_seen_in_beam", true)
+	await get_tree().physics_frame
+	var mark_seen: bool = mark.is_perceptible()
 	var aimed: Vector3 = pistol._apply_auto_aim(from, off_line)
-	_ok(aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster it can see")
+	_ok(mark_seen and aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster it can see (perceptible %s)" % mark_seen)
 	mark.set("_seen_in_beam", false)
 	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line) or LightGrid.is_lit(mark.global_position, BaseMonster.LIT_POOL), "C03 auto-aim does not lean toward a monster the dark hides")
+	if is_instance_valid(prev_cam):
+		prev_cam.make_current()
+	check_cam.queue_free()
 	SettingsManager.set_setting("auto_aim", false)
 	# the HUD's two weapon slots
 	var hud := _main.get_node_or_null("HUD")

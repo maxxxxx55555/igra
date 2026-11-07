@@ -53,6 +53,35 @@ agent had already added `CFG1` asserting `permissions/internet=false` for every 
 assertion directly contradicted the shipping policy. It was replaced by an assertion of that
 policy, not deleted.
 
+### 3b. Full-battery failures closed (the `-CheckSet Full` run)
+
+The first Full run reported `Провалено: 2, пройдено: 101`: one transient tooling fault and five
+`rc15 closeout` checks. All were fixed and the closeout gate re-run in the engine:
+`[closeout] DONE checks=654 fails=0`.
+
+- **lint_changed (transient Windows fault).** `tools/lint_changed.py --demo` created its fixture
+  tree inside the repository and removed it with a plain `TemporaryDirectory` cleanup; Windows
+  briefly keeps a just-written file handle open, so the cleanup raised and the demo exited non-zero
+  even though all six fixtures were judged correctly (a leftover `.lint-demo-*` tree at the exact
+  time of the failing run confirmed it). The demo now passes `ignore_cleanup_errors=True`, so a
+  leftover ignored scratch tree cannot fail the self-check. The verdict logic, all six fixtures and
+  every line-number citation in `docs/UTILITIES_REPORT.md` are unchanged.
+- **C03 / UIFX4 / BOSSHIT1 (stale perception fixtures).** The other AI's visibility rules made
+  damage numbers, hit markers and auto-aim legal only for a monster the player can *actually*
+  perceive (camera frustum + rendered light + clear eye line). The three QA checks still set a bare
+  `_seen_in_beam` flag and expected the old unconditional feedback. Their fixtures now stand a
+  check camera on the target on the empty flat, exactly as the new `RcPerception` gate does, and
+  assert perceptibility where relevant. No assertion was relaxed: C03 still proves the aim bends
+  only toward a visible monster, UIFX4 still proves the pool of 12 recycles, BOSSHIT1 still
+  requires both the number and the hit marker.
+- **CT7 (touch look ownership).** The new "one finger owns the look" rule means a finger landing
+  after `PINCH_PAIR_MS` must neither zoom nor steal the look. The old check expected it to turn
+  the view. It now asserts three things instead of two: no zoom, no stolen look, **and** that the
+  owning first finger still turns the view.
+- **HUDP10 (joystick rest alpha).** The touch-contrast pass raised `REST_ALPHA` from `0.55` to
+  `0.8`; the check pinned the literal `0.55`. It now reads `REST_ALPHA` from the shipped
+  `virtual_joystick.gd` and asserts the ring returns to that value, so it cannot drift again.
+
 ## 4. Release workflow bug found and fixed
 
 The supplied fixture harness `tests/Test-Igra-Release-Workflow.ps1` failed in `Prepare` on Windows
