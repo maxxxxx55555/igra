@@ -30,7 +30,7 @@ const FADE_OUT: float = 0.3
 ## 3.14: how many read-back entries the log keeps.
 const HISTORY_MAX: int = 50
 ## The LOG toggle rests see-through and is full for a few seconds after a new entry (docs/HUD_PLAN.md row 17).
-const _LOG_REST: float = 0.45
+const _LOG_REST: float = 0.8
 const _LOG_WAKE_SEC: float = 4.0
 const _FADE := preload("res://scripts/ui/hud_fade.gd")
 ## Share Tech Mono - the canon font for numbers/stats (GDD 11.3).
@@ -49,6 +49,7 @@ const _TYPE_ICON: Dictionary = {
 }
 
 var _column: VBoxContainer
+var _root: Control
 var _header: Control
 var _log_toggle: Button
 var _log_panel: PanelContainer
@@ -63,21 +64,23 @@ var _hud_visible: bool = true
 var _history: Array[Dictionary] = []
 
 ## The column starts under the HUD's stat panel (about 260 px tall): at the corner, the LOG button sat on its first label.
-const COLUMN_TOP := 290.0
+## The LOG toggle and the HUD's Map button share one row: both read UiScale.log_map_row(), so the safe-area inset is
+## applied once, by the same calculation, and a resize re-places them absolutely instead of adding it twice.
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 90
-	var root := Control.new()
-	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	root.position = Vector2(16, COLUMN_TOP)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(root)
+	_root = Control.new()
+	_root.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_root)
+	_layout_root()
+	get_viewport().size_changed.connect(_layout_root)
 	_column = VBoxContainer.new()
 	_column.name = "ToastColumn"
 	_column.add_theme_constant_override("separation", 8)
 	_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(_column)
+	_root.add_child(_column)
 	_build_log_header()
 	_stack = VBoxContainer.new()
 	_stack.name = "ToastStack"
@@ -97,6 +100,27 @@ func _ready() -> void:
 func _on_setting_changed(key: String, _value: Variant) -> void:
 	if key == "trailer_mode":
 		_on_hud_visibility(_hud_visible)
+	elif key == "button_size":
+		_cap_log_height()
+
+func _layout_root() -> void:
+	_root.position = UiScale.log_map_row(get_viewport().get_visible_rect().size)
+	_cap_log_height()
+
+## The open log must stop above the joystick: the column shares the left edge with it, and Button Size grows the
+## joystick from the corner. Absolute minimum sizes keep repeated calls (resize, scale, toasts) idempotent.
+func _cap_log_height() -> void:
+	if _log_panel == null:
+		return
+	var vp := get_viewport().get_visible_rect().size
+	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 64.0, 2.0)
+	var joy_top := vp.y - 200.0 * factor - 16.0
+	var top := _root.position.y + UiScale.min_touch() + 8.0
+	if _stack.visible:
+		top += _stack.size.y + 8.0
+	var avail := maxf(96.0, joy_top - top)
+	_log_panel.custom_minimum_size = Vector2(360, minf(220.0, avail))
+	_log_scroll.custom_minimum_size = Vector2(340, maxf(40.0, minf(180.0, avail - 40.0)))
 
 func _on_toast_requested(text: String, type: String) -> void:
 	var entry := _record(text, type)
@@ -206,6 +230,7 @@ func _toggle_log() -> void:
 	_log_panel.visible = not _log_panel.visible
 	if _log_panel.visible:
 		_rebuild_log()
+		call_deferred("_cap_log_height")
 
 func _rebuild_log() -> void:
 	for c in _log_rows.get_children():
@@ -274,6 +299,8 @@ func _show(data: Dictionary) -> void:
 	row.add_theme_stylebox_override("panel", _panel_style())
 	row.modulate.a = 0.0
 	_stack.add_child(row)
+	if _log_panel.visible:
+		call_deferred("_cap_log_height")  # a new toast pushes the open log down: re-cap it above the joystick
 
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 8)
@@ -312,7 +339,9 @@ func _show(data: Dictionary) -> void:
 	tw.tween_callback(func() -> void:
 		row.queue_free()
 		_visible_count -= 1
-		_pump())
+		_pump()
+		if _log_panel.visible:
+			call_deferred("_cap_log_height"))
 
 func _pop_in(row: Control) -> void:
 	if not is_instance_valid(row):

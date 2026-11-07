@@ -98,12 +98,17 @@ var _halos: MultiMeshInstance3D = null
 var _ground_mat: ShaderMaterial = null
 var _fronts: Array[Transform3D] = []
 var _widths: Array[float] = []
+## Real building footprints in skyline-local XZ, recorded as the ring is built: the map draws its edges from these,
+## not from a guess at the outer ring, so the alleys between blocks and the actual front widths read correctly.
+var _footprints: Array[Rect2] = []
 var _cur_seed := 0.0
 var _frontage: Node3D
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
 	_district_id = district_id
+	_footprints.clear()
+	add_to_group(&"city_skyline")
 	var style: Array = STYLE.get(district_id, STYLE[&"suburbs"])
 	var palette: Array = PALETTES.get(district_id, [FACADES, FACADE_GLOW])
 	var facades: Array = palette[0]
@@ -143,6 +148,10 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			if skip:
 				continue
 			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5 - SHELL_DEPTH)))
+			var centre := turn * Vector3(cx, 0.0, -edge - d * 0.5 - SHELL_DEPTH)
+			var hx: float = w * 0.5 if side % 2 == 0 else d * 0.5
+			var hz: float = d * 0.5 if side % 2 == 0 else w * 0.5
+			_footprints.append(Rect2(Vector2(centre.x - hx, centre.z - hz), Vector2(hx * 2.0, hz * 2.0)))
 			var tint: Color = facades[rng.randi() % facades.size()]
 			_cur_seed = rng.randf()
 			tints.append(tint)
@@ -198,6 +207,17 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	add_child(grass)
 	_add_ground()
 	_add_solid_ground(edge)
+
+## True when a skyline-local XZ point falls inside a recorded building footprint. The map queries this
+## instead of guessing at the outer ring, so alleys and real front widths classify as street, not wall.
+func occupies_local(point: Vector2) -> bool:
+	for rect in _footprints:
+		if rect.has_point(point):
+			return true
+	return false
+
+func has_footprints() -> bool:
+	return not _footprints.is_empty()
 
 ## The front plate of the block: a sill band below the windows, a lintel band above them, an upright pier between every pair
 ## of windows and a jamb at each end, all SHELL_DEPTH deep. The body of the block stands behind it, so every opening is a

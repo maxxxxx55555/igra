@@ -344,10 +344,11 @@ func _in_menu_scene() -> bool:
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
 func _on_game_state(state: int) -> void:
-	# Игровые накладки (трекер квестов, миникарта, погода) видны только в игре:
+	# Игровые накладки (трекер квестов) видны только в игре:
 	# в меню и на экранах смерти/победы они висели поверх кнопок.
+	# The weather overlay owns its own visibility (game state AND graphics tier), so it is not driven here.
 	var in_game := state == GameManager.GameState.PLAYING
-	for n in [_quest_hud, _weather_overlay]:
+	for n in [_quest_hud]:
 		if is_instance_valid(n):
 			n.visible = in_game
 	match state:

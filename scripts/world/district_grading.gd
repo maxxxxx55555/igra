@@ -1,28 +1,14 @@
 extends Node
-## Per-district visual grading. Drives Environment tints + fog.
-## Listens to DistrictThemes.theme_changed.
+## Per-district ground grading from DistrictThemes.theme_changed.
+## The Environment branch that used to live here was dead (its world_environment_path export was never set by
+## world_bootstrap.gd); the live stage fog/ambient owner is scripts/world_env_setup.gd, the single writer.
 
-@export var world_environment_path: NodePath
 @export var district_root_path: NodePath
 
-var _env: WorldEnvironment
 var _root: Node3D
 var _ready_done: bool = false
 
-## Fog density scales with the graphics tier (LOW..ULTRA) so weaker presets
-## read a touch clearer and the top tier leans into the mood a bit more.
-const _FOG_TIER_MULT: Array[float] = [0.6, 0.85, 1.0, 1.15]
-
-## GDD §11.1: DARK почти pitch-black (ambient 0.03), LIT/FULL 0.11/0.16.
-## PARTIAL (между DARK и STREETS) не описан явно — берём среднее.
-## Индексы соответствуют DistrictData.Stage (DARK/PARTIAL/STREETS/FULL).
-const _STAGE_AMBIENT: Array[float] = [0.03, 0.06, 0.11, 0.16]
-## The light the fog itself carries, by stage: at 0.6 everywhere the teal haze lit every facade of an unpowered district
-## (the owner: very dark, walking as in the dark); restored streets get the haze back.
-const _STAGE_FOG_LIGHT: Array[float] = [0.12, 0.28, 0.45, 0.6]
-
 func _ready() -> void:
-	_env = get_node_or_null(world_environment_path) as WorldEnvironment
 	_root = get_node_or_null(district_root_path) as Node3D
 	if not DistrictThemes.theme_changed.is_connected(_apply):
 		DistrictThemes.theme_changed.connect(_apply)
@@ -43,38 +29,10 @@ func _on_stage_changed(district_id: StringName, _stage: int) -> void:
 	if district_id == DistrictThemes.current_id:
 		_apply(district_id)
 
-func _ambient_energy_for(district_id: StringName) -> float:
-	var stage: int = clampi(PowerGrid.get_stage(district_id), 0, _STAGE_AMBIENT.size() - 1)
-	return _STAGE_AMBIENT[stage]
-
-func _fog_multiplier() -> float:
-	var tier: int = clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, _FOG_TIER_MULT.size() - 1)
-	return _FOG_TIER_MULT[tier]
-
 func _apply(district_id: StringName) -> void:
 	if not _ready_done:
 		return
 	var theme: Dictionary = DistrictThemes.get_theme(district_id)
-	if _env != null and _env.environment != null:
-		var e: Environment = _env.environment
-		# RESCUE WAVE P2: real starfield panorama now lives on the
-		# WorldEnvironment resource itself (scenes/environment/world_env.tscn).
-		# LOW tier falls back to a flat color (perf — panorama sky costs more
-		# to sample than a solid clear), everything else keeps the sky.
-		var tier: int = clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2)
-		if tier == 0:
-			e.background_mode = Environment.BG_COLOR
-			e.background_color = Color(theme.get("sky", Color.BLACK))
-		else:
-			e.background_mode = Environment.BG_SKY
-		var fog: Color = Color(theme.get("fog", Color.GRAY))
-		e.fog_enabled = true
-		e.fog_color = fog
-		e.fog_density = (0.012 if String(district_id) != "park" else 0.006) * _fog_multiplier()
-		e.ambient_light_color = Color(theme.get("ambient", Color.WHITE))
-		e.ambient_light_energy = _ambient_energy_for(district_id)
-		e.fog_light_energy = _STAGE_FOG_LIGHT[clampi(PowerGrid.get_stage(district_id), 0, _STAGE_FOG_LIGHT.size() - 1)]
-		e.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	if _root != null:
 		_apply_ground(_root, Color(theme.get("primary", Color.GRAY)), district_id)
 

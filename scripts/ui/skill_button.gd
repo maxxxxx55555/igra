@@ -73,7 +73,14 @@ func refresh() -> void:
 				req_label.text = LocalizationManager.tf("SKILL_REQUIRES", [", ".join(req_names)])
 			else:
 				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")
-	modulate.a = 0.85 if disabled and level == 0 else 1.0  # at 0.6 the Requires line fell under 3:1
+	# A locked card dims its decoration (the disabled stylebox and the icon), never its text: modulating the whole
+	# button dropped the small Requires line under 3:1. The requirement reads in the lifted danger colour instead.
+	modulate.a = 1.0
+	var icon := name_label.get_parent().get_node_or_null("IconTex") as CanvasItem
+	if icon != null:
+		icon.modulate.a = 0.6 if disabled and level == 0 else 1.0
+	req_label.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER_TEXT)
+	level_label.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER_DIM if disabled and level == 0 else ThemeProvider.COLOR_TEXT)
 	for state in ["normal", "disabled"]:
 		if disabled and level == 0:
 			remove_theme_stylebox_override(state)

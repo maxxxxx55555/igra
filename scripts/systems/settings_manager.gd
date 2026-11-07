@@ -331,7 +331,8 @@ func set_hud_opacity(v: float) -> void:
 	EventBus.settings_changed.emit("hud_opacity", _settings["hud_opacity"])
 
 func set_button_size(v: float) -> void:
-	_settings["button_size"] = clampf(v, maxf(0.5, UiScale.min_touch() / 72.0), 2.0)
+	# The floor is MIN_TOUCH over the smallest action-cluster control (64 px, hud_3d.gd TOUCH_BTN), never under 48.
+	_settings["button_size"] = clampf(v, maxf(0.5, UiScale.min_touch() / 64.0), 2.0)
 	EventBus.settings_changed.emit("button_size", _settings["button_size"])
 
 func set_colorblind_mode(idx: int) -> void:
@@ -694,7 +695,7 @@ func from_dict(d: Dictionary) -> void:
 	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
 	# The button size also keeps the touch floor of its setter.
 	if _settings.has("button_size"):
-		_settings["button_size"] = maxf(float(_settings["button_size"]), UiScale.min_touch() / 72.0)
+		_settings["button_size"] = maxf(float(_settings["button_size"]), UiScale.min_touch() / 64.0)
 	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
 	_settings["hardcore"] = _settings.get("hardcore", false) is bool and _settings["hardcore"]
 	# The stored index of the language list could point past the two languages left: it follows the live language.

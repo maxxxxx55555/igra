@@ -425,6 +425,9 @@ const TOUCH_LOOK_SENS: float = 0.004
 const PINCH_PAIR_MS: int = 250
 var _touch_pos: Dictionary = {}
 var _pinch_dist: float = 0.0
+## The one finger that owns the look: claimed on a press in the look zone that no touch control sits under, and
+## released on lift/cancel. A second finger dragging over HUD buttons never steers the camera.
+var _look_touch_index: int = -1
 
 func _input(event: InputEvent) -> void:
 	if not gameplay_active:
@@ -439,14 +442,42 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventScreenTouch:
 		_track_swipe(event)
 		_track_pinch(event)
+		_track_look_ownership(event)
 	elif event is InputEventScreenDrag:
 		if _pinch_drag(event):
 			return
-		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
-		if event.position.x < vp_w * JOY_ZONE_RATIO:
+		if event.index != _look_touch_index or UIManager.is_hud_blocked():
 			return
 		var touch_mult: float = SettingsManager.get_touch_sensitivity() if SettingsManager != null else 1.0
 		_apply_look(-event.relative.x * TOUCH_LOOK_SENS * touch_mult, -event.relative.y * TOUCH_LOOK_SENS * touch_mult)
+
+## _input runs before GUI input, so the claim is geometric: a press under any visible touch control belongs to that
+## control, not to the look. Release and cancel (also a release outside the zone) clear the ownership by index.
+func _track_look_ownership(event: InputEventScreenTouch) -> void:
+	if not event.pressed or event.canceled:
+		if event.index == _look_touch_index:
+			_look_touch_index = -1
+		return
+	if _look_touch_index != -1 or UIManager.is_hud_blocked():
+		return
+	if event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+		return
+	if _touch_on_control(event.position):
+		return
+	_look_touch_index = event.index
+
+## Whether a visible, touch-handling Control sits under the point: buttons, scrollers, and anything with a gui_input
+## handler (the joystick, the quick slots). Plain backdrops that merely stop the mouse are not touch controls.
+func _touch_on_control(pos: Vector2) -> bool:
+	for node: Node in get_tree().root.find_children("*", "Control", true, false):
+		var c := node as Control
+		if not c.is_visible_in_tree() or c.mouse_filter != Control.MOUSE_FILTER_STOP:
+			continue
+		if not (c is BaseButton or c is ScrollContainer or c.has_method("_gui_input") or not c.gui_input.get_connections().is_empty()):
+			continue
+		if c.get_global_rect().has_point(pos):
+			return true
+	return false
 
 func _track_swipe(event: InputEventScreenTouch) -> void:
 	if event.pressed:

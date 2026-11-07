@@ -1,7 +1,6 @@
 extends RefCounted
 ## rc16 closeout checks of beauty (Z-visual): wired by the orchestrator into _closeout_check_runner.gd as `await <Preload>.run(self)`
 
-const GRAIN_SHADER_PATH: String = "res://assets/shaders/grain_overlay.gdshader"
 const DAMAGE_SHADER_PATH: String = "res://assets/shaders/damage_vignette.gdshader"
 const INDICATOR_PATH: String = "res://scenes/effects/damage_indicator.tscn"
 ## The damage flash fades in 0.55 s: its strength is read 0.2 s into it, then 0.8 s later.
@@ -9,23 +8,39 @@ const FLASH_MID_SEC: float = 0.2
 const FLASH_REST_SEC: float = 0.8
 
 static func run(r: Node) -> void:
-	_grain_sampler(r)
+	_grain_single_owner(r)
 	await _damage_flash(r)
-	_grain_hash(r)
+	await _grain_tier(r)
 	_overlay_grain_hash(r)
 
 static func _shader_code(path: String) -> String:
 	var shader: Shader = load(path) as Shader
 	return shader.code if shader != null else ""
 
-## BEAUTY1: the HUD grain pass reads the screen 1:1 at SCREEN_UV, so its screen sampler asks for a plain linear filter, not a mipmap one.
-static func _grain_sampler(r: Node) -> void:
-	var sampler: String = ""
-	for line in _shader_code(GRAIN_SHADER_PATH).split("\n"):
-		if line.contains("hint_screen_texture"):
-			sampler = line
-	r._ok(sampler.contains("filter_linear") and not sampler.contains("mipmap"),
-		"BEAUTY1 the HUD grain pass samples the screen with a plain linear filter and no mipmap filter (%s)" % sampler.strip_edges())
+## Every grain pass of the game scene: a node named GrainOverlay, or a canvas item whose shader file is a grain shader.
+static func _grain_nodes(root: Node) -> Array[Node]:
+	var out: Array[Node] = []
+	if root.name == "GrainOverlay":
+		out.append(root)
+	elif root is CanvasItem and (root as CanvasItem).material is ShaderMaterial:
+		var sh: Shader = ((root as CanvasItem).material as ShaderMaterial).shader
+		if sh != null and sh.resource_path.contains("grain"):
+			out.append(root)
+	for c in root.get_children():
+		out.append_array(_grain_nodes(c))
+	return out
+
+## BEAUTY1: the post-process overlay is the SINGLE grain owner. The HUD used to run its own grain pass on top of the
+## overlay's, so the screen was grained twice; the game scene now carries exactly one grain pass, the overlay's, and the HUD none.
+static func _grain_single_owner(r: Node) -> void:
+	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+	var grain: ColorRect = overlay.get_node_or_null("GrainOverlay") as ColorRect if overlay != null else null
+	var shader: Shader = (grain.material as ShaderMaterial).shader if grain != null and grain.material is ShaderMaterial else null
+	var hud: Node = r._main.get_node_or_null("HUD")
+	var hud_grain: Node = hud.find_child("GrainOverlay", true, false) if hud != null else null
+	var owners: Array[Node] = _grain_nodes(r._main)
+	r._ok(hud != null and hud_grain == null and shader != null and owners.size() == 1 and owners[0] == grain,
+		"BEAUTY1 the post-process overlay owns the only grain pass: the HUD has none (%s) and the game scene carries exactly one (%d)" % [hud_grain == null, owners.size()])
 
 ## BEAUTY2: a hit starts the ember vignette on the peak of its beat. The beat runs on `age`, which a hit sets to 0 together with strength 1, and the strength is 0 when the fade is over.
 ## It ran on the free-running TIME before, so the corner alpha of a hit landed anywhere from 0.10 to 1.00 (46 % of the hits below 0.5).
@@ -54,11 +69,22 @@ static func _damage_flash(r: Node) -> void:
 	indicator.queue_free()
 	SettingsManager.set_setting("reduce_flash", flash0)
 
-## BEAUTY3: the HUD grain hashes each pixel cell without a repeat. The old hash took fract(cell * (127.1, 311.7)): the multipliers are whole numbers plus .1 and .7, so the noise was one 10 x 10 px tile repeated over the screen (autocorrelation 0.96 at a lag of 10 px in the shader's own float math, about 0 for the new hash).
-static func _grain_hash(r: Node) -> void:
-	var code: String = _shader_code(GRAIN_SHADER_PATH)
-	r._ok(not code.contains("127.1") and not code.contains("311.7") and code.contains("0.1031") and code.contains("33.33"),
-		"BEAUTY3 the HUD grain hash has no 127.1 / 311.7 multipliers (a 10 px repeat) and is the 0.1031 / 33.33 hash")
+## BEAUTY3: the single grain pass follows the graphics tier: off on Low, on from Medium up. The HUD's own grain pass used to
+## stay on at Low while the overlay's went off, so Low grained the screen once through the HUD anyway.
+static func _grain_tier(r: Node) -> void:
+	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+	var grain: CanvasItem = overlay.get_node_or_null("GrainOverlay") as CanvasItem if overlay != null else null
+	if grain == null:
+		r._ok(false, "BEAUTY3 the post-process overlay has no grain layer to gate by tier")
+		return
+	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	SettingsManager.set_graphics_tier(0)
+	var low: bool = not grain.visible
+	SettingsManager.set_graphics_tier(1)
+	var medium: bool = grain.visible
+	SettingsManager.set_graphics_tier(tier0)
+	r._ok(low and medium,
+		"BEAUTY3 the single grain pass is off on the Low tier and on from Medium up (Low hidden %s, Medium shown %s)" % [low, medium])
 
 ## BEAUTY4: the grain of the post-process overlay does not fade with uptime. The old hash multiplied (UV + TIME * 0.24) * 110 by 234.34 and
 ## 435.345: after about 20 minutes float32 cannot tell those numbers apart and the grain became a constant (alpha 0 from about 1400 s). The new hash

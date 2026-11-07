@@ -8,9 +8,10 @@ const PANEL_WIDTH := 360
 const PANEL_HEIGHT := 224
 const MAX_ROWS := 1
 const PANEL_MARGIN := 20
-## The top right held a radar and a minimap down to y 236; both went with the owner's map rules of 2026-11-05 (the Map is
-## its own screen now), and the panel keeps its place under the pause button.
-const PANEL_TOP := 252
+## The radar and minimap that used to hold the top right down to y 236 went with the owner's map rules of 2026-11-05;
+## the panel now sits in the free top space under the pause button, offset by the safe-area inset (UiScale, the same
+## pattern hud_3d.gd uses). _layout_panel assigns absolute offsets, so a resize never adds the inset twice.
+const PANEL_TOP := 100
 
 var _container: VBoxContainer
 var _title_lbl: Label
@@ -54,7 +55,7 @@ func _build_ui() -> void:
 	# fills the screen and lets every click through, so the panel is on screen and a faded one does not take the camera's touches.
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_ignore_input(self)
-	# Панель справа сверху, под миникартой.
+	# Top right, in the free space under the pause button (the radar/minimap are gone).
 	# size у заякоренного Control игнорируется, а из четырёх отступов задавались
 	# только два — панель схлопывалась в ~70 px, и текст переносился по одной
 	# букве в строку. Задаём пресет и все четыре отступа явно.
@@ -92,11 +93,13 @@ func _build_ui() -> void:
 	_container.visible = false
 
 func _layout_panel() -> void:
-	var width: float = minf(float(PANEL_WIDTH), get_viewport().get_visible_rect().size.x * 0.34)
-	_container.offset_left = -(width + PANEL_MARGIN)
-	_container.offset_right = -PANEL_MARGIN
-	_container.offset_top = PANEL_TOP
-	_container.offset_bottom = PANEL_TOP + PANEL_HEIGHT
+	var vp := get_viewport().get_visible_rect().size
+	var inset := UiScale.insets(vp)
+	var width: float = minf(float(PANEL_WIDTH), vp.x * 0.34)
+	_container.offset_left = -(width + PANEL_MARGIN) - inset.z
+	_container.offset_right = -PANEL_MARGIN - inset.z
+	_container.offset_top = PANEL_TOP + inset.y
+	_container.offset_bottom = PANEL_TOP + PANEL_HEIGHT + inset.y
 
 func _make_stylebox() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()

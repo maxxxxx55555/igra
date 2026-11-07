@@ -42,6 +42,7 @@ const Rc29Atk := preload("res://scripts/tools/rc16/s29_attack_cases.gd")
 const Rc29Play := preload("res://scripts/tools/rc16/s29_play_checks.gd")
 const Rc29Fix := preload("res://scripts/tools/rc16/s29_fix_checks.gd")
 const Rc30 := preload("res://scripts/tools/rc16/s30_checks.gd")
+const RcPerception := preload("res://scripts/tools/rc16/perception_checks.gd")
 const FinalSource := preload("res://scripts/tools/rc16/release_completion.gd")
 
 var _checked: int = 0
@@ -154,6 +155,10 @@ func _run() -> void:
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "s30":
 		await Rc30.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "perception":
+		await RcPerception.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -273,6 +278,7 @@ func _rc16_checks() -> void:
 	Rc29Atk.run(self)
 	await Rc29Play.run(self)
 	await Rc29Fix.run(self)
+	await RcPerception.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
@@ -450,14 +456,24 @@ func _check_visibility_and_hiding() -> void:
 	_ok(is_equal_approx(dark.x, 3.0) and is_equal_approx(dark.y, 1.0), "S02 light off halves it and the dark caps it at 3 m (%s)" % str(dark))
 	_player.set("current_state", _player.State.CROUCH)
 	_ok(is_equal_approx(monster._sight_ranges().x, 1.5), "S02 crouching with the light off: 1.5 m")
-	var lit_cells: Dictionary = LightGrid._grid
-	LightGrid._grid = {}
+	# S04b asks is_perceptible on camera now: the monster stands 4 m ahead of the player, the pool lights that reach it are
+	# held hidden for the dark reading (the predicate reads live rendered lights, not the grid), and the beam flag alone lifts it.
+	var cam := get_viewport().get_camera_3d()
+	var fwd := -cam.global_transform.basis.z
+	fwd.y = 0.0
+	monster.global_position = _player.global_position + fwd.normalized() * 4.0
 	monster.set("_seen_in_beam", false)
+	var pool_lights: Array[Node3D] = LightGrid.visible_lights_at(monster.global_position, monster.LIT_POOL)
+	var was_visible: Array[bool] = []
+	for light: Node3D in pool_lights:
+		was_visible.append(light.visible)
+		light.visible = false
 	var in_dark: bool = monster.is_perceptible()
 	monster.set("_seen_in_beam", true)
 	var in_beam: bool = monster.is_perceptible()
 	monster.set("_seen_in_beam", false)
-	LightGrid._grid = lit_cells
+	for i: int in pool_lights.size():
+		pool_lights[i].visible = was_visible[i]
 	_ok(not in_dark and in_beam, "S04b the HUD and the auto-aim see a monster only in the beam or a lit pool: in the dark %s, in the beam %s" % [in_dark, in_beam])
 	_player.set("current_state", _player.State.RUN)
 	var cell := Vector2i(floori(_player.global_position.x / LightGrid.CELL_SIZE), floori(_player.global_position.z / LightGrid.CELL_SIZE))
