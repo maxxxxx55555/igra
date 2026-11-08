@@ -11,10 +11,10 @@ status record, not a marketing sheet: a check that did not run is named as not r
 |---|---|
 | Source integration (the other AI's 38 files + this pass's fixes) | DONE, committed |
 | Static battery `tools/check.sh --static` | **PASS 72/72** (with the project venv Python) |
-| Full battery `tools/check.sh --all` | run by the release workflow; see section 6 |
-| Workflow `Verify -CheckSet Full` | see section 6 |
-| Windows Desktop export | see section 6 |
-| Merge into protected `main` | see section 6 |
+| Full battery `tools/check.sh --all` | **PASS 103/103** (two window-only checks recorded as `MANUAL_WINDOWED_REQUIRED`, never as passes) |
+| Workflow `Verify -CheckSet Full` | **PASS** — all seven required commands PASS, source fingerprint recorded |
+| Windows Desktop export | **CANDIDATE** — `LastStreetlight.exe`, SHA-256 `45c6601f85f57ed728a46bde86dd3fb2b517df6300701a0f03c441ad051eb8f9`; opens outside the editor, 0 errors in its log |
+| Merge into protected `main` | **MERGED** — PR #57, `main` = `d2205586`; CI green on the merge commit |
 | Physical devices, signing, asset rights, store acceptance | **NOT VERIFIED** (owner-side, cannot be automated here) |
 
 The release workflow is deliberately conservative: even a fully green automated run leaves
@@ -131,9 +131,22 @@ The supplied workflow is the authority for the release chain:
 `-Mode Verify -CheckSet Full` → commit evidence → `-Mode Export` (Windows Desktop) →
 `-Mode Publish` (push the integration branch) → PR into protected `main`. `main` enforces PRs even
 for admins (`enforce_admins=true`, 0 required approvals), so a direct push is impossible by design.
-The final state of that chain is recorded in
-`C:\Users\Maxsim\Desktop\igra-release-runs\20261107-112445-cd7797a6b4\run-state.json` and in the
-PR itself; this report does not guess its outcome in advance.
+
+**The chain ran to the end.**
+
+| Step | Result |
+|---|---|
+| `-Mode Verify -CheckSet Full` | PASS on head `a0e7aec0`; `gate-static`, `gate-flow`, `gate-scene`, `gate-full` all PASS; fingerprint `7dddcf90…` |
+| `-Mode Export` (`Windows Desktop`, embedded PCK, version 1.0.1) | CANDIDATE; `export_refs_check --preset` PASS; SHA-256 `45c6601f85f57ed728a46bde86dd3fb2b517df6300701a0f03c441ad051eb8f9`; 219 773 576 bytes |
+| Export smoke test | launched outside the editor on a fresh `APPDATA`; exit 0; OpenGL 3.3 on the AMD Radeon; `godot.log` has 0 errors and 0 warnings |
+| `-Mode Publish` | integration branch pushed and verified on origin |
+| PR | [#57](https://github.com/maxxxxx55555/igra/pull/57) — 26 CI checks green, `MERGEABLE`/`CLEAN`, merged with a merge commit `d2205586` |
+| CI on `main` | `static` and `release-wrapper` green on `d2205586` |
+
+The workflow's own state is in
+`C:\Users\Maxsim\Desktop\igra-release-runs\20261107-112445-cd7797a6b4\run-state.json`. Its
+`release_status` stays `NOT_READY`: a green automated run is not a human review, and signing,
+device, windowed-appearance and store acceptance remain owner-side.
 
 ## 7. Branch analysis and cleanup
 
@@ -141,7 +154,12 @@ Read after `git fetch --prune origin`. Seven feature branches had **0 commits ah
 were ancestors of it, with no open pull requests: every change they held was already in `main`.
 They were therefore deleted, with their tips recorded in `docs/ABSORB_PLAN.md` section 8 so any can
 be restored. `origin/gh-pages` was kept — it hosts the privacy-policy page the store listing links
-to, and is not game code. Nothing was lost, and nothing was left unabsorbed.
+to, and is not game code.
+
+The integration branch `integration/igra-20261107-112445-cd7797a6b4` was deleted from origin after
+PR #57 merged, because `main` then contained every one of its commits; it is restorable from
+`a0e7aec0`. `origin` now carries exactly two refs: `main` and `gh-pages`. Nothing was lost, and
+nothing was left unabsorbed.
 
 ## 8. Deliverables added in this pass
 
