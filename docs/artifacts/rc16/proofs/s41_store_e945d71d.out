@@ -1,0 +1,10 @@
+# proof s41_store_e945d71d
+# utc 20261108T075320Z
+# head e945d71d (uncommitted paths: 0)
+# env TLS_CAPTURE_HASH=e945d71d 
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/release_frames_scene.tscn rc=0 (log: .qa_logs/release_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+[safe-delete][SAFE_DELETE_INVALID_PATH] embedded drive prefix is not allowed
+# EXIT=0

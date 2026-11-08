@@ -10,7 +10,7 @@ const _ROWS: int = 5
 ## The crosshair and the ammo counter fade this long after the last shot, hit or aim; the touch controls rest at this alpha (the joystick
 ## ring in virtual_joystick.gd rests at the same one) and wake to full on a press.
 const _COMBAT_HOLD_SEC: float = 5.0
-const _TOUCH_REST: float = 0.55
+const _TOUCH_REST: float = 0.8
 const _FADE := preload("res://scripts/ui/hud_fade.gd")
 const _NOISE_SHOWN: float = 0.34
 const _VIS_SHOWN: float = 0.15
@@ -149,7 +149,7 @@ func _ready() -> void:
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
 	enemy_name_label.add_theme_font_override("font", ThemeProvider.heading_font())
 	enemy_name_label.add_theme_font_size_override("font_size", 28)
-	enemy_name_label.add_theme_color_override("font_color", Color(0.752941, 0.223529, 0.168627))
+	enemy_name_label.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER_TEXT)
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
 	prompt.visible = false
@@ -163,7 +163,6 @@ func _ready() -> void:
 	_setup_enemy_resist_label()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
-	_setup_grain_overlay()
 	_setup_damage_indicator()
 	_setup_damage_numbers()
 	_setup_heal_flash()
@@ -354,29 +353,6 @@ func _setup_weapon_compare() -> void:
 	ui.set_script(ui_script)
 	add_child(ui)
 	wm.weapon_switched.connect(ui.on_weapon_switched)
-
-## Permanent-night film grain, per art pass. Off on the LOW graphics tier
-## (cheap fragment shader but still a full-screen sampled pass — not worth
-## it once QualityManager has already dropped to LOW to protect FPS).
-var _grain_rect: ColorRect = null
-
-func _setup_grain_overlay() -> void:
-	_grain_rect = ColorRect.new()
-	_grain_rect.name = "GrainOverlay"
-	_grain_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_grain_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var mat := ShaderMaterial.new()
-	mat.shader = load("res://assets/shaders/grain_overlay.gdshader")
-	_grain_rect.material = mat
-	add_child(_grain_rect)
-	_apply_grain_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
-	EventBus.settings_changed.connect(func(key: String, value: Variant) -> void:
-		if key == "graphics_tier":
-			_apply_grain_tier(int(value)))
-
-func _apply_grain_tier(tier: int) -> void:
-	if _grain_rect:
-		_grain_rect.visible = tier > 0
 
 ## 3.15: damage direction indicator. `scripts/effects/damage_indicator.gd` and
 ## `scenes/effects/damage_indicator.tscn` were both committed and complete
@@ -727,8 +703,9 @@ func _apply_touch_visibility() -> void:
 	_install_joystick()
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
+## The floor is MIN_TOUCH over the smallest cluster control (TOUCH_BTN, 64 px), so no button ever shrinks under 48.
 func _apply_button_size() -> void:
-	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / 72.0, 2.0)
+	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / TOUCH_BTN.x, 2.0)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
 		if cluster != null:
@@ -739,6 +716,7 @@ func _apply_button_size() -> void:
 ## Settings > One-Handed Mode: the action buttons stand beside the joystick on the left, so the one thumb that walks reaches all of them.
 const _JOYSTICK_W: float = 200.0  # the BottomLeft control of hud_3d.tscn
 const _ACTION_W: float = 308.0  # from the corner to the far side of the Stealth button (offset_left in hud_3d.tscn)
+const _ACTION_CLUSTER_H: float = 372.0  # from the corner to the top of the highest side button (308 + TOUCH_BTN.y)
 const _ONE_HAND_GAP: float = 24.0
 
 func _place_action_cluster(factor: float) -> void:
@@ -752,6 +730,13 @@ func _place_action_cluster(factor: float) -> void:
 	# Reflow chooses a new side, but must keep the safe margin already applied.
 	cluster.offset_left += _safe_area_inset.x if left else -_safe_area_inset.z
 	cluster.offset_right = cluster.offset_left
+	# The ammo counter rides above the whole cluster at any scale (the cluster grows from the corner), so it never
+	# overlaps the attack/action buttons. Absolute offsets keep re-runs and the safe-area inset idempotent.
+	var ammo := get_node_or_null("AmmoCounter") as Control
+	if ammo != null:
+		var ammo_h: float = ammo.offset_bottom - ammo.offset_top
+		ammo.offset_bottom = -(_ACTION_CLUSTER_H * factor + 16.0) - _safe_area_inset.w
+		ammo.offset_top = ammo.offset_bottom - ammo_h
 
 func _one_handed() -> bool:
 	return bool(SettingsManager.get_setting("one_handed", false))
@@ -1055,11 +1040,16 @@ func _setup_damage_numbers() -> void:
 func _on_enemy_damaged(monster: Node3D, amount: float) -> void:
 	if not is_instance_valid(monster) or roundi(amount) < 1:
 		return
+	# Blind fire and DoT on a hidden target must not reveal its position (the owner's rules): only a monster the
+	# player can currently perceive gets a number, and _process_numbers drops it the moment that stops being true.
+	if not _monster_perceptible(monster):
+		return
 	for label in _numbers:
 		if label.visible:
 			continue
 		label.text = str(roundi(amount))
 		label.add_theme_color_override("font_color", _NUMBER_BRASS if amount > _NUMBER_BIG_HIT else _NUMBER_BONE)
+		label.set_meta(&"monster", monster)
 		label.set_meta(&"anchor", monster.global_position + _NUMBER_HEAD)
 		label.set_meta(&"age", 0.0)
 		label.visible = true
@@ -1070,6 +1060,15 @@ func _process_numbers(delta: float) -> void:
 	for label in _numbers:
 		if not label.visible:
 			continue
+		# get_meta can return a freed monster: assigning that to a typed Node3D local
+		# raises "previously freed", and passing it to _monster_perceptible raises before
+		# its own guard runs. Read it untyped, validate, then type it.
+		var held: Variant = label.get_meta(&"monster", null)
+		var monster: Node3D = held if is_instance_valid(held) else null
+		if not _monster_perceptible(monster):
+			label.visible = false
+			continue
+		label.set_meta(&"anchor", monster.global_position + _NUMBER_HEAD)
 		var age: float = float(label.get_meta(&"age")) + delta
 		label.visible = age < _NUMBER_SEC
 		label.set_meta(&"age", age)
@@ -1134,14 +1133,23 @@ func _process_noise_vignette(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
-	# a monster charging out of the dark is not named: only one the player can see gets the bar (the owner's rules)
-	for e: Node in get_tree().get_nodes_in_group("enemies"):
-		if e.get("monster_id") == monster_id and e.has_method("is_perceptible") and e.is_perceptible():
-			_show_enemy_bar(monster_id, -1.0)
-			return
+	# a monster charging out of the dark is not named: _show_enemy_bar gates on is_perceptible (the owner's rules);
+	# audible cues are unaffected, they come from the monster itself
+	_show_enemy_bar(monster_id, -1.0)
 
 func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 	_show_enemy_bar(monster_id, ratio)
+
+## The shared visibility predicate (BaseMonster.is_perceptible): camera frustum, clear line of sight, and the
+## flashlight beam or a rendered light pool. Every enemy telemetry path in this file asks it.
+func _monster_perceptible(monster: Node3D) -> bool:
+	return is_instance_valid(monster) and monster.has_method("is_perceptible") and monster.is_perceptible()
+
+func _resolve_monster(monster_id: StringName) -> Node3D:
+	for e: Node in get_tree().get_nodes_in_group("enemies"):
+		if e is Node3D and is_instance_valid(e) and e.get("monster_id") == monster_id:
+			return e as Node3D
+	return null
 
 ## The enemy name/HP readout lives here, fed by three producers: the "spotted"
 ## event, a damage report, and - in the build that actually ships - the aim scan
@@ -1153,6 +1161,9 @@ func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 const _ENEMY_BAR_HOLD: float = 5.0
 var _enemy_bar_hold: float = 0.0
 var _enemy_bar_id: String = ""
+## The instance behind the held bar: the hold re-checks its perceptibility every frame, so stepping out of the
+## light or behind a wall hides the readout at once instead of holding it for the full 5 s.
+var _enemy_bar_monster: Node3D = null
 
 ## GDD 6.4 / 25.2: "DamageType: HUD-визуализация матрицы (система уже работает -
 ## UI нет)". The matrix itself is `resistances` on the roster entry, the player's
@@ -1210,6 +1221,13 @@ func _update_enemy_resist(monster_id: StringName) -> void:
 	_resist_label.visible = true
 
 func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
+	# Single gate for all three producers (spotted, damage report, aim scan): a target the player cannot
+	# currently perceive gets no readout, and one already on screen loses it the same frame.
+	var monster := _resolve_monster(monster_id)
+	if not _monster_perceptible(monster):
+		_hide_enemy_bar()
+		return
+	_enemy_bar_monster = monster
 	_enemy_bar_hold = _ENEMY_BAR_HOLD
 	if ratio >= 0.0:
 		enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
@@ -1236,12 +1254,28 @@ func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
 func _process_enemy_bar(delta: float) -> void:
 	if _enemy_bar_hold <= 0.0:
 		return
+	if not is_instance_valid(_enemy_bar_monster) or not _monster_perceptible(_enemy_bar_monster):
+		_hide_enemy_bar()
+		return
 	_enemy_bar_hold -= delta
 	if _enemy_bar_hold > 0.0:
 		return
+	_hide_enemy_bar(true)
+
+## Immediate hide (perceptibility lost) or the held fade-out (fade = true). Either way the hold and the tracked
+## instance end here, so the next show starts a fresh fade-in.
+func _hide_enemy_bar(fade: bool = false) -> void:
+	_enemy_bar_hold = 0.0
 	_enemy_bar_id = ""
+	_enemy_bar_monster = null
 	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
+	if not fade:
+		enemy_name_label.visible = false
+		enemy_hp_bar.visible = false
+		if _resist_label != null:
+			_resist_label.visible = false
+		return
 	_enemy_hp_tween = create_tween()
 	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
 	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
@@ -1823,7 +1857,12 @@ func _setup_slot_placeholders() -> void:
 				badge.text = str(cnt)
 		var si := i
 		slot.gui_input.connect(func(event: InputEvent):
-			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			# Real touch and real mouse both activate; the emulated mouse a touch generates (DEVICE_ID_EMULATION)
+			# is ignored so one tap never fires the slot twice.
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT \
+					and event.device != InputEvent.DEVICE_ID_EMULATION:
+				_use_quick_slot(si)
+			elif event is InputEventScreenTouch and event.pressed and event.device != InputEvent.DEVICE_ID_EMULATION:
 				_use_quick_slot(si)
 		)
 	_apply_slot_bindings()
@@ -1975,22 +2014,26 @@ func _on_item_picked_up(item_id: StringName, _amount: int = 1) -> void:
 	tw.tween_property(flash, "color:a", 0.0, _SLOT_FLASH_SEC)
 	tw.tween_callback(flash.queue_free)
 
-## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
-## covered the caption ("...ILITY" in docs/stills/tzverify frames).
-## Beside the LOG toggle (toast_manager.gd COLUMN_TOP, 16 + its 72 + 8): the two buttons that open a screen share one row.
-const _MAP_BUTTON_POS := Vector2(96, 290)
-
+## Below the 5th status row (VISIBILITY at y~190): at y=182 the button covered the caption ("...ILITY" in docs/stills/tzverify frames).
+## The LOG toggle (toast_manager.gd) and this button share one row: both read UiScale.log_map_row(), so the safe-area
+## inset is applied once, by the same calculation, and a resize re-places them absolutely instead of adding it twice.
 func _add_map_button() -> void:
 	var btn := Button.new()
 	btn.name = "MapButton"
-	btn.position = _MAP_BUTTON_POS
-	btn.size = Vector2(72, 48)
+	btn.size = Vector2(UiScale.min_touch() * 1.5, UiScale.min_touch())
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	btn.add_theme_font_size_override("font_size", 16)
 	btn.text = LocalizationManager.t("MAP_TITLE")
 	btn.visible = has_touch_ui()  # a keyboard has the city_map_toggle key
 	btn.pressed.connect(_on_map_btn)
 	add_child(btn)
+	get_viewport().size_changed.connect(_place_map_button)
+	_place_map_button()
+
+func _place_map_button() -> void:
+	var btn := get_node_or_null("MapButton") as Button
+	if btn != null:
+		btn.position = UiScale.log_map_row(get_viewport().get_visible_rect().size) + Vector2(UiScale.min_touch() * 1.5 + 8.0, 0.0)
 
 func _on_map_btn() -> void:
 	if UIManager and UIManager.has_method("open"):

@@ -275,17 +275,20 @@ static func _touch_cluster_is_clear(r: Node) -> void:
 	r._ok(clear, "HUDP9 the touch action buttons are on screen and clear of each other (%s)" % [rects])
 
 ## HUDP10: the joystick fades only the ring it sits in. The first-run calibration dialog hosts one in a container, which must keep its alpha while
-## the thumb goes down and after it lifts (the dialog was left at the ring's rest alpha, 0.55).
+## the thumb goes down and after it lifts (the dialog was left at the ring's rest alpha). Read that alpha from the shipped control rather than
+## pinning a literal: the touch-contrast pass raised REST_ALPHA from 0.55 to 0.8, and a pinned literal silently went stale.
 static func _joystick_fades_only_its_ring(r: Node) -> void:
+	var joystick_script: GDScript = load("res://scripts/ui/virtual_joystick.gd")
+	var rest_alpha: float = float(joystick_script.get_script_constant_map().get("REST_ALPHA", -1.0))
 	var container := VBoxContainer.new()
 	var ring := Panel.new()
 	r.add_child(container)
 	r.add_child(ring)
-	ring.modulate.a = 0.55  # the alpha the HUD rests its ring at
+	ring.modulate.a = rest_alpha  # the alpha the HUD rests its ring at
 	var joysticks: Array[Control] = []
 	for host: Control in [container, ring]:
 		var joystick := Control.new()
-		joystick.set_script(load("res://scripts/ui/virtual_joystick.gd"))
+		joystick.set_script(joystick_script)
 		joystick.size = Vector2(160.0, 160.0)
 		host.add_child(joystick)
 		joysticks.append(joystick)
@@ -304,10 +307,10 @@ static func _joystick_fades_only_its_ring(r: Node) -> void:
 		joystick.call("_gui_input", touch)
 		joystick.call("_process", 0.2)
 	var kept: bool = is_equal_approx(going_down, 1.0) and is_equal_approx(container.modulate.a, 1.0)
-	var ring_wakes: bool = ring_down > 0.99 and is_equal_approx(ring.modulate.a, 0.55)
+	var ring_wakes: bool = rest_alpha > 0.0 and rest_alpha < 1.0 and ring_down > 0.99 and is_equal_approx(ring.modulate.a, rest_alpha)
 	container.queue_free()
 	ring.queue_free()
-	r._ok(kept and ring_wakes, "HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (%.2f) and lifts (%.2f), the ring goes full (%.2f) and rests (%.2f)" % [going_down, container.modulate.a, ring_down, ring.modulate.a])
+	r._ok(kept and ring_wakes, "HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (%.2f) and lifts (%.2f), the ring goes full (%.2f) and rests (%.2f, shipped REST_ALPHA %.2f)" % [going_down, container.modulate.a, ring_down, ring.modulate.a, rest_alpha])
 
 ## HUDP11: Button Size grows the side buttons with the action buttons, so the eight touch buttons stay on screen and clear of each other from 0.8 to 1.5
 ## (the side buttons stayed put while Interact grew over Jump and Flash from 1.10). A HUD built under touch emulation carries all eight.

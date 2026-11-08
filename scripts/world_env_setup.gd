@@ -27,6 +27,9 @@ const AMBIENT_COLOR_FULL: Color = Color(0.125, 0.153, 0.212)
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
+## The light the fog itself carries, by stage (DARK/PARTIAL/STREETS/FULL): at 0.6 everywhere the teal haze lit every
+## facade of an unpowered district; a restored street gets the haze back. This live Environment is the single owner.
+const FOG_LIGHT_BY_STAGE: Array[float] = [0.12, 0.28, 0.45, 0.6]
 ## The moon casts a shadow only where it is bright enough to show one: at 0.12 (the dark stages) the shadow is invisible and
 ## cost a quarter of the first district's draw calls (66 of 235, windowed perf_check_scene).
 const MOON_SHADOW_MIN: float = 0.2
@@ -146,6 +149,7 @@ func apply_for_stage(stage: int) -> void:
 			glow_energy = GLOW_FULL
 	_env.ambient_light_energy = ambient_energy
 	_env.ambient_light_color = ambient_color
+	_env.fog_light_energy = FOG_LIGHT_BY_STAGE[clampi(stage, 0, FOG_LIGHT_BY_STAGE.size() - 1)]
 	if _moon:
 		_moon.light_energy = moon_energy
 		_moon.shadow_enabled = moon_energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
@@ -246,11 +250,9 @@ func _find_player_glow() -> OmniLight3D:
 
 ## 2026-09-12 audio/visual pass: per-district color-correction LUT
 ## (assets/textures/luts/README.md). This is the ONE live WorldEnvironment
-## (see class comment above) — district_grading.gd also grades per-district
-## fog/sky/ambient, but its `world_environment_path` export is never set by
-## its only instantiator (world_bootstrap.gd's dynamic "Grading" node), so
-## that whole branch is dead code today; not touched here (see
-## docs/KNOWN_ISSUES.md "district_grading.gd Environment branch is dead").
+## (see class comment above); district_grading.gd now only tints the ground,
+## its never-wired Environment branch having been removed in favour of this
+## single stage/fog owner.
 ## Filename convention IS the district->LUT mapping, no table needed.
 ## Missing file (a district with no LUT yet) leaves grading off — safe
 ## identity fallback, never an error.

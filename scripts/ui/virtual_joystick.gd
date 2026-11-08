@@ -12,7 +12,7 @@ const KNOB_RADIUS: float = 26.0
 const PRESS_SCALE: float = 1.18
 ## The ring rests see-through and is full while the thumb is on it (the HUD's other touch controls rest at the same alpha: hud_3d.gd _TOUCH_REST).
 ## Only the HUD's ring, a Panel, is faded: the calibration dialog hosts this control in a container that keeps its own alpha.
-const REST_ALPHA: float = 0.55
+const REST_ALPHA: float = 0.8
 const BASE_TEX_PATH := "res://assets/textures/touch/touch_joy_base_256.png"
 const KNOB_TEX_PATH := "res://assets/textures/touch/touch_joy_knob_256.png"
 var _base_tex: Texture2D = null

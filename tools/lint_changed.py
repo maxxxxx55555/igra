@@ -21,7 +21,7 @@ import shutil
 import subprocess
 import sys
 import sysconfig
-import tempfile
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 BASE = "e4bb4df"
@@ -163,19 +163,23 @@ def demo():
     }
     wanted = {"good.gd": 0, "syntax.gd": 1, "space.gd": 1, "same.gd": 1, "unused.py": 1, "cd.sh": 1}
     wrong = []
-    with tempfile.TemporaryDirectory(prefix=".lint-demo-", dir=ROOT) as tmp:
-        folder = pathlib.Path(tmp)
-        for name, body in fixtures.items():
-            (folder / name).write_text(body, encoding="utf-8", newline="\n")
-        for name, want in wanted.items():
-            rel = (folder / name).relative_to(ROOT).as_posix()
-            result = CHECKS[kind(rel)]([rel])
-            if result is None:
-                print("DEMO SKIP %s: tool not installed" % name)
-                continue
-            found = result[rel]
-            if bool(found) != bool(want):
-                wrong.append((name, want, found))
+    # One fixed scratch tree, written fresh and never deleted: removing it tripped the
+    # host's bulk-delete guard (22 entries in a turn) and killed the demo, so the gate
+    # failed for a reason unrelated to the code. .gitignore ignores .lint-demo-*/ and
+    # changed() skips ignored files, so a leftover cannot become a "changed" file.
+    folder = ROOT / ".lint-demo-fixtures"
+    folder.mkdir(exist_ok=True)
+    for name, body in fixtures.items():
+        (folder / name).write_text(body, encoding="utf-8", newline="\n")
+    for name, want in wanted.items():
+        rel = (folder / name).relative_to(ROOT).as_posix()
+        result = CHECKS[kind(rel)]([rel])
+        if result is None:
+            print("DEMO SKIP %s: tool not installed" % name)
+            continue
+        found = result[rel]
+        if bool(found) != bool(want):
+            wrong.append((name, want, found))
     for name, want, found in wrong:
         print("DEMO FAIL %s: wanted %d finding(s), got %s" % (name, want, found))
     print("lint_changed demo: %d fixtures, %d wrong" % (len(wanted), len(wrong)))

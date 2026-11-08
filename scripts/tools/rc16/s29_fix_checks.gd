@@ -33,7 +33,7 @@ static func run(r: Node) -> void:
 	await _pickup_hint(r)
 	_bob_rate(r)
 	_lamp_dips(r)
-	_boss_hits(r)
+	await _boss_hits(r)
 	_master_limit(r)
 	await _heading_face(r)
 
@@ -382,6 +382,19 @@ static func _lamp_dips(r: Node) -> void:
 ## BOSSHIT2: in the second phase a blow outside the flashlight beam takes nothing off and says so, once in eight seconds.
 static func _boss_hits(r: Node) -> void:
 	var boss: Node3D = r._monster("boss_architect_3d")
+	# The owner's rules of 2026-11-05: the crosshair hit marker is a locating visual,
+	# emitted only when the target is perceptible. Put the Architect on the empty
+	# flat, on camera and in the beam, so BOSSHIT1 tests the visible hit it names.
+	var base: Vector3 = Cartography.district_origin() + Vector3(900.0, 0.0, 900.0)
+	boss.global_position = base
+	var prev_cam: Camera3D = r.get_viewport().get_camera_3d()
+	var cam := Camera3D.new()
+	cam.fov = 90.0
+	r.add_child(cam)
+	cam.look_at_from_position(base + Vector3(0.0, 1.6, 8.0), base + Vector3(0.0, 1.0, 0.0))
+	cam.make_current()
+	boss.set("_seen_in_beam", true)
+	await r.get_tree().physics_frame
 	var numbers: Array[int] = [0]
 	var markers: Array[int] = [0]
 	var toasts: Array[int] = [0]
@@ -393,7 +406,7 @@ static func _boss_hits(r: Node) -> void:
 	EventBus.toast_requested.connect(on_toast)
 	boss.call("take_damage", 5.0, Vector3(0.0, 0.0, 5.0))
 	var hp_first: float = float(boss.get("hp"))
-	r._ok(numbers[0] == 1 and markers[0] == 1, "BOSSHIT1 a hit on the Architect gives a damage number (%d) and the hit marker (%d)" % [numbers[0], markers[0]])
+	r._ok(numbers[0] == 1 and markers[0] == 1 and boss.is_perceptible(), "BOSSHIT1 a hit on the Architect gives a damage number (%d) and the hit marker (%d)" % [numbers[0], markers[0]])
 	boss.set("phase", 1)
 	boss.set("_is_in_flashlight", false)
 	boss.call("take_damage", 5.0, Vector3(0.0, 0.0, 5.0))
@@ -402,6 +415,9 @@ static func _boss_hits(r: Node) -> void:
 	EventBus.enemy_damaged.disconnect(on_number)
 	EventBus.crosshair_state_changed.disconnect(on_marker)
 	EventBus.toast_requested.disconnect(on_toast)
+	if is_instance_valid(prev_cam):
+		prev_cam.make_current()
+	cam.queue_free()
 	boss.queue_free()
 
 ## MASTER1: the Master bus ends in a hard limiter at -1 dB or lower, so what the music, the ambience and a shot add up to cannot pass the full scale at the output (only the Music bus had a limiter).

@@ -233,6 +233,18 @@ func _check_app_icon() -> void:
 		_ok(txt.contains("launcher_icons/adaptive_foreground_432x432=\"res://store/icon-adaptive/foreground_1080x1080.png\"")
 			and txt.contains("launcher_icons/adaptive_background_432x432=\"res://store/icon-adaptive/background_1080x1080.png\""),
 			"Android launcher icons привязаны")
-		_ok(txt.contains("permissions/internet=true"), "INTERNET разрешён (нужен для LAN-мультиплеера)")
+		# The LAN lobby is archived (docs/KNOWN_ISSUES.md "Confirmed dead code"):
+		# it is not registered in UIManager and no button opens it. The release
+		# brief requires an offline build, so this gate now asserts the stricter
+		# condition instead of the obsolete "INTERNET is allowed" one. No enabled
+		# Android plugin may merge the permission back into the generated manifest.
+		_ok(txt.contains("permissions/internet=false") and not txt.contains("permissions/internet=true"),
+			"INTERNET запрещён во всех пресетах (офлайн-релиз, LAN-лобби в архиве)")
+		var plugins_line := ""
+		for line in txt.split("\n"):
+			if String(line).begins_with("gradle_build/plugins_enabled="):
+				plugins_line = String(line).strip_edges()
+		_ok(plugins_line == "gradle_build/plugins_enabled=PackedStringArray()",
+			"INTERNET не вернётся через включённый Android-плагин в итоговый манифест")
 	else:
 		_ok(false, "export_presets.cfg читается")

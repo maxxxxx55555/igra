@@ -109,18 +109,30 @@ func _draw_canvas() -> void:
 		return
 	var bounds := _bounds(cells)
 	var px: float = minf(_canvas.size.x / maxf(bounds.size.x + 4.0, 1.0), _canvas.size.y / maxf(bounds.size.y + 4.0, 1.0)) * _zoom
-	var sb := get_tree().get_first_node_in_group(&"street_builder")
+	var sb := get_tree().get_first_node_in_group(&"street_builder") as Node3D
+	var skyline := get_tree().get_first_node_in_group(&"city_skyline") as CitySkyline
 	for cell: Vector2i in cells:
 		var at := _to_canvas(Vector2(cell), bounds, px)
 		_canvas.draw_rect(Rect2(at, Vector2(px, px)), STONE)
 		# the edge of a building the lit street runs along: a neighbour inside a block, never charted itself
 		for side: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 			var next := cell + side
-			if cells.has(next) or sb == null or not is_block(sb, next):
+			if cells.has(next) or sb == null or not _is_building(sb, skyline, next):
 				continue
 			var a := at + Vector2(maxi(side.x, 0), maxi(side.y, 0)) * px
 			var b := a + (Vector2(0, px) if side.x != 0 else Vector2(px, 0))
 			_canvas.draw_line(a, b, BUILDING_EDGE, maxf(1.0, px * 0.12))
+
+## Whether a cell's centre lies in a building. Prefers the skyline's recorded footprints (real front widths and
+## alleys), converting the charted cell from street-builder space into skyline-local XZ; falls back to the outer
+## ring heuristic only when no skyline has been built (e.g. a headless gate with a bare StreetBuilder).
+func _is_building(sb: Node3D, skyline: CitySkyline, cell: Vector2i) -> bool:
+	if skyline != null and skyline.has_footprints():
+		var local := (Vector2(cell) + Vector2(0.5, 0.5)) * Cartography.CELL
+		var world := sb.to_global(Vector3(local.x, 0.0, local.y))
+		var point := skyline.to_local(world)
+		return skyline.occupies_local(Vector2(point.x, point.z))
+	return is_block(sb, cell)
 
 ## Whether a cell's centre lies in the ring of buildings round the district (the 3 by 3 lots inside it are open, walkable ground).
 static func is_block(sb: Node, cell: Vector2i) -> bool:

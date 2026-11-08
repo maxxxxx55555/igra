@@ -416,10 +416,29 @@ func _handle_light_reaction(delta: float) -> void:
 func _is_in_light() -> bool:
 	return _is_in_flashlight
 
-## Whether the player can see this monster: in the flashlight's beam (range, cone, unshaded) or standing in a lit pool.
-## The reticle, the enemy bar and the auto-aim ask it, so none of them reveals what the dark hides (the owner's rules of 2026-11-05).
+## Whether the player can see this monster right now: on camera, lit (the flashlight's beam or a lit pool that actually
+## reaches it unshaded), with a clear eye line. The reticle, the enemy bar, the auto-aim, the damage numbers and the hit
+## marker all ask it, so none of them reveals what the dark or a wall hides (the owner's rules of 2026-11-05).
 func is_perceptible() -> bool:
-	return _seen_in_beam or LightGrid.is_lit(global_position, LIT_POOL)
+	var cam := get_viewport().get_camera_3d()
+	if cam == null:
+		return false
+	var chest := global_position + Vector3(0.0, 1.0, 0.0)
+	if not cam.is_position_in_frustum(chest):
+		return false
+	if not _seen_in_beam and not _lit_pool_reaches(chest):
+		return false
+	var hit := get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(cam.global_position, chest))
+	return hit.is_empty() or hit.collider == self
+
+## A lit pool counts only when a light that actually renders reaches the monster unshaded: the grid's radial sum lights
+## through walls, so each contributing light is ray-tested to this instance, not just its species or cell.
+func _lit_pool_reaches(chest: Vector3) -> bool:
+	for light in LightGrid.visible_lights_at(global_position, LIT_POOL):
+		var hit := get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(light.global_position, chest))
+		if hit.is_empty() or hit.collider == self:
+			return true
+	return false
 
 func _state_idle(delta: float) -> void:
 	velocity = Vector3.ZERO
@@ -721,18 +740,21 @@ func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRost
 func _hit_feedback(reduced: float, src_pos: Vector3) -> void:
 	EventBus.enemy_damaged.emit(self, reduced)
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
-	_hit_flash()
+	# The locating visuals (flash, sparks, blood, crosshair hit) only show for a monster the player can actually see;
+	# blind fire and damage-over-time on a hidden target keep the sound and the physics but leak no position.
+	var seen := is_perceptible()
+	if seen:
+		_hit_flash()
 	if _rig:
 		_rig.flinch(src_pos, reduced / maxf(max_hp, 1.0))
 	if reduced >= max_hp * HEAVY_HIT:
 		attack_timer = maxf(attack_timer, STAGGER_SEC)
 	if is_in_group("boss"):
 		WowDirector.hit_stop()
-	_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
-	_spawn_vfx(_VFX_BLOOD_HIT, global_position + Vector3(0, 1.0, 0), (global_position - src_pos).normalized() if src_pos != Vector3.ZERO else Vector3.ZERO)
-	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
-	# the HUD crosshair never actually reacted to landing a hit.
-	EventBus.crosshair_state_changed.emit(&"hit")
+	if seen:
+		_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
+		_spawn_vfx(_VFX_BLOOD_HIT, global_position + Vector3(0, 1.0, 0), (global_position - src_pos).normalized() if src_pos != Vector3.ZERO else Vector3.ZERO)
+		EventBus.crosshair_state_changed.emit(&"hit")
 
 const _HIT_FLASH_COLOR := Color("#c9a24a")
 const _HIT_FLASH_ENERGY: float = 2.0

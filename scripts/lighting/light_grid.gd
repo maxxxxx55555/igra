@@ -107,3 +107,33 @@ func cell_brightness(world_pos: Vector3) -> float:
 
 func is_lit(world_pos: Vector3, threshold: float = 0.3) -> bool:
 	return cell_brightness(world_pos) >= threshold
+
+## The registered lights whose pool actually reaches world_pos right now: read live (the grid snapshot goes stale between
+## rebuilds), skip a light the LightLimiter hid or its owner put out, respect a spotlight's cone, and leave the player's
+## flashlight to the beam test. The radial grid alone lights through walls; a visibility consumer ray-tests each light returned.
+func visible_lights_at(world_pos: Vector3, threshold: float = 0.05) -> Array[Node3D]:
+	var out: Array[Node3D] = []
+	for id in _lights:
+		var data: Dictionary = _lights[id]
+		var n := data["node"] as Node3D
+		if not is_instance_valid(n) or not n.is_visible_in_tree():
+			continue
+		if n is SpotLight3D and n.is_in_group(&"flashlight"):
+			continue
+		var intensity: float = _intensity_of(n)
+		var rng_v: float = _range_of(n)
+		if intensity <= 0.01 or rng_v <= 0.01:
+			continue
+		var pos: Vector3 = n.global_position
+		var d: float = Vector2(pos.x - world_pos.x, pos.z - world_pos.z).length()
+		if d > rng_v:
+			continue
+		if n is SpotLight3D:
+			var spot := n as SpotLight3D
+			var to_pos: Vector3 = world_pos - pos
+			if to_pos.length() > spot.spot_range or (-spot.global_transform.basis.z).angle_to(to_pos) > deg_to_rad(spot.spot_angle):
+				continue
+		var fall: float = clampf(1.0 - d / rng_v, 0.0, 1.0)
+		if fall * intensity >= threshold:
+			out.append(n)
+	return out

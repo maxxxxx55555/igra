@@ -231,8 +231,20 @@ static func _damage_numbers(r: Node) -> void:
 	r._playing()
 	var hud: Node = r._main.get_node_or_null("HUD")
 	var pool: Node = hud.get_node_or_null("DamageNumbers") if hud != null else null
-	var player: Node3D = r._player
-	var monster: Node3D = r._monster("rotter_3d", player.global_position - player.global_transform.basis.z * 4.0)
+	# The owner's rules of 2026-11-05: a floating damage number is a locating visual,
+	# so the HUD draws it only for a monster the player can perceive (camera frustum,
+	# rendered light, clear eye line). Stand the fixture on the empty flat with a
+	# check camera on its chest and the beam on it, exactly as RcPerception's DN1 does.
+	var base: Vector3 = Cartography.district_origin() + Vector3(900.0, 0.0, 900.0)
+	var prev_cam: Camera3D = r.get_viewport().get_camera_3d()
+	var cam := Camera3D.new()
+	cam.fov = 90.0
+	r.add_child(cam)
+	cam.look_at_from_position(base + Vector3(0.0, 1.6, 8.0), base + Vector3(0.0, 1.0, 0.0))
+	cam.make_current()
+	var monster: Node3D = r._monster("rotter_3d", base)
+	monster.set("_seen_in_beam", true)
+	await r.get_tree().physics_frame
 	var hp0: float = float(monster.get("hp"))
 	monster.call("take_damage", 7.0)
 	await r.get_tree().process_frame
@@ -241,6 +253,9 @@ static func _damage_numbers(r: Node) -> void:
 	await r.get_tree().create_timer(1.0).timeout
 	r._ok(pool != null and shown == [dealt] and _visible_numbers(pool).is_empty() and pool.get_child_count() == 12,
 		"UIFX4 a monster hit for %s shows that number and it is back in the pool of 12 after 1.0 s (shown %s, pool %s, signal %s)" % [dealt, shown, pool.get_child_count() if pool != null else "missing", EventBus.has_signal(&"enemy_damaged")])
+	if is_instance_valid(prev_cam):
+		prev_cam.make_current()
+	cam.queue_free()
 	monster.queue_free()
 
 static func _screen_slide(r: Node) -> void:

@@ -42,12 +42,45 @@ const Rc29Atk := preload("res://scripts/tools/rc16/s29_attack_cases.gd")
 const Rc29Play := preload("res://scripts/tools/rc16/s29_play_checks.gd")
 const Rc29Fix := preload("res://scripts/tools/rc16/s29_fix_checks.gd")
 const Rc30 := preload("res://scripts/tools/rc16/s30_checks.gd")
+const RcPerception := preload("res://scripts/tools/rc16/perception_checks.gd")
 const FinalSource := preload("res://scripts/tools/rc16/release_completion.gd")
 
 var _checked: int = 0
 var _fails: int = 0
 var _player: Node3D = null
 var _main: Node = null
+var _profile_tier: int = 2
+var _profile_effects: int = 2
+var _profile_flags: Dictionary = {}
+
+## The full battery (tools/check.sh --all) runs every engine gate against one shared
+## user:// profile and exports TLS_UDG_GUARDED=1, which tells QaLaunchGuard that the
+## shell guard owns the restore. Settings written by a preceding probe therefore
+## survive into this gate. Several checks here measure effects that exist only at
+## High (dust motes, menu fog, parallax, district dressing); if the profile was
+## left at Low they report a false failure. Pin the visual baseline this gate was
+## written against, then put the profile's own values back in _finish().
+const VISUAL_FLAGS: Array[String] = ["reduce_camera_motion", "reduce_flash", "reduce_screen_shake", "reduce_time_fx", "reduce_ui_motion"]
+
+func _pin_visual_baseline() -> void:
+	_profile_tier = int(SettingsManager.get_setting("graphics_tier", 2))
+	_profile_effects = int(SettingsManager.get_setting("effects", 2))
+	for key: String in VISUAL_FLAGS:
+		_profile_flags[key] = SettingsManager.get_setting(key, false)
+	SettingsManager.set_graphics_tier(2)
+	SettingsManager.set_setting("effects", 2)
+	for key: String in VISUAL_FLAGS:
+		SettingsManager.set_setting(key, false)
+
+func _restore_visual_baseline() -> void:
+	SettingsManager.set_graphics_tier(_profile_tier)
+	SettingsManager.set_setting("effects", _profile_effects)
+	for key: String in VISUAL_FLAGS:
+		SettingsManager.set_setting(key, _profile_flags.get(key, false))
+	# set_setting() only writes memory. A check below (LANG1) calls save_to_cfg(),
+	# which would otherwise leave the pinned tier on disk; write the restored
+	# values back so a standalone run leaves the profile as it found it.
+	SettingsManager.save_to_cfg()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -63,6 +96,7 @@ func _ok(cond: bool, what: String) -> void:
 
 func _run() -> void:
 	# The checks read English layouts. The profile's saved language came on with SettingsManager's deferred call, queued before this one.
+	_pin_visual_baseline()
 	LocalizationManager.set_language("en")
 	SaveSystem.mark_onboard_done()
 	GameManager._change_state(GameManager.GameState.PLAYING)
@@ -156,6 +190,10 @@ func _run() -> void:
 		await Rc30.run(self)
 		_finish()
 		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "perception":
+		await RcPerception.run(self)
+		_finish()
+		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
 		await Rc16Finish.rtl_screens_note(self)
 		_finish()
@@ -232,6 +270,7 @@ func _run() -> void:
 	_finish()
 
 func _finish() -> void:
+	_restore_visual_baseline()
 	print("[closeout] DONE checks=%d fails=%d" % [_checked, _fails])
 	get_tree().quit(1 if _fails > 0 else 0)
 
@@ -273,6 +312,7 @@ func _rc16_checks() -> void:
 	Rc29Atk.run(self)
 	await Rc29Play.run(self)
 	await Rc29Fix.run(self)
+	await RcPerception.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
@@ -396,8 +436,10 @@ func _check_weapons() -> void:
 	var hp1: float = float(target.get("hp"))
 	shotgun.fire(center + Vector3(0.0, 0.0, 3.0), toward)
 	_ok(float(target.get("hp")) < hp1, "G25 the shotgun's pellets hurt at close range (%.1f -> %.1f)" % [hp1, float(target.get("hp"))])
-	# C03: auto-aim leans toward a living monster near the line of fire, only when the setting is on
-	var mark := _monster("crawler_3d", FAR + Vector3(30.0, 0.0, 0.0))
+	# C03: auto-aim leans toward a living monster near the line of fire, only when the setting is on.
+	# The fixture stands on the same empty flat as RcPerception's VIS checks: no district geometry
+	# or streetlight can occlude the eye line or light the mark from outside the beam.
+	var mark := _monster("crawler_3d", Cartography.district_origin() + Vector3(900.0, 0.0, 900.0))
 	await get_tree().physics_frame
 	var mark_center := (mark.get_node("CollisionShape3D") as Node3D).global_position
 	from = mark_center + Vector3(0.0, 0.0, 6.0)
@@ -406,12 +448,26 @@ func _check_weapons() -> void:
 	SettingsManager.set_setting("auto_aim", false)
 	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line), "C03 auto-aim off leaves the aim alone")
 	SettingsManager.set_setting("auto_aim", true)
-	# the owner's rules of 2026-11-05: the aim leans only toward a monster the player can see (here, one in the beam)
+	# The owner's rules of 2026-11-05: the aim leans only toward a monster the player
+	# can actually perceive (camera frustum + rendered light + clear eye line). A bare
+	# _seen_in_beam flag is no longer enough: stand a check camera on the mark so the
+	# "seen" branch is a real perception case, then put the previous camera back.
+	var prev_cam := get_viewport().get_camera_3d()
+	var check_cam := Camera3D.new()
+	check_cam.fov = 90.0
+	add_child(check_cam)
+	check_cam.look_at_from_position(mark.global_position + Vector3(0.0, 1.6, 6.0), mark.global_position + Vector3(0.0, 1.0, 0.0))
+	check_cam.make_current()
 	mark.set("_seen_in_beam", true)
+	await get_tree().physics_frame
+	var mark_seen: bool = mark.is_perceptible()
 	var aimed: Vector3 = pistol._apply_auto_aim(from, off_line)
-	_ok(aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster it can see")
+	_ok(mark_seen and aimed.dot(to_target) > off_line.dot(to_target) + 0.001, "C03 auto-aim on pulls the aim toward the monster it can see (perceptible %s)" % mark_seen)
 	mark.set("_seen_in_beam", false)
 	_ok(pistol._apply_auto_aim(from, off_line).is_equal_approx(off_line) or LightGrid.is_lit(mark.global_position, BaseMonster.LIT_POOL), "C03 auto-aim does not lean toward a monster the dark hides")
+	if is_instance_valid(prev_cam):
+		prev_cam.make_current()
+	check_cam.queue_free()
 	SettingsManager.set_setting("auto_aim", false)
 	# the HUD's two weapon slots
 	var hud := _main.get_node_or_null("HUD")
@@ -450,14 +506,24 @@ func _check_visibility_and_hiding() -> void:
 	_ok(is_equal_approx(dark.x, 3.0) and is_equal_approx(dark.y, 1.0), "S02 light off halves it and the dark caps it at 3 m (%s)" % str(dark))
 	_player.set("current_state", _player.State.CROUCH)
 	_ok(is_equal_approx(monster._sight_ranges().x, 1.5), "S02 crouching with the light off: 1.5 m")
-	var lit_cells: Dictionary = LightGrid._grid
-	LightGrid._grid = {}
+	# S04b asks is_perceptible on camera now: the monster stands 4 m ahead of the player, the pool lights that reach it are
+	# held hidden for the dark reading (the predicate reads live rendered lights, not the grid), and the beam flag alone lifts it.
+	var cam := get_viewport().get_camera_3d()
+	var fwd := -cam.global_transform.basis.z
+	fwd.y = 0.0
+	monster.global_position = _player.global_position + fwd.normalized() * 4.0
 	monster.set("_seen_in_beam", false)
+	var pool_lights: Array[Node3D] = LightGrid.visible_lights_at(monster.global_position, monster.LIT_POOL)
+	var was_visible: Array[bool] = []
+	for light: Node3D in pool_lights:
+		was_visible.append(light.visible)
+		light.visible = false
 	var in_dark: bool = monster.is_perceptible()
 	monster.set("_seen_in_beam", true)
 	var in_beam: bool = monster.is_perceptible()
 	monster.set("_seen_in_beam", false)
-	LightGrid._grid = lit_cells
+	for i: int in pool_lights.size():
+		pool_lights[i].visible = was_visible[i]
 	_ok(not in_dark and in_beam, "S04b the HUD and the auto-aim see a monster only in the beam or a lit pool: in the dark %s, in the beam %s" % [in_dark, in_beam])
 	_player.set("current_state", _player.State.RUN)
 	var cell := Vector2i(floori(_player.global_position.x / LightGrid.CELL_SIZE), floori(_player.global_position.z / LightGrid.CELL_SIZE))
