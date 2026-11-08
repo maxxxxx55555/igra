@@ -49,6 +49,38 @@ var _checked: int = 0
 var _fails: int = 0
 var _player: Node3D = null
 var _main: Node = null
+var _profile_tier: int = 2
+var _profile_effects: int = 2
+var _profile_flags: Dictionary = {}
+
+## The full battery (tools/check.sh --all) runs every engine gate against one shared
+## user:// profile and exports TLS_UDG_GUARDED=1, which tells QaLaunchGuard that the
+## shell guard owns the restore. Settings written by a preceding probe therefore
+## survive into this gate. Several checks here measure effects that exist only at
+## High (dust motes, menu fog, parallax, district dressing); if the profile was
+## left at Low they report a false failure. Pin the visual baseline this gate was
+## written against, then put the profile's own values back in _finish().
+const VISUAL_FLAGS: Array[String] = ["reduce_camera_motion", "reduce_flash", "reduce_screen_shake", "reduce_time_fx", "reduce_ui_motion"]
+
+func _pin_visual_baseline() -> void:
+	_profile_tier = int(SettingsManager.get_setting("graphics_tier", 2))
+	_profile_effects = int(SettingsManager.get_setting("effects", 2))
+	for key: String in VISUAL_FLAGS:
+		_profile_flags[key] = SettingsManager.get_setting(key, false)
+	SettingsManager.set_graphics_tier(2)
+	SettingsManager.set_setting("effects", 2)
+	for key: String in VISUAL_FLAGS:
+		SettingsManager.set_setting(key, false)
+
+func _restore_visual_baseline() -> void:
+	SettingsManager.set_graphics_tier(_profile_tier)
+	SettingsManager.set_setting("effects", _profile_effects)
+	for key: String in VISUAL_FLAGS:
+		SettingsManager.set_setting(key, _profile_flags.get(key, false))
+	# set_setting() only writes memory. A check below (LANG1) calls save_to_cfg(),
+	# which would otherwise leave the pinned tier on disk; write the restored
+	# values back so a standalone run leaves the profile as it found it.
+	SettingsManager.save_to_cfg()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -64,6 +96,7 @@ func _ok(cond: bool, what: String) -> void:
 
 func _run() -> void:
 	# The checks read English layouts. The profile's saved language came on with SettingsManager's deferred call, queued before this one.
+	_pin_visual_baseline()
 	LocalizationManager.set_language("en")
 	SaveSystem.mark_onboard_done()
 	GameManager._change_state(GameManager.GameState.PLAYING)
@@ -237,6 +270,7 @@ func _run() -> void:
 	_finish()
 
 func _finish() -> void:
+	_restore_visual_baseline()
 	print("[closeout] DONE checks=%d fails=%d" % [_checked, _fails])
 	get_tree().quit(1 if _fails > 0 else 0)
 
