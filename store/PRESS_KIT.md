@@ -35,14 +35,14 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 | Feature graphic | `store/feature-graphic.png` | 1024 x 500 | 612245 |
 | Press header (art) | `store/trailer/presskit_1600x900.png` | 1600 x 900 | 1171636 |
 | Still: first light (art) | `store/trailer/still_first_light_1920x1080.png` | 1920 x 1080 | 2417858 |
-| Screenshot: main menu | `docs/stills/store/01_main_menu_after_b61f669c_20261107T203756Z.png` | 1920 x 1055 | 2277029 |
-| Screenshot: district day full | `docs/stills/store/02_district_day_full_after_b61f669c_20261107T203821Z.png` | 1920 x 1055 | 2696020 |
-| Screenshot: district night dark | `docs/stills/store/03_district_night_dark_after_b61f669c_20261107T203813Z.png` | 1920 x 1055 | 2311641 |
-| Screenshot: combat | `docs/stills/store/04_combat_after_b61f669c_20261107T203830Z.png` | 1920 x 1055 | 2782245 |
-| Screenshot: boss | `docs/stills/store/05_boss_after_b61f669c_20261107T203836Z.png` | 1920 x 1055 | 2481350 |
-| Screenshot: victory ngplus | `docs/stills/store/06_victory_ngplus_after_b61f669c_20261107T203841Z.png` | 1920 x 1055 | 1986635 |
-| Screenshot: skill tree | `docs/stills/store/07_skill_tree_after_b61f669c_20261107T203824Z.png` | 1920 x 1055 | 236120 |
-| Screenshot: shop | `docs/stills/store/08_shop_after_b61f669c_20261107T203825Z.png` | 1920 x 1055 | 1273877 |
+| Screenshot: main menu | `docs/stills/store/01_main_menu_after_e945d71d_20261108T075343Z.png` | 1920 x 1055 | 2293724 |
+| Screenshot: district day full | `docs/stills/store/02_district_day_full_after_e945d71d_20261108T075403Z.png` | 1920 x 1055 | 2691630 |
+| Screenshot: district night dark | `docs/stills/store/03_district_night_dark_after_e945d71d_20261108T075357Z.png` | 1920 x 1055 | 2309804 |
+| Screenshot: combat | `docs/stills/store/04_combat_after_e945d71d_20261108T075410Z.png` | 1920 x 1055 | 2677536 |
+| Screenshot: boss | `docs/stills/store/05_boss_after_e945d71d_20261108T075416Z.png` | 1920 x 1055 | 2504259 |
+| Screenshot: victory ngplus | `docs/stills/store/06_victory_ngplus_after_e945d71d_20261108T075420Z.png` | 1920 x 1055 | 1986635 |
+| Screenshot: skill tree | `docs/stills/store/07_skill_tree_after_e945d71d_20261108T075405Z.png` | 1920 x 1055 | 236120 |
+| Screenshot: shop | `docs/stills/store/08_shop_after_e945d71d_20261108T075406Z.png` | 1920 x 1055 | 1273877 |
 
 The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.
 
