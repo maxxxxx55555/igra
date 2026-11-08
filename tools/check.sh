@@ -351,10 +351,10 @@ else
   bad "af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')"
 fi
 # U0: gdparse, gdlint (gdlintrc: defect-class rules), ruff, shellcheck and actionlint on the files changed since the rc15 tag; the self-check first.
-if "$PY" tools/lint_changed.py --demo >/dev/null 2>&1 && "$PY" tools/lint_changed.py >/dev/null 2>&1; then
+if lint_out=$("$PY" tools/lint_changed.py --demo 2>&1) && lint_out=$("$PY" tools/lint_changed.py 2>&1); then
   ok "lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)"
 else
-  bad "lint_changed (см. 'python tools/lint_changed.py')"
+  bad "lint_changed (см. 'python tools/lint_changed.py'): $(printf '%s' "$lint_out" | tr '\n' ' ' | cut -c1-600)"
 fi
 if [[ -f tools/af5_check.py ]]; then
   if "$PY" tools/af5_check.py --demo >/dev/null 2>&1 && "$PY" tools/af5_check.py >/dev/null 2>&1; then
