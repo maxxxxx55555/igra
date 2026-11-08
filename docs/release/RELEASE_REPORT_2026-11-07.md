@@ -102,6 +102,16 @@ is lazily materialised and its **first read returns `$null`**. The fix primes th
 use. The repaired script passes **11/11** harness cases and is kept both in the kit and in
 `tools/release/owner_handoff/`; `run-state.json` records the new hash and the reason.
 
+## 4b. One source normalisation the exporter forces
+
+`godot --export-release "Windows Desktop"` rewrites `default_bus_layout.tres` in a normalised form
+on every run: sub-resources are re-ordered, the `load_steps` hint and every property that already
+equals its engine default are dropped (`bus/0/*`, `room_size = 0.8` on the music reverb), and the
+hand-written `uid://audiobuses00` is re-encoded as `uid://udiobuses00`. The rewrite is byte-stable
+(two consecutive exports produced the same SHA-256) and functionally identical — the same nine
+buses, sends and effects, with only defaults made implicit. The normalised file is committed so that
+the export cannot change committed source, and the full battery was re-run on it.
+
 ## 5. Frame freshness (AF3) — recaptured, not bypassed
 
 `tools/qa_sim/af3_frame_check.py` failed 8/8: the store stills were shot at `650aea4`, while the
