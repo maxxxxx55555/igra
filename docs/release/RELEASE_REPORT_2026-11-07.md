@@ -59,13 +59,25 @@ The first Full run reported `Провалено: 2, пройдено: 101`: one 
 `rc15 closeout` checks. All were fixed and the closeout gate re-run in the engine:
 `[closeout] DONE checks=654 fails=0`.
 
-- **lint_changed (transient Windows fault).** `tools/lint_changed.py --demo` created its fixture
-  tree inside the repository and removed it with a plain `TemporaryDirectory` cleanup; Windows
-  briefly keeps a just-written file handle open, so the cleanup raised and the demo exited non-zero
-  even though all six fixtures were judged correctly (a leftover `.lint-demo-*` tree at the exact
-  time of the failing run confirmed it). The demo now passes `ignore_cleanup_errors=True`, so a
-  leftover ignored scratch tree cannot fail the self-check. The verdict logic, all six fixtures and
-  every line-number citation in `docs/UTILITIES_REPORT.md` are unchanged.
+- **lint_changed (self-check, not the linter).** `tools/lint_changed.py --demo` wrote its six fixtures
+  into a temporary tree inside the repository and removed it with `TemporaryDirectory`. On this host a
+  bulk-delete guard refuses (and kills) a recursive delete of that many entries, so the demo aborted
+  and the gate failed even though all six fixtures had been judged correctly — the captured output was
+  `[safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] {"count":22,...}`. The demo now writes one fixed
+  scratch tree (`.lint-demo-fixtures`, already covered by `.gitignore`) and never deletes it, so no
+  delete happens at all. `--demo` reports 6 fixtures / 0 wrong and the real lint run reports 0 findings.
+  The verdict logic, all six fixtures and every line-number citation in `docs/UTILITIES_REPORT.md` are
+  unchanged.
+- **Freed monster reaching the HUD (real runtime bug, both gates).** `scripts/ui/hud_3d.gd` kept a raw
+  monster reference in each damage label's metadata and in `_enemy_bar_monster`. When that monster was
+  freed, `var monster: Node3D = label.get_meta(...)` raised `Trying to assign invalid previously freed
+  instance`, and the later `_monster_perceptible(monster)` call raised `Invalid type ... (previously
+  freed)` before its own `is_instance_valid` guard could run — GDScript checks typed parameters at the
+  call boundary. The closeout gate and the GOLD MASTER suite both failed on those engine errors while
+  every assertion passed. The readout now reads the reference untyped, validates it, and only then
+  types it; the enemy-bar hold does the same before its per-frame re-check. Verified:
+  `[closeout] DONE checks=654 fails=0` with 0 `SCRIPT ERROR` lines, and `[qa] DONE fails=0` for the
+  GOLD MASTER suite with 0.
 - **C03 / UIFX4 / BOSSHIT1 (stale perception fixtures).** The other AI's visibility rules made
   damage numbers, hit markers and auto-aim legal only for a monster the player can *actually*
   perceive (camera frustum + rendered light + clear eye line). The three QA checks still set a bare

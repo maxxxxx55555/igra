@@ -1060,7 +1060,11 @@ func _process_numbers(delta: float) -> void:
 	for label in _numbers:
 		if not label.visible:
 			continue
-		var monster: Node3D = label.get_meta(&"monster", null)
+		# get_meta can return a freed monster: assigning that to a typed Node3D local
+		# raises "previously freed", and passing it to _monster_perceptible raises before
+		# its own guard runs. Read it untyped, validate, then type it.
+		var held: Variant = label.get_meta(&"monster", null)
+		var monster: Node3D = held if is_instance_valid(held) else null
 		if not _monster_perceptible(monster):
 			label.visible = false
 			continue
@@ -1250,7 +1254,7 @@ func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
 func _process_enemy_bar(delta: float) -> void:
 	if _enemy_bar_hold <= 0.0:
 		return
-	if not _monster_perceptible(_enemy_bar_monster):
+	if not is_instance_valid(_enemy_bar_monster) or not _monster_perceptible(_enemy_bar_monster):
 		_hide_enemy_bar()
 		return
 	_enemy_bar_hold -= delta
