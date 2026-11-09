@@ -26,6 +26,8 @@ All28 final engine gates pass from the frozen source copy, including compile, si
 
 The complete static battery passes72/72. Native audio and the seeded autoplay were performed on the preceding `00bfdd1e` revision; the subsequent repair changes cached map captions only. Their historical capture identity is preserved, and the complete engine battery is rerun after that repair.
 
+The delivered runtime source is `a2672e7736ce34c4e8e3021cdc576d3cff68bfa1`. Windows and Web were exported from that clean commit; the packaged Windows EXE initializes native rendering and exits without fatal errors after900 frames. The Windows build is unsigned. Web is built but has not been verified in a browser. Both archives include third-party notices and source identity; exact file sizes and SHA256 values are in the [build manifest](../artifacts/release-20261110/engine/map-locale-final/build-manifest.json). Eight new1920×1080 [source-stamped frames](../artifacts/release-20261110/engine/map-locale-final/fresh-frames.json) document this commit's staged states without claiming store-creative acceptance.
+
 An actual seeded autoplay reaches WIN, with2deaths and14 automatic nudge rescues. This proves the assisted progression path reaches the ending; it does not certify clean navigation or human traversal. Native UI fixtures and staged ending screenshots are identified as such. Known retained-resource diagnostics remain in the raw output rather than being presented as a clean teardown.
 
 ## Run the current source
