@@ -14,6 +14,7 @@ var _canvas: Control = null
 var _blank: Label = null
 var _zoom: float = 1.0
 var _pan: Vector2 = Vector2.ZERO
+var _captions: Dictionary[String, Control] = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -34,10 +35,12 @@ func _ready() -> void:
 	title.add_theme_font_size_override("font_size", 32)
 	title.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 	root.add_child(title)
+	_captions["MAP_TITLE"] = title
 	_blank = Label.new()
 	_blank.text = LocalizationManager.t("MAP_BLANK")
 	_blank.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	root.add_child(_blank)
+	_captions["MAP_BLANK"] = _blank
 	_canvas = Control.new()
 	_canvas.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_canvas.clip_contents = true
@@ -54,9 +57,15 @@ func _ready() -> void:
 		btn.custom_minimum_size = Vector2(150, 48)
 		btn.pressed.connect(spec[1])
 		row.add_child(btn)
+		_captions[String(spec[0])] = btn
+	LocalizationManager.language_changed.connect(_on_language_changed)
 	visibility_changed.connect(func() -> void:
 		if visible:
 			_reset_view())
+
+func _on_language_changed(_language: String) -> void:
+	for key: String in _captions:
+		_captions[key].set("text", LocalizationManager.t(key))
 
 func _cells() -> Dictionary:
 	var dm := get_node_or_null("/root/DistrictManager")
