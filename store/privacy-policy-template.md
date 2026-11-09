@@ -10,14 +10,14 @@ false for the shipping build.
 
 A full plain-language **RU version** (all 9 sections, mirroring the EN policy) is at the
 bottom so the RU listing can point to a Russian policy too. The only things the owner must
-fill in are the `[square bracket]` placeholders: the contact email / support URL (the app
-name and dates are already filled in, EN and RU alike).
+fill in were the `[square bracket]` placeholders: the contact email / support URL. They are
+**filled** (2026-11-09) with `maxzimkasky@gmail.com`, EN and RU alike, and the dates are
+2026-10-28 — the values the live page `https://maxxxxx55555.github.io/igra/` serves.
 
-> **⚠ PLACEHOLDERS STILL OPEN (final sync, 2026-09-13 — RC FINAL v2):** exactly 4 fill-in
-> slots remain — `**[contact email / support URL]**` ×2 in the EN text (§1, §9) and its RU
-> mirror `**[контактный email / страница поддержки]**` ×2 (§1, §9). Everything else in both
-> policy texts is final and matches the shipped build. Do not publish while any `[square
-> bracket]` remains.
+> **✅ PLACEHOLDERS CLOSED (2026-11-09).** The 4 fill-in slots are filled with the published values:
+> `maxzimkasky@gmail.com` ×4 (EN §1, EN §9, RU §1, RU §9). The policy texts below are byte-identical to the
+> live page `https://maxxxxx55555.github.io/igra/`, which serves them since 2026-10-28. The authoritative
+> copy of the text that is published is `docs/PRIVACY_POLICY_FINAL.md`; this template is kept as history.
 >
 > **Claim audit note:** the previous draft's §4 described a LAN multiplayer feature. That
 > feature is NOT reachable in the launch build (the LAN prototype is archived with no UI
@@ -29,12 +29,12 @@ name and dates are already filled in, EN and RU alike).
 
 # Privacy Policy — Last Streetlight
 
-_Effective date: 2026-09-13_
-_Last updated: 2026-09-13_
+_Effective date: 2026-10-28_
+_Last updated: 2026-10-28_
 
 ## 1. Who we are
 This policy explains what data, if any, the game **Last Streetlight** ("the App", "we", "us")
-collects. The developer can be reached at: **[contact email / support URL]**.
+collects. The developer can be reached at: **maxzimkasky@gmail.com**.
 
 ## 2. Summary
 The App is **offline-first single-player**. As shipped, it **does not collect, store, or
@@ -80,19 +80,19 @@ added), we will update this page before the change ships. The "Last updated" dat
 the most recent revision.
 
 ## 9. Contact
-Questions about this policy or the App's data practices: **[contact email / support URL]**.
+Questions about this policy or the App's data practices: **maxzimkasky@gmail.com**.
 
 ---
 
 ## РУ / RU version (Политика конфиденциальности)
 
-_Дата вступления в силу: 2026-09-13_
-_Дата последнего обновления: 2026-09-13_
+_Дата вступления в силу: 2026-10-28_
+_Дата последнего обновления: 2026-10-28_
 
 ### 1. Кто мы
 Эта политика объясняет, какие данные (если вообще какие-либо) собирает игра **«Последний
 фонарь»** (далее — «Приложение», «мы»). Связаться с разработчиком можно так:
-**[контактный email / страница поддержки]**.
+**maxzimkasky@gmail.com**.
 
 ### 2. Коротко
 Приложение работает **офлайн** и является одиночным. В текущей версии оно **не собирает, не
@@ -138,15 +138,15 @@ _Дата последнего обновления: 2026-09-13_
 обновления» выше отражает последнюю редакцию.
 
 ### 9. Контакты
-Вопросы об этой политике и о данных Приложения: **[контактный email / страница поддержки]**.
+Вопросы об этой политике и о данных Приложения: **maxzimkasky@gmail.com**.
 
 ---
 
 ## Before publishing (owner checklist)
-1. Replace every remaining `[square bracket]` placeholder — exactly 4, all the
-   contact email / support URL (×2 EN, ×2 RU). Dates and the app name are already
-   filled in (EN and RU alike) with the RC FINAL v2 sync date.
-2. Publish at a stable HTTPS URL and paste it into the store listing's privacy-policy field
+1. **DONE (2026-11-09).** Every `[square bracket]` placeholder is filled: the contact email
+   `maxzimkasky@gmail.com` (×2 EN, ×2 RU). The dates and the app name were already filled in.
+2. **DONE.** Published at a stable HTTPS URL — `https://maxxxxx55555.github.io/igra/` — which serves
+   exactly these texts. Paste that URL into the store listing's privacy-policy field
    (the Play listing currently marks it TODO — see `store/listing.md` Data-safety notes).
 3. If any future build enables AppLovin advertising, update §5 (and the RU version) to disclose
    the SDK's data collection before that build ships — see `docs/store/HUMAN_CHECKLIST.md`.

@@ -49,5 +49,5 @@ The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each 
 ## For a reviewer
 
 1. A review copy is the signed bundle of `docs/RELEASE_ARTIFACTS.md`, installed from a closed test track.
-2. Contact: **[contact email / support URL]** (the owner fills it; it is the same address as in `docs/PRIVACY_POLICY_FINAL.md`).
+2. Contact: **maxzimkasky@gmail.com** (the published address; the same one as in `docs/PRIVACY_POLICY_FINAL.md` and on the live policy page https://maxxxxx55555.github.io/igra/).
 3. Trailer: the script is `store/TRAILER_SCRIPT.md`; no video exists yet.

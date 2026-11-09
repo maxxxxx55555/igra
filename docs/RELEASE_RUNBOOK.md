@@ -119,8 +119,9 @@ reviews using `store/review-responses.md`.
 
 ## 6. Privacy policy (host at a stable URL, then paste the URL in §3.2)
 
-**Text:** `store/privacy-policy-template.md` (EN + RU). Replace its 4 `[contact email / support URL]`
-placeholders.
+**Text:** `docs/PRIVACY_POLICY_FINAL.md` (EN + RU; the same text as `store/privacy-policy-template.md`).
+**Done (2026-11-09):** its 4 contact slots are filled (`maxzimkasky@gmail.com`) and the date is
+2026-10-28; the page is live at `https://maxxxxx55555.github.io/igra/`.
 
 **Variant A:** if SECURITY_SWEEP_V2 #2 is applied, replace the second sentence of §5 with:
 

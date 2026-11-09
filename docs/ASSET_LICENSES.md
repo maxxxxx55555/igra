@@ -564,3 +564,54 @@ The 29 repainted 2D files of `docs/ART_PASS_2.md` (menu hero, five screen backdr
 ## Changed 2026-11-05 (Session 39e): the five ending pictures
 
 `assets/store/endings/ending_<id>.png` (1920 x 1080, shown behind the ending and the death cards by `scripts/ui/terminal_layout.gd` `set_ending`) were flat procedural skylines (the art director's item 3); `scripts/ui/terminal_layout.gd` `ENDING_ART` now shows the Gemini art of the v7 slot table instead, one per ending, so no picture ships twice (copies cost 9.3 MB of the bundle in the build of row 552, which is not kept); the five files keep their old content and are no longer read: light `assets/ui/menu_city.png`, hope `screens_v2/loading_street.png`, survivor `screens_v2/character_dim.png`, dark `screens_v2/death_loom.png`, truth `screens_v2/journal_paper.png`. Same origin and terms as those slots; no new generation.
+
+## Session 42 (2026-11-09) — provenance audit closures (photos, fonts, Kenney)
+
+A full pass over every asset class confirmed the policy (generated in-house / AI-generated in-session
+from in-house references / web-sourced under CC0 with attribution recorded; no other origin permitted).
+Three classes that were *not* yet covered by a ledger row were verified and are recorded here.
+
+### `assets/photos/` — 10 procedural "old-city photo" textures (PROJECT-OWNED, no third-party rights)
+
+| Path | Origin | License | Attribution |
+|---|---|---|---|
+| `assets/photos/{abandoned_street,dark_alley,old_park,broken_lamp,foggy_avenue,ruined_school,empty_hospital,night_substation,warehouse_shadow,last_streetlight}.png` (256² RGBA, 10 files) | Generated in-repo by `scripts/tools/_gen_photos.gd` (committed `c5587bb7`, "feat(photos): procedural photo generator + PhotoAlbum fallback") — an fBm noise + vignette + sepia generator with a fixed seed (`_rng.seed = 20260807`). No external source, no sample, no model. Consumed by `scripts/ui/photo_album.gd` as a `PhotoAlbum` fallback. | Own work; no third-party material; no rights to clear | none required |
+
+These are byte-for-byte reproducible from the engine script; they carry no third-party licence and no
+attribution obligation.
+
+### `assets/fonts/` — 4 typefaces (all free for commercial use; minor hygiene gap)
+
+| Path | Typeface | Source / licence | Commercial use | Action |
+|---|---|---|---|---|
+| `assets/fonts/BebasNeue-Regular.ttf` | Bebas Neue (Ryoichi Tsunekawa) | Google Fonts — SIL Open Font License 1.1 | ✅ free | Add OFL text to repo (see note) |
+| `assets/fonts/Rajdhani-Regular.ttf` | Rajdhani (Indian Type Foundry) | Google Fonts — SIL OFL 1.1 | ✅ free | Add OFL text to repo |
+| `assets/fonts/RobotoCondensed-Regular.ttf` | Roboto Condensed (Google) | Google Fonts — Apache 2.0 (also shipped OFL via Google Fonts) | ✅ free | Add licence text to repo |
+| `assets/fonts/ShareTechMono-Regular.ttf` | Share Tech Mono (Map-Type / Vitalii Maltsev) | Google Fonts — SIL OFL 1.1 | ✅ free | Add OFL text to repo |
+
+All four are standard Google Fonts and are free to embed and ship in a commercial product. The only
+gap is **hygiene, not rights**: SIL OFL 1.1 requires the licence text to accompany the font, and no
+`OFL.txt` / licence file is currently bundled. Owner action (non-blocking): drop the SIL OFL 1.1 text
+and the Apache 2.0 notice into `assets/fonts/` (or a `THIRD_PARTY_LICENCES.md`) before first publish.
+
+### `assets/models/kenney/` — Kenney model packs (CC0 1.0, public domain)
+
+| Path | Origin | License | Attribution |
+|---|---|---|---|
+| `assets/models/kenney/` (Weapon Pack, Space Kit, Dungeon Pack, per `assets/models/kenney/README.txt`) | Kenney (`https://kenney.nl/assets`) | CC0 1.0 (public-domain dedication) | none required; CC0 asks for none |
+
+Kenney publishes every asset under CC0 1.0, so no attribution is owed and the models are safe to ship.
+The in-tree `README.txt` says "BESPLATNYE MODELI" (free models) and links the source; it does not
+explicitly print "CC0", but Kenney's standard licence for these packs is CC0 and that is recorded here.
+
+### Audit verdict (2026-11-09)
+
+- Textures, environment PBR (Poly Haven CC0), art (AI-generated in-session, project-owned), night
+  sky (own code), one-shots (own code), photos (own code), fonts (free OFL/Apache), Kenney (CC0),
+  and the in-house synthesized music beds (own tools): **all clear**, no third-party rights to clear.
+- Music: the 12 Gemini/Lyria-generated tracks (`docs/MUSIC_RIGHTS_MEMO.md`, owner **Decision A**,
+  shipped labelled as AI) carry a documented, accepted residual commercial-rights ambiguity
+  (Google ToS claim no ownership but are silent on commercial use; strict API §5(e) reading is
+  unsettled). This is the only asset class with any risk, and it is a **known, owner-accepted**
+  residual, not an open gap.
+- One non-blocking hygiene item remains: bundle the font licence texts (`OFL.txt` / Apache notice).
