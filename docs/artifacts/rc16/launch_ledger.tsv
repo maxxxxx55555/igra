@@ -623,3 +623,4 @@ n	utc	head	id	exit	command
 622	20261107T203726Z	b61f669c	s40_store_b61f669c	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
 623	20261108T075320Z	e945d71d	s41_store_e945d71d	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
 624	20261108T083750Z	81fe34db	s42_store_81fe34db	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
+625	20261109T005801Z	10856bb0	s43_store_10856bb0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
