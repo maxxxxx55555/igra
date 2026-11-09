@@ -75,6 +75,9 @@ func _setup_system_font() -> void:
 func _apply_font_to_theme(theme: Theme, font: Font) -> void:
 	if theme == null:
 		return
+	# An explicitly bundled font must not acquire an operating-system dependency.
+	if theme.default_font is FontFile and not (theme.default_font as FontFile).allow_system_fallback:
+		return
 	if theme.default_font == null:
 		theme.default_font = font
 	elif not theme.default_font.fallbacks.has(font):

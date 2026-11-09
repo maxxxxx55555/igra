@@ -341,12 +341,16 @@ func _slot_of(item: StringName) -> int:
 func _item_cells(ui: Control) -> int:
 	return ui._grid.get_children().filter(func(cell: Node) -> bool: return cell is Button).size()
 
-# ── V03: the heading face is the emboldened Bebas Neue ───────────────────────
+# V03 follows the owner's natural-case UI typography; Bebas belongs to the wordmark.
 func _check_theme() -> void:
-	var font := ThemeProvider.build_theme().get_font(&"font", &"Button")
-	_ok(font is FontVariation and (font as FontVariation).variation_embolden > 0.0, "V03 ThemeProvider headings use the emboldened Bebas Neue")
-	var project_theme := load("res://assets/ui/theme_tls.tres") as Theme
-	_ok(project_theme.get_font(&"font", &"Button") is FontVariation, "V03 the project theme Button font is the bold variation")
+	var canon := preload("res://scripts/tools/rc16/font_canon_checks.gd")
+	var button: Font = ThemeProvider.build_theme().get_font(&"font", &"Button")
+	_ok(canon.role(ThemeProvider.heading_font(), 600.0) and canon.role(button, 500.0), "V03 headings use bundled Roboto600 and controls Roboto500 with EN/RU glyphs")
+	var menu := (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate() as Control
+	menu.call("_style_title", menu.get_node("VBox"))
+	var wordmark: Font = (menu.get_node("VBox/Title") as Label).get_theme_font("font")
+	_ok(canon.wordmark(wordmark), "V03 the actual menu wordmark retains Bebas with bundled Cyrillic fallback")
+	menu.free()
 
 # ── what the districts now carry ────────────────────────────────────────────
 func _check_placement() -> void:

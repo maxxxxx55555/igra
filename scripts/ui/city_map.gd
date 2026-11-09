@@ -49,6 +49,7 @@ const ACTION_SIZE := Vector2(230, 34)
 
 var _list: VBoxContainer = null
 var _title: Label = null
+var _close_button: Button = null
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -56,6 +57,7 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
 	_build()
+	LocalizationManager.language_changed.connect(_on_language_changed)
 	EventBus.district_stage_changed.connect(func(_a: StringName, _b: int) -> void: _refresh())
 	EventBus.district_entered.connect(func(_a: StringName) -> void: _refresh())
 	visibility_changed.connect(func() -> void:
@@ -95,10 +97,15 @@ func _build() -> void:
 	scroll.add_child(_list)
 
 	var close := Button.new()
+	_close_button = close
 	close.text = LocalizationManager.t("BTN_CLOSE")
 	close.custom_minimum_size = Vector2(160, 40)
 	close.pressed.connect(_close)
 	root.add_child(close)
+
+func _on_language_changed(_language: String) -> void:
+	_close_button.text = LocalizationManager.t("BTN_CLOSE")
+	_refresh()
 
 func _refresh() -> void:
 	if _list == null:

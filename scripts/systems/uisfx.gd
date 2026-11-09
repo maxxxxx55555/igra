@@ -32,7 +32,7 @@ const _UI_GAIN_DEFAULT_DB: float = 9.0
 
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
-	EventBus.inventory_notice.connect(func(_msg: String) -> void: error())
+	# Text notices have no sound; dedicated action signals own their feedback.
 	EventBus.purchase_failed.connect(func(_item_id: String, _reason: String) -> void: error())
 	EventBus.game_saved.connect(func() -> void: save())
 	EventBus.secret_found.connect(func(_id: String) -> void: play_ui("secret_discovery_sting"))
@@ -58,6 +58,9 @@ func _ready() -> void:
 ## в дереве ещё нет, и прямое обращение дало бы Nil. Поэтому подписки на них
 ## откладываются на кадр, когда автолоады уже подняты.
 func _wire_late_autoloads() -> void:
+	var wallet := get_node_or_null("/root/CoinWallet")
+	if wallet != null:
+		wallet.purchase_failed.connect(func(_reason: String) -> void: error())
 	var endings := get_node_or_null("/root/EndingsManager")
 	if endings != null:
 		# Не на game_won: там MusicDirector уже запускает music_victory и
@@ -87,7 +90,7 @@ func play_ui(sound: String) -> void:
 	p.play()
 	p.finished.connect(p.queue_free)
 
-## Every button of the UI answers a press (the click and a pulse) and a hover (a tick; the swell is ThemeSetup's), and a tab change clicks (docs/POLISH.md).
+## Every button answers a press with a click and pulse; hover feedback is visual, and a tab change clicks.
 ## A node is looked at one frame after it enters the tree, when its own screen has wired what it wants: a button that already has the click is left
 ## alone, and so is every control of the HUD (the touch buttons have their own press).
 func _on_node_added(node: Node) -> void:
@@ -126,7 +129,8 @@ func click() -> void:
 	_play("ui_click", 800.0, 0.05)
 
 func hover() -> void:
-	_play("ui_hover", 1000.0, 0.03)
+	# Pointer movement keeps visual feedback; activation retains the mechanical click.
+	pass
 
 ## docs/GAMEFEEL_SPEC.md UI press micro-scale; _wire gives it to every button.
 const PRESS_SCALE: float = 0.95

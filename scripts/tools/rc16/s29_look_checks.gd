@@ -234,19 +234,18 @@ static func _menu_parallax(r: Node) -> void:
 	menu.queue_free()
 	r._ok(shader_ok and moved > 0.05 and low > 0.0 and low < moved * 0.5 and held, "PAR1 the menu hero wears the parallax shader (%s), a drag moves it by %.3f, %.3f on the Low tier (0.4 of it), Motion Comfort holds it still (%s)" % [shader_ok, moved, low, held])
 
-## THEME1 (B10): the type scale is in the theme as label variations (Display 44, Huge 30, Title 22, Small 13, Mono 15), the titles are on the Bebas face, and the option button has the 2 px brass focus ring and a disabled
-## box of its own.
+## THEME1: preserve the type scale, bundled Roboto600 headings and option focus/disabled states.
 static func _theme(r: Node) -> void:
 	var theme: Theme = (load("res://scripts/ui/theme_provider.gd") as GDScript).build_theme()
 	var sizes: Array[int] = []
 	for variation: StringName in [&"DisplayLabel", &"HugeLabel", &"TitleLabel", &"SmallLabel", &"MonoLabel"]:
 		sizes.append(theme.get_font_size(&"font_size", variation))
 	var title: Font = theme.get_font(&"font", &"TitleLabel")
-	var bebas: bool = title is FontVariation and (title as FontVariation).base_font.resource_path.ends_with("BebasNeue-Regular.ttf")
+	var heading: bool = preload("res://scripts/tools/rc16/font_canon_checks.gd").role(title, 600.0)
 	var focus := theme.get_stylebox("focus", "OptionButton") as StyleBoxFlat
 	var ring: bool = focus != null and focus.border_width_left == 2 and focus.border_color.is_equal_approx(Color("#c9a24a"))
 	var dimmed: bool = theme.get_stylebox("disabled", "OptionButton") != theme.get_stylebox("normal", "Button")
-	r._ok(sizes == [44, 30, 22, 13, 15] and bebas and ring and dimmed, "THEME1 the type scale %s (44 30 22 13 15), the titles on Bebas (%s), the option button's 2 px brass focus ring (%s) and a disabled box of its own (%s)" % [sizes, bebas, ring, dimmed])
+	r._ok(sizes == [44, 30, 22, 13, 15] and heading and ring and dimmed, "THEME1 type scale %s (44 30 22 13 15), bundled Roboto600 EN/RU headings (%s), option 2px focus (%s), distinct disabled box (%s)" % [sizes, heading, ring, dimmed])
 
 ## MOON1 (B11): the shadow bias of the moon is 0.06 and 1.2 times the moon_bias_mult of the district (park 0.9), and 1.0 for a district the table does not know.
 static func _moon(r: Node) -> void:

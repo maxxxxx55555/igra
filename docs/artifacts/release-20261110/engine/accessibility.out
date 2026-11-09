@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[a11y] reduce_flash=true suppresses WowDirector flash: true
+[a11y] reduce_flash=false lets WowDirector flash fire: true
+[a11y] reduce_time_fx=true suppresses hit_stop: true
+[a11y] reduce_time_fx=false lets hit_stop fire: true
+[a11y] reduce_ui_motion=true suppresses press_pulse: true
+[a11y] reduce_ui_motion=false lets press_pulse fire: true
+[a11y] all three toggles survive save->reload round trip: true
+[a11y] DONE bad=0

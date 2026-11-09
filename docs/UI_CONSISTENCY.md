@@ -41,7 +41,7 @@ margin and the buttons 10 (`scripts/ui/theme_provider.gd`, `build_theme`). The c
 ## 4. Colour
 
 51 hex literals in the UI scripts and scenes, 27 distinct: 30 (59 %) are the eleven tokens of `docs/STYLE_GUIDE.md` sections 2 and 8 (brass `#c9a24a` is the most used:
-`COLOR_AMBER` in `scripts/ui/theme_provider.gd:14`). The 17 others are listed by the tool: 0d0f12 15181d 20242b 2f4a22 3a2a22 3a3226 3a3f47 5a2a2a 7a5a23 7fc4d9
+`COLOR_AMBER` in `scripts/ui/theme_provider.gd:10`). The 17 others are listed by the tool: 0d0f12 15181d 20242b 2f4a22 3a2a22 3a3226 3a3f47 5a2a2a 7a5a23 7fc4d9
 8c8a82 c98a2e e6cf6e e8a13a f2c879 ff3030 ff5050. Two of them are the subtitle colour options (yellow `e6cf6e` and cyan `7fc4d9`, an accessibility feature, G1), the
 rest belong to the asset registry, the visual-style helper that draws the player's marker (`asset_registry.gd`, `visual_style.gd`), the joystick and the minimap. Pure black appears
 only as the fade-to-black of a transition (`scripts/ui/fade_transition.gd:29`) and pure white only as the neutral modulate that tints nothing (`Color.WHITE`), never as a surface. Not changed in this pass: a retint of those shades changes how a

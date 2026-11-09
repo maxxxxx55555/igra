@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[theme-unify] main_menu Play button stylebox = StyleBoxFlat
+[theme-unify] main menu uses quiet action hierarchy
+[theme-unify] hud_3d BtnPause stylebox = StyleBoxFlat
+[theme-unify] HUD uses quiet shared controls
+[theme-unify] hud_3d Slot0 (nested, inherited) panel bg matches ThemeProvider.COLOR_BG_PANEL: true
+[theme-unify] bundled EN/RU/DE Label = true
+[theme-unify] bundled EN/RU/DE Button = true
+[theme-unify] bundled EN/RU/DE LineEdit = true
+[theme-unify] actual CanvasLayer Shop inherits quiet bundled controls = true
+[theme-unify] DONE bad=0

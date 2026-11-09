@@ -3,7 +3,7 @@ extends RefCounted
 ## facade shader, carry roof boxes and balconies, and the weathering follows the graphics tier; SOV3, the halo behind a landmark is a pool of light and not a third of the sky (HALO-27); SOV4, every district has
 ## sign words and every letter of them is in the engine's own font (the bundled fonts hold no Cyrillic: a missing glyph is a box on a wall); SOV5, the dead grass of the courtyards shows 0, 72 and 144 tufts at the three
 ## graphics tiers; SOV6, the glow of the blocks and the paint of the signs rises with the power stage and the restored district is not dim (the pixel proof is the wall line of `tools/qa_sim/density_frames`);
-## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MENU2 (V2), the daily card of the menu follows a language change (it did not: the
+## SOV7 (V2), the main menu keeps its hero art clear of fog and grain at every graphics tier and its title stencilled; MENU2 (V2), the daily card of the menu follows a language change (it did not: the
 ## final frames showed it in English under a Russian and an Arabic menu); MUS1 (M1), the Architect announces its second and third phase (the signal was
 ## declared and listened to and never emitted) and the music takes the theme of the phase it is told; MUS3 and MUS4, the boss theme ends with a new run and with a change of district (it outlived a death and followed the player
 ## into the next run, the theme of the last phase with it); SOV8, every sign word fits the row of the sign atlas (two long words were cut off); MUS2 (M1), the twelve generated tracks the music manager names load as Ogg streams (the guards skip a missing file
@@ -118,16 +118,17 @@ static func _menu(r: Node) -> void:
 	var menu := (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate() as Control
 	r.add_child(menu)
 	await r.get_tree().process_frame
-	var fog := menu.get_node_or_null("MenuFog") as ColorRect
-	var hero := menu.get_node_or_null("MenuHeroV2")
+	var hero := menu.get_node_or_null("MenuHeroV2") as TextureRect
 	var title := menu.get_node("VBox/Title") as Label
-	var between: bool = fog != null and hero != null and fog.get_index() > hero.get_index() and fog.get_index() < menu.get_node("VBox").get_index()
-	var stencilled: bool = title.material is ShaderMaterial and (title.material as ShaderMaterial).shader.resource_path == "res://assets/shaders/stencil_title.gdshader"
-	var high: bool = fog != null and fog.visible
-	SettingsManager.set_graphics_tier(0)
-	var low: bool = fog != null and fog.visible
+	var hero_visible: bool = hero != null and hero.texture != null and hero.is_visible_in_tree()
+	var stencil := title.material as ShaderMaterial
+	var stencilled: bool = stencil != null and stencil.shader != null and stencil.shader.resource_path == "res://assets/shaders/stencil_title.gdshader"
+	var overlays: Array[int] = []
+	for tier: int in [0, 1, 2, 3]:
+		SettingsManager.set_graphics_tier(tier)
+		overlays.append(_menu_overlays(menu))
 	SettingsManager.set_graphics_tier(tier_before)
-	r._ok(between and stencilled and high and not low, "SOV7 the menu draws fog and grain between its hero art and its title (High %s, Low %s) and the title is stencilled (%s)" % [high, low, stencilled])
+	r._ok(hero_visible and stencilled and overlays == [0, 0, 0, 0], "SOV7 the menu shows its hero art (%s) without fog/grain overlays at Low, Medium, High or Ultra (%s) and keeps its title stencilled (%s)" % [hero_visible, overlays, stencilled])
 	var lang_before: String = LocalizationManager.current_lang
 	var lang_after: String = "en" if lang_before != "en" else "ru"
 	var title_before: String = LocalizationManager.t("DAILY_CHALLENGE_TITLE")
@@ -138,6 +139,14 @@ static func _menu(r: Node) -> void:
 	LocalizationManager.set_language(lang_before)
 	r._ok(followed, "MENU2 the daily card of the menu follows a language change (%s to %s: the title reads %s)" % [lang_before, lang_after, daily.text if daily != null else "missing"])
 	menu.queue_free()
+
+static func _menu_overlays(menu: Control) -> int:
+	var count: int = 0
+	for item: CanvasItem in menu.find_children("*", "CanvasItem", true, false):
+		var material := item.material as ShaderMaterial
+		if item.is_visible_in_tree() and material != null and material.shader != null and material.shader.resource_path == "res://assets/shaders/menu_fog.gdshader":
+			count += 1
+	return count
 
 static func _boss(r: Node) -> void:
 	var boss: Node = load("res://scripts/enemies/boss_3d.gd").new()

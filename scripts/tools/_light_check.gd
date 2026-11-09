@@ -6,6 +6,11 @@ extends Node3D
 var _fails: int = 0
 
 func _ready() -> void:
+	await _check_grid_lifecycle()
+	if OS.get_environment("TLS_LIGHT_GRID_ONLY") == "1":
+		print("[light] DONE fails=", _fails)
+		get_tree().quit(1 if _fails > 0 else 0)
+		return
 	print("[light] DBG ready start")
 	var main: Node = load("res://scenes/main_3d.tscn").instantiate()
 	print("[light] DBG instantiated, adding child")
@@ -46,6 +51,41 @@ func _ok(cond: bool, what: String) -> void:
 	else:
 		_fails += 1
 		print("[light] FAIL ", what)
+
+## Scene replacement can detach a still-valid lamp before it is freed or unregistered.
+## The public brightness/visibility queries must lose it without reading a detached global transform.
+func _check_grid_lifecycle() -> void:
+	await get_tree().process_frame
+	var spy := preload("res://scripts/tools/rc16/engine_checks.gd").Spy.new()
+	OS.add_logger(spy)
+	var pool := OmniLight3D.new()
+	pool.omni_range = 8.0
+	pool.light_energy = 2.0
+	add_child(pool)
+	var at := Vector3(5002.0, 4.2, 5002.0)
+	pool.global_position = at
+	LightGrid.register_light(pool)
+	_ok(LightGrid.is_lit(at) and LightGrid.visible_lights_at(at).has(pool), "GRID1 attached light contributes to brightness and visibility")
+	remove_child(pool)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_ok(not LightGrid.is_lit(at) and not LightGrid.visible_lights_at(at).has(pool), "GRID2 a detached live light leaves no phantom lit cell or visible light")
+	add_child(pool)
+	pool.global_position = at
+	LightGrid.register_light(pool)
+	_ok(LightGrid.is_lit(at), "GRID3 reattached and registered light contributes again")
+	pool.free()
+	var freed_visible: Array[Node3D] = LightGrid.visible_lights_at(at)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_ok(freed_visible.is_empty() and not LightGrid.is_lit(at), "GRID4 a freed registered light is safe before and after the next update")
+	var detached := OmniLight3D.new()
+	LightGrid.register_light(detached)
+	_ok(not LightGrid.is_lit(Vector3.ZERO), "GRID5 an unattached light cannot register a phantom origin pool")
+	LightGrid.unregister_light(detached)
+	detached.free()
+	OS.remove_logger(spy)
+	_ok(spy.seen.is_empty(), "GRID6 light detach/free/register lifecycle emits no engine error (%s)" % [spy.seen.slice(0, 3)])
 
 func _report_lights() -> void:
 	var player := _find_player()

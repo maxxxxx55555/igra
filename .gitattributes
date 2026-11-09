@@ -1,2 +1,5 @@
 *.sh text eol=lf
 *.ps1 text eol=crlf
+
+# Preserve reviewed evidence hashes across Windows and Unix checkouts.
+docs/artifacts/release-20261110/** -text

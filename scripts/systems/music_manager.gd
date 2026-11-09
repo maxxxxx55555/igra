@@ -21,7 +21,7 @@ enum Mood { MENU, AMBIENT, TENSION, BATTLE, BOSS, VICTORY }
 
 #region Constants
 const TRACKS: Dictionary = {
-	Mood.MENU: "res://assets/audio/music/music_menu_dark.ogg",
+	Mood.MENU: "res://assets/audio/music/scott_buckley_hymn.ogg",
 	Mood.AMBIENT: "res://assets/audio/ambience/districts/suburbs_dark.ogg",  # until a district is entered
 	Mood.TENSION: "res://assets/audio/music/music_tension.ogg",
 	Mood.BATTLE: "res://assets/audio/music/music_battle.ogg",
@@ -61,19 +61,20 @@ const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 	&"substation": "res://assets/audio/ambience/districts/substation_dark.ogg",
 	&"power_station": "res://assets/audio/ambience/districts/power_station_dark.ogg",
 }
-## Session 27 (M1): eight of the lit beds are generated tracks of assets/audio/music (docs/MUSIC_BRIEF.md, docs/ASSET_LICENSES.md); residential, park and industrial are improved SYNTHESIZED beds (tools/gen_district_beds.py, v10 M1), not composed music.
+## The owner-selected human-composed recording accompanies restored calm exploration.
+## The three existing signature beds and every district's dark ambience stay distinct.
 const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
-	&"suburbs": "res://assets/audio/music/suburbs.ogg",
+	&"suburbs": "res://assets/audio/music/scott_buckley_moonlight.ogg",
 	&"residential": "res://assets/audio/ambience/districts/residential_lit.ogg",
 	&"park": "res://assets/audio/ambience/districts/park_lit.ogg",
-	&"school": "res://assets/audio/music/school.ogg",
-	&"hospital": "res://assets/audio/music/hospital.ogg",
-	&"gas_station": "res://assets/audio/music/gas_station.ogg",
-	&"police": "res://assets/audio/music/police.ogg",
-	&"warehouses": "res://assets/audio/music/warehouses.ogg",
+	&"school": "res://assets/audio/music/scott_buckley_moonlight.ogg",
+	&"hospital": "res://assets/audio/music/scott_buckley_moonlight.ogg",
+	&"gas_station": "res://assets/audio/music/scott_buckley_moonlight.ogg",
+	&"police": "res://assets/audio/music/scott_buckley_moonlight.ogg",
+	&"warehouses": "res://assets/audio/music/scott_buckley_moonlight.ogg",
 	&"industrial": "res://assets/audio/ambience/districts/industrial_lit.ogg",
-	&"substation": "res://assets/audio/music/substation.ogg",
-	&"power_station": "res://assets/audio/music/power_station.ogg",
+	&"substation": "res://assets/audio/music/scott_buckley_moonlight.ogg",
+	&"power_station": "res://assets/audio/music/scott_buckley_moonlight.ogg",
 }
 
 ## Слои GDD §25.2. Ambient_Dark/Lit ведутся стадией электросети,

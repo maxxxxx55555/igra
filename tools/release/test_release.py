@@ -13,7 +13,7 @@ from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pipeline import Pipeline, configure_profile, import_configuration, judge, verified_profile, reset_profile  # noqa: E402
+from pipeline import GATES, Pipeline, configure_profile, import_configuration, judge, verified_profile, reset_profile  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools/qa_sim"))
@@ -21,6 +21,14 @@ import aab_check  # noqa: E402
 
 
 class JudgeTests(unittest.TestCase):
+    def test_release_polish_requires_the_complete_non_capture_run(self):
+        marker = next(gate[2] for gate in GATES if gate[0] == "release_polish")
+        judge("[release-polish] DONE checks=32 fails=0", 0, marker, True)
+        for output in ("[release-polish] DONE checks=31 fails=0",
+                       "[release-polish] DONE checks=32 fails=1"):
+            with self.assertRaises(RuntimeError):
+                judge(output, 0, marker, True)
+
     def test_full_battery_runs_twice_and_keeps_failed_pass_logs(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -159,13 +167,13 @@ class JudgeTests(unittest.TestCase):
             script.parent.mkdir(parents=True)
             shutil.copy2(ROOT / "tools/qa_sim/proof_run", script)
             child = 'import sys; print("x" * 800000); print("REQUIRED_DONE_MARKER"); sys.exit(7)'
-            result = subprocess.run([bash, str(script), "burst", "--", sys.executable, "-c", child], capture_output=True)
+            result = subprocess.run([bash, script.as_posix(), "burst", "--", sys.executable, "-c", child], capture_output=True)
             self.assertEqual(result.returncode, 7, result.stdout + result.stderr)
             output = (project / ".qa_logs/proofs/burst.out").read_text()
             self.assertTrue(output.endswith("REQUIRED_DONE_MARKER\n# EXIT=7\n"))
             self.assertEqual(output.count("x" * 800000), 1)
             child = 'for n in 1 2 3; do "$1" -c "print(\'child-\' + \'$n\' + \'x\' * 200000)"; done; exit 9'
-            result = subprocess.run([bash, str(script), "nested", "--", bash, "-c", child, "fixture", sys.executable], capture_output=True)
+            result = subprocess.run([bash, script.as_posix(), "nested", "--", bash, "-c", child, "fixture", sys.executable], capture_output=True)
             self.assertEqual(result.returncode, 9, result.stdout + result.stderr)
             output = (project / ".qa_logs/proofs/nested.out").read_text()
             self.assertTrue(output.endswith("# EXIT=9\n"))

@@ -16,7 +16,9 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 import retint_ui_chrome  # noqa: E402  (the table of the old token colours and the files that hold UI colours)
-CANON_FONTS = {"RobotoCondensed-Regular.ttf", "BebasNeue-Regular.ttf", "ShareTechMono-Regular.ttf", "Rajdhani-Regular.ttf", "OpenDyslexic-Regular.ttf"}
+# Full-VF is the same canon family with bundled Cyrillic; its OFL and upstream hash
+# are recorded beside the asset, rather than relying on an operating-system font.
+CANON_FONTS = {"RobotoCondensed-Regular.ttf", "RobotoCondensed-Full-VF.ttf", "BebasNeue-Regular.ttf", "ShareTechMono-Regular.ttf", "Rajdhani-Regular.ttf", "OpenDyslexic-Regular.ttf"}
 BRASS = "#c9a24a"
 SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 28, 30, 32, 36, 44, 64}  # 15 and 30: the Mono and Huge steps of the type scale of docs/VISUAL_PASS.md W9 (theme_provider.gd)
 MAX_FACADE_CHROMA = 0.25

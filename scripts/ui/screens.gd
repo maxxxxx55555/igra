@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const _SHOP_LAYOUT := preload("res://scripts/ui/shop_layout.gd")
+const _CHROME := preload("res://scripts/ui/screen_chrome.gd")
 
 const UI_MANAGER_IDS: Dictionary = {}
 
@@ -126,6 +127,7 @@ func _build_screen(name: String) -> void:
 	header_line.size = Vector2(card_w - 4, 2)
 	header_line.position = Vector2(2, 46)
 	card.add_child(header_line)
+	_CHROME.apply(card, border, header_line)
 	var title_lbl := Label.new()
 	title_lbl.name = "Title"
 	title_lbl.size = Vector2(card_w - 40, 36)
@@ -1004,11 +1006,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
 	var card_w: float = (content.size.x - 24.0 - 12.0 * (grid_container.columns - 1)) / grid_container.columns
-	var card_style := StyleBoxFlat.new()
-	card_style.bg_color = ThemeProvider.COLOR_BG_PANEL2
-	card_style.border_color = ThemeProvider.COLOR_BORDER
-	card_style.set_border_width_all(1)
-	card_style.set_content_margin_all(14)
+	var card_style: StyleBoxFlat = _CHROME.item_style()
 	for it in items:
 		## A panel sizes the card from its content and a vertical box places it: absolute child positions land one card width off under the
 		## right-to-left layout of Arabic (launches 21 to 23, CORRECTION_LOG 113).
@@ -1066,7 +1064,7 @@ func _tint_prices() -> void:
 		pl.text = str(entry["price"]) + LocalizationManager.t("SCR_MONET")
 		if short > 0:
 			pl.text += "  " + LocalizationManager.tf("SHOP_NEED_MORE", [short])
-		pl.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER if short > 0 else ThemeProvider.COLOR_AMBER)
+		pl.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER_TEXT if short > 0 else ThemeProvider.COLOR_AMBER)
 
 func _mark_owned(btn: Button) -> void:
 	btn.disabled = true

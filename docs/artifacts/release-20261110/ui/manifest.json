@@ -1,0 +1,429 @@
+{
+  "current_frames": [
+    {
+      "frame": "frames/menu_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "menu",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "5c4de053cc5a6685d519e7bd43889740490116ae9beb72563cfaa548fbe15ec6",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/menu_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "menu",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "ccb652efb5d2ff51b4e225e9da50fafa463401a7c54c2e8bbed62a5cc94c01a8",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/settings_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "settings",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "484187cded33bf8b0a9322c1a5c91d0374bce404fa84dd517fb03299a0d948ef",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/settings_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "settings",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "484187cded33bf8b0a9322c1a5c91d0374bce404fa84dd517fb03299a0d948ef",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/menu_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "menu",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "37a22539005afd02d0fb4c8bc0614b4d4885dee83ab35d99350e7af4b9fed2ad",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/menu_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "menu",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "f16ae74500ac02cf8f407c139ee44545928cbaabb75f7f24f93ac2e03fb66a75",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/settings_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "settings",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "b66b90a0f683ce4af73181e8fae9d06b27d4f51fbe9dde9cb0cf8c880f66529c",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/settings_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "settings",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "b66b90a0f683ce4af73181e8fae9d06b27d4f51fbe9dde9cb0cf8c880f66529c",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/inventory_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "inventory",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "1ad7e83b3633e0159bdb344886cad14e40b91d2c851a3a21c80e0bb62d66fcec",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/inventory_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "inventory",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "1869ece37e93f60566db98000c94a184b9d37bc7685860d577cc5af37e128478",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/shop_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "shop",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "9dbf229214273036b72ec2d81f4c9921c348ebd8806d2e69f45c9296b1dc083c",
+      "evidence_run": "archive_shop_final_nov10"
+    },
+    {
+      "frame": "frames/shop_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "shop",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "9dbf229214273036b72ec2d81f4c9921c348ebd8806d2e69f45c9296b1dc083c",
+      "evidence_run": "archive_shop_final_nov10"
+    },
+    {
+      "frame": "frames/journal_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "journal",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "6f62e91607d4ae680ea4c0826ca0f71f727febdbc3686543423ea09da97f55fe",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "journal",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "6f62e91607d4ae680ea4c0826ca0f71f727febdbc3686543423ea09da97f55fe",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_longest_note_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "journal_longest_note",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "a38f969e946a6500d803ca66b897937ef2660008a4c51aec7d176bd16e8196d9",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_longest_note_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "journal_longest_note",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "a38f969e946a6500d803ca66b897937ef2660008a4c51aec7d176bd16e8196d9",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/ending_en_tier2.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "ending",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "9cef21b2873a383c440adc622b50bccdfa2ca751143cfddcd5d53607cf6e3041",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/ending_en_tier0.png",
+      "height": 1080,
+      "language": "en",
+      "pixel_edits": false,
+      "screen": "ending",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "0aafb149788d0c33a1d41f53ab7d8a2cb20f705d99b68cd4876ec36a1cfd3738",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/inventory_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "inventory",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "b6614de4c4c8fae591560636b76dbef69c073aac161692e4e95521e9bd692c75",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/inventory_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "inventory",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "983a200034a56c1d73aaa70d2321e25a2bb776334e614cdb846edaf7e5712516",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/shop_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "shop",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "108bf88f6f8e08db2dadc7f665f638c9abdc821b2b8ed1ddb5ce8ca607a9e35d",
+      "evidence_run": "archive_shop_final_nov10"
+    },
+    {
+      "frame": "frames/shop_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "shop",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "108bf88f6f8e08db2dadc7f665f638c9abdc821b2b8ed1ddb5ce8ca607a9e35d",
+      "evidence_run": "archive_shop_final_nov10"
+    },
+    {
+      "frame": "frames/journal_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "journal",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "05dd8b2797f1d0af647e4d7d1b38d07b4afb01847a314982c623213a3dc073b4",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "journal",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "05dd8b2797f1d0af647e4d7d1b38d07b4afb01847a314982c623213a3dc073b4",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_longest_note_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "journal_longest_note",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "0e768efbc3e9e41a779ff9ae616e0abae06bdd01859bd03bea0cfb36e4a8bb62",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/journal_longest_note_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "journal_longest_note",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "0e768efbc3e9e41a779ff9ae616e0abae06bdd01859bd03bea0cfb36e4a8bb62",
+      "evidence_run": "archive_type_final_nov10"
+    },
+    {
+      "frame": "frames/ending_ru_tier2.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "ending",
+      "source_menu_art_preserved": true,
+      "tier": 2,
+      "width": 1920,
+      "sha256": "8d9516dcde797492c8c0d8f8dd0781a205ce0fbd361bb7748373e5a32a63641d",
+      "evidence_run": "archive_final_family_nov10"
+    },
+    {
+      "frame": "frames/ending_ru_tier0.png",
+      "height": 1080,
+      "language": "ru",
+      "pixel_edits": false,
+      "screen": "ending",
+      "source_menu_art_preserved": true,
+      "tier": 0,
+      "width": 1920,
+      "sha256": "39368c7012ee2a1a408dd31aa4903757db2cb7243645689ddeb9a2af72e3f14d",
+      "evidence_run": "archive_final_family_nov10"
+    }
+  ],
+  "macro_candidate_frames": [
+    {
+      "candidate": "a",
+      "frame": "candidates/a/journal_en_tier0.png",
+      "sha256": "1378d81cb4e569dac9e703a3d4e972d447316b4256ef7e6c522bb2b71a1f66cd",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "a",
+      "frame": "candidates/a/journal_en_tier2.png",
+      "sha256": "1378d81cb4e569dac9e703a3d4e972d447316b4256ef7e6c522bb2b71a1f66cd",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "a",
+      "frame": "candidates/a/journal_ru_tier0.png",
+      "sha256": "cbd483799c84c1a6d844f21fd23ff8a00f1ea3d65950b6a83ba59c7c5924a4be",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "a",
+      "frame": "candidates/a/journal_ru_tier2.png",
+      "sha256": "cbd483799c84c1a6d844f21fd23ff8a00f1ea3d65950b6a83ba59c7c5924a4be",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "b",
+      "frame": "candidates/b/journal_en_tier0.png",
+      "sha256": "0ed11c8e7b9908f9814264ed48cf599c9f9aef7ba421f917b9327517603170a1",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "b",
+      "frame": "candidates/b/journal_en_tier2.png",
+      "sha256": "0ed11c8e7b9908f9814264ed48cf599c9f9aef7ba421f917b9327517603170a1",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "b",
+      "frame": "candidates/b/journal_ru_tier0.png",
+      "sha256": "fafe7e1bf23c8127a29df82775260b48a6c80c778c30e35ef1961c97e8a1bf1a",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "b",
+      "frame": "candidates/b/journal_ru_tier2.png",
+      "sha256": "fafe7e1bf23c8127a29df82775260b48a6c80c778c30e35ef1961c97e8a1bf1a",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "c",
+      "frame": "candidates/c/journal_en_tier0.png",
+      "sha256": "5d341564b60bde830131bab8054b03bc5bea3e1ceb7c20a37eac35a5feb61ed2",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "c",
+      "frame": "candidates/c/journal_en_tier2.png",
+      "sha256": "5d341564b60bde830131bab8054b03bc5bea3e1ceb7c20a37eac35a5feb61ed2",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "c",
+      "frame": "candidates/c/journal_ru_tier0.png",
+      "sha256": "364b71b142fda16465241e01a51bc9d8733aa20a2216d6f4a58be3aa4e539a69",
+      "native_uncropped": true,
+      "pixel_edits": false
+    },
+    {
+      "candidate": "c",
+      "frame": "candidates/c/journal_ru_tier2.png",
+      "sha256": "364b71b142fda16465241e01a51bc9d8733aa20a2216d6f4a58be3aa4e539a69",
+      "native_uncropped": true,
+      "pixel_edits": false
+    }
+  ],
+  "navigation": "all8 actual pages PASS in EN/RU",
+  "pixel_edits": false,
+  "scope": "native desktop1920 High/Low; not physical-phone or whole-game approval"
+}

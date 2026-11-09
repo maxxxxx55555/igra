@@ -1,0 +1,108 @@
+{
+  "source_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+  "source_tree_dirty": false,
+  "artifacts": [
+    {
+      "path": "LastStreetlight-1.0.1-web-candidate.zip",
+      "bytes": 96349944,
+      "sha256": "efacfc956fcf6fb3430650c3ec1bbc86c5beb0f04f04abf73a4f8b7cb8066fd4"
+    },
+    {
+      "path": "LastStreetlight-1.0.1-windows-candidate.zip",
+      "bytes": 121163136,
+      "sha256": "c216bf8be2849fb5fbb4c843e067e5a3ae939b8a34a9c9e1010df29de96e3382"
+    },
+    {
+      "path": "web/BUILD_INFO.json",
+      "bytes": 168,
+      "sha256": "9a56c16c868a028fcf30d73b500a98583dd4b61310dee6ebd9f294099d7d9822"
+    },
+    {
+      "path": "web/index.apple-touch-icon.png",
+      "bytes": 57639,
+      "sha256": "8a193c3eb99f9acd014420808d0c973721d3afbc8423e0c0b2d779ba40feef08"
+    },
+    {
+      "path": "web/index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "path": "web/index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 5450,
+      "sha256": "3e5c870c1c7c3f6be7a29bb03fd77e7abe9bb4c9ee8e427fe5a9a680b02b46b1"
+    },
+    {
+      "path": "web/index.icon.png",
+      "bytes": 429993,
+      "sha256": "33ac30f9a3290369c26b0dd36f7a271acad5e880c7554ad75dc9a644d8ccd500"
+    },
+    {
+      "path": "web/index.js",
+      "bytes": 279815,
+      "sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba"
+    },
+    {
+      "path": "web/index.pck",
+      "bytes": 114101880,
+      "sha256": "315cc0ace541a6e4d8ec029822820b5de52708fdf70b7aa9c9f35533617915d1"
+    },
+    {
+      "path": "web/index.png",
+      "bytes": 2669430,
+      "sha256": "2c3671c8148eae2595da3c8a147a85308c51b6fa5a9e4f34fa1db93bd1af06e7"
+    },
+    {
+      "path": "web/index.wasm",
+      "bytes": 39514754,
+      "sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0"
+    },
+    {
+      "path": "web/THIRD_PARTY_NOTICES.md",
+      "bytes": 101961,
+      "sha256": "fb805842cef81cdbcbf874be1603406a7e01d673155123610f48a9380a4358a8"
+    },
+    {
+      "path": "windows/BUILD_INFO.json",
+      "bytes": 172,
+      "sha256": "b53eed33f29ea817d8313b60392466eb7af03cf0fe15835d8c4301082d227812"
+    },
+    {
+      "path": "windows/LastStreetlight.exe",
+      "bytes": 223373960,
+      "sha256": "ee018895d9b47cadedfa2c3fa8d466fb6db153f944ee6a2ef5815b5d5d39dd61"
+    },
+    {
+      "path": "windows/THIRD_PARTY_NOTICES.md",
+      "bytes": 101961,
+      "sha256": "fb805842cef81cdbcbf874be1603406a7e01d673155123610f48a9380a4358a8"
+    },
+    {
+      "path": "windows-smoke.out",
+      "bytes": 207,
+      "sha256": "c74fd16f0812106de5c142bcbd96cacf6a1bf9b722d0b57a2c9c6fdeab10f7e6"
+    }
+  ],
+  "status": "WINDOWS_SMOKE_PASS_WEB_BUILT_BROWSER_UNVERIFIED",
+  "android": "NOT_REBUILT: existing signing credentials unavailable",
+  "store_and_physical_device": "NOT_VERIFIED",
+  "windows_smoke": {
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 33.1,
+    "evidence": "windows-smoke.out",
+    "scope": "Packaged EXE initializes native rendering and exits after900 frames with no fatal engine error; not a human playthrough"
+  },
+  "release_status": "CANDIDATE_MANUAL_AND_WORLD_ART_REVIEW_PENDING",
+  "windows_signing": "UNSIGNED; existing release signing identity not used",
+  "web_browser": "NOT_VERIFIED",
+  "supported_languages": [
+    "ru",
+    "en"
+  ]
+}

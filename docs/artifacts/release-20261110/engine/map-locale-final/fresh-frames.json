@@ -1,0 +1,51 @@
+{
+  "source_commit": "a2672e7736ce34c4e8e3021cdc576d3cff68bfa1",
+  "native_resolution": [
+    1920,
+    1080
+  ],
+  "frames": [
+    {
+      "path": "docs/stills/store/01_main_menu_after_a2672e77_20261109T230718Z.png",
+      "bytes": 1870406,
+      "sha256": "4eb79f834b13e25a164da2d2db77b11fd11a98769e9adb8dc7fadb1c95cc5156"
+    },
+    {
+      "path": "docs/stills/store/02_district_day_full_after_a2672e77_20261109T230802Z.png",
+      "bytes": 2688987,
+      "sha256": "8ed1c2053dd6d5676b57ee441dad47b3e7fa96cc3203d65a7f89397a9293fba6"
+    },
+    {
+      "path": "docs/stills/store/03_district_night_dark_after_a2672e77_20261109T230748Z.png",
+      "bytes": 2303706,
+      "sha256": "ca9d153e4635eab63d9f437f2a8deb6267e943b0c7aca424aa184cefc9d0ab57"
+    },
+    {
+      "path": "docs/stills/store/04_combat_after_a2672e77_20261109T230810Z.png",
+      "bytes": 2817448,
+      "sha256": "34f66536cf725e5a37cb9278d2e52c8231762fd133777b45766f86eb516bae65"
+    },
+    {
+      "path": "docs/stills/store/05_boss_after_a2672e77_20261109T230816Z.png",
+      "bytes": 2559891,
+      "sha256": "bc5ee82c1c0817c1e55b64a304f4b7cca85de04327bb9bf8517a2483890a4d82"
+    },
+    {
+      "path": "docs/stills/store/06_victory_ngplus_after_a2672e77_20261109T230820Z.png",
+      "bytes": 2263449,
+      "sha256": "2698db5eb2a3aa42fc47b39c0dedcc929088ccb841d3b2c3179fd3b107cb78b8"
+    },
+    {
+      "path": "docs/stills/store/07_skill_tree_after_a2672e77_20261109T230803Z.png",
+      "bytes": 281582,
+      "sha256": "f3aea8431b92a0d3dbe0af321d8fd05355364c472df5f356245539dc8346fdd5"
+    },
+    {
+      "path": "docs/stills/store/08_shop_after_a2672e77_20261109T230804Z.png",
+      "bytes": 1438397,
+      "sha256": "2d5c3ae66d5e738a024b6439f0e84687ff2f03b33d160c788c32f43813492d7b"
+    }
+  ],
+  "acceptance": "AF3 source/freshness evidence; staged game states, not approved store creative or whole-world visual acceptance",
+  "capture": "Direct native viewport bytes; original save mtimes used for UTC names; no pixel edits"
+}

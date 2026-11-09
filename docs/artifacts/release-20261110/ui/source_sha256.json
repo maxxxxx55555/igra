@@ -1,0 +1,98 @@
+[
+  {
+    "path": "scripts/ui/theme_provider.gd",
+    "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6",
+    "qa_equal": true,
+    "git_blob_sha256": "f4fad92ef8de13bc83558f87f463f6defda20659e1a781631025804dbb8286a8",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/inv_kit.gd",
+    "sha256": "f63a53b28f671af4931aaef3265a04ff028cf0136a79e4bfea15fde8781b9839",
+    "qa_equal": true,
+    "git_blob_sha256": "6b06c2e0bdce5721660bcd2dcb8b2170f50dc493ba2223cc70d2819839bdc84f",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/codex_ui.gd",
+    "sha256": "6b2bc882b7b7c4479b7321e475e99887277118fd120d574d6a7766d364ed4a91",
+    "qa_equal": true,
+    "git_blob_sha256": "d4f10ee565934f29b6943131d9b1daafbcdde62744d5b0108287e6fac3cd54ca",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/journal_ui.gd",
+    "sha256": "51789ebf6ea551145383547e7d6f43bc7d847afec5ec711c0963ce5f49e25b0b",
+    "qa_equal": true,
+    "git_blob_sha256": "49d6b0fc396faf51df7f2578e891b7b5659e59e92ad4bd8eefaa26e5efc8efea",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/main_menu.gd",
+    "sha256": "13fd2799b310c3786584233992ff7f585e70eb8c1f6f7bbe54aaf321a6ea4ffb",
+    "qa_equal": true,
+    "git_blob_sha256": "1b9ae2d24ebaa0e72b22f30f4ead2b35eca07921e390970b439c7131a2f6fe80",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/screens.gd",
+    "sha256": "3fc524da6797f349e0d8a603fdb58346ba6cb63954c94620164b7641c6e5a1bc",
+    "qa_equal": true,
+    "git_blob_sha256": "3bbdcbdd16f382858aa54cf6c34c762e5a4e2cda2007cf45e2548745b6fb03e1",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/ui/screen_chrome.gd",
+    "sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
+    "qa_equal": true,
+    "git_blob_sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/tools/_theme_unify_probe.gd",
+    "sha256": "549bff61e82594b2a88201c2b087d13382b2890beab318349765171c5bf9517d",
+    "qa_equal": true,
+    "git_blob_sha256": "09f67978b812b1c49bb3c39fde9e9db80aa4bfa04fcf399008a34b5f3fa799fc",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/tools/_closeout_check_runner.gd",
+    "sha256": "5a28a9ff2526faae64edd7dbea42f8f034420726b9442f0a7a9fc6bc08fdd34f",
+    "qa_equal": true,
+    "git_blob_sha256": "ae3e1a74c6c4f338b7f3031fc2817127ef6fe7e263064184a1761f30e954d9cf",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/tools/rc16/s29_look_checks.gd",
+    "sha256": "6dd8a36d249ce1f9439a0d35970929c491608bad6369b4c89bbb117493a9e9c0",
+    "qa_equal": true,
+    "git_blob_sha256": "69b19652be493081a1a1bd045f249d5fefcb8757e7aefea4be8676aee81b7497",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "scripts/tools/rc16/font_canon_checks.gd",
+    "sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b",
+    "qa_equal": true,
+    "git_blob_sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
+  },
+  {
+    "path": "tools/qa_sim/consistency_check.py",
+    "sha256": "02b46a797d94c02146028df171c89312cadd7144362fa11206568d3d2b9cc2aa",
+    "qa_equal": true,
+    "git_blob_sha256": "cf8896ed10ba2ecf3938e3239feb583a241294cb455f73ef29b649481b0bd921",
+    "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+    "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
+  }
+]

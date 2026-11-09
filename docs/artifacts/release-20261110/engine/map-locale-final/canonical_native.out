@@ -1,0 +1,27 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[final] frame 00_boot_title.png
+[final] frame 01_main_menu.png
+[final] frame 01_menu_en_s2.png
+[final] frame 01_menu_ru_s1.png
+[final] frame 01_menu_ru_s2.png
+[final] facing 28 of 96 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.556705, -8.0), player at (-8.0, 0.859892, -8.0) hp=100.0, paused=false
+[final] frame 03_district_night_dark.png
+[final] frame 10_hud_hurt.png
+[final] frame 11_hud_prompt.png
+[final] frame 12_hud_touch.png
+[final] frame 02_district_day_full.png
+[final] frame 07_skill_tree.png
+[final] frame 08_shop.png
+[final] frame 08_shop_de.png
+[final] 04 camera /root/Main3D/Camera3D at (-5.874464, 2.557648, -0.197898), player at (-5.874464, 0.860274, -0.197898) hp=100.0, paused=false
+[final] frame 04_combat.png
+[final] 05 camera /root/Main3D/Camera3D at (-8.528213, 2.562497, -14.89366), player at (-8.528213, 0.85946, -14.89366) hp=100.0, paused=false
+[final] 05 boss at (-8.910208, 1.2, -19.87904)
+[final] frame 05_boss.png
+[final] frame 06_victory_ngplus.png
+[final] DONE frames=18
+WARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

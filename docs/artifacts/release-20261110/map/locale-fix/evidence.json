@@ -1,0 +1,38 @@
+{
+  "historical_evidence": "The earlier map PNGs, captured-source raw hashes, Git digests and snapshots remain unchanged; those images predate this caption-only repair.",
+  "change": "Refresh cached architectural-map captions and district-travel Close/title/list on language_changed without changing map memory or view.",
+  "source_hashes": {
+    "scripts/ui/district_map.gd": {
+      "raw_sha256": "a19b5ba7bdc5af8a7dd209477103de9bc0c00a64f9d5570e96cbf30e3e01dbcf",
+      "qa_raw_sha256": "a19b5ba7bdc5af8a7dd209477103de9bc0c00a64f9d5570e96cbf30e3e01dbcf",
+      "git_blob": "0a0bdcfa68a19faf671719224e04dacceddd8b98"
+    },
+    "scripts/ui/city_map.gd": {
+      "raw_sha256": "48e0db935ef19a80d63c795fc702e19e62bc8b9f18db02148c6373d4c5e32d78",
+      "qa_raw_sha256": "48e0db935ef19a80d63c795fc702e19e62bc8b9f18db02148c6373d4c5e32d78",
+      "git_blob": "9f67f90d28feef748157199a4ea9aee9a2c878ec"
+    },
+    "scripts/tools/_i18n_check.gd": {
+      "raw_sha256": "cc7cb95516f889229d1bebbfcc33c1790e9c276418be61dd95b4f0e754e6c7b4",
+      "qa_raw_sha256": "cc7cb95516f889229d1bebbfcc33c1790e9c276418be61dd95b4f0e754e6c7b4",
+      "git_blob": "83c4556ef322285ebe153e5afb2a3c82e70ae38e"
+    }
+  },
+  "runs": {
+    "red": {
+      "exit_code": 1,
+      "seconds": 12.0,
+      "failures": 2,
+      "raw_output": "red.out",
+      "output_sha256": "c5b74e9afcc899a203c3b21e81df2a45caf32e54f98f7ca777528a1555f33659"
+    },
+    "green": {
+      "exit_code": 0,
+      "seconds": 7.6,
+      "failures": 0,
+      "raw_output": "green.out",
+      "output_sha256": "ea6a9575ceb257abc95ac3d008cd1e85eba72815bdcbaa06e2d8ae7030eb7afa"
+    }
+  },
+  "limitations": "Headless cached-route behavior only; no new native Russian screenshot or physical-device claim."
+}
