@@ -22,7 +22,8 @@ var _picked_up: bool = false
 ## Where this pickup sits in its district's loot list (DistrictLoot): taken keys are not spawned again, the rest are.
 var loot_key: String = ""
 
-const _PICKUP_BLIP := preload("res://assets/audio/sfx/ui_hover.wav")
+const _PICKUP_GENERIC := preload("res://assets/audio/sfx/interact/loot_pickup_generic.wav")
+const _PICKUP_RARE := preload("res://assets/audio/sfx/interact/loot_pickup_rare.wav")
 
 func _ready() -> void:
 	# WAVE 6 P4: nothing ever added pickups to this group, so _game_test_3d.gd's own check read an always-empty group
@@ -57,7 +58,8 @@ func _on_body_entered(body: Node) -> void:
 	var data := ItemDatabase.get_item(item_id)
 	if data != null:
 		UIManager.fly_pickup_icon(global_position, data.icon)
-	AudioManager.play_sfx(_PICKUP_BLIP, -8.0, &"UI")
+	var rare: bool = data != null and int(data.rarity) >= 2
+	AudioManager.play_sound_3d(_PICKUP_RARE if rare else _PICKUP_GENERIC, global_position, -6.0, &"UI")
 
 	# Сигнал item_picked_up уже отправлен внутри InventoryManager.try_add(),
 	# который сам же занимается и сетевой синхронизацией инвентаря.

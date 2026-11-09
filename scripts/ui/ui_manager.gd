@@ -131,6 +131,7 @@ func is_hud_blocked() -> bool:
 ## Escape on a keyboard and Back on Android: an open pause screen resumes, else the top closable screen (codex, map, workbench) closes, else a run pauses.
 ## A closable screen closes before the pause opens: the pause over an open Codex stacked two blocking screens and the codex kept hiding the HUD after Continue.
 func back() -> void:
+	UISFX.back()
 	if is_instance_valid(_photo) and _photo.active:
 		_photo.toggle()  # the photo mode hides the HUD: Back leaves it first, a phone has no other way out
 	elif _is_open(&"pause"):
