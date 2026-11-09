@@ -1,40 +1,26 @@
 extends Control
-## Журнал найденных документов.
-##
-## Раньше здесь был жёстко зашитый словарь из двух документов, причём
-## по-русски. Игрок при этом может найти 13 штук: 11 разложены по районам
-## из data/documents/documents_catalog.json (33 записи с готовыми текстами)
-## плюс два выдаются за события. Одиннадцать из них не отображались нигде —
-## подобрал и потерял. Теперь журнал читает тот же каталог, что и подбор,
-## и показывает полный текст в отдельной панели, а не всплывающим уведомлением
-## на пару секунд.
-
-## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
-## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
-## вкладку вместо центрирования.
-var embedded: bool = false
-
+## Physical evidence and its transcription, without a wall of locked placeholders.
 const CATALOG_PATH: String = "res://data/documents/documents_catalog.json"
-
-var _list: VBoxContainer = null
-var _reader: PanelContainer = null
-var _reader_title: Label = null
-var _reader_text: RichTextLabel = null
+var embedded: bool = false
 var _catalog: Dictionary = {}
+var _list: VBoxContainer
+var _title: Label
+var _status: Label
+var _locked: Label
+var _reader_title: Label
+var _reader_text: RichTextLabel
+var _selected: String = ""
 
 func _ready() -> void:
+	theme = ThemeProvider.build_theme()
+	_build()
 	_load_catalog()
+	_refresh()
 	EventBus.document_unlocked.connect(func(_id: StringName) -> void: _refresh())
-	# PHASE 1 (languages = settings): title_key/content_key entries resolve
-	# through LocalizationManager, so a live language switch must reload
-	# the catalog and rebuild the list, not just leave the cached strings.
-	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+	LocalizationManager.language_changed.connect(func(_language: String) -> void:
 		_load_catalog()
 		_refresh())
-	_build()
 
-## Каталог — список {doc_id,title,content}; переводим в словарь по id.
-## Файл читается с utf-8-sig: у него BOM, и без этого первый ключ битый.
 func _load_catalog() -> void:
 	if not FileAccess.file_exists(CATALOG_PATH):
 		return
@@ -60,117 +46,124 @@ func _load_catalog() -> void:
 			}
 
 func _build() -> void:
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
-	if not embedded:
-		var bg := ColorRect.new()
-		bg.color = Color(0.04, 0.05, 0.07, 0.94)
-		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-		add_child(bg)
-
-	var panel := PanelContainer.new()
-	if embedded:
-		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
-	else:
-		panel.set_anchors_preset(Control.PRESET_CENTER)
-		panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
-		panel.grow_vertical = Control.GROW_DIRECTION_BOTH
-	panel.custom_minimum_size = Vector2(860, 500)
-	add_child(panel)
-
-	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 8)
-	panel.add_child(vb)
-
-	var t := Label.new()
-	t.text = LocalizationManager.t("JOURNAL_TITLE")
-	t.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
-	t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
-	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vb.add_child(t)
-
-	var cols := HBoxContainer.new()
-	cols.add_theme_constant_override("separation", 12)
-	cols.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vb.add_child(cols)
-
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var root := VBoxContainer.new()
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.add_theme_constant_override("separation", 26)
+	add_child(root)
+	_title = Label.new()
+	_title.visible = not embedded
+	_title.add_theme_font_size_override("font_size", 36)
+	_title.add_theme_font_override("font", ThemeProvider.heading_font())
+	root.add_child(_title)
+	_status = Label.new()
+	_status.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+	root.add_child(_status)
+	var spread := HBoxContainer.new()
+	spread.add_theme_constant_override("separation", 36)
+	spread.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(spread)
+	var index := VBoxContainer.new()
+	index.custom_minimum_size.x = 0
+	index.add_theme_constant_override("separation", 12)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(330, 390)
-	cols.add_child(scroll)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	index.add_child(scroll)
 	_list = VBoxContainer.new()
-	_list.add_theme_constant_override("separation", 6)
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_list.add_theme_constant_override("separation", 8)
 	scroll.add_child(_list)
-
-	_reader = PanelContainer.new()
-	_reader.custom_minimum_size = Vector2(490, 390)
-	cols.add_child(_reader)
-	# V2 SKIN WIRING P4: real paper texture behind the found-document text.
-	var paper_path := "res://assets/textures/screens_v2/journal_paper.png"
-	if ResourceLoader.exists(paper_path):
-		var paper_sb := StyleBoxTexture.new()
-		paper_sb.texture = load(paper_path)
-		paper_sb.content_margin_left = 14.0
-		paper_sb.content_margin_right = 14.0
-		paper_sb.content_margin_top = 12.0
-		paper_sb.content_margin_bottom = 12.0
-		_reader.add_theme_stylebox_override("panel", paper_sb)
-	var rv := VBoxContainer.new()
-	rv.add_theme_constant_override("separation", 8)
-	_reader.add_child(rv)
+	_locked = Label.new()
+	_locked.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+	_locked.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	index.add_child(_locked)
+	var art := TextureRect.new()
+	art.texture = load("res://assets/textures/screens_v2/journal_paper.png")
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	art.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	art.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var reading := PanelContainer.new()
+	var paper := StyleBoxFlat.new()
+	paper.bg_color = ThemeProvider.COLOR_BG_DARK
+	paper.set_content_margin_all(0.0)
+	reading.add_theme_stylebox_override("panel", paper)
+	reading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	reading.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var copy := VBoxContainer.new()
+	copy.add_theme_constant_override("separation", 22)
+	reading.add_child(copy)
 	_reader_title = Label.new()
-	_reader_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_reader_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	rv.add_child(_reader_title)
+	_reader_title.add_theme_font_size_override("font_size", 30)
+	_reader_title.add_theme_font_override("font", ThemeProvider.heading_font())
+	_reader_title.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
+	copy.add_child(_reader_title)
 	_reader_text = RichTextLabel.new()
-	_reader_text.fit_content = false
-	_reader_text.scroll_active = true
 	_reader_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_reader_text.scroll_active = true
+	_reader_text.add_theme_font_size_override("normal_font_size", 20)
 	_reader_text.add_theme_color_override("default_color", ThemeProvider.COLOR_TEXT)
-	rv.add_child(_reader_text)
-
+	copy.add_child(_reader_text)
+	spread.add_child(art)
+	art.size_flags_stretch_ratio = 1.8
+	var editorial := VBoxContainer.new()
+	editorial.custom_minimum_size.x = 530
+	editorial.add_theme_constant_override("separation", 24)
+	spread.add_child(editorial)
+	index.custom_minimum_size.y = 180
+	editorial.add_child(index)
+	editorial.add_child(reading)
 	if not embedded:
-		var back := Button.new()
-		back.text = LocalizationManager.t("ui_close")
-		back.focus_mode = Control.FOCUS_NONE
-		back.custom_minimum_size = Vector2(160, 38)
-		back.pressed.connect(func() -> void: UIManager.close(&"journal"))
-		vb.add_child(back)
-	_refresh()
+		var close := Button.new()
+		close.text = LocalizationManager.t("ui_close")
+		ThemeProvider.style_control(close, &"ghost")
+		close.pressed.connect(func() -> void: UIManager.close(&"journal"))
+		root.add_child(close)
 
 func _refresh() -> void:
-	if _list == null:
-		return
-	for c in _list.get_children():
-		c.queue_free()
-	var found := 0
-	var ids := _catalog.keys()
+	_title.text = LocalizationManager.t("JOURNAL_TITLE")
+	for child: Node in _list.get_children():
+		child.queue_free()
+	var ids: Array = _catalog.keys()
 	ids.sort()
-	for id in ids:
-		var unlocked: bool = ProgressTracker.is_doc_unlocked(String(id))
-		if unlocked:
-			found += 1
-		var b := Button.new()
-		b.focus_mode = Control.FOCUS_NONE
-		b.text = String(_catalog[id]["title"]) if unlocked else "???"
-		b.disabled = not unlocked
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		if unlocked:
-			b.pressed.connect(_open.bind(String(id)))
-		_list.add_child(b)
-	_reader_title.text = LocalizationManager.tf("JOURNAL_FOUND", [found, Endings.get_total_documents()])  # the catalog holds 22 notes that no district places: the death and victory screens count 101, so does this
-	_reader_text.text = ""
+	var found: int = 0
+	var first_unlocked: String = ""
+	for id: Variant in ids:
+		if not ProgressTracker.is_doc_unlocked(String(id)):
+			continue
+		found += 1
+		if first_unlocked.is_empty():
+			first_unlocked = String(id)
+		var row := Button.new()
+		row.text = String(_catalog[id]["title"])
+		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		row.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		ThemeProvider.style_control(row, &"row", String(id) == _selected)
+		row.pressed.connect(_open.bind(String(id)))
+		_list.add_child(row)
+	_status.text = LocalizationManager.tf("JOURNAL_FOUND", [found, Endings.get_total_documents()])
+	_locked.text = "%s · %d" % [LocalizationManager.t("SKILL_LOCKED"), maxi(Endings.get_total_documents() - found, 0)]
+	if _selected.is_empty():
+		_selected = first_unlocked
+	if not _selected.is_empty():
+		_open(_selected)
+	elif found == 0:
+		_reader_title.text = LocalizationManager.t("JOURNAL_TAB_DOCUMENTS")
+		_reader_text.text = LocalizationManager.t("TUT_JOURNAL")
 
 func _open(doc_id: String) -> void:
+	_selected = doc_id
 	var entry: Dictionary = _catalog.get(doc_id, {})
 	_reader_title.text = String(entry.get("title", ""))
 	_reader_text.text = String(entry.get("text", "")) + _related_line(entry.get("world_refs", []))
+	for child: Node in _list.get_children():
+		if child is Button:
+			ThemeProvider.style_control(child as Button, &"row", (child as Button).text == _reader_title.text)
 
-## World bible cross-links (park+ lore packs): show already-revealed
-## characters/factions a note points at, by their short i18n title.
-## Minimal lookup, no new UI - appended under the note text.
 func _related_line(world_refs: Array) -> String:
 	var names: Array = []
 	for ref_id in world_refs:

@@ -1,5 +1,9 @@
 # Human checklist — things Claude cannot do
 
+## Music credits to retain in the store and distribution (2026-11-10)
+
+Hymn and Moonlight by Scott Buckley, released under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), www.scottbuckley.com.au. Sources: [Hymn](https://www.scottbuckley.com.au/library/hymn/) and [Moonlight](https://www.scottbuckley.com.au/library/moonlight/). Changes: mono conversion, two-second loop crossfade, 3 ms edge guards, level matching and OGG encoding; no pitch or tempo change. These credits also appear in-game. Other shipped music remains partly AI-generated (Google Lyria); this addition does not remove that disclosure. The ledger and exact file hashes are in `docs/ASSET_LICENSES.md`.
+
 Steps below need a GUI, an account, real credentials, or a build toolchain
 this session doesn't have. Everything else (code wiring, config placeholders,
 docs) is already done — see `docs/SESSION_REPORT_FINAL.md` for what.

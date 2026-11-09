@@ -1,0 +1,40 @@
+{
+  "source_qa_hashes": {
+    "scripts/lighting/light_grid.gd": {
+      "source_sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3",
+      "qa_sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3"
+    },
+    "scripts/tools/_light_check.gd": {
+      "source_sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71",
+      "qa_sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71"
+    }
+  },
+  "cases": {
+    "light_grid_red_nov10": {
+      "result": "EXPECTED_FAIL",
+      "exit_code": 1,
+      "seconds": 7.6,
+      "failed_checks": 3,
+      "failure": "Detached global-transform reads, freed-object cast, phantom origin registration",
+      "log_sha256": "e1b41522a02b2a7bec2233a714ad64f71afb25023223de94ac45ab61e0f60917"
+    },
+    "light_grid_green_nov10": {
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 7.7,
+      "checks": 6,
+      "failures": 0,
+      "engine_errors": 0,
+      "log_sha256": "be0897e1ac20716a93240de6b91b8d6a12472c1581867fc06cedabfccb460313"
+    },
+    "map_perception_nov10": {
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 18.8,
+      "checks": 17,
+      "failures": 0,
+      "log_sha256": "faeef97213b071cd42fd7b230677176a8f66b14cc9036e66abb91c1be7da523c"
+    }
+  },
+  "limits": "Headless checks do not measure rendered darkness, audio quality, frame rate, or physical touch behavior."
+}

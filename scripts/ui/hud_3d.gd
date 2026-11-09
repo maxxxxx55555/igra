@@ -706,6 +706,7 @@ func _apply_touch_visibility() -> void:
 ## The floor is MIN_TOUCH over the smallest cluster control (TOUCH_BTN, 64 px), so no button ever shrinks under 48.
 func _apply_button_size() -> void:
 	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / TOUCH_BTN.x, 2.0)
+	_layout_touch_buttons(factor)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
 		if cluster != null:
@@ -715,9 +716,19 @@ func _apply_button_size() -> void:
 
 ## Settings > One-Handed Mode: the action buttons stand beside the joystick on the left, so the one thumb that walks reaches all of them.
 const _JOYSTICK_W: float = 200.0  # the BottomLeft control of hud_3d.tscn
-const _ACTION_W: float = 308.0  # from the corner to the far side of the Stealth button (offset_left in hud_3d.tscn)
-const _ACTION_CLUSTER_H: float = 372.0  # from the corner to the top of the highest side button (308 + TOUCH_BTN.y)
 const _ONE_HAND_GAP: float = 24.0
+const _TOUCH_LAYOUT := preload("res://scripts/ui/hud_touch_layout.gd")
+var _action_extent := Vector2(308.0, 372.0)
+
+func _layout_touch_buttons(factor: float = 1.0) -> void:
+	var cluster := get_node_or_null("BottomRight") as Control
+	if cluster == null:
+		return
+	var row_limit: float = 420.0
+	if _one_handed():
+		var half_width: float = get_viewport().get_visible_rect().size.x * 0.5 - _safe_area_inset.x
+		row_limit = minf(row_limit, (half_width - _ONE_HAND_GAP) / factor - _JOYSTICK_W)
+	_action_extent = _TOUCH_LAYOUT.arrange(cluster, row_limit)
 
 func _place_action_cluster(factor: float) -> void:
 	var cluster := get_node_or_null("BottomRight") as Control
@@ -726,7 +737,7 @@ func _place_action_cluster(factor: float) -> void:
 	var left: bool = _one_handed()
 	cluster.anchor_left = 0.0 if left else 1.0
 	cluster.anchor_right = cluster.anchor_left
-	cluster.offset_left = (_JOYSTICK_W + _ACTION_W) * factor + _ONE_HAND_GAP if left else 0.0
+	cluster.offset_left = (_JOYSTICK_W + _action_extent.x) * factor + _ONE_HAND_GAP if left else 0.0
 	# Reflow chooses a new side, but must keep the safe margin already applied.
 	cluster.offset_left += _safe_area_inset.x if left else -_safe_area_inset.z
 	cluster.offset_right = cluster.offset_left
@@ -735,7 +746,7 @@ func _place_action_cluster(factor: float) -> void:
 	var ammo := get_node_or_null("AmmoCounter") as Control
 	if ammo != null:
 		var ammo_h: float = ammo.offset_bottom - ammo.offset_top
-		ammo.offset_bottom = -(_ACTION_CLUSTER_H * factor + 16.0) - _safe_area_inset.w
+		ammo.offset_bottom = -(_action_extent.y * factor + 16.0) - _safe_area_inset.w
 		ammo.offset_top = ammo.offset_bottom - ammo_h
 
 func _one_handed() -> bool:
@@ -832,12 +843,26 @@ func _localize_static_labels() -> void:
 	var map_button := get_node_or_null("MapButton") as Button
 	if map_button != null:
 		map_button.text = LocalizationManager.t("MAP_TITLE")
-	var btn_sprint := get_node_or_null("BottomRight/BtnSprint") as Button
-	if btn_sprint != null:
-		btn_sprint.text = LocalizationManager.t("HUD_SPRINT")
-	var btn_stealth := get_node_or_null("BottomRight/BtnStealth") as Button
-	if btn_stealth != null:
-		btn_stealth.text = LocalizationManager.t("HUD_STEALTH")
+	var captions := {"BtnSprint": "HUD_SPRINT", "BtnStealth": "HUD_STEALTH", "BtnStrobe": "TOUCH_STROBE", "BtnMelee": "TOUCH_MELEE", "BtnUV": "TOUCH_UV", "BtnWorkbench": "TOUCH_CRAFT"}
+	var tips := {"BtnAttack": "KEY_ATTACK", "BtnSprint": "KEY_RUN", "BtnStealth": "KEY_STEALTH", "BtnInteract": "PROMPT_INTERACT", "BtnJump": "KEY_JUMP", "BtnFlash": "TOUCH_FLASH_BTN", "BtnStrobe": "TOUCH_STROBE", "BtnWheel": "INV_QUICK_ACCESS", "BtnReload": "KEY_RELOAD", "BtnMelee": "TOUCH_MELEE", "BtnUV": "TOUCH_UV", "BtnDodge": "TUT_DODGE", "BtnInventory": "KEY_INVENTORY", "BtnWorkbench": "TOUCH_CRAFT"}
+	for button_name: String in tips:
+		var button := get_node_or_null("BottomRight/" + button_name) as Button
+		if button == null:
+			continue
+		button.tooltip_text = LocalizationManager.t(tips[button_name])
+		if captions.has(button_name):
+			button.text = LocalizationManager.t(captions[button_name])
+	# Action pictograms are textures: the bundled UI font does not contain the old sword/arrow/ring glyphs.
+	var attack := get_node_or_null("BottomRight/BtnAttack") as Button
+	if attack != null:
+		attack.text = ""
+		attack.icon = preload("res://assets/textures/ui/btn_action_128.png")
+		attack.add_theme_constant_override("icon_max_width", 48)
+		attack.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if has_touch_ui():
+		_apply_button_size()
+	else:
+		_layout_touch_buttons()
 
 func _add_captions() -> void:
 	var data := [
@@ -1739,7 +1764,8 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 		b.button_down.connect(cb)
 		$BottomRight.add_child(b)  # in the cluster, so Button Size grows them with it
 		return b
-	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
+	var jump := mk.call("BtnJump", "", func() -> void: isv.request_jump()) as Button
+	jump.icon = preload("res://assets/textures/ui/btn_jump_128.png")
 	anchored.call(jump, 48.0, 232.0)
 	var flash := mk.call("BtnFlash", "", func() -> void: isv.request_flashlight()) as Button
 	flash.icon = preload("res://assets/ui/ui_flashlight.svg")
@@ -1750,7 +1776,8 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 	strobe.add_theme_font_size_override("font_size", 16)
 	anchored.call(strobe, 200.0, 232.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
-	var wheel := mk.call("BtnWheel", "◎", _on_touch_wheel_pressed) as Button
+	var wheel := mk.call("BtnWheel", "", _on_touch_wheel_pressed) as Button
+	wheel.icon = preload("res://assets/textures/ui/btn_special_hold_128.png")
 	anchored.call(wheel, 276.0, 232.0)
 	wheel.button_up.connect(_on_touch_wheel_released)
 	# the owner's final rules: every action the keyboard has gets a visible button (reload, melee, UV, dodge besides its gesture,
@@ -1781,9 +1808,10 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 	var bench := mk.call("BtnWorkbench", LocalizationManager.t("TOUCH_CRAFT"), send.call(&"workbench")) as Button
 	bench.add_theme_font_size_override("font_size", 16)
 	anchored.call(bench, 352.0, 308.0)
-	for icon_button: Button in [reload, dodge, bag, flash]:
+	for icon_button: Button in [reload, dodge, bag, flash, jump, wheel]:
 		icon_button.add_theme_constant_override("icon_max_width", 36)  # a 128 px icon must not grow the button past its slot
 		icon_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_localize_static_labels()
 	_rest_touch_controls()
 
 ## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full

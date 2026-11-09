@@ -1,0 +1,1794 @@
+[
+	{
+		"actual_language": "en",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "en_high_0.8_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2226.2, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2139.8, 990.4), S: (76.8, 51.2)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (2043.8, 990.4), S: (86.4, 51.2)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2235.8, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2239.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2171.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (2099.8, 843.2), S: (62.4, 51.2)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (2032.6, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2239.0, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2171.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (2111.0, 782.4), S: (51.2, 51.2)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (2050.2, 782.4), S: (51.2, 51.2)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2239.0, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2175.0, 721.6), S: (54.4, 51.2)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "en",
+		"tier": 2
+	},
+	{
+		"actual_language": "en",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "en_high_0.8_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (377.6, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (291.2, 990.4), S: (76.8, 51.2)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (195.2, 990.4), S: (86.4, 51.2)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (387.2, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (390.4, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (323.2, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (251.2, 843.2), S: (62.4, 51.2)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (184.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (390.4, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (323.2, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (262.4, 782.4), S: (51.2, 51.2)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (201.6, 782.4), S: (51.2, 51.2)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (390.4, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (326.4, 721.6), S: (54.4, 51.2)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "en",
+		"tier": 2
+	},
+	{
+		"actual_language": "en",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "en_high_1.5_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2131.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (1969.0, 912.0), S: (144.0, 96.0)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (1789.0, 912.0), S: (162.0, 96.0)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2149.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2155.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2029.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (1894.0, 636.0), S: (117.0, 96.0)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (1768.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2155.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2029.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (1915.0, 522.0), S: (96.0, 96.0)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (1801.0, 522.0), S: (96.0, 96.0)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2155.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2035.0, 408.0), S: (102.0, 96.0)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "en",
+		"tier": 2
+	},
+	{
+		"actual_language": "en",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "en_high_1.5_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (687.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (525.0, 912.0), S: (144.0, 96.0)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (345.0, 912.0), S: (162.0, 96.0)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (705.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (711.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (585.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (450.0, 636.0), S: (117.0, 96.0)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (324.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (711.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (585.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (471.0, 522.0), S: (96.0, 96.0)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (357.0, 522.0), S: (96.0, 96.0)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (711.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (591.0, 408.0), S: (102.0, 96.0)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "en",
+		"tier": 2
+	},
+	{
+		"actual_language": "en",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "en_low_0.8_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2226.2, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2139.8, 990.4), S: (76.8, 51.2)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (2043.8, 990.4), S: (86.4, 51.2)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2235.8, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2239.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2171.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (2099.8, 843.2), S: (62.4, 51.2)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (2032.6, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2239.0, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2171.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (2111.0, 782.4), S: (51.2, 51.2)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (2050.2, 782.4), S: (51.2, 51.2)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2239.0, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2175.0, 721.6), S: (54.4, 51.2)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "en",
+		"tier": 0
+	},
+	{
+		"actual_language": "en",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "en_low_0.8_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (377.6, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (291.2, 990.4), S: (76.8, 51.2)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (195.2, 990.4), S: (86.4, 51.2)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (387.2, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (390.4, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (323.2, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (251.2, 843.2), S: (62.4, 51.2)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (184.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (390.4, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (323.2, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (262.4, 782.4), S: (51.2, 51.2)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (201.6, 782.4), S: (51.2, 51.2)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (390.4, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (326.4, 721.6), S: (54.4, 51.2)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "en",
+		"tier": 0
+	},
+	{
+		"actual_language": "en",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "en_low_1.5_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2131.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (1969.0, 912.0), S: (144.0, 96.0)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (1789.0, 912.0), S: (162.0, 96.0)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2149.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2155.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2029.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (1894.0, 636.0), S: (117.0, 96.0)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (1768.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2155.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2029.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (1915.0, 522.0), S: (96.0, 96.0)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (1801.0, 522.0), S: (96.0, 96.0)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2155.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2035.0, 408.0), S: (102.0, 96.0)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "en",
+		"tier": 0
+	},
+	{
+		"actual_language": "en",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "en_low_1.5_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (687.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Attack"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (525.0, 912.0), S: (144.0, 96.0)]",
+				"text": "SPRINT",
+				"tooltip": "Sprint"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (345.0, 912.0), S: (162.0, 96.0)]",
+				"text": "STEALTH",
+				"tooltip": "Stealth"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (705.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Interact"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (711.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Jump"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (585.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Flashlight button"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (450.0, 636.0), S: (117.0, 96.0)]",
+				"text": "Strobe",
+				"tooltip": "Strobe"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (324.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Quick access"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (711.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Inventory"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (585.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Reload"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (471.0, 522.0), S: (96.0, 96.0)]",
+				"text": "Hit",
+				"tooltip": "Hit"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (357.0, 522.0), S: (96.0, 96.0)]",
+				"text": "UV",
+				"tooltip": "UV"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (711.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Dodge when something lunges: double-tap a movement key (on a phone, double-tap the joystick)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (591.0, 408.0), S: (102.0, 96.0)]",
+				"text": "Craft",
+				"tooltip": "Craft"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "en",
+		"tier": 0
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "ru_high_0.8_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2226.2, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2159.0, 990.4), S: (57.6, 51.2)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (2075.8, 990.4), S: (73.6, 51.2)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2235.8, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2239.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2171.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (2101.4, 843.2), S: (60.8, 51.2)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (2034.2, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2239.0, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2171.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (2107.0, 782.4), S: (55.2, 51.2)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (2046.2, 782.4), S: (51.2, 51.2)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2239.0, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2167.8, 721.6), S: (61.6, 51.2)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "ru",
+		"tier": 2
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "ru_high_0.8_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (376.0, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (308.8, 990.4), S: (57.6, 51.2)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (225.6, 990.4), S: (73.6, 51.2)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (385.6, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (388.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (321.6, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (251.2, 843.2), S: (60.8, 51.2)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (184.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (388.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (321.6, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (256.8, 782.4), S: (55.2, 51.2)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (196.0, 782.4), S: (51.2, 51.2)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (388.8, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (317.6, 721.6), S: (61.6, 51.2)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "ru",
+		"tier": 2
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "ru_high_1.5_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2131.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2005.0, 912.0), S: (108.0, 96.0)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (1849.0, 912.0), S: (138.0, 96.0)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2149.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2155.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2029.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (1897.0, 636.0), S: (114.0, 96.0)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (1771.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2155.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2029.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (1907.5, 522.0), S: (103.5, 96.0)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (1793.5, 522.0), S: (96.0, 96.0)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2155.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2021.5, 408.0), S: (115.5, 96.0)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "ru",
+		"tier": 2
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "ru_high_1.5_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (684.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (558.0, 912.0), S: (108.0, 96.0)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (402.0, 912.0), S: (138.0, 96.0)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (702.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (708.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (582.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (450.0, 636.0), S: (114.0, 96.0)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (324.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (708.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (582.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (460.5, 522.0), S: (103.5, 96.0)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (346.5, 522.0), S: (96.0, 96.0)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (708.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (574.5, 408.0), S: (115.5, 96.0)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "ru",
+		"tier": 2
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "ru_low_0.8_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2226.2, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2159.0, 990.4), S: (57.6, 51.2)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (2075.8, 990.4), S: (73.6, 51.2)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2235.8, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2239.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2171.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (2101.4, 843.2), S: (60.8, 51.2)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (2034.2, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2239.0, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2171.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (2107.0, 782.4), S: (55.2, 51.2)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (2046.2, 782.4), S: (51.2, 51.2)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2239.0, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2167.8, 721.6), S: (61.6, 51.2)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "ru",
+		"tier": 0
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 0.8,
+		"buttons": 14,
+		"case": "ru_low_0.8_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (376.0, 971.2), S: (70.4, 70.4)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (308.8, 990.4), S: (57.6, 51.2)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (225.6, 990.4), S: (73.6, 51.2)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (385.6, 907.2), S: (51.2, 51.2)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (388.8, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (321.6, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (251.2, 843.2), S: (60.8, 51.2)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (184.0, 843.2), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (388.8, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (321.6, 782.4), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (256.8, 782.4), S: (55.2, 51.2)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (196.0, 782.4), S: (51.2, 51.2)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (388.8, 721.6), S: (57.6, 51.2)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (317.6, 721.6), S: (61.6, 51.2)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "ru",
+		"tier": 0
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "ru_low_1.5_normal",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (2131.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (2005.0, 912.0), S: (108.0, 96.0)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (1849.0, 912.0), S: (138.0, 96.0)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (2149.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (2155.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (2029.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (1897.0, 636.0), S: (114.0, 96.0)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (1771.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (2155.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (2029.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (1907.5, 522.0), S: (103.5, 96.0)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (1793.5, 522.0), S: (96.0, 96.0)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (2155.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (2021.5, 408.0), S: (115.5, 96.0)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": false,
+		"requested_language": "ru",
+		"tier": 0
+	},
+	{
+		"actual_language": "ru",
+		"button_size": 1.5,
+		"buttons": 14,
+		"case": "ru_low_1.5_onehand",
+		"controls": [
+			{
+				"icon": "res://assets/textures/ui/btn_action_128.png",
+				"name": "BtnAttack",
+				"rect": "[P: (684.0, 876.0), S: (132.0, 132.0)]",
+				"text": "",
+				"tooltip": "Атака"
+			},
+			{
+				"icon": "",
+				"name": "BtnSprint",
+				"rect": "[P: (558.0, 912.0), S: (108.0, 96.0)]",
+				"text": "БЕГ",
+				"tooltip": "Бег"
+			},
+			{
+				"icon": "",
+				"name": "BtnStealth",
+				"rect": "[P: (402.0, 912.0), S: (138.0, 96.0)]",
+				"text": "СТЕЛС",
+				"tooltip": "Скрытность"
+			},
+			{
+				"icon": "res://assets/ui/ui_interact.svg",
+				"name": "BtnInteract",
+				"rect": "[P: (702.0, 756.0), S: (96.0, 96.0)]",
+				"text": "",
+				"tooltip": "Взаимодействовать"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_jump_128.png",
+				"name": "BtnJump",
+				"rect": "[P: (708.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Прыжок"
+			},
+			{
+				"icon": "res://assets/ui/ui_flashlight.svg",
+				"name": "BtnFlash",
+				"rect": "[P: (582.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Кнопка фонарика"
+			},
+			{
+				"icon": "",
+				"name": "BtnStrobe",
+				"rect": "[P: (450.0, 636.0), S: (114.0, 96.0)]",
+				"text": "Строб",
+				"tooltip": "Строб"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_special_hold_128.png",
+				"name": "BtnWheel",
+				"rect": "[P: (324.0, 636.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Быстрый доступ"
+			},
+			{
+				"icon": "res://assets/ui/ui_backpack.svg",
+				"name": "BtnInventory",
+				"rect": "[P: (708.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Инвентарь"
+			},
+			{
+				"icon": "res://assets/ui/ui_ammo.svg",
+				"name": "BtnReload",
+				"rect": "[P: (582.0, 522.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Перезарядка"
+			},
+			{
+				"icon": "",
+				"name": "BtnMelee",
+				"rect": "[P: (460.5, 522.0), S: (103.5, 96.0)]",
+				"text": "Удар",
+				"tooltip": "Удар"
+			},
+			{
+				"icon": "",
+				"name": "BtnUV",
+				"rect": "[P: (346.5, 522.0), S: (96.0, 96.0)]",
+				"text": "УФ",
+				"tooltip": "УФ"
+			},
+			{
+				"icon": "res://assets/textures/ui/btn_dodge_128.png",
+				"name": "BtnDodge",
+				"rect": "[P: (708.0, 408.0), S: (108.0, 96.0)]",
+				"text": "",
+				"tooltip": "Уклоняйся, когда что-то бросается: дважды нажми клавишу движения (на телефоне — дважды коснись джойстика)."
+			},
+			{
+				"icon": "",
+				"name": "BtnWorkbench",
+				"rect": "[P: (574.5, 408.0), S: (115.5, 96.0)]",
+				"text": "Крафт",
+				"tooltip": "Крафт"
+			}
+		],
+		"failures": [],
+		"logical_viewport": "(2335.0, 1080.0)",
+		"native_window": "(1600, 740)",
+		"one_handed": true,
+		"requested_language": "ru",
+		"tier": 0
+	}
+]

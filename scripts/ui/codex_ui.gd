@@ -1,42 +1,19 @@
 extends Control
-## «Кодекс» — единый экран для пяти справочных разделов игры.
-##
-## Раньше журнал документов, задания, достижения, характеристики и
-## энциклопедия существ были пятью отдельными полноэкранными окнами. Между
-## ними нельзя было переключиться: чтобы из достижений попасть в статистику,
-## игрок закрывал одно окно и искал кнопку второго. На телефоне это особенно
-## неудобно — половина разделов вообще открывалась только с клавиатуры.
-##
-## Здесь они собраны под общей рамкой с рядом вкладок снизу. Сами экраны не
-## переписаны и не продублированы: каждый инстанцируется своим же скриптом с
-## флагом embedded = true, из-за которого он не рисует собственный фон и
-## кнопку закрытия. Правка в журнале по-прежнему меняет журнал в одном месте.
-
-## Вкладки в порядке показа: ключ подписи -> скрипт раздела.
+## Full-screen archive with quiet section navigation; pages remain lazy.
 const TABS: Array[Dictionary] = [
 	{"id": &"journal", "label": "JOURNAL_TITLE", "script": "res://scripts/ui/journal_ui.gd"},
 	{"id": &"quests", "label": "CODEX_TAB_QUESTS", "script": "res://scripts/ui/quest_journal.gd"},
 	{"id": &"achievements", "label": "ACHIEVEMENTS_TITLE", "script": "res://scripts/ui/achievements_ui.gd"},
 	{"id": &"stats", "label": "STATS_TITLE", "script": "res://scripts/ui/stats_ui.gd"},
 	{"id": &"bestiary", "label": "enc_title", "script": "res://scripts/ui/encyclopedia_ui.gd"},
-	# GOLD MASTER v4 mobile-art pass: controls (keyboard+touch) + glossary.
 	{"id": &"help", "label": "Help", "script": "res://scripts/ui/help_ui.gd"},
-	# GOLD MASTER v5 hooks pass: collectible-album read of the same
-	# document-unlock data journal_ui.gd lists as text.
 	{"id": &"collection", "label": "COLLECTION_TITLE", "script": "res://scripts/ui/collection_ui.gd"},
-	# G26 (GDD 24.2): the photo album.
 	{"id": &"photos", "label": "PHOTO_ALBUM_TITLE", "script": "res://scripts/ui/photo_album_ui.gd"},
 ]
 
-## The pages stand in a column of at most this width, centred: on a wide window a statistics page had its labels at one edge and its values at the other.
-const MAX_PAGE_W: float = 960.0
 
-var _content: Control = null
-var _tab_row: HBoxContainer = null
+var _content: Control
 var _buttons: Array[Button] = []
-## Разделы создаются лениво — при первом открытии вкладки, а не все сразу:
-## энциклопедия и журнал строят десятки узлов, и на слабом телефоне открытие
-## экрана заметно подтормаживало бы.
 var _pages: Dictionary = {}
 var _current: int = -1
 var _title_label: Label
@@ -44,138 +21,97 @@ var _close_btn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build()
-	# Static audit 2026-09-08: title/close/tab-label text was set once and
-	# never retranslated. Retranslate in place (not a full rebuild) so the
-	# lazily-created tab pages in _pages/_current aren't torn down - each
-	# hosted page (journal_ui.gd etc.) already retranslates itself.
-	LocalizationManager.language_changed.connect(func(_l: String) -> void:
-		_title_label.text = LocalizationManager.t("CODEX_TITLE")
-		_close_btn.text = LocalizationManager.t("ui_close")
-		for i in TABS.size():
-			_buttons[i].text = LocalizationManager.t(String(TABS[i]["label"])))
-
-func _build() -> void:
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
-
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var background := ColorRect.new()
+	background.color = ThemeProvider.COLOR_BG_DARK
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(background)
 	var root := VBoxContainer.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.offset_left = 24
-	root.offset_top = 18
-	root.offset_right = -24
-	root.offset_bottom = -18
-	root.add_theme_constant_override("separation", 10)
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.offset_left = 64
+	root.offset_right = -64
+	root.offset_top = 42
+	root.offset_bottom = -42
+	root.add_theme_constant_override("separation", 28)
 	add_child(root)
-
-	# Шапка: заголовок слева, крестик справа.
 	var header := HBoxContainer.new()
 	root.add_child(header)
 	_title_label = Label.new()
-	_title_label.text = LocalizationManager.t("CODEX_TITLE")
-	_title_label.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
-	_title_label.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	_title_label.add_theme_font_size_override("font_size", 36)
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_title_label)
 	_close_btn = Button.new()
 	_close_btn.text = LocalizationManager.t("ui_close")
-	_close_btn.focus_mode = Control.FOCUS_NONE
-	_close_btn.custom_minimum_size = Vector2(140, 40)
+	ThemeProvider.style_control(_close_btn, &"ghost")
 	_close_btn.pressed.connect(_close)
 	header.add_child(_close_btn)
-
-	# Содержимое активной вкладки.
+	var body := HBoxContainer.new()
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 48)
+	root.add_child(body)
+	var nav := HFlowContainer.new()
+	nav.add_theme_constant_override("separation", 4)
 	_content = Control.new()
-	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_content.clip_contents = true
+	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_content.resized.connect(_fit_pages)
-	root.add_child(_content)
-
-	# Ряд вкладок внизу — большие кнопки, рассчитанные на палец.
-	_tab_row = HBoxContainer.new()
-	_tab_row.add_theme_constant_override("separation", 6)
-	root.add_child(_tab_row)
-	for i in TABS.size():
-		var btn := Button.new()
-		btn.text = LocalizationManager.t(String(TABS[i]["label"]))
-		btn.focus_mode = Control.FOCUS_NONE
-		btn.custom_minimum_size = Vector2(0, 52)
-		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.pressed.connect(_show_tab.bind(i))
-		_tab_row.add_child(btn)
-		_buttons.append(btn)
-
+	body.add_child(_content)
+	root.add_child(nav)
+	for i: int in TABS.size():
+		var button := Button.new()
+		button.text = LocalizationManager.t(String(TABS[i]["label"]))
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.custom_minimum_size = Vector2(0, 48)
+		button.pressed.connect(_show_tab.bind(i))
+		nav.add_child(button)
+		_buttons.append(button)
 	_show_tab(0)
+	LocalizationManager.language_changed.connect(func(_language: String) -> void:
+		_title_label.text = LocalizationManager.t(String(TABS[_current]["label"]))
+		_close_btn.text = LocalizationManager.t("ui_close")
+		for i: int in TABS.size():
+			_buttons[i].text = LocalizationManager.t(String(TABS[i]["label"])))
 
-## Переключает вкладку, создавая её раздел при первом обращении.
 func _show_tab(index: int) -> void:
 	if index < 0 or index >= TABS.size() or index == _current:
 		return
 	_current = index
-	for page in _pages.values():
-		if is_instance_valid(page):
-			(page as Control).visible = false
+	_title_label.text = LocalizationManager.t(String(TABS[index]["label"]))
+	for page: Control in _pages.values():
+		page.hide()
 	var id: StringName = TABS[index]["id"]
-	var page: Control = _pages.get(id, null)
-	if page == null or not is_instance_valid(page):
-		page = _make_page(String(TABS[index]["script"]))
-		if page == null:
-			return
+	var page: Control = _pages.get(id)
+	if page == null:
+		page = load(String(TABS[index]["script"])).new()
+		page.set("embedded", true)
 		_pages[id] = page
 		_content.add_child(page)
+		page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		_fit_pages()
-	page.visible = true
-	_highlight(index)
+		for label: Node in page.find_children("*", "Label", true, false):
+			if (label as Label).text == _title_label.text and (label as Label).get_theme_font_size("font_size") >= 22:
+				(label as Label).hide()
+				break
+	page.show()
+	for i: int in _buttons.size():
+		ThemeProvider.style_control(_buttons[i], &"ghost", i == index)
 
 func _fit_pages() -> void:
-	var margin: float = maxf((_content.size.x - MAX_PAGE_W) * 0.5, 0.0)
-	for page: Control in _pages.values():
-		if is_instance_valid(page):
-			page.offset_left = margin
-			page.offset_right = -margin
+	for id: StringName in _pages:
+		var page: Control = _pages[id]
+		var margin: float = 0.0 if id == &"journal" else maxf((_content.size.x - 1080.0) * 0.5, 0.0)
+		page.offset_left = margin
+		page.offset_right = -margin
 
-## Инстанцирует раздел в встроенном режиме: свой фон и кнопку закрытия он
-## рисовать не должен — рамка общая.
-func _make_page(script_path: String) -> Control:
-	var scr: Script = load(script_path)
-	if scr == null:
-		return null
-	var node: Control = scr.new() as Control
-	if node == null:
-		return null
-	# embedded ставится до входа в дерево: _build() раздела вызывается из
-	# _ready(), то есть уже после add_child().
-	node.set("embedded", true)
-	node.set_anchors_preset(Control.PRESET_FULL_RECT)
-	return node
-
-## Активная вкладка подсвечивается янтарным, остальные приглушены.
-func _highlight(index: int) -> void:
-	for i in _buttons.size():
-		var col: Color = ThemeProvider.COLOR_AMBER if i == index else ThemeProvider.COLOR_TEXT_DIM
-		_buttons[i].add_theme_color_override("font_color", col)
-
-## Какая вкладка сейчас открыта (id, а не индекс) — нужно UIManager, чтобы
-## повторное нажатие клавиши раздела закрывало экран.
 func current_tab() -> StringName:
-	if _current < 0 or _current >= TABS.size():
-		return &""
-	return TABS[_current]["id"]
+	return TABS[_current]["id"] if _current >= 0 else &""
 
-func _close() -> void:
-	UIManager.close(&"codex")
-
-## Позволяет открыть «Кодекс» сразу на нужном разделе: старые клавиши
-## («Журнал», «Энциклопедия») ведут в свои вкладки, а не в первую попавшуюся.
 func open_tab(id: StringName) -> void:
-	for i in TABS.size():
+	for i: int in TABS.size():
 		if TABS[i]["id"] == id:
 			_show_tab(i)
 			return
+
+func _close() -> void:
+	UIManager.close(&"codex")

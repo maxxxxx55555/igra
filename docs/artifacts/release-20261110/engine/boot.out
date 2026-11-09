@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[boot] t=0.0s phase0 runner ready
+[boot] t=0.9s phase1 menu reachable
+[boot] t=6.7s phase2 New Game started, player spawned
+[boot] t=8.4s phase2b no ad before input — OK
+[boot] t=8.4s phase3 sustaining 60s gameplay
+[boot] t=18.4s heartbeat 10/60s — playing, player alive
+[boot] t=28.4s heartbeat 20/60s — playing, player alive
+[boot] t=38.4s heartbeat 30/60s — playing, player alive
+[boot] t=48.4s heartbeat 40/60s — playing, player alive
+[boot] t=58.4s heartbeat 50/60s — playing, player alive
+[boot] t=68.4s heartbeat 60/60s — playing, player alive
+[boot] t=68.4s phase4 save
+[boot] t=68.5s phase5 quit-to-menu
+[boot] t=68.6s phase6 load
+[boot] DONE fails=0

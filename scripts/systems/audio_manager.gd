@@ -93,9 +93,9 @@ func _ready() -> void:
 	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0, &"Combat"))
 	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0, &"Combat"))
 	# Озвучка игровых событий (раньше были немыми).
-	EventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _one_shot(_gen_pickup(), -10.0, &"UI"))
+	# Physical pickups already play their object-specific clip in ItemPickup3D.
 	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0, &"UI"))
-	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0, &"UI"))
+	# Explicit purchase rejection belongs to UISFX; a second tone masks its meaning.
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0, &"UI"))
 	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void:
 		if not _has_ui_sting("district_restored_sting"): _one_shot(_gen_powerup(), -4.0, &"UI"))

@@ -20,7 +20,7 @@ PROOFS = ROOT / "docs" / "PROOFS.md"
 CLOSURES = ROOT / "docs" / "artifacts" / "rc16" / "closures.json"
 LOGS = ROOT / "docs" / "artifacts" / "rc16" / "proofs"
 BEGIN, END = "<!-- rc16:begin -->", "<!-- rc16:end -->"
-EXIT = re.compile(r"^# EXIT=(\d+)$", re.M)
+EXIT = re.compile(r"^# EXIT=(\d+)\r?$", re.M)
 STAMP = re.compile(r"_(\d{8}T\d{6}Z)\.(?:png|jpg)$")
 ANSI = re.compile("\x1b\\[[0-9;]*m")
 
@@ -76,6 +76,8 @@ def demo():
     assert cell("a|b\nc") == "a\\|b c"
     assert STAMP.search("x_after_a1b2c3d_20261003T014512Z.png").group(1) == "20261003T014512Z"
     assert EXIT.search("body\n# EXIT=0\n").group(1) == "0"
+    assert EXIT.search("body\r\n# EXIT=7\r\n"), "Windows proof exits must be recognized"
+    assert EXIT.search("body\r\n# EXIT=7\r\n").group(1) == "7"
     assert STAMP.search("A01_menu_after_bca7d33_20261007T235629Z.jpg").group(1) == "20261007T235629Z"
     assert ANSI.sub("", "\x1b[32mWIN\x1b[0m seed 1") == "WIN seed 1"
     print("gen_proofs16 demo OK")

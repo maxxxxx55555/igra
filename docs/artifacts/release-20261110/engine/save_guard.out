@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[qa-guard-check] OK   no snapshot: restore returns -1 and touches nothing
+[qa-guard-check] OK   snapshot taken
+[qa-guard-check] OK   manifest records the owner pid
+[qa-guard-check] OK   restore reports byte-identical
+[qa-guard-check] OK   overwritten save and deleted slot restored
+[qa-guard-check] OK   QA-created file removed
+[qa-guard-check] OK   engine logs left alone
+[qa-guard-check] OK   snapshot removed after a verified restore
+[qa-guard-check] OK   interrupted .tmp copy is not a snapshot
+[qa-guard-check] OK   snapshot without a manifest is refused
+[qa-guard-check] OK   invalid JSON manifest is refused without a parser error
+[qa-guard-check] OK   second snapshot taken
+[qa-guard-check] OK   damaged snapshot (sha256 mismatch) is refused and kept
+[qa-guard-check] DONE fails=0

@@ -1,0 +1,408 @@
+{
+  "base_commit": "bef60fdd8eae87c977da7e2a343c7f991bd3e077",
+  "source_identity": "Exact changed source SHA256 below; run preceded its code commit",
+  "engine_version": "4.7.2.stable.official.ed1daf0bf",
+  "gates": [
+    {
+      "name": "compile",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 52.3,
+      "evidence": "compile.out",
+      "sha256": "964608731a3b3db14191e6a3a7344ef4be3ac7aae564728c705ce73db71b1b16",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "all_scripts",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 49.5,
+      "evidence": "all_scripts.out",
+      "sha256": "33fb9498bef392d9a9614d2b2d797cde0b268606f6d9909759658bdfd287a228",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "signals",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 11.2,
+      "evidence": "signals.out",
+      "sha256": "26123c095b8f0a7fce90f6416a73abb6ace9d55325c6dbf579d470dcceaa5bee",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "api",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 11.1,
+      "evidence": "api.out",
+      "sha256": "3e089be4685c74886e714d7b2f4a9e0bc5e38c04f59b93687bcfdc5c556da024",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "localization",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.2,
+      "evidence": "localization.out",
+      "sha256": "7cc1ba7e8ba42ce2dc2aafe3eac08432fbcaf67604a626acd4268062ffe3f320",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "assets",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.6,
+      "evidence": "assets.out",
+      "sha256": "f56f6650b62f57c2a71b967aa6c44b74d5fdde39c23fddda8c556ad2b6f78811",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "world",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 24.6,
+      "evidence": "world.out",
+      "sha256": "54bd0f7b459a4915c788c1a0e178dbb6abcfcaf7c2e1c7251760a345d7c74ef7",
+      "resource_retention_messages": [
+        "14"
+      ]
+    },
+    {
+      "name": "save",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 12.9,
+      "evidence": "save.out",
+      "sha256": "437e45aa6eb127f2286fe0db40af83e76dfd675f80db6a4181d64a4f8cb2fdf2",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "craft",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 11.8,
+      "evidence": "craft.out",
+      "sha256": "48b7679fd3326ae2c0f8467279ef392b7dc47298ee01f1e49711cb3e6f52db94",
+      "resource_retention_messages": [
+        "2"
+      ]
+    },
+    {
+      "name": "security",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 14.4,
+      "evidence": "security.out",
+      "sha256": "236767c083488260e38450e1d0b4301b5a872c0f801e74a491beada2d30e69a2",
+      "resource_retention_messages": [
+        "4"
+      ]
+    },
+    {
+      "name": "boot",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 79.6,
+      "evidence": "boot.out",
+      "sha256": "85d6084425d1eae53e7926ea11e48a8cfb123ac5d564157a6de1ada4d381dde0",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "footsteps",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.6,
+      "evidence": "footsteps.out",
+      "sha256": "72827295f38bba866b0b4ccc675f5ff12b88fc89a954e2790fe14c2847db3fdd",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "save_guard",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 12.6,
+      "evidence": "save_guard.out",
+      "sha256": "680680b8678eba619614720837eb0151f887b03b35f489a5d2b2abc53a774908",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "audio_start",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 11.2,
+      "evidence": "audio_start.out",
+      "sha256": "e61d1a3718dd38af7abe05191b5a18c2306fe4d53bfa527ec7a9ec0d996cccbe",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "audio_bus",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 12.2,
+      "evidence": "audio_bus.out",
+      "sha256": "feae4e29a03abd0ab386b2e6a3abc4cd0c4cf6d4ea23cdfcb5adb4b07a842802",
+      "resource_retention_messages": [
+        "21"
+      ]
+    },
+    {
+      "name": "audio_lifecycle",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.8,
+      "evidence": "audio_lifecycle.out",
+      "sha256": "b4ad0d2e886bbbb7312d67f8dea7d1e6bff2066ad699843bd9b1572c489209e8",
+      "resource_retention_messages": [
+        "28"
+      ]
+    },
+    {
+      "name": "premium_visual",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 17.5,
+      "evidence": "premium_visual.out",
+      "sha256": "661c69c7d0747067d500a733c1f2bb6f3f72db82446a3ce172b427d519cfd7d6",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "menu_lifecycle",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.1,
+      "evidence": "menu_lifecycle.out",
+      "sha256": "f3aada2cdf47935791601eceaba60488430a9bb911f874aded9b74901a921a17",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "threaded_loader",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 10.5,
+      "evidence": "threaded_loader.out",
+      "sha256": "1e638c662c29c0b4d963c7819cc3df70a16c5e91a59fd9f7047d746f5b7173d3",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "loot_floor",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 42.5,
+      "evidence": "loot_floor.out",
+      "sha256": "48c59ad79c119bb2df4172bad39c8ace0d88aad4c942ba8712203f45f1b0c7b9",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "theme",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 12.4,
+      "evidence": "theme.out",
+      "sha256": "b78cd122b6aa6fe560d152e7f696960b536b125fac3bd50a2252645587f075e9",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "settings",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 12.4,
+      "evidence": "settings.out",
+      "sha256": "16781fa23d20bfb5beda8337baeaa67791be6a112118221815e4564732c187a3",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "accessibility",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 7.7,
+      "evidence": "accessibility.out",
+      "sha256": "a86cb828b4bd8d83ca877443ef59f4d495b1b30479778e12ba450870ee60def1",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "layout",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 21.1,
+      "evidence": "layout.out",
+      "sha256": "bf6dfc07c1b24bfcc6e03a085c2722139de8e86939c6ad2c8aff19ea1b5d2861",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "release_polish",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 9.7,
+      "evidence": "release_polish.out",
+      "sha256": "74fcbf43da7b802f4de3a38787553c230f1a9eb5d7ee45f96b5f239a4bdf1ef4",
+      "resource_retention_messages": [
+        "24"
+      ]
+    },
+    {
+      "name": "closeout",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 187.1,
+      "evidence": "closeout.out",
+      "sha256": "5af1d7e5a036cb4db1bc8cb3a47c6f44830536fb7037a764006a2d5b96ff96bf",
+      "resource_retention_messages": []
+    },
+    {
+      "name": "goldmaster",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 46.9,
+      "evidence": "goldmaster.out",
+      "sha256": "7e49dedadce8319eb4769acca3e91fb62f69dd4201ef88bf7a2ba39947c297e3",
+      "resource_retention_messages": [
+        "22"
+      ]
+    },
+    {
+      "name": "touch",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 13.2,
+      "evidence": "touch.out",
+      "sha256": "54397ed26a56eb0a3d94660ce8eda6ec2ec1132cc90fd64962817318e9bcd284",
+      "resource_retention_messages": []
+    }
+  ],
+  "native_and_autoplay": [
+    {
+      "name": "audio_truth_final_nov10",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 63.1,
+      "evidence": "audio_truth_final_nov10.out",
+      "sha256": "be65ab163237c23624554bf64472ea0f60a9879a1d693d508fbda418136d1823"
+    },
+    {
+      "name": "nov10_bot_1",
+      "result": "PASS",
+      "exit_code": 0,
+      "seconds": 152.6,
+      "evidence": "nov10_bot_1.out",
+      "sha256": "fbc944f2d0bb6c9c175726cdebc7d4e5cb0cb9d954ce057bc5db3fa974607cf9"
+    }
+  ],
+  "changed_runtime_source_sha256": [
+    {
+      "path": "assets/audio/music/scott_buckley_hymn.ogg",
+      "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df"
+    },
+    {
+      "path": "assets/audio/music/scott_buckley_moonlight.ogg",
+      "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a"
+    },
+    {
+      "path": "assets/fonts/RobotoCondensed-Full-VF.LICENSE.md",
+      "sha256": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6"
+    },
+    {
+      "path": "assets/fonts/RobotoCondensed-Full-VF.SOURCE.md",
+      "sha256": "9a4da91845c7dd5217b6612dc96835aa80132056b6c272ee29d8067637cb6eb8"
+    },
+    {
+      "path": "assets/fonts/RobotoCondensed-Full-VF.ttf",
+      "sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0"
+    },
+    {
+      "path": "scripts/credits.gd",
+      "sha256": "016b1f21c529d37ecd742ba4462bb903e80ed37498a264c1980f0fdc1f23ebf3"
+    },
+    {
+      "path": "scripts/i18n/localization_manager.gd",
+      "sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004"
+    },
+    {
+      "path": "scripts/lighting/light_grid.gd",
+      "sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3"
+    },
+    {
+      "path": "scripts/systems/audio_manager.gd",
+      "sha256": "64b42aa56b4c435de697b9702c70355b1e138663aa431df7d766e7799402f518"
+    },
+    {
+      "path": "scripts/systems/music_manager.gd",
+      "sha256": "f517ba1de0d6984425be2bf11467871ed1b1a0bc9a38d3e8a20a9ce986b0c72e"
+    },
+    {
+      "path": "scripts/systems/uisfx.gd",
+      "sha256": "5630122471454a7cad315c60fa1b1d37295820b7d0147d26220dd305ba5c591d"
+    },
+    {
+      "path": "scripts/tools/_audio_lifecycle_check.gd",
+      "sha256": "e8263685bef94189cf694b53615dfcc707d4e2c30ecf316a80ee4d37e1b261ee"
+    },
+    {
+      "path": "scripts/tools/_closeout_check_runner.gd",
+      "sha256": "5a28a9ff2526faae64edd7dbea42f8f034420726b9442f0a7a9fc6bc08fdd34f"
+    },
+    {
+      "path": "scripts/tools/_light_check.gd",
+      "sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71"
+    },
+    {
+      "path": "scripts/tools/_theme_unify_probe.gd",
+      "sha256": "549bff61e82594b2a88201c2b087d13382b2890beab318349765171c5bf9517d"
+    },
+    {
+      "path": "scripts/tools/rc16/font_canon_checks.gd",
+      "sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b"
+    },
+    {
+      "path": "scripts/tools/rc16/hud_checks.gd",
+      "sha256": "b173f148bf555dd3360f645b328e8e6e244f1342cc0198977f3efcdb96cd4996"
+    },
+    {
+      "path": "scripts/tools/rc16/s27_checks.gd",
+      "sha256": "846873eb974131db706875e6594e77dc97830c7135bbc91f72f06d4d4655881f"
+    },
+    {
+      "path": "scripts/tools/rc16/s29_look_checks.gd",
+      "sha256": "6dd8a36d249ce1f9439a0d35970929c491608bad6369b4c89bbb117493a9e9c0"
+    },
+    {
+      "path": "scripts/ui/codex_ui.gd",
+      "sha256": "6b2bc882b7b7c4479b7321e475e99887277118fd120d574d6a7766d364ed4a91"
+    },
+    {
+      "path": "scripts/ui/hud_3d.gd",
+      "sha256": "c29adb059b9dc45087f3549fd3f9e1778b91a89b5a477fa0251a92f00a29c5b0"
+    },
+    {
+      "path": "scripts/ui/hud_touch_layout.gd",
+      "sha256": "e399acd170f415f32c2e8a806a01ae1f5dc5d5f8e8807a578e1d9f72c3a387e6"
+    },
+    {
+      "path": "scripts/ui/inv_kit.gd",
+      "sha256": "f63a53b28f671af4931aaef3265a04ff028cf0136a79e4bfea15fde8781b9839"
+    },
+    {
+      "path": "scripts/ui/journal_ui.gd",
+      "sha256": "51789ebf6ea551145383547e7d6f43bc7d847afec5ec711c0963ce5f49e25b0b"
+    },
+    {
+      "path": "scripts/ui/main_menu.gd",
+      "sha256": "13fd2799b310c3786584233992ff7f585e70eb8c1f6f7bbe54aaf321a6ea4ffb"
+    },
+    {
+      "path": "scripts/ui/screen_chrome.gd",
+      "sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd"
+    },
+    {
+      "path": "scripts/ui/screens.gd",
+      "sha256": "3fc524da6797f349e0d8a603fdb58346ba6cb63954c94620164b7641c6e5a1bc"
+    },
+    {
+      "path": "scripts/ui/theme_provider.gd",
+      "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6"
+    }
+  ],
+  "autoplay_limit": "Seed1 WIN with2deaths and14 nudge rescues; not clean navigation or human traversal acceptance",
+  "teardown_limit": "Known headless resource-retention warnings remain recorded; not claimed leak-free",
+  "import_note": "Clean QA import initially failed without generated mappings; verified byte-identical import mappings plus theme-safe import passed before these gates"
+}

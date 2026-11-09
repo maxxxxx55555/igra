@@ -28,6 +28,8 @@ func _scan_recursive(n: Node) -> void:
 		_scan_recursive(c)
 
 func register_light(n: Node3D) -> void:
+	if not is_instance_valid(n) or not n.is_inside_tree():
+		return
 	if n is SpotLight3D and n.is_in_group(&"flashlight"):
 		_flashlights.append(n)
 	var data: Dictionary = {
@@ -64,8 +66,8 @@ func _process(_delta: float) -> void:
 	var dirty: bool = _dirty
 	for id in _lights.keys():
 		var data: Dictionary = _lights[id]
-		# a freed light is dropped before any cast: casting a freed object is an engine error
-		if not is_instance_valid(data["node"]):
+		# A scene can detach a live light before freeing it; neither state has a usable global transform.
+		if not is_instance_valid(data["node"]) or not (data["node"] as Node3D).is_inside_tree():
 			_lights.erase(id)
 			dirty = true
 			continue
@@ -115,8 +117,10 @@ func visible_lights_at(world_pos: Vector3, threshold: float = 0.05) -> Array[Nod
 	var out: Array[Node3D] = []
 	for id in _lights:
 		var data: Dictionary = _lights[id]
+		if not is_instance_valid(data["node"]):
+			continue
 		var n := data["node"] as Node3D
-		if not is_instance_valid(n) or not n.is_visible_in_tree():
+		if not n.is_inside_tree() or not n.is_visible_in_tree():
 			continue
 		if n is SpotLight3D and n.is_in_group(&"flashlight"):
 			continue

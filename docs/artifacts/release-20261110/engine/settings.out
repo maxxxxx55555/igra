@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[settings-persist] tier=Low glow_intensity=0.40 ssao=false
+[settings-persist] tier=High glow_intensity=0.40 ssao=false
+[settings-persist] item12 graphics preset switch applies to live Environment: true
+[settings-persist] item13 restart round-trip: load_from_cfg=true high_contrast=true text_size=2
+[settings-persist] DONE bad=0

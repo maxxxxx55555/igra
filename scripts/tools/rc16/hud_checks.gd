@@ -28,6 +28,7 @@ static func run(r: Node) -> void:
 	_safe_area_slides(r, hud)
 	_safe_area_survives_touch_settings(r, hud)
 	await _touch_buttons_scale_clear(r)
+	await _touch_labels_use_bundled_glyphs(r)
 	await _combat_hud_rests(r, hud)
 	await _layout_holds(r, hud)
 	r._playing()
@@ -312,8 +313,8 @@ static func _joystick_fades_only_its_ring(r: Node) -> void:
 	ring.queue_free()
 	r._ok(kept and ring_wakes, "HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (%.2f) and lifts (%.2f), the ring goes full (%.2f) and rests (%.2f, shipped REST_ALPHA %.2f)" % [going_down, container.modulate.a, ring_down, ring.modulate.a, rest_alpha])
 
-## HUDP11: Button Size grows the side buttons with the action buttons, so the eight touch buttons stay on screen and clear of each other from 0.8 to 1.5
-## (the side buttons stayed put while Interact grew over Jump and Flash from 1.10). A HUD built under touch emulation carries all eight.
+## HUDP11: Button Size grows the side buttons with the action buttons, so all fourteen touch buttons stay on screen and clear of each other from 0.8 to 1.5
+## (the side buttons stayed put while Interact grew over Jump and Flash from 1.10). A HUD built under touch emulation carries all fourteen.
 static func _touch_buttons_scale_clear(r: Node) -> void:
 	var emulate0: Variant = ProjectSettings.get_setting("input_devices/pointing/emulate_touch_from_mouse", false)
 	var calibrated0: Variant = SettingsManager.get_setting("touch_calibration_done", false)
@@ -334,7 +335,7 @@ static func _touch_buttons_scale_clear(r: Node) -> void:
 		await r.get_tree().process_frame
 		await r.get_tree().process_frame
 		var rects: Dictionary = {}
-		for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+		for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]:
 			var button := hud.find_child(button_name, true, false) as Control
 			if button != null:
 				var drawn: Transform2D = button.get_global_transform()  # a Control's global rect ignores the scale of its parent
@@ -352,7 +353,39 @@ static func _touch_buttons_scale_clear(r: Node) -> void:
 	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", emulate0)
 	SettingsManager.set_button_size(size0)
 	SettingsManager.set_setting("touch_calibration_done", calibrated0)
-	r._ok(touch and found == 8 and bad.is_empty(), "HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD %s, found %d, problems %s)" % [touch, found, bad.slice(0, 4)])
+	r._ok(touch and found == 14 and bad.is_empty(), "HUDP11 all fourteen touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD %s, found %d, problems %s)" % [touch, found, bad.slice(0, 4)])
+
+## Live language changes must refresh the side captions; action symbols must be supplied by the bundled font or a texture.
+static func _touch_labels_use_bundled_glyphs(r: Node) -> void:
+	var language0: String = LocalizationManager.current_lang
+	var hud := HUD_SCENE.instantiate()
+	r.get_tree().root.add_child(hud)
+	await r.get_tree().process_frame
+	if hud.get_node_or_null("BottomRight/BtnReload") == null:
+		hud.call("_add_side_buttons", InputService, true)
+	var captions := {"BtnSprint": "HUD_SPRINT", "BtnStealth": "HUD_STEALTH", "BtnStrobe": "TOUCH_STROBE", "BtnMelee": "TOUCH_MELEE", "BtnUV": "TOUCH_UV", "BtnWorkbench": "TOUCH_CRAFT"}
+	var bad: Array[String] = []
+	var checked: int = 0
+	for language: String in ["en", "ru"]:
+		LocalizationManager.set_language(language)
+		await r.get_tree().process_frame
+		if LocalizationManager.current_lang != language:
+			bad.append("requested language was not selected: " + language)
+		for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]:
+			var button := hud.get_node("BottomRight/" + button_name) as Button
+			checked += 1
+			if button.text.is_empty() and button.icon == null:
+				bad.append(language + " " + button_name + " has no visible label")
+			if captions.has(button_name) and button.text != LocalizationManager.t(captions[button_name]):
+				bad.append(language + " " + button_name + " stale caption: " + button.text)
+			var font := button.get_theme_font("font")
+			for index: int in button.text.length():
+				if not font.has_char(button.text.unicode_at(index)):
+					bad.append(language + " " + button_name + " missing glyph: " + button.text[index])
+	LocalizationManager.set_language(language0)
+	hud.queue_free()
+	await r.get_tree().process_frame
+	r._ok(checked == 28 and bad.is_empty(), "HUDP15 all fourteen touch controls use supported EN/RU captions and bundled glyphs on a live language change (%d checked): %s" % [checked, bad])
 
 ## HUDP7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
 static func _combat_hud_rests(r: Node, hud: Node) -> void:

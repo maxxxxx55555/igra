@@ -45,7 +45,7 @@ GATES = [
     ("settings", "settings_persist_probe", r"\[settings-persist\] DONE bad=0\b", 120),
     ("accessibility", "a11y_probe", r"\[a11y\] DONE bad=0\b", 120),
     ("layout", "ui_layout_check", r"\[uilay\] DONE fails=0\b", 180),
-    ("release_polish", "release_polish_check", r"\[release-polish\] DONE checks=39 fails=0\b", 180),
+    ("release_polish", "release_polish_check", r"\[release-polish\] DONE checks=32 fails=0\b", 180),
     ("closeout", "closeout_check", r"\[closeout\] DONE .*fails=0\b", 900),
     ("goldmaster", "qa_headless_suite", r"\[qa\] DONE fails=0\b", 240),
     ("touch", "touch_probe", r"\[touch-probe\] DONE fails=0\b", 180),

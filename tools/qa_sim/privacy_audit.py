@@ -26,6 +26,7 @@ PATTERNS = {
 }
 # (kind, file, status, reason)
 ROWS = [
+    ("url", "scripts/credits.gd", "INACTIVE", "plain-text artist, source and CC BY 4.0 attribution labels; no request, clickable link or shell_open call"),
     ("enet", "scripts/multiplayer/network_manager.gd", "INACTIVE", "create_server() and join_server() are called by scripts/ui/lobby_menu.gd only, and no screen opens the lobby (see LOBBY_FILES); no peer is ever made"),
     ("enet", "scripts/net/lan_network.gd", "INACTIVE", "the LAN prototype's peer; no file but the lobby reaches it (docs/A10_multiplayer_decision.md)"),
     ("upnp", "scripts/multiplayer/network_manager.gd", "INACTIVE", "enable_upnp is false by default and the code that would use it is the unreachable lobby's"),
@@ -119,9 +120,9 @@ def write(path, found):
         "",
         table(found),
         "",
-        "Absent (zero hits in the searched paths): HTTPRequest, HTTPClient, WebSocketPeer, TCP clients, Firebase, Crashlytics, any analytics SDK, any URL in a script or scene.",
+        "Absent (zero hits in the searched paths): HTTPRequest, HTTPClient, WebSocketPeer, TCP clients, Firebase, Crashlytics and any analytics SDK. Credits contain inert attribution URLs; they initiate no network traffic.",
         "",
-        "Android permissions the export asks for (`export_presets.cfg`): " + ", ".join("`%s`" % p for p in perms) + ". INTERNET is there for the LAN game and the ad provider of a later build; the vibration is the haptics of the touch controls.",
+        "Android permissions the export asks for (`export_presets.cfg`): " + ", ".join("`%s`" % p for p in perms) + ". The release is offline: INTERNET and Android SDK plugins are disabled. Vibration supports touch-control haptics.",
         "",
         "Status words: ACTIVE runs in every session and stays on the device; INACTIVE is code that no screen or build reaches; STUB is a path that has no provider and does nothing;",
         "BUILD-TIME is not in the running game. The lobby (`scenes/ui/lobby.tscn`, `scripts/ui/lobby_menu.gd`) is named by no other file of `scripts/`, `scenes/` or `project.godot`.",

@@ -1,0 +1,298 @@
+{
+  "runtime": "bef60fdd+ui-c+map-baseline-nov10",
+  "route": "Input.parse_input_event(actual city_map_toggle key)",
+  "source_baseline": "bef60fdd8eae87c977da7e2a343c7f991bd3e077 plus unrelated reviewed UI/audio working changes",
+  "source_qa_hashes": {
+    "scripts/systems/cartography.gd": {
+      "source_sha256": "f37c1dfe4e735a74592f96671dbb137ce824ef07352e01eeb020975ff2fe0405",
+      "qa_sha256": "f37c1dfe4e735a74592f96671dbb137ce824ef07352e01eeb020975ff2fe0405"
+    },
+    "scripts/ui/district_map.gd": {
+      "source_sha256": "17e2d5d510269dec6e00d1a1db18ee6c040d48a74f3410bebd0524b3dcb03149",
+      "qa_sha256": "17e2d5d510269dec6e00d1a1db18ee6c040d48a74f3410bebd0524b3dcb03149"
+    },
+    "scripts/ui/city_map.gd": {
+      "source_sha256": "e8af6f10067759791a9477bec95ba38455b60c8f0fe99c7fadd2d260faab8324",
+      "qa_sha256": "e8af6f10067759791a9477bec95ba38455b60c8f0fe99c7fadd2d260faab8324"
+    },
+    "scripts/ui/ui_manager.gd": {
+      "source_sha256": "177a505df0a24b5ba936f1fe0d26a44bec29a453c765a3913ab0cb791c070f5e",
+      "qa_sha256": "177a505df0a24b5ba936f1fe0d26a44bec29a453c765a3913ab0cb791c070f5e"
+    },
+    "scripts/ui/hud_3d.gd": {
+      "source_sha256": "0d29d723045dae86e26f8f535f9a0dda1005d767927f324681530cdaf70dac90",
+      "qa_sha256": "0d29d723045dae86e26f8f535f9a0dda1005d767927f324681530cdaf70dac90"
+    },
+    "scripts/core/input_service.gd": {
+      "source_sha256": "3526c54d73ff4498eadf00f959e9054dec427791860d29b56b25bcbb44a622ad",
+      "qa_sha256": "3526c54d73ff4498eadf00f959e9054dec427791860d29b56b25bcbb44a622ad"
+    },
+    "scripts/core/qa_launch_guard.gd": {
+      "source_sha256": "e9afeadd7b58e4da25700c8ec5ffaa96f57ddb0e5a6a42fc234c5c525b686fa3",
+      "qa_sha256": "e9afeadd7b58e4da25700c8ec5ffaa96f57ddb0e5a6a42fc234c5c525b686fa3"
+    },
+    "scripts/world/streetlight_3d.gd": {
+      "source_sha256": "e226e400121454967b5c375cdcd569a53363cd8ff41e264815fe88037d102256",
+      "qa_sha256": "e226e400121454967b5c375cdcd569a53363cd8ff41e264815fe88037d102256"
+    },
+    "scripts/i18n/localization_manager.gd": {
+      "source_sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004",
+      "qa_sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004"
+    }
+  },
+  "images_sha256": {
+    "01_unlit_blank.png": "5b295401b7930e3fb1210cefb31b8f3c45d8aac2208fd86143669981c811cdb2",
+    "02_flashlight_only_blank.png": "83b5df2e756d0ba117881656fee19fde7033901fdb011408fb2f7ec480cffca2",
+    "03_restored_observed.png": "dba26a506c7c0c013fa6acfdc15e96d25923306dfe9665ca1119a7fafecad1b3",
+    "04_remote_unobserved_blank.png": "46b3323147a372464081fd4d1547b79e32fe3ccd23acc3d43afbbbf716520325"
+  },
+  "frames": [
+    {
+      "camera": [
+        -22.0,
+        2.56006336212158,
+        8.42732238769531
+      ],
+      "cells": 0,
+      "charted": {
+        "districts": {
+          "suburbs": []
+        },
+        "rev": 1
+      },
+      "contract_matches": true,
+      "expected_blank": true,
+      "file": "01_unlit_blank.png",
+      "flashlight_battery": 98.9259259259251,
+      "flashlight_enabled": false,
+      "flashlight_energy": 24.0,
+      "flashlight_range": 16.0,
+      "flashlight_visible": false,
+      "height": 1080,
+      "hud_blocked": true,
+      "language": "en",
+      "map_script": "res://scripts/ui/district_map.gd",
+      "stage": 0,
+      "tier": 2,
+      "width": 1920
+    },
+    {
+      "camera": [
+        -21.5,
+        2.56006336212158,
+        8.42732238769531
+      ],
+      "cells": 0,
+      "charted": {
+        "districts": {
+          "suburbs": []
+        },
+        "rev": 1
+      },
+      "contract_matches": true,
+      "expected_blank": true,
+      "file": "02_flashlight_only_blank.png",
+      "flashlight_battery": 98.7481481481472,
+      "flashlight_enabled": true,
+      "flashlight_energy": 24.0,
+      "flashlight_range": 16.0,
+      "flashlight_visible": true,
+      "height": 1080,
+      "hud_blocked": true,
+      "language": "en",
+      "map_script": "res://scripts/ui/district_map.gd",
+      "stage": 0,
+      "tier": 2,
+      "width": 1920
+    },
+    {
+      "camera": [
+        -21.5,
+        2.56006336212158,
+        8.42732238769531
+      ],
+      "cells": 30,
+      "charted": {
+        "districts": {
+          "suburbs": [
+            -15,
+            1,
+            -14,
+            1,
+            -16,
+            2,
+            -15,
+            2,
+            -14,
+            2,
+            -13,
+            2,
+            -16,
+            3,
+            -15,
+            3,
+            -14,
+            3,
+            -13,
+            3,
+            -16,
+            4,
+            -15,
+            4,
+            -14,
+            4,
+            -13,
+            4,
+            -16,
+            5,
+            -15,
+            5,
+            -14,
+            5,
+            -13,
+            5,
+            -15,
+            6,
+            -14,
+            6,
+            -13,
+            6,
+            -14,
+            7,
+            -13,
+            7,
+            -13,
+            8,
+            -14,
+            8,
+            -15,
+            9,
+            -14,
+            9,
+            -15,
+            10,
+            -14,
+            10,
+            -15,
+            11
+          ]
+        },
+        "rev": 1
+      },
+      "contract_matches": true,
+      "expected_blank": false,
+      "file": "03_restored_observed.png",
+      "flashlight_battery": 98.6962962962953,
+      "flashlight_enabled": false,
+      "flashlight_energy": 24.0,
+      "flashlight_range": 16.0,
+      "flashlight_visible": false,
+      "height": 1080,
+      "hud_blocked": true,
+      "language": "en",
+      "map_script": "res://scripts/ui/district_map.gd",
+      "stage": 3,
+      "tier": 2,
+      "width": 1920
+    },
+    {
+      "camera": [
+        -21.5,
+        2.56006336212158,
+        8.42732238769531
+      ],
+      "cells": 30,
+      "charted": {
+        "districts": {
+          "suburbs": [
+            -15,
+            1,
+            -14,
+            1,
+            -16,
+            2,
+            -15,
+            2,
+            -14,
+            2,
+            -13,
+            2,
+            -16,
+            3,
+            -15,
+            3,
+            -14,
+            3,
+            -13,
+            3,
+            -16,
+            4,
+            -15,
+            4,
+            -14,
+            4,
+            -13,
+            4,
+            -16,
+            5,
+            -15,
+            5,
+            -14,
+            5,
+            -13,
+            5,
+            -15,
+            6,
+            -14,
+            6,
+            -13,
+            6,
+            -14,
+            7,
+            -13,
+            7,
+            -13,
+            8,
+            -14,
+            8,
+            -15,
+            9,
+            -14,
+            9,
+            -15,
+            10,
+            -14,
+            10,
+            -15,
+            11
+          ]
+        },
+        "rev": 1
+      },
+      "file": "04_remote_unobserved_blank.png",
+      "flashlight_battery": 98.6962962962953,
+      "flashlight_enabled": false,
+      "flashlight_energy": 24.0,
+      "flashlight_range": 16.0,
+      "flashlight_visible": false,
+      "height": 1080,
+      "hud_blocked": true,
+      "language": "en",
+      "map_script": "res://scripts/ui/district_map.gd",
+      "remote_cell": [
+        200,
+        200
+      ],
+      "remote_charted": false,
+      "stage": 3,
+      "tier": 2,
+      "width": 1920
+    }
+  ],
+  "result": "PASS_EXISTING_REVEAL_BEHAVIOR_NOT_FULL_VISUAL_RELEASE_ACCEPTANCE",
+  "limits": [
+    "English native capture only; Russian source dictionaries and route inspected, no native Russian map frame in this set.",
+    "No physical multitouch or movement/combat fairness test.",
+    "Only suburbs CLEAR High shown; coarse cell silhouette is not photographic world completion."
+  ]
+}

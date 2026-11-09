@@ -1,0 +1,62 @@
+[
+  {
+    "path": "scripts/ui/theme_provider.gd",
+    "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/inv_kit.gd",
+    "sha256": "f63a53b28f671af4931aaef3265a04ff028cf0136a79e4bfea15fde8781b9839",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/codex_ui.gd",
+    "sha256": "6b2bc882b7b7c4479b7321e475e99887277118fd120d574d6a7766d364ed4a91",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/journal_ui.gd",
+    "sha256": "51789ebf6ea551145383547e7d6f43bc7d847afec5ec711c0963ce5f49e25b0b",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/main_menu.gd",
+    "sha256": "13fd2799b310c3786584233992ff7f585e70eb8c1f6f7bbe54aaf321a6ea4ffb",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/screens.gd",
+    "sha256": "3fc524da6797f349e0d8a603fdb58346ba6cb63954c94620164b7641c6e5a1bc",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/ui/screen_chrome.gd",
+    "sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/tools/_theme_unify_probe.gd",
+    "sha256": "549bff61e82594b2a88201c2b087d13382b2890beab318349765171c5bf9517d",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/tools/_closeout_check_runner.gd",
+    "sha256": "5a28a9ff2526faae64edd7dbea42f8f034420726b9442f0a7a9fc6bc08fdd34f",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/tools/rc16/s29_look_checks.gd",
+    "sha256": "6dd8a36d249ce1f9439a0d35970929c491608bad6369b4c89bbb117493a9e9c0",
+    "qa_equal": true
+  },
+  {
+    "path": "scripts/tools/rc16/font_canon_checks.gd",
+    "sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b",
+    "qa_equal": true
+  },
+  {
+    "path": "tools/qa_sim/consistency_check.py",
+    "sha256": "02b46a797d94c02146028df171c89312cadd7144362fa11206568d3d2b9cc2aa",
+    "qa_equal": true
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Hymn",
+    "artist": "Scott Buckley",
+    "source_bytes": 4855797,
+    "source_sha256": "65a0b4ee666c26d72cb6faeaaf2215f9516924a9bdbf01008cd642cbad4ba125",
+    "source_url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2018/02/sb_hymn.mp3",
+    "licence": "CC-BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "page": "https://www.scottbuckley.com.au/library/hymn/",
+    "path": "assets/audio/music/scott_buckley_hymn.ogg",
+    "bytes": 1040327,
+    "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df",
+    "seconds": 119.29090702947846,
+    "lufs": -18.0,
+    "true_peak_dbfs": -2.2,
+    "seam_step": 2.820792724378407e-05,
+    "changes": "Mono 44.1 kHz, two-second circular tail/head overlap, 3ms edge guards, level-matched -18 LUFS, Vorbis q4. No pitch or tempo change.",
+    "perceptual_audition": "NOT_PERFORMED_MODEL_AUDIO_INPUT_UNAVAILABLE"
+  },
+  {
+    "title": "Moonlight",
+    "artist": "Scott Buckley",
+    "source_bytes": 10177523,
+    "source_sha256": "7feb8c703983dbdfc97018f004cfebad8f03b86f2382c58c0ad24e375d4c17f5",
+    "source_url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2022/07/Moonlight.mp3",
+    "licence": "CC-BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "page": "https://www.scottbuckley.com.au/library/moonlight/",
+    "path": "assets/audio/music/scott_buckley_moonlight.ogg",
+    "bytes": 2016267,
+    "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a",
+    "seconds": 252.33374149659863,
+    "lufs": -18.0,
+    "true_peak_dbfs": -2.0,
+    "seam_step": 2.2337367227009963e-06,
+    "changes": "Mono 44.1 kHz, two-second circular tail/head overlap, 3ms edge guards, level-matched -18 LUFS, Vorbis q4. No pitch or tempo change.",
+    "perceptual_audition": "NOT_PERFORMED_MODEL_AUDIO_INPUT_UNAVAILABLE"
+  }
+]

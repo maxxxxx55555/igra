@@ -1,0 +1,22 @@
+# Architectural map evidence — 2026-11-10
+
+**Existing reveal behavior PASS; no production map change was required by these scenarios.** Actual windowed Godot run `map_baseline_nov10` exited 0 in 53.7 seconds. Four uncropped 1920×1080 images, runtime cell data and nine matching production/QA source hashes are recorded in [evidence.json](evidence.json). No raw log is packaged here.
+
+| Actual scenario | Observed result | Frame |
+|---|---|---|
+| Fresh unpowered district, flashlight off | Zero charted cells; blank map | [Unlit](01_unlit_blank.png) |
+| Flashlight on, small real player movement, repeated survey | Zero charted cells; flashlight visible, energy 24, range 16 | [Flashlight only](02_flashlight_only_blank.png) |
+| Real power-stage restoration, player observes the nearby lit frontage | 30 local cells and the adjacent observed building edge; no whole-district reveal | [Restored and observed](03_restored_observed.png) |
+| Pan into distant unobserved space | Opaque blank drawing; remote cell `(200,200)` absent from memory | [Unobserved](04_remote_unobserved_blank.png) |
+
+The probe delivered the configured **K key** using `Input.parse_input_event`, rather than instantiating a substitute map. The live route is `UIManager._unhandled_input` → `district_map.gd`; the touch HUD Map button opens the same screen. All frames report `hud_blocked=true`. `Cartography` contains only district-local chart cells; the renderer consumes charted cells and real skyline footprints. It draws no player, enemy, NPC, item, loot, quest, lamp, route or pin markers. Unknown canvas stays opaque at every pan/zoom; no radar/minimap was introduced.
+
+`city_map.gd` is a separate non-spatial district travel list, preserving progression and travel. No strategic city-map script is tracked in this source revision. `Screens` excludes CityMap from duplicate screens, but its empty alias table makes the legacy `show_screen("CityMap")` call a no-op; no gameplay caller was found and ScreenFlowManager is disabled in `project.godot`. This inactive route was not claimed as exercised. Screens' independent PowerGrid screen is a circuit/status diagram with no current gameplay caller found, not the architectural map. Puzzle/travel functions were preserved.
+
+Only English/Russian are supported by `LocalizationManager.SUPPORTED`; map/control strings exist in both source dictionaries. These four native images are **English**; this evidence does not claim a native Russian map layout test. The independent HUD source audit confirms move/look/attack/melee/reload/interact/sprint/crouch/jump/dodge/flashlight/UV/strobe/quick wheel/inventory/map/pause routes, including real input events for the added combat actions. It is source wiring evidence, not physical phone/multitouch execution.
+
+The map still uses a coarse cell silhouette; the restored frame is not evidence of a detailed finished architectural illustration. This focused pass does not establish save-slot/travel/reload persistence, arbitrary transformed layouts, every district/tier, physical touch sizing, or fair movement/combat in darkness. Existing bounded survey, fair cursors, rendered-light/occlusion guards and save policy were preserved. Broader release acceptance remains separate.
+
+The existing headless perception suite subsequently passed **17 checks, zero failures** in 18.8 seconds: real illumination/frustum/occlusion, hidden damage-number rejection, CART1–5 restored-light/flashlight/always-on/limiter/fair-cursor cases, Low rain and release configuration. This is behavioral evidence alongside the four native map images.
+
+A separate broader-run defect was reproduced and fixed at the shared `LightGrid` boundary: detached lamps still had valid objects but no usable global transforms; an immediate visibility query could also cast a freed object. The existing light-check gate now exercises six attach/detach/free/register cases. RED produced three failures and the real engine errors; the minimal lifetime guards produced GREEN, six passes and no engine errors. Cartography/map policy was not changed. Source/log hashes and exact outcomes are in [validation.json](validation.json); raw logs remain outside the repository.

@@ -47,7 +47,7 @@ SETS = [
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
         ("scripts/world/dead_grass.gd", "const PER_COURTYARD: Array[int] = [0, 8, 16]", "const PER_COURTYARD: Array[int] = [16, 16, 16]", "SOV5"),
         ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.05]", "SOV6"),
-        ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
+        ("scripts/ui/main_menu.gd", "\t_install_background()\n", "\t_install_background()\n\tvar fog: ColorRect = load(\"res://scripts/ui/menu_fog.gd\").new()\n\tadd_child(fog)\n", "SOV7"),
         ("scripts/enemies/boss_3d.gd", "EventBus.boss_phase_changed.emit(3)", "pass", "MUS1"),
         ("scripts/systems/music_manager.gd", '&"police": "res://assets/audio/music/police.ogg",', '&"police": "res://assets/audio/music/police_x.ogg",', "MUS2"),
         ("data/i18n/en.json", '"CREDITS_MUSIC": "Music (partly AI, Google Lyria) and SFX: TLS Team"', '"CREDITS_MUSIC": "Music and SFX: TLS Team"', "CRED1"),

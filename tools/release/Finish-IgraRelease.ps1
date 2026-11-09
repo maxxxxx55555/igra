@@ -1,12 +1,12 @@
 #requires -Version 5.1
 <#
 Run: powershell -NoProfile -ExecutionPolicy Bypass -File .\Finish-IgraRelease.ps1
-Checks current main and builds Windows/Web. Repeat the command to resume the
-same source; -Update starts from newest main. -CheckGame skips exports.
--Android additionally requires existing signing environment, SDK and JDK 17.
--SigningEnv <path to .signingelease.env> sets that signing environment for this process only (nothing is printed);
-a missing -AndroidSdk or -JavaHome is looked up in %LOCALAPPDATA%\Android\Sdk, C:\Android\Sdk and the Adoptium JDK 17.
-Owner's one command: .	oolselease\Finish-IgraRelease.ps1 -Android -SigningEnv .signingelease.env
+Checks current main and builds Windows/Web. Repeat to resume the pinned source;
+-Update starts from newest main. -CheckGame skips exports.
+-Android requires the existing signing identity, Android SDK and JDK 17.
+-SigningEnv .signing\release.env loads signing variables into this process only;
+values are never printed. Missing SDK/JDK paths are detected when installed.
+Android example: .\tools\release\Finish-IgraRelease.ps1 -Android -SigningEnv .signing\release.env
 This script never replaces a project, generates signing keys or publishes a store release.
 #>
 [CmdletBinding()]

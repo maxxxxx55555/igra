@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[hud-glyph] FAIL HUDP15 all fourteen touch controls use supported EN/RU captions and bundled glyphs on a live language change (28 checked): ["en BtnAttack missing glyph: ⚔", "en BtnJump missing glyph: ↑", "en BtnStrobe stale caption: Строб", "en BtnWheel missing glyph: ◎", "en BtnMelee stale caption: Удар", "en BtnUV stale caption: УФ", "en BtnWorkbench stale caption: Крафт", "ru BtnAttack missing glyph: ⚔", "ru BtnJump missing glyph: ↑", "ru BtnWheel missing glyph: ◎"]
+[hud-glyph] DONE fails=1

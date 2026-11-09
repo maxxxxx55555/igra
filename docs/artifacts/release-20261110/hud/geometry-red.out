@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[hud-touch] FAIL HUDP9 the touch action buttons are on screen and clear of each other ([[P: (1784.0, 1784.0), S: (88.0, 88.0)], [P: (1696.0, 1808.0), S: (72.0, 64.0)], [P: (1612.0, 1808.0), S: (92.0, 64.0)], [P: (1796.0, 1704.0), S: (64.0, 64.0)]])
+[hud-touch] FAIL HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD true, found 8, problems ["BtnSprint over BtnStealth at 0.8", "BtnFlash over BtnStrobe at 0.8", "BtnSprint over BtnStealth at 1.0", "BtnSprint over BtnStealth at 1.5"])
+[hud-touch] FAIL A11Y8 one-handed: 8 buttons found (8) in the left half, on screen and clear of each other and the joystick (problems ["BtnSprint over BtnStealth at 1.0", "BtnSprint over BtnStealth at 1.5"]); Sprint latches (true) and lets go (true); double-tap window 0.60 against 0.30; the plain mode holds (true)
+[hud-touch] FAIL HUDP13 every action has a touch button inside the screen and apart (10 buttons): ["BtnWorkbench overlaps"]
+[hud-touch] DONE fails=4

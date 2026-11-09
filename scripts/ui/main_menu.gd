@@ -1,11 +1,6 @@
 extends Control
-## Главное меню.
-##
-## Кнопки в main_menu.tscn не имели ни одной подписи (в сцене text не задан
-## вообще) — игрок видел пять пустых прямоугольников. Тексты берутся из
-## LocalizationManager и обновляются при смене языка.
+## Main menu with localized actions and a clear street-art backdrop.
 
-const _FOG := preload("res://scripts/ui/menu_fog.gd")
 const _LAYOUT := preload("res://scripts/ui/main_menu_layout.gd")
 const _STENCIL := preload("res://assets/shaders/stencil_title.gdshader")
 
@@ -31,7 +26,6 @@ func _ready() -> void:
 	if vb == null:
 		return
 	_install_background()
-	_install_fog()
 	_style_title(vb as VBoxContainer)
 	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
@@ -71,21 +65,10 @@ func _install_background() -> void:
 	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
 	_install_hero_bg_v2(bg)
 
-## V2 of Session 27: fog and film grain over the backdrop, between the hero art and the lamp's flicker (scripts/ui/menu_fog.gd).
-func _install_fog() -> void:
-	if get_node_or_null("MenuFog") != null:
-		return
-	var fog := _FOG.new()
-	add_child(fog)
-	var hero := get_node_or_null("MenuHeroV2")
-	move_child(fog, (hero.get_index() + 1) if hero != null else 1)
-
 ## A restrained warm tint keeps the street artwork inside the night palette.
 const HERO_TINT := Color(0.93, 0.91, 0.86)
 
-## V2 SKIN WIRING P4: real hero art (streetlight + silhouette) over the
-## procedural skyline above - inserted between them so both keep working,
-## just visually replaced (no code removed, matches "additive only").
+## Hero art sits above the procedural backdrop and beneath the menu controls.
 func _install_hero_bg_v2(after: Node) -> void:
 	var path := "res://assets/ui/menu_city.png"
 	if get_node_or_null("MenuHeroV2") != null or not ResourceLoader.exists(path):
@@ -100,11 +83,7 @@ func _install_hero_bg_v2(after: Node) -> void:
 	hero.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	move_child(hero, (after.get_index() + 1) if after else 0)
 
-## The hero art puts the lamp head right behind the title (amber on near-white),
-## so the title gets a bg-deep outline that reads on any backdrop. It replaces
-## an additive overlay of logo_grunge_512.png: that texture is an opaque
-## stencil a Label cannot be masked by, so the overlay only ever drew a pale
-## box over the title (rc14 menu frame).
+## A dark outline keeps the stencilled title readable over bright artwork.
 func _style_title(vb: VBoxContainer) -> void:
 	var title := vb.get_node_or_null("Title") as Label if vb != null else null
 	if title == null:
@@ -113,7 +92,7 @@ func _style_title(vb: VBoxContainer) -> void:
 	# draws as two line breaks: a blank line between the words.
 	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098))
-	title.add_theme_font_override("font", ThemeProvider.heading_font())
+	title.add_theme_font_override("font", ThemeProvider.wordmark_font())
 	title.add_theme_constant_override("outline_size", 2)
 	# V2 of Session 27: the title card is stencilled, one cut across the letters and their outline (assets/shaders/stencil_title.gdshader)
 	var stencil := ShaderMaterial.new()
@@ -121,11 +100,7 @@ func _style_title(vb: VBoxContainer) -> void:
 	title.material = stencil
 	title.resized.connect(func() -> void: stencil.set_shader_parameter("label_h", title.size.y))
 
-## Flicker стоял в сцене с color.a = 0.15 и без единой строчки кода, которая
-## бы его двигала — ровный тёплый засвет поверх всего меню 24/7 вместо
-## задуманного мерцания лампы (см. комментарий T14 у _install_background).
-## Приглушаем базовую альфу и гоняем её неровными рывками, как дышащий
-## на ладан фонарь.
+## Restrained irregular lamp flicker preserves the scene's warm lighting cue.
 func _start_flicker() -> void:
 	var f: ColorRect = get_node_or_null("Flicker")
 	if f == null:
@@ -160,7 +135,7 @@ const _DAILY_TEXT_KEYS: Dictionary = {
 	"play_minutes": "DAILY_PLAY_MINUTES", "photo_subject": "DAILY_PHOTO_SUBJECT",
 	"no_flashlight_segment": "DAILY_NO_FLASHLIGHT_SEGMENT",
 }
-## A thin outline keeps the small print legible through the moving fog.
+## A thin outline keeps the small print legible over the artwork.
 func _legible(line: Label) -> void:
 	line.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098))
 	line.add_theme_constant_override("outline_size", 2)
@@ -282,13 +257,7 @@ func _layout_menu() -> void:
 ## resets progress, see _on_play_pressed()).
 ## The action the player most likely wants stands out from the column: Continue when there is a save, else Play.
 func _mark_primary(button: Button) -> void:
-	var box := button.get_theme_stylebox(&"normal").duplicate() as StyleBoxFlat
-	if box == null:
-		return
-	box.bg_color = ThemeProvider.COLOR_BG_PANEL2
-	box.border_color = ThemeProvider.COLOR_AMBER
-	button.add_theme_stylebox_override(&"normal", box)
-	button.add_theme_color_override(&"font_color", ThemeProvider.COLOR_AMBER)
+	ThemeProvider.style_control(button, &"primary")
 
 func _apply_ngp_status(vb: Node) -> void:
 	var play_btn := vb.get_node_or_null("Play") as Button
