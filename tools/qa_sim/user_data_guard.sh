@@ -22,6 +22,21 @@ udg_dir() {
 	else echo "${XDG_DATA_HOME:-$HOME/.local/share}/godot/app_userdata/$name"; fi
 }
 
+# Delete helpers that survive the Windows "safe-delete" wrapper, which refuses
+# any path carrying a drive prefix (e.g. C:\Users\...). Git Bash accepts the
+# unix form (/c/Users/...) for the very same file, so we convert when cygpath
+# is present. On Linux (no cygpath, no safe-delete) this is a no-op pass-through.
+_udg_rm() {
+	local t="$1"
+	if command -v cygpath >/dev/null 2>&1; then t=$(cygpath -u -- "$t" 2>/dev/null) || true; fi
+	command rm -f -- "$t"
+}
+_udg_rm_rf() {
+	local t="$1"
+	if command -v cygpath >/dev/null 2>&1; then t=$(cygpath -u -- "$t" 2>/dev/null) || true; fi
+	command rm -rf -- "$t"
+}
+
 _udg_list() { # dir -> sorted relative paths of the game's own files
 	( cd "$1" 2>/dev/null || exit 0; find . -maxdepth 1 -type f; find ./saves -type f 2>/dev/null ) | sed 's#^\./##' | sort
 }
@@ -47,7 +62,7 @@ udg_snapshot() { # [dir]
 		mkdir -p "$UDG_SNAP/files/$(dirname "$f")"
 		cp -p "$UDG_DIR/$f" "$UDG_SNAP/files/$f" && cmp -s "$UDG_DIR/$f" "$UDG_SNAP/files/$f" || {
 			echo "  user-data guard: FAIL cannot snapshot $f - do not run the game against this profile"
-			rm -rf -- "$UDG_SNAP"  # partial copy only; the profile itself was not touched
+			_udg_rm_rf "$UDG_SNAP"  # partial copy only; the profile itself was not touched
 			return 1
 		}
 	done < "$UDG_SNAP/list"
@@ -68,7 +83,7 @@ udg_restore() {
 	fi
 	_udg_list "$UDG_DIR" > "$UDG_SNAP/current"
 	while IFS= read -r f; do
-		grep -qxF -- "$f" "$UDG_SNAP/list" || rm -f -- "$UDG_DIR/$f"
+		grep -qxF -- "$f" "$UDG_SNAP/list" || _udg_rm "$UDG_DIR/$f"
 	done < "$UDG_SNAP/current"
 	while IFS= read -r f; do
 		mkdir -p "$UDG_DIR/$(dirname "$f")"
@@ -78,7 +93,7 @@ udg_restore() {
 	[[ "$(_udg_list "$UDG_DIR")" == "$(cat "$UDG_SNAP/list")" ]] || { echo "  user-data guard: FAIL file set differs after restore"; bad=1; }
 	if [[ $bad -eq 0 ]]; then
 		echo "  user-data guard: $(wc -l < "$UDG_SNAP/list") file(s) restored byte-identical"
-		rm -rf -- "$UDG_SNAP"
+		_udg_rm_rf "$UDG_SNAP"
 	else
 		echo "  user-data guard: snapshot kept at $UDG_SNAP"
 	fi
@@ -89,7 +104,7 @@ _udg_demo() {
 	local d; d=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg_demo.XXXXXX") && [[ -n "$d" ]] || { echo "demo FAIL: no temp dir"; return 1; }
 	_udg_demo_steps "$d"
 	local rc=$?
-	rm -rf -- "$d"
+	_udg_rm_rf "$d"
 	return $rc
 }
 
@@ -119,7 +134,7 @@ _udg_demo_steps() { # synthetic profile dir; every demo snapshot lives under it
 	[[ $(find "${TMPDIR:-/tmp}" -maxdepth 1 -name 'tls_udg.*' | wc -l) -eq $before ]] || { echo "demo FAIL: partial snapshot left in temp"; return 1; }
 	# Lost snapshot: restore must fail and delete nothing.
 	udg_snapshot "$d" > /dev/null
-	rm -rf -- "$UDG_SNAP"
+	_udg_rm_rf "$UDG_SNAP"
 	if udg_restore > /dev/null; then echo "demo FAIL: restore succeeded without a snapshot"; return 1; fi
 	[[ -e "$d/tls_savegame.save" && -e "$d/saves/slot1.save" ]] || { echo "demo FAIL: lost snapshot deleted owner files"; return 1; }
 	# A pending QaLaunchGuard copy next to a profile: the shell guard must refuse to start.

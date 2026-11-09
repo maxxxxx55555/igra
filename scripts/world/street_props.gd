@@ -342,11 +342,27 @@ func _build_prop_multimesh() -> void:
 		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
-			_prop_material("", Color(0.05, 0.05, 0.055), 0.95, 0.0), "TreeTrunksBatched")
+			_bark_material(), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
-		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
+		var cone_mat := _prop_material("", Color(0.42, 0.24, 0.16), 0.6, 0.0)
 		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, cone_mat, "ConesBatched")
+
+## Dead bark, not a smooth brown pipe: a mottled grain over a dark trunk colour, triplanar so the cylinder carries it round, rough enough to catch no sheen.
+func _bark_material() -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.10, 0.085, 0.07)
+	var grain := NoiseTexture2D.new()
+	var noise := FastNoiseLite.new()
+	noise.frequency = 0.35
+	grain.noise = noise
+	grain.width = 128
+	grain.height = 128
+	mat.albedo_texture = grain
+	mat.roughness = 1.0
+	mat.uv1_triplanar = true
+	mat.uv1_scale = Vector3.ONE * 2.0
+	return mat
 
 ## The prop meshes are centred on their origin: lift each so it rests on the ground.
 func _raised(positions: Array[Vector3], lift: float) -> Array[Vector3]:

@@ -174,10 +174,53 @@ nothing was left unabsorbed.
 
 ## 9. What is still NOT verified (carried over honestly)
 
-- Android export: empty keystore, no Gradle/JDK release toolchain; the brief allows the Windows
-  desktop build only.
 - Production art and the provenance/licensing of the music; AI-generated reference images are
   labelled as references, not shipped frames.
-- Windowed appearance, rendered performance, audible output and subjective audio on real devices.
-- Physical device/signing checks and store acceptance. These are owner-side by the workflow's own
-  contract and are reported as `NOT_VERIFIED`, never as a pass.
+- Subjective windowed appearance and audible output on real devices.
+- A physical smartphone pass: `adb devices` lists no attached device (`docs/RELEASE_ARTIFACTS.md`
+  keeps the owner-side note). No run on a phone is claimed.
+- Windows Authenticode signing: the `.p12` files on this machine are GOST personal e-signature
+  certificates, not code-signing certificates, and no `signtool.exe` is installed. The exported
+  `.exe` is therefore unsigned; this is an owner decision, not a hidden failure.
+- Store submission and acceptance. These are owner-side by the workflow's own contract and are
+  reported as `NOT_VERIFIED`, never as a pass.
+
+## 10. Session 41 (9 November 2026) — the remaining gates, actually run
+
+The earlier report said the Android toolchain was unavailable. That was a path mistake: the SDK is
+at `C:/Android/Sdk` (platforms 34/36, build-tools 36.1.0), with JDK 17, Android Studio JBR 21,
+Gradle 8.11.1 and the 4.7.stable export templates. The windowed/GPU gates and the signed AAB were
+therefore executed instead of being left as owner-side guesses.
+
+| Gate / artifact | Result |
+|---|---|
+| Windowed GPU perf gate (`guarded_windowed perf_check_scene.tscn`) | PASS, `fails=0`; suburbs 103 and power_station 111 draw calls (D1<200, D11<350), p95 24.09/28.33 ms (budget 33), 221.5 MiB video memory (budget 512), 94 emitting particles |
+| Windowed audio truth gate (`guarded_windowed audio_truth_gate_scene.tscn`) | PASS; Music bus peak -13.8 dB (threshold >-45 dB), SFX/Ambient buses within the ceiling |
+| `tools/check.sh --static` | PASS 72/72 |
+| `tools/check.sh --all` | PASS **103/103**, 0 failures; the two window-only checks are recorded as SKIP in this run and were run separately above, not counted as passes twice |
+| Signed Android AAB | `LastStreetlight-1.0.1-release.aab`, 110 189 462 bytes, SHA-256 `47bfdb27f979502b10cc29d39ac53480c5a85d66bd1c06db9652f92d96a930a8`; `jarsigner` "jar verified.", 4096-bit RSA, signer matches the recorded release certificate |
+| `aab_check.py --bundletool … --secrets` | PASS: manifest package/versionCode 17/versionName 1.0.1, label, no ad-SDK dex, 37 integrity-manifest files, 0 missing refs, 0 secret hits, jar verified, signer match |
+| Windows Desktop EXE | `LastStreetlight-1.0.1-release.exe`, 219 807 856 bytes, SHA-256 `8b32c148987ddafbe84e60cb2149ecb5c7239c515f0386bed4d28761c3102f11`; launches outside the editor on a fresh profile, exit 0, 0 errors/warnings in `godot.log` |
+
+**Real defects found and fixed in this session** (each one failed a gate, none cosmetic):
+
+- `tools/qa_sim/user_data_guard.sh`: the Windows safe-delete shim exports `rm`/`rmdir`/`unlink`
+  functions and puts a guarded `rm` on `PATH`, so the QA guard could not delete its own damaged
+  snapshot copy. `QaLaunchGuard` then deliberately crashed **every** engine gate (exit 132). The
+  guard now deletes through unix-style paths when `cygpath` is available; on Linux it is a no-op.
+  The `--demo` self-check passes.
+- `scripts/gameplay/door.gd`: four trailing-whitespace lines failed `gdlint`.
+- `docs/DENSITY_PLAN.md`: the `KIT` citation went stale when two lines were added above it;
+  corrected to the current line.
+- `export_presets.cfg`: six interaction sounds that shipped scripts actually `preload()` (wood
+  door open/close, fuse insert, both loot pickups, save-fail) were still excluded by broad globs.
+  The globs were narrowed to explicit unused filenames, so every played sound ships and the
+  bundle stays lean. `export_refs_check` passes statically and against the built AAB.
+
+The nine source patches that landed during the verification run (door/fuse/pickup sounds, a
+save-failed UI sting, a Back sound, the PBR albedo correction, bark material, cone tone and the
+shared border token) were preserved, gated and committed — not reverted.
+
+Artifacts: `C:\Users\Maxsim\Desktop\igra-release-runs\20261108-windowed\`.
+`release_status` remains `NOT_READY`: unsigned EXE, no device pass and no store submission are
+owner-side and are reported as `NOT_VERIFIED`.

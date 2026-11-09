@@ -148,6 +148,12 @@ func error() -> void:
 func save() -> void:
 	_play("ui_save", 950.0, 0.08)
 
+func save_failed() -> void:
+	_play("interact/save_fail", 300.0, 0.12)
+
+func back() -> void:
+	_play("ui_back", 420.0, 0.06)
+
 func achievement() -> void:
 	if ResourceLoader.exists(_UI_DIR + "ui_achievement_sting.ogg"):
 		play_ui("achievement_sting")

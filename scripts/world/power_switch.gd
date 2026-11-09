@@ -34,6 +34,7 @@ const STAGE_MSG_KEYS: Array[String] = [
 
 const _Props := preload("res://scripts/art/prop_meshes.gd")
 const _CLUNK_SFX := preload("res://assets/audio/sfx/interact/fuse_box_close.wav")
+const _FUSE_SFX := preload("res://assets/audio/sfx/interact/fuse_insert.wav")
 var _panel: MeshInstance3D
 var _glow: StandardMaterial3D
 var _light: OmniLight3D
@@ -163,6 +164,7 @@ func interact(_player: Node = null) -> void:
 				LocalizationManager.tf("NEED_ITEM", [_item_name(need)]))
 			return
 		inv.remove(need, 1)
+		AudioManager.play_sound_3d(_FUSE_SFX, global_position, -6.0, &"Environment")
 
 	if not pg.advance_district(district_id, target):
 		return

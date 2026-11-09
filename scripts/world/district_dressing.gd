@@ -44,6 +44,8 @@ const SODIUM := Color("#ffb36a")
 const LITTER_COLORS: Array[Color] = [Color(0.22, 0.23, 0.26), Color(0.30, 0.29, 0.26), Color(0.20, 0.16, 0.09), Color(0.09, 0.09, 0.10)]
 const LEAF_COLORS: Array[Color] = [Color(0.17, 0.15, 0.08), Color(0.12, 0.14, 0.08), Color(0.20, 0.13, 0.07)]
 const CRATE_COLOR := Color(0.22, 0.17, 0.11)
+## The mean sRGB albedo of the PBR sets the dressing uses (plywood, rusted_metal: ~0.38 measured), the divisor that keeps a tint over a texture at the look's colour.
+const ALBEDO_SET_MEAN: float = 0.38
 const BARREL_COLORS: Array[Color] = [Color(0.16, 0.17, 0.19), Color(0.27, 0.15, 0.10)]
 ## Per district and block: litter, leaves, puddles, crates, barrels, bins.
 const KIT := {
@@ -259,7 +261,11 @@ func _plain(color: Color, roughness: float, metallic: float, tinted: bool = fals
 	mat.roughness = roughness
 	mat.metallic = metallic
 	mat.vertex_color_use_as_albedo = tinted
-	return preload("res://scripts/world/pbr_sets.gd").apply(mat, tex)  # B6: the set `tex` names, if its files exist
+	mat = preload("res://scripts/world/pbr_sets.gd").apply(mat, tex)  # B6: the set `tex` names, if its files exist
+	if mat.albedo_texture != null and not tinted:
+		# apply() resets the tint to white, which drew the crates and bins as raw bright PBR; keep the look's colour as the set's mean (same correction as urban_set_dressing.gd)
+		mat.albedo_color = Color(minf(color.r / ALBEDO_SET_MEAN, 1.0), minf(color.g / ALBEDO_SET_MEAN, 1.0), minf(color.b / ALBEDO_SET_MEAN, 1.0))
+	return mat
 
 ## A soft round patch that is not lit by anything: a wet stain (`add` false: darkens what is under it) or a pool of light (`add` true: brightens it).
 func _soft(color: Color, add: bool) -> StandardMaterial3D:
