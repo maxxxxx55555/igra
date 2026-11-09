@@ -8,77 +8,122 @@
     {
       "path": "scripts/systems/music_manager.gd",
       "bytes": 28853,
-      "sha256": "f517ba1de0d6984425be2bf11467871ed1b1a0bc9a38d3e8a20a9ce986b0c72e"
+      "sha256": "f517ba1de0d6984425be2bf11467871ed1b1a0bc9a38d3e8a20a9ce986b0c72e",
+      "git_blob_sha256": "7d84aea803547f6337a093242aa37281f83ef0c69fa44a70a86199c88b8e7ba1",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/systems/uisfx.gd",
       "bytes": 9807,
-      "sha256": "5630122471454a7cad315c60fa1b1d37295820b7d0147d26220dd305ba5c591d"
+      "sha256": "5630122471454a7cad315c60fa1b1d37295820b7d0147d26220dd305ba5c591d",
+      "git_blob_sha256": "dcd8ac0f3a1d5a24fd2966e4e2aba3cb25b428d5769037b77b346c392528c64e",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/systems/audio_manager.gd",
       "bytes": 17287,
-      "sha256": "64b42aa56b4c435de697b9702c70355b1e138663aa431df7d766e7799402f518"
+      "sha256": "64b42aa56b4c435de697b9702c70355b1e138663aa431df7d766e7799402f518",
+      "git_blob_sha256": "875557dd1dfdc4560012b63545fad68d80c6874474b09760b9a0ff17e51090b6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/credits.gd",
       "bytes": 2079,
-      "sha256": "016b1f21c529d37ecd742ba4462bb903e80ed37498a264c1980f0fdc1f23ebf3"
+      "sha256": "016b1f21c529d37ecd742ba4462bb903e80ed37498a264c1980f0fdc1f23ebf3",
+      "git_blob_sha256": "b4ee1e606fd1f8cdd8f7fce991b13667a2dbdd1f40572321d38e2f726fb689b8",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/_audio_lifecycle_check.gd",
       "bytes": 7436,
-      "sha256": "e8263685bef94189cf694b53615dfcc707d4e2c30ecf316a80ee4d37e1b261ee"
+      "sha256": "e8263685bef94189cf694b53615dfcc707d4e2c30ecf316a80ee4d37e1b261ee",
+      "git_blob_sha256": "bbfc10d492c6f8fad39f94e54f92eff64f9faed2bd2eb1bcbb921a56f32abf56",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scenes/tools/audio_lifecycle_check_scene.tscn",
       "bytes": 202,
-      "sha256": "b5623dc134921b7cc6a6c720de3e5715cd65322aaa3bf0e8f1b8f82f8777685d"
+      "sha256": "b5623dc134921b7cc6a6c720de3e5715cd65322aaa3bf0e8f1b8f82f8777685d",
+      "git_blob_sha256": "e0549430c9313dc377331a5465ae38fc877effafd09b68496da11f627f30c81c",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scenes/ui/credits.tscn",
       "bytes": 1556,
-      "sha256": "93f807b12afd6b63b2e176c48b85a6383aa339b53a002eee585aca4f882231f4"
+      "sha256": "93f807b12afd6b63b2e176c48b85a6383aa339b53a002eee585aca4f882231f4",
+      "git_blob_sha256": "3137834884fb4a4fbbe0c725ebdfa0ae4b576a6a7da8ef259969b3d8e5b97c0c",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/theme_provider.gd",
       "bytes": 11238,
-      "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6"
+      "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6",
+      "git_blob_sha256": "f4fad92ef8de13bc83558f87f463f6defda20659e1a781631025804dbb8286a8",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/fonts/RobotoCondensed-Full-VF.ttf",
       "bytes": 371616,
-      "sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0"
+      "sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0",
+      "git_blob_sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "default_bus_layout.tres",
       "bytes": 2741,
-      "sha256": "c047fb5c2e57fa0f3ef2fef99925d6aa6b43e022522dc843c4ea625b8a54fb9f"
+      "sha256": "c047fb5c2e57fa0f3ef2fef99925d6aa6b43e022522dc843c4ea625b8a54fb9f",
+      "git_blob_sha256": "bc693f6f5e876d13296be44bc9799133ffb7569c6f5b44bc703451fef4fb73f2",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "tools/qa_sim/master_licensed_music.py",
       "bytes": 2670,
-      "sha256": "1a89254e1fa1634d333c4f405fa83c641d10afe8c1ab7c959da069744f57ff52"
+      "sha256": "1a89254e1fa1634d333c4f405fa83c641d10afe8c1ab7c959da069744f57ff52",
+      "git_blob_sha256": "1a89254e1fa1634d333c4f405fa83c641d10afe8c1ab7c959da069744f57ff52",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "tools/qa_sim/music_post.py",
       "bytes": 15072,
-      "sha256": "05fbc44456a74bbf45fe4d137f30e3c8e8cfc861f981d71ac6b0257f0ca7076d"
+      "sha256": "05fbc44456a74bbf45fe4d137f30e3c8e8cfc861f981d71ac6b0257f0ca7076d",
+      "git_blob_sha256": "680be57216dd4fdc3a97190947f543ce6c8ac0e5e467ad9477558c33801001cb",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "tools/qa_sim/audio_loudness.py",
       "bytes": 8828,
-      "sha256": "0e26ac7132506c2b76790c437b5acb01cbaf390000407706ee130bbecdb4d2c3"
+      "sha256": "0e26ac7132506c2b76790c437b5acb01cbaf390000407706ee130bbecdb4d2c3",
+      "git_blob_sha256": "dec17f23386d975aa120c60c897f0abd7bb067aca7db6d42d0492f60f04d2148",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/audio/music/scott_buckley_hymn.ogg",
       "bytes": 1040327,
-      "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df"
+      "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df",
+      "git_blob_sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/audio/music/scott_buckley_moonlight.ogg",
       "bytes": 2016267,
-      "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a"
+      "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a",
+      "git_blob_sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     }
   ],
   "source_recordings": [
@@ -199,5 +244,6 @@
       "bytes": 1368,
       "sha256": "ff2989cef122b1078e07b68de887652398640f9ef672ba3f68f8f9ca169a7456"
     }
-  ]
+  ],
+  "source_sha_policy": "Existing capture SHA fields identify raw worktree bytes used by QA. git_blob_sha256 identifies committed source bytes at git_blob_commit. Only an exact match or CRLF-to-LF normalization is permitted; binaries match exactly. No captured byte stream or original SHA has been replaced."
 }

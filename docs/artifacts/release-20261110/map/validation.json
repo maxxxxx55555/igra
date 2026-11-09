@@ -2,11 +2,17 @@
   "source_qa_hashes": {
     "scripts/lighting/light_grid.gd": {
       "source_sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3",
-      "qa_sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3"
+      "qa_sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3",
+      "git_blob_sha256": "0d0c652e61431f23d5d048773d8e9c1c38ae0d269ab3f5b7fffd8ffbaabea3f3",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/tools/_light_check.gd": {
       "source_sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71",
-      "qa_sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71"
+      "qa_sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71",
+      "git_blob_sha256": "90e11a4872d9911291bafd120d2c2d5f43251511d57a67abb0def7f09f6f6226",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     }
   },
   "cases": {
@@ -36,5 +42,6 @@
       "log_sha256": "faeef97213b071cd42fd7b230677176a8f66b14cc9036e66abb91c1be7da523c"
     }
   },
-  "limits": "Headless checks do not measure rendered darkness, audio quality, frame rate, or physical touch behavior."
+  "limits": "Headless checks do not measure rendered darkness, audio quality, frame rate, or physical touch behavior.",
+  "source_sha_policy": "Existing capture SHA fields identify raw worktree bytes used by QA. git_blob_sha256 identifies committed source bytes at git_blob_commit. Only an exact match or CRLF-to-LF normalization is permitted; binaries match exactly. No captured byte stream or original SHA has been replaced."
 }

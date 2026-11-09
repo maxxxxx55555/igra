@@ -2,6 +2,8 @@
 
 **Existing reveal behavior PASS; no production map change was required by these scenarios.** Actual windowed Godot run `map_baseline_nov10` exited 0 in 53.7 seconds. Four uncropped 1920×1080 images, runtime cell data and nine matching production/QA source hashes are recorded in [evidence.json](evidence.json). No raw log is packaged here.
 
+Source identity is historical: the nine production/QA hashes matched each other at capture time. The captured HUD preceded the later icon/localization repair and differs from the final HUD source; its original raw SHA remains recorded, and its final Git digest is labelled a current reference only. No byte-equivalence or newline-only claim is made for that HUD row. The map renderer, cartography and other eight recorded dependencies still match their captured bytes apart from documented Git CRLF/LF normalization. The HUD was blocked under the map modal; current map behavior is separately covered by the final 655-assertion closeout and 17 perception checks.
+
 | Actual scenario | Observed result | Frame |
 |---|---|---|
 | Fresh unpowered district, flashlight off | Zero charted cells; blank map | [Unlit](01_unlit_blank.png) |

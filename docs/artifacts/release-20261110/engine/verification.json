@@ -1,6 +1,6 @@
 {
   "base_commit": "bef60fdd8eae87c977da7e2a343c7f991bd3e077",
-  "source_identity": "Exact changed source SHA256 below; run preceded its code commit",
+  "source_identity": "Exact frozen source SHA256 below, now committed; later delivery commits change evidence only",
   "engine_version": "4.7.2.stable.official.ed1daf0bf",
   "gates": [
     {
@@ -291,118 +291,204 @@
   "changed_runtime_source_sha256": [
     {
       "path": "assets/audio/music/scott_buckley_hymn.ogg",
-      "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df"
+      "sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df",
+      "git_blob_sha256": "dfd5ebbccaaf08aa1425bb2e7a431389f5f4b83588717ad3b0b1e1ca4f86f4df",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/audio/music/scott_buckley_moonlight.ogg",
-      "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a"
+      "sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a",
+      "git_blob_sha256": "b14247486678bb7004d86835067df81999ae0cb06eca6456a80d36e7501c3d6a",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/fonts/RobotoCondensed-Full-VF.LICENSE.md",
-      "sha256": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6"
+      "sha256": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+      "git_blob_sha256": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/fonts/RobotoCondensed-Full-VF.SOURCE.md",
-      "sha256": "9a4da91845c7dd5217b6612dc96835aa80132056b6c272ee29d8067637cb6eb8"
+      "sha256": "9a4da91845c7dd5217b6612dc96835aa80132056b6c272ee29d8067637cb6eb8",
+      "git_blob_sha256": "9a4da91845c7dd5217b6612dc96835aa80132056b6c272ee29d8067637cb6eb8",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "assets/fonts/RobotoCondensed-Full-VF.ttf",
-      "sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0"
+      "sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0",
+      "git_blob_sha256": "dace262afcee68a5276f200d8026c57221735c0118ab5fda8c2c0d3dc409a8d0",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/credits.gd",
-      "sha256": "016b1f21c529d37ecd742ba4462bb903e80ed37498a264c1980f0fdc1f23ebf3"
+      "sha256": "016b1f21c529d37ecd742ba4462bb903e80ed37498a264c1980f0fdc1f23ebf3",
+      "git_blob_sha256": "b4ee1e606fd1f8cdd8f7fce991b13667a2dbdd1f40572321d38e2f726fb689b8",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/i18n/localization_manager.gd",
-      "sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004"
+      "sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004",
+      "git_blob_sha256": "0310d0bab1bfa949112b1bad5917076afb20ce504352f66e08f07a6fd228a9e2",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/lighting/light_grid.gd",
-      "sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3"
+      "sha256": "4cdda878b10b104b3f9d3e857c3b441bdcb6416b612bf88275d952ca92759cf3",
+      "git_blob_sha256": "0d0c652e61431f23d5d048773d8e9c1c38ae0d269ab3f5b7fffd8ffbaabea3f3",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/systems/audio_manager.gd",
-      "sha256": "64b42aa56b4c435de697b9702c70355b1e138663aa431df7d766e7799402f518"
+      "sha256": "64b42aa56b4c435de697b9702c70355b1e138663aa431df7d766e7799402f518",
+      "git_blob_sha256": "875557dd1dfdc4560012b63545fad68d80c6874474b09760b9a0ff17e51090b6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/systems/music_manager.gd",
-      "sha256": "f517ba1de0d6984425be2bf11467871ed1b1a0bc9a38d3e8a20a9ce986b0c72e"
+      "sha256": "f517ba1de0d6984425be2bf11467871ed1b1a0bc9a38d3e8a20a9ce986b0c72e",
+      "git_blob_sha256": "7d84aea803547f6337a093242aa37281f83ef0c69fa44a70a86199c88b8e7ba1",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/systems/uisfx.gd",
-      "sha256": "5630122471454a7cad315c60fa1b1d37295820b7d0147d26220dd305ba5c591d"
+      "sha256": "5630122471454a7cad315c60fa1b1d37295820b7d0147d26220dd305ba5c591d",
+      "git_blob_sha256": "dcd8ac0f3a1d5a24fd2966e4e2aba3cb25b428d5769037b77b346c392528c64e",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/_audio_lifecycle_check.gd",
-      "sha256": "e8263685bef94189cf694b53615dfcc707d4e2c30ecf316a80ee4d37e1b261ee"
+      "sha256": "e8263685bef94189cf694b53615dfcc707d4e2c30ecf316a80ee4d37e1b261ee",
+      "git_blob_sha256": "bbfc10d492c6f8fad39f94e54f92eff64f9faed2bd2eb1bcbb921a56f32abf56",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/_closeout_check_runner.gd",
-      "sha256": "5a28a9ff2526faae64edd7dbea42f8f034420726b9442f0a7a9fc6bc08fdd34f"
+      "sha256": "5a28a9ff2526faae64edd7dbea42f8f034420726b9442f0a7a9fc6bc08fdd34f",
+      "git_blob_sha256": "ae3e1a74c6c4f338b7f3031fc2817127ef6fe7e263064184a1761f30e954d9cf",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/_light_check.gd",
-      "sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71"
+      "sha256": "03c4a52ad8dbe17cdf59ea510784274081fd4c6ba210e12ed78182d01ed8fb71",
+      "git_blob_sha256": "90e11a4872d9911291bafd120d2c2d5f43251511d57a67abb0def7f09f6f6226",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/_theme_unify_probe.gd",
-      "sha256": "549bff61e82594b2a88201c2b087d13382b2890beab318349765171c5bf9517d"
+      "sha256": "549bff61e82594b2a88201c2b087d13382b2890beab318349765171c5bf9517d",
+      "git_blob_sha256": "09f67978b812b1c49bb3c39fde9e9db80aa4bfa04fcf399008a34b5f3fa799fc",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/rc16/font_canon_checks.gd",
-      "sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b"
+      "sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b",
+      "git_blob_sha256": "0a154f2f682296bc37dd14c42f6ba6d7845b5f9c8c7ee97c9fbd0e0a73b9416b",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/rc16/hud_checks.gd",
-      "sha256": "b173f148bf555dd3360f645b328e8e6e244f1342cc0198977f3efcdb96cd4996"
+      "sha256": "b173f148bf555dd3360f645b328e8e6e244f1342cc0198977f3efcdb96cd4996",
+      "git_blob_sha256": "e0bcd3fa1925d603502bf4364ee24904446748177bb3e279d3f162f82a6c9082",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/rc16/s27_checks.gd",
-      "sha256": "846873eb974131db706875e6594e77dc97830c7135bbc91f72f06d4d4655881f"
+      "sha256": "846873eb974131db706875e6594e77dc97830c7135bbc91f72f06d4d4655881f",
+      "git_blob_sha256": "79e6a3550008047f6c92c413566087df27b7faaaef8c078ff0fbe1e31c419d73",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/tools/rc16/s29_look_checks.gd",
-      "sha256": "6dd8a36d249ce1f9439a0d35970929c491608bad6369b4c89bbb117493a9e9c0"
+      "sha256": "6dd8a36d249ce1f9439a0d35970929c491608bad6369b4c89bbb117493a9e9c0",
+      "git_blob_sha256": "69b19652be493081a1a1bd045f249d5fefcb8757e7aefea4be8676aee81b7497",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/codex_ui.gd",
-      "sha256": "6b2bc882b7b7c4479b7321e475e99887277118fd120d574d6a7766d364ed4a91"
+      "sha256": "6b2bc882b7b7c4479b7321e475e99887277118fd120d574d6a7766d364ed4a91",
+      "git_blob_sha256": "d4f10ee565934f29b6943131d9b1daafbcdde62744d5b0108287e6fac3cd54ca",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/hud_3d.gd",
-      "sha256": "c29adb059b9dc45087f3549fd3f9e1778b91a89b5a477fa0251a92f00a29c5b0"
+      "sha256": "c29adb059b9dc45087f3549fd3f9e1778b91a89b5a477fa0251a92f00a29c5b0",
+      "git_blob_sha256": "4539c6525c25aa4c248e5c979bd54d88d9b3183e713ad5bf346b95a5496ae7e6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/hud_touch_layout.gd",
-      "sha256": "e399acd170f415f32c2e8a806a01ae1f5dc5d5f8e8807a578e1d9f72c3a387e6"
+      "sha256": "e399acd170f415f32c2e8a806a01ae1f5dc5d5f8e8807a578e1d9f72c3a387e6",
+      "git_blob_sha256": "e399acd170f415f32c2e8a806a01ae1f5dc5d5f8e8807a578e1d9f72c3a387e6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/inv_kit.gd",
-      "sha256": "f63a53b28f671af4931aaef3265a04ff028cf0136a79e4bfea15fde8781b9839"
+      "sha256": "f63a53b28f671af4931aaef3265a04ff028cf0136a79e4bfea15fde8781b9839",
+      "git_blob_sha256": "6b06c2e0bdce5721660bcd2dcb8b2170f50dc493ba2223cc70d2819839bdc84f",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/journal_ui.gd",
-      "sha256": "51789ebf6ea551145383547e7d6f43bc7d847afec5ec711c0963ce5f49e25b0b"
+      "sha256": "51789ebf6ea551145383547e7d6f43bc7d847afec5ec711c0963ce5f49e25b0b",
+      "git_blob_sha256": "49d6b0fc396faf51df7f2578e891b7b5659e59e92ad4bd8eefaa26e5efc8efea",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/main_menu.gd",
-      "sha256": "13fd2799b310c3786584233992ff7f585e70eb8c1f6f7bbe54aaf321a6ea4ffb"
+      "sha256": "13fd2799b310c3786584233992ff7f585e70eb8c1f6f7bbe54aaf321a6ea4ffb",
+      "git_blob_sha256": "1b9ae2d24ebaa0e72b22f30f4ead2b35eca07921e390970b439c7131a2f6fe80",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/screen_chrome.gd",
-      "sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd"
+      "sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
+      "git_blob_sha256": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "EXACT_BYTES: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/screens.gd",
-      "sha256": "3fc524da6797f349e0d8a603fdb58346ba6cb63954c94620164b7641c6e5a1bc"
+      "sha256": "3fc524da6797f349e0d8a603fdb58346ba6cb63954c94620164b7641c6e5a1bc",
+      "git_blob_sha256": "3bbdcbdd16f382858aa54cf6c34c762e5a4e2cda2007cf45e2548745b6fb03e1",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     {
       "path": "scripts/ui/theme_provider.gd",
-      "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6"
+      "sha256": "e69a541d5d60eac254cf9132cd5207ad33bb06834ae79cc1c369aec87b1139b6",
+      "git_blob_sha256": "f4fad92ef8de13bc83558f87f463f6defda20659e1a781631025804dbb8286a8",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     }
   ],
   "autoplay_limit": "Seed1 WIN with2deaths and14 nudge rescues; not clean navigation or human traversal acceptance",
   "teardown_limit": "Known headless resource-retention warnings remain recorded; not claimed leak-free",
-  "import_note": "Clean QA import initially failed without generated mappings; verified byte-identical import mappings plus theme-safe import passed before these gates"
+  "import_note": "Clean QA import initially failed without generated mappings; verified byte-identical import mappings plus theme-safe import passed before these gates",
+  "committed_runtime_source": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+  "source_sha_policy": "Existing capture SHA fields identify raw worktree bytes used by QA. git_blob_sha256 identifies committed source bytes at git_blob_commit. Only an exact match or CRLF-to-LF normalization is permitted; binaries match exactly. No captured byte stream or original SHA has been replaced."
 }

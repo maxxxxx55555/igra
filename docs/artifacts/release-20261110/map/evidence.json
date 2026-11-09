@@ -5,39 +5,68 @@
   "source_qa_hashes": {
     "scripts/systems/cartography.gd": {
       "source_sha256": "f37c1dfe4e735a74592f96671dbb137ce824ef07352e01eeb020975ff2fe0405",
-      "qa_sha256": "f37c1dfe4e735a74592f96671dbb137ce824ef07352e01eeb020975ff2fe0405"
+      "qa_sha256": "f37c1dfe4e735a74592f96671dbb137ce824ef07352e01eeb020975ff2fe0405",
+      "git_blob_sha256": "18582f56de991ae7e1b6d2fd92aecd193eeed8c023ab36b6b1369d6870542ea1",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/ui/district_map.gd": {
       "source_sha256": "17e2d5d510269dec6e00d1a1db18ee6c040d48a74f3410bebd0524b3dcb03149",
-      "qa_sha256": "17e2d5d510269dec6e00d1a1db18ee6c040d48a74f3410bebd0524b3dcb03149"
+      "qa_sha256": "17e2d5d510269dec6e00d1a1db18ee6c040d48a74f3410bebd0524b3dcb03149",
+      "git_blob_sha256": "d8c932546874d4b9f77806a669861757e53264911cc674ead63a350729f9bb3e",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/ui/city_map.gd": {
       "source_sha256": "e8af6f10067759791a9477bec95ba38455b60c8f0fe99c7fadd2d260faab8324",
-      "qa_sha256": "e8af6f10067759791a9477bec95ba38455b60c8f0fe99c7fadd2d260faab8324"
+      "qa_sha256": "e8af6f10067759791a9477bec95ba38455b60c8f0fe99c7fadd2d260faab8324",
+      "git_blob_sha256": "b691c7f4fabfaca78a335681900df58250d42deeeadf5a2b4e2d83c9ef81fb59",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/ui/ui_manager.gd": {
       "source_sha256": "177a505df0a24b5ba936f1fe0d26a44bec29a453c765a3913ab0cb791c070f5e",
-      "qa_sha256": "177a505df0a24b5ba936f1fe0d26a44bec29a453c765a3913ab0cb791c070f5e"
+      "qa_sha256": "177a505df0a24b5ba936f1fe0d26a44bec29a453c765a3913ab0cb791c070f5e",
+      "git_blob_sha256": "984a90dccb5ccf24b34e95f1d81f87e15df4c41682d8d0fdc38d1e7c6797f493",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/ui/hud_3d.gd": {
       "source_sha256": "0d29d723045dae86e26f8f535f9a0dda1005d767927f324681530cdaf70dac90",
-      "qa_sha256": "0d29d723045dae86e26f8f535f9a0dda1005d767927f324681530cdaf70dac90"
+      "qa_sha256": "0d29d723045dae86e26f8f535f9a0dda1005d767927f324681530cdaf70dac90",
+      "git_blob_role": "Current source reference only; not the identity of the earlier captured HUD.",
+      "historical_capture_note": "The map capture preceded the later HUD icon/localization repair. The original raw capture SHA is preserved; current final Git bytes are different source, not merely newline normalization. The HUD was blocked under the modal. Current map/cartography behavior is separately covered by final closeout/perception checks.",
+      "git_blob_sha256": "4539c6525c25aa4c248e5c979bd54d88d9b3183e713ad5bf346b95a5496ae7e6",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "HISTORICAL_CAPTURE_DIFFERS: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/core/input_service.gd": {
       "source_sha256": "3526c54d73ff4498eadf00f959e9054dec427791860d29b56b25bcbb44a622ad",
-      "qa_sha256": "3526c54d73ff4498eadf00f959e9054dec427791860d29b56b25bcbb44a622ad"
+      "qa_sha256": "3526c54d73ff4498eadf00f959e9054dec427791860d29b56b25bcbb44a622ad",
+      "git_blob_sha256": "5aa4c44efeba8e96ad27d520ee368b03515eb5c10ce752dfa7c89c168e6c925f",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/core/qa_launch_guard.gd": {
       "source_sha256": "e9afeadd7b58e4da25700c8ec5ffaa96f57ddb0e5a6a42fc234c5c525b686fa3",
-      "qa_sha256": "e9afeadd7b58e4da25700c8ec5ffaa96f57ddb0e5a6a42fc234c5c525b686fa3"
+      "qa_sha256": "e9afeadd7b58e4da25700c8ec5ffaa96f57ddb0e5a6a42fc234c5c525b686fa3",
+      "git_blob_sha256": "7724ee8169abc968d0f3bfbba87fd809e0627d18c41423a4fa2bc66b10b28d3f",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/world/streetlight_3d.gd": {
       "source_sha256": "e226e400121454967b5c375cdcd569a53363cd8ff41e264815fe88037d102256",
-      "qa_sha256": "e226e400121454967b5c375cdcd569a53363cd8ff41e264815fe88037d102256"
+      "qa_sha256": "e226e400121454967b5c375cdcd569a53363cd8ff41e264815fe88037d102256",
+      "git_blob_sha256": "03726d216cd27d5d7dfe73042ef6f5009ae160a33b5e3777ffb2e5f86f7a1fe9",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     },
     "scripts/i18n/localization_manager.gd": {
       "source_sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004",
-      "qa_sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004"
+      "qa_sha256": "9e7a960bc212bb7e5a714737a775bf9e7f6c4d943bd552ac18ea4d0e390fc004",
+      "git_blob_sha256": "0310d0bab1bfa949112b1bad5917076afb20ce504352f66e08f07a6fd228a9e2",
+      "git_blob_commit": "00bfdd1e1607d423f4fb2b88bac5beb22bb35028",
+      "newline_policy": "CRLF_TO_LF_ONLY: captured raw SHA retained; committed Git SHA recorded separately."
     }
   },
   "images_sha256": {
@@ -294,5 +323,6 @@
     "English native capture only; Russian source dictionaries and route inspected, no native Russian map frame in this set.",
     "No physical multitouch or movement/combat fairness test.",
     "Only suburbs CLEAR High shown; coarse cell silhouette is not photographic world completion."
-  ]
+  ],
+  "source_sha_policy": "Existing capture SHA fields identify raw worktree bytes used by QA. git_blob_sha256 identifies committed source bytes at git_blob_commit. Only an exact match or CRLF-to-LF normalization is permitted; binaries match exactly. No captured byte stream or original SHA has been replaced. Exception: the explicitly labelled historical HUD row is not asserted equivalent to final source."
 }
