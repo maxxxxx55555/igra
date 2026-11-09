@@ -53,3 +53,5 @@ scripts/systems/audio_ducker.gd	d5e5c98015dd0db46068eb84103b163fa9b5506b	e560e1c
 export_presets.cfg	34533c51dadcf52dd189241dd6f10bd0965d6f4e	7fdf0b1077d8c078dc69bacf52df4f23625c2d60	*no_frame_shows_the_android_version_code*
 export_presets.cfg	7fdf0b1077d8c078dc69bacf52df4f23625c2d60	edc75c3e0d50cf4f1190c5766cfde18a2f3a06cc	*no_frame_shows_the_android_version_code*
 export_presets.cfg	edc75c3e0d50cf4f1190c5766cfde18a2f3a06cc	d65ba37cc204be3d11b3e88c97ff4acb5646a0a6	*no_frame_shows_the_android_version_code*
+# 1.0.1 font-licence audit: assets/fonts/THIRD_PARTY_FONTS.md is a licence record added to assets/fonts/; not loaded by any runtime script, so no kept frame shows it.
+assets/fonts/THIRD_PARTY_FONTS.md		2c0c71047fc89566e32a2156b61c1f257b7b6e9a	*no_kept_frame_shows_a_font_licence_file*
