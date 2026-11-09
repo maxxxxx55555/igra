@@ -65,7 +65,7 @@ def build():
     lines += ["", "The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.", "",
               "## For a reviewer", "",
               "1. A review copy is the signed bundle of `docs/RELEASE_ARTIFACTS.md`, installed from a closed test track.",
-              "2. Contact: **[contact email / support URL]** (the owner fills it; it is the same address as in `docs/PRIVACY_POLICY_FINAL.md`).",
+              "2. Contact: **maxzimkasky@gmail.com** (the published address; the same one as in `docs/PRIVACY_POLICY_FINAL.md` and on the live policy page https://maxxxxx55555.github.io/igra/).",
               "3. Trailer: the script is `store/TRAILER_SCRIPT.md`; no video exists yet.", ""]
     return "\n".join(lines)
 

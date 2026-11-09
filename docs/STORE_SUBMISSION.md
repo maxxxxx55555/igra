@@ -71,19 +71,21 @@ spot-check); limits: title 30, short description 80, full description 4,000 char
 
 ## 3. Privacy policy: the text to host
 
-Host it at a stable HTTPS URL (any static page), fill the two placeholders (contact and date), and paste the URL into the Console's
-privacy-policy field and the store listing. It states only what this build does; each sentence was checked against the code or the manifest
+Host it at a stable HTTPS URL (any static page) and paste the URL into the Console's
+privacy-policy field and the store listing. **Done (2026-11-09):** the contact and the date
+below are filled in (`maxzimkasky@gmail.com`, 2026-10-28) and the page is live at
+`https://maxxxxx55555.github.io/igra/`. It states only what this build does; each sentence was checked against the code or the manifest
 (§8). Variant A of `docs/RELEASE_RUNBOOK.md` §6 (no ads) is built in, so use this text and not the template's advertising section.
 
 ### 3.1 English
 
 > # Privacy Policy: Last Streetlight
 >
-> Effective date: **[date of publication]**. Last updated: **[date of publication]**.
+> Effective date: **2026-10-28**. Last updated: **2026-10-28**.
 >
 > ## 1. Who we are
 > "Last Streetlight" (the "App") is a single-player survival-horror game for Android. This policy explains what data the App handles.
-> The developer can be reached at **[contact email / support URL]**.
+> The developer can be reached at **maxzimkasky@gmail.com**.
 >
 > ## 2. Summary
 > The App does not collect, transmit, sell or share personal data. It has no account system, no analytics, no crash-reporting service,
@@ -119,17 +121,17 @@ privacy-policy field and the store listing. It states only what this build does;
 > released, and the "Last updated" date will change.
 >
 > ## 9. Contact
-> **[contact email / support URL]**
+> **maxzimkasky@gmail.com**
 
 ### 3.2 Русский
 
 > # Политика конфиденциальности: «Последний фонарь»
 >
-> Дата вступления в силу: **[дата публикации]**. Дата последнего обновления: **[дата публикации]**.
+> Дата вступления в силу: **2026-10-28**. Дата последнего обновления: **2026-10-28**.
 >
 > ## 1. Кто мы
 > «Последний фонарь» (далее «Приложение») — одиночная игра в жанре survival-horror для Android. Эта политика объясняет, какие данные
-> обрабатывает Приложение. Связаться с разработчиком можно так: **[контактный email / страница поддержки]**.
+> обрабатывает Приложение. Связаться с разработчиком можно так: **maxzimkasky@gmail.com**.
 >
 > ## 2. Коротко
 > Приложение не собирает, не передаёт, не продаёт и не раскрывает персональные данные. В нём нет системы аккаунтов, аналитики, сервиса
@@ -165,7 +167,7 @@ privacy-policy field and the store listing. It states only what this build does;
 > «последнего обновления» изменится.
 >
 > ## 9. Контакты
-> **[контактный email / страница поддержки]**
+> **maxzimkasky@gmail.com**
 
 `store/privacy-policy-template.md` carries a pointer to this section; its older text said the same in fewer words and is no longer the one
 to host.

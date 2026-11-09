@@ -215,7 +215,11 @@ story-driven, survival game, offline horror game, flashlight game.
   be updated first — see `docs/store/HUMAN_CHECKLIST.md`.
 - The Android build declares `INTERNET` (reserved for the optional ad plugin)
   and `VIBRATE` (touch haptics) only — see `export_presets.cfg`.
-- Privacy-policy URL placeholder — see `store/privacy-policy-template.md`.
+- Privacy-policy URL: **https://maxxxxx55555.github.io/igra/** — live, serves the EN and RU
+  policy texts of `docs/PRIVACY_POLICY_FINAL.md` (verified HTTP 200 on 2026-11-09); the contact
+  address it publishes is maxzimkasky@gmail.com. Paste this URL into the Play Console field
+  "Privacy policy" and keep the Data-Safety answers exactly as the page states them
+  ("no data collected, no users").
 
 ---
 

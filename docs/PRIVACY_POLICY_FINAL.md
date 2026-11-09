@@ -6,11 +6,12 @@ This file replaces `store/privacy-policy-template.md` and the draft `docs/PRIVAC
 
 ## What the owner does
 
-1. Replace the two kinds of placeholder in the English and the Russian text: `[date of publication]` (and its Russian twin) and `[contact email / support URL]` (and its Russian twin).
-   They are the only text in square brackets. Do not publish while one remains.
-2. Host the text at a stable public HTTPS address that is a web page, not a PDF. Recipe on GitHub Pages: the repository `maxxxxx55555/igra` has a branch `gh-pages` whose only file is `index.html`
-   (the page of 2026-09-13, written from the older template). Replace its text with the two policy texts below, commit, and in the repository's Settings, Pages, choose the branch
-   `gh-pages` and the folder `/ (root)`. The address is then `https://maxxxxx55555.github.io/igra/`. UNVERIFIABLE-HERE: whether Pages is switched on and what the page shows today; open the address in a private window.
+1. **DONE (2026-11-09).** The two kinds of placeholder that used to stand in this file are filled with the
+   values of the published page: the date **2026-10-28** (effective and last updated) and the contact
+   **maxzimkasky@gmail.com**. No `[square bracket]` placeholder remains in the English or the Russian text.
+2. **DONE and verified 2026-11-09.** The text is live at `https://maxxxxx55555.github.io/igra/`, served by the
+   `gh-pages` branch of `maxxxxx55555/igra` (its only file is `index.html`). The address answers HTTP 200 and
+   serves exactly these two texts: effective date 2026-10-28, the contact address 4 times, English and Russian.
 3. Paste the address into the Play Console (Policy, App content, Privacy policy) and into the store listing (`store/listing.md`, Data-safety notes). The answers of the Data safety form are in `store/IARC_ANSWERS.md`.
 4. If a later build switches on the advertising provider, publish an updated policy before that build, as section 5 of the text promises (the checklist is `docs/store/HUMAN_CHECKLIST.md`).
 
@@ -18,10 +19,10 @@ This file replaces `store/privacy-policy-template.md` and the draft `docs/PRIVAC
 
 > # Privacy Policy: Last Streetlight
 >
-> Effective date: **[date of publication]**. Last updated: **[date of publication]**.
+> Effective date: **2026-10-28**. Last updated: **2026-10-28**.
 >
 > ## 1. Who we are
-> "Last Streetlight" (the "App") is a single-player survival-horror game for Android. This policy explains what data the App handles. The developer can be reached at **[contact email / support URL]**.
+> "Last Streetlight" (the "App") is a single-player survival-horror game for Android. This policy explains what data the App handles. The developer can be reached at **maxzimkasky@gmail.com**.
 >
 > ## 2. Summary
 > The App does not collect, transmit, sell or share personal data. It has no account system, no analytics, no crash-reporting service, no advertising in this version and no in-app purchases.
@@ -55,16 +56,16 @@ This file replaces `store/privacy-policy-template.md` and the draft `docs/PRIVAC
 > If a later version adds advertising, online features or any data collection, this policy will be updated before that version is released, and the "Last updated" date will change.
 >
 > ## 9. Contact
-> **[contact email / support URL]**
+> **maxzimkasky@gmail.com**
 
 ## Русский текст
 
 > # Политика конфиденциальности: «Last Streetlight»
 >
-> Дата вступления в силу: **[дата публикации]**. Дата последнего обновления: **[дата публикации]**.
+> Дата вступления в силу: **2026-10-28**. Дата последнего обновления: **2026-10-28**.
 >
 > ## 1. Кто мы
-> «Last Streetlight» (далее «Приложение») — одиночная игра в жанре survival-horror для Android. Эта политика объясняет, какие данные обрабатывает Приложение. Связаться с разработчиком можно так: **[контактный email / страница поддержки]**.
+> «Last Streetlight» (далее «Приложение») — одиночная игра в жанре survival-horror для Android. Эта политика объясняет, какие данные обрабатывает Приложение. Связаться с разработчиком можно так: **maxzimkasky@gmail.com**.
 >
 > ## 2. Коротко
 > Приложение не собирает, не передаёт, не продаёт и не раскрывает персональные данные. В нём нет системы аккаунтов, аналитики, сервиса отчётов о сбоях, рекламы в этой версии и внутриигровых покупок.
@@ -98,7 +99,7 @@ This file replaces `store/privacy-policy-template.md` and the draft `docs/PRIVAC
 > Если будущая версия добавит рекламу, онлайн-функции или сбор каких-либо данных, эта политика будет обновлена до выхода такой версии, а дата «последнего обновления» изменится.
 >
 > ## 9. Контакты
-> **[контактный email / страница поддержки]**
+> **maxzimkasky@gmail.com**
 
 ## Where the code holds each statement
 

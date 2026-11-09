@@ -74,11 +74,12 @@ Scanned every paste-ready field line of the generated block +
 `store/changelog.md` (376 lines: Title/Tagline/Short/Full/bullets/tags):
 **0** occurrences of `[…]`, `<…>`, TODO, FIXME, or "placeholder".
 Deliberate fill-in fields live ONLY in non-paste-ready template regions
-and are by design: `store/privacy-policy-template.md`
-(`[contact email / support URL]` ×2 EN + ×2 RU — owner fills email/URL;
-dates and app name pre-filled), `store/review-responses.md`
+and are by design: `store/review-responses.md`
 (`<support@…>`, `<name>` etc.), `store/press-kit.md` contact template
 (`<APK/AAB link + expiry>` etc.). None of these is console copy.
+The privacy policy's own slots are **closed** (2026-11-09): the contact is
+`maxzimkasky@gmail.com` (×4, EN and RU) and the date is 2026-10-28 — the same
+values the live page `https://maxxxxx55555.github.io/igra/` serves.
 
 ## 6. Facts shipped in copy — all traced
 

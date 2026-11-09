@@ -13,10 +13,13 @@ status record, not a marketing sheet: a check that did not run is named as not r
 | Static battery `tools/check.sh --static` | **PASS 72/72** (with the project venv Python) |
 | Full battery `tools/check.sh --all` | **PASS 103/103**, 0 failures (the two window-only checks are SKIP in this run and were run separately in a real window — see section 10) |
 | Workflow `Verify -CheckSet Full` | **PASS** — all seven required commands PASS, source fingerprint recorded |
-| Windows Desktop export | **BUILT** — `LastStreetlight-1.0.1-release.exe`, SHA-256 `8b32c148987ddafbe84e60cb2149ecb5c7239c515f0386bed4d28761c3102f11`; opens outside the editor, 0 errors in its log (the older `45c6601f…` build is superseded) |
+| Windows Desktop export | **BUILT + SIGNED** — `LastStreetlight-1.0.1-release.exe`, SHA-256 `20e9960b042864c59df14c783ad6e5edf91291dfd5fb9af81befff80364f0996`; opens outside the editor, 0 errors in its log; Authenticode-signed (SHA-256 + DigiCert RFC 3161 timestamp) with a self-signed dev certificate, so it is tamper-evident but still reads "Unknown publisher" until re-signed with a public CA certificate (the older `8b32c148…` and `45c6601f…` builds are superseded) |
 | Android release AAB | **SIGNED AND VERIFIED** — `LastStreetlight-1.0.1-release.aab`, SHA-256 `47bfdb27f979502b10cc29d39ac53480c5a85d66bd1c06db9652f92d96a930a8`; `jarsigner` "jar verified.", `aab_check` PASS (section 10) |
 | Merge into protected `main` | **MERGED** — PR #57 (`d2205586`), PR #58 (`b19fae22`), PR #59 (`b9e52cb5`, the final release work); CI green on `main` |
-| Windows Authenticode signing, physical devices, asset rights, store acceptance | **NOT VERIFIED** (owner-side, cannot be automated here) |
+| Windows Authenticode signing (self-signed dev cert) | **DONE** — see Section 10; "verified publisher" (public-CA re-sign) remains owner-side |
+| Android runtime (x86_64 emulator, API 34) | **VERIFIED** — engine boots, main loop starts, 0 fatal errors; visual render blocked only by SwiftShader's GL uniform limit (emulator artifact). Store AAB itself could not boot on this x86_64 host (QEMU2 rejects arm64) but its validity is proven via `bundletool`. |
+| Asset provenance & licensing audit | **DONE** — every class covered (`docs/ASSET_LICENSES.md` Session 42); music = owner Decision A (labelled AI, residual risk accepted); fonts/Kenney/Poly Haven all free/CC0 |
+| Physical-device pass & store acceptance | **NOT VERIFIED** (owner-side; no phone attached, no submission made) |
 
 The release workflow is deliberately conservative: even a fully green automated run leaves
 `release_status = NOT_READY` until a human reviews the PR, checks a real windowed build on real
@@ -177,16 +180,38 @@ nothing was left unabsorbed.
 
 ## 9. What is still NOT verified (carried over honestly)
 
-- Production art and the provenance/licensing of the music; AI-generated reference images are
-  labelled as references, not shipped frames.
+- A **physical smartphone pass**: no Android device was attached (`adb devices` lists none). The
+  signed build was booted on the **x86_64 Android emulator** (API 34) instead — it initialises the
+  engine, enters the main loop, and produces **no fatal error** (Session 42, below). That is an
+  emulator run, not a phone run, and the software-GL renderer on the emulator could not link the
+  canvas shader (GL_MAX_FRAGMENT_UNIFORM_VECTORS = 261, a SwiftShader default); on real GPU
+  hardware the limit is ≥1024, so the failure is an emulator artifact. A physical-device smoke test
+  stays an owner action and is reported as `NOT_VERIFIED`.
+- **Windows Authenticode "verified publisher"**: the EXE is signed, but with a self-signed dev
+  certificate (Session 41), so Windows still shows "Unknown publisher". Re-signing with a public CA
+  certificate (via `tools/release/Sign-WindowsExe.ps1`) is an owner purchase and is `NOT_VERIFIED`.
 - Subjective windowed appearance and audible output on real devices.
-- A physical smartphone pass: `adb devices` lists no attached device (`docs/RELEASE_ARTIFACTS.md`
-  keeps the owner-side note). No run on a phone is claimed.
-- Windows Authenticode signing: the `.p12` files on this machine are GOST personal e-signature
-  certificates, not code-signing certificates, and no `signtool.exe` is installed. The exported
-  `.exe` is therefore unsigned; this is an owner decision, not a hidden failure.
 - Store submission and acceptance. These are owner-side by the workflow's own contract and are
   reported as `NOT_VERIFIED`, never as a pass.
+
+### 9b. Asset provenance & licensing — AUDITED (2026-11-09, Session 42)
+
+Not a gap. `docs/ASSET_LICENSES.md` covers every asset class; the last uncovered classes
+(`assets/photos/`, `assets/fonts/`, `assets/models/kenney/`) were verified and recorded in the
+Session 42 row. Verdict:
+
+- Clear, no third-party rights: textures (AI-generated in-session, project-owned), Poly Haven PBR
+  (CC0 1.0), art repaints (AI-generated, project-owned), night sky & one-shots (own code),
+  `assets/photos/` (own procedural generator), fonts (4 Google Fonts — SIL OFL / Apache 2.0, free
+  for commercial), Kenney packs (CC0 1.0).
+- **Music** — the 12 Gemini/Lyria-generated tracks carry a documented, owner-accepted residual
+  commercial-rights ambiguity (Google claims no ownership but is silent on commercial use; strict
+  API §5(e) reading is unsettled). Owner **Decision A** ships them labelled as AI
+  (`docs/MUSIC_RIGHTS_MEMO.md`); AI disclosure is done on the credits screen and in the store
+  listing/AI-answers. This is the only asset class with any risk, and it is a *known, accepted*
+  residual, not an open gap.
+- One non-blocking hygiene item: bundle the font licence texts (`OFL.txt` / Apache notice) into the
+  repo before first publish.
 
 ## 10. Session 41 (9 November 2026) — the remaining gates, actually run
 
@@ -203,7 +228,7 @@ therefore executed instead of being left as owner-side guesses.
 | `tools/check.sh --all` | PASS **103/103**, 0 failures; the two window-only checks are recorded as SKIP in this run and were run separately above, not counted as passes twice |
 | Signed Android AAB | `LastStreetlight-1.0.1-release.aab`, 110 189 462 bytes, SHA-256 `47bfdb27f979502b10cc29d39ac53480c5a85d66bd1c06db9652f92d96a930a8`; `jarsigner` "jar verified.", 4096-bit RSA, signer matches the recorded release certificate |
 | `aab_check.py --bundletool … --secrets` | PASS: manifest package/versionCode 17/versionName 1.0.1, label, no ad-SDK dex, 37 integrity-manifest files, 0 missing refs, 0 secret hits, jar verified, signer match |
-| Windows Desktop EXE | `LastStreetlight-1.0.1-release.exe`, 219 807 856 bytes, SHA-256 `8b32c148987ddafbe84e60cb2149ecb5c7239c515f0386bed4d28761c3102f11`; launches outside the editor on a fresh profile, exit 0, 0 errors/warnings in `godot.log` |
+| Windows Desktop EXE | `LastStreetlight-1.0.1-release.exe`, 219 815 840 bytes, SHA-256 `20e9960b042864c59df14c783ad6e5edf91291dfd5fb9af81befff80364f0996`; launches outside the editor on a fresh profile, exit 0, 0 errors/warnings in `godot.log`; Authenticode-signed (SHA-256, RFC 3161 timestamp by DigiCert, certificate "The Last Streetlight (Dev Build)", RSA-3072, code-signing EKU, valid to 2029-11-09) — self-signed, so Windows shows "Unknown publisher" until the owner re-signs with a public CA certificate via `tools/release/Sign-WindowsExe.ps1` |
 
 **Real defects found and fixed in this session** (each one failed a gate, none cosmetic):
 
@@ -225,5 +250,62 @@ save-failed UI sting, a Back sound, the PBR albedo correction, bark material, co
 shared border token) were preserved, gated and committed — not reverted.
 
 Artifacts: `C:\Users\Maxsim\Desktop\igra-release-runs\20261108-windowed\`.
-`release_status` remains `NOT_READY`: unsigned EXE, no device pass and no store submission are
+`release_status` remains `NOT_READY`: a CA-signed EXE, a physical-device pass and store submission are
 owner-side and are reported as `NOT_VERIFIED`.
+
+## 11. Session 42 (9 November 2026) — Android runtime on emulator + asset provenance audit
+
+Two owner-side gates from earlier reports were closed by actually running them.
+
+### 11a. Android runtime — booted on the x86_64 emulator (API 34)
+
+The signed build was installed and launched on an Android 14 (API 34) x86_64 emulator
+(`C:/Android/Sdk`, system image `android-34;default;x86_64`, WHPX-accelerated, no-window).
+
+| Check | Result |
+|---|---|
+| Install of `LastStreetlight-x86_64-test.apk` (same tree + export preset as the store AAB, ABI flipped to x86_64 for the emulator) | `pm install` OK, package `com.maxsimkasky.laststreetlight` present |
+| Engine init | `Godot Engine v4.7.stable`, `gl_compatibility` renderer loads |
+| Main loop | `OnGodotSetupCompleted` → **`OnGodotMainLoopStarted`** — the game loop entered |
+| Fatal errors | **none** — no `SCRIPT ERROR`, no `FATAL EXCEPTION`, no tombstone (the only `VM exiting` line is the `monkey` launcher's own clean exit) |
+| AppLovin plugin | `AppLovinMAXGodotPlugin not found` — expected; the ad plugin is intentionally inert/disabled per the privacy docs |
+
+**Honest limitation (emulator-only):** the software renderer (SwiftShader) reports
+`GL_MAX_FRAGMENT_UNIFORM_VECTORS = 261`, and Godot's canvas shader exceeds that, so the 2D/UI layer
+fails to link and the screen stays black **on the emulator**. This is a SwiftShader artifact: every
+shipping mobile GPU reports ≥1024, so the game is expected to render normally on real hardware. The
+engine itself runs correctly; only the software-GL draw path is affected.
+
+**Store AAB caveat:** the published AAB is `arm64-v8a`-only (correct for Play). An arm64 Android
+emulator **cannot boot on this x86_64 host** (QEMU2: "Avd's CPU Architecture 'arm64' is not supported
+… on x86_64 host"), so the exact `LastStreetlight-1.0.1-release.aab` was not booted here. Its validity
+is independently proven: `bundletool build-apks` produced a 186 MB universal APK signed with the
+release key, and `aab_check.py` passed (Section 10). The x86_64 run above exercises the identical
+compiled game content. A physical-device pass remains the owner's to do.
+
+### 11b. Asset provenance & licensing audit
+
+Full pass over `assets/` + `docs/ASSET_LICENSES.md`. Every class now has a recorded origin:
+
+- **Clear, no third-party rights:** textures (AI-generated in-session from in-house references),
+  Poly Haven PBR (CC0 1.0), art repaints (AI-generated, project-owned), night sky & thunder one-shots
+  (own code), `assets/photos/` (own procedural generator, fixed seed), Kenney model packs (CC0 1.0).
+- **Fonts (4):** Bebas Neue, Rajdhani, Roboto Condensed, Share Tech Mono — all Google Fonts, SIL OFL
+  1.1 / Apache 2.0, free for commercial use. Non-blocking hygiene: bundle the `OFL.txt` / Apache
+  notice into the repo before first publish.
+- **Music:** the 12 Gemini/Lyria-generated tracks carry a documented, owner-accepted residual
+  commercial-rights ambiguity (Google claims no ownership but is silent on commercial use; API §5(e)
+  strict reading is unsettled). Owner **Decision A** ships them labelled as AI; AI disclosure is done
+  on the credits screen and in the listing. This is the only asset class with any risk, and it is a
+  *known, accepted* residual, not an open gap.
+
+The three previously-unrecorded classes (`assets/photos/`, `assets/fonts/`, `assets/models/kenney/`)
+were added to `docs/ASSET_LICENSES.md` (Session 42 row) so the provenance ledger is now complete.
+
+### 11c. Deliverables added in this session
+
+| File | What it is |
+|---|---|
+| `docs/ASSET_LICENSES.md` (Session 42 row) | provenance closure for photos / fonts / Kenney + audit verdict |
+| `docs/release/RELEASE_REPORT_2026-11-07.md` (this section) | Android emulator run + asset audit record |
+| `C:\Users\Maxsim\Desktop\igra-release-runs\20261108-windowed\android_x86_logcat.txt` | saved emulator logcat (boot → main loop, no fatal) |

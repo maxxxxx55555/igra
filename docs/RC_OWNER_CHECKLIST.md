@@ -194,22 +194,19 @@ the `TLS.aab`/`TLS_release.apk` examples).
 
 ## STEP 4 — Privacy policy: contact email + hosted URL
 
-- [ ] CHK040 Pick the policy text: full draft in `docs/PRIVACY_POLICY.md` or the
-      shorter fill-in template `store/privacy-policy-template.md` (root
-      `RELEASE_CHECKLIST.md` §3 says either is fine; the Data Safety answers in STEP 5
-      match both).
-- [ ] CHK041 Replace the contact placeholder — literally the line
-      `Contact: [your email/support address]` in `docs/PRIVACY_POLICY.md`, and on the
-      gh-pages page the two spans `[REPLACE BEFORE PUBLISHING: contact email / support
-      URL]` / `[ЗАПОЛНИТЬ ПЕРЕД ПУБЛИКАЦИЕЙ: ...]` — with a real, monitored address
-      (identity action; verified still un-filled on the remote `gh-pages` branch's
-      `index.html` as of 2026-09-20).
-- [ ] CHK042 Publish at any stable URL you control. The pre-built route: GitHub repo →
-      **Settings → Pages** → Source: **Deploy from a branch** → branch **gh-pages** /
-      **(root)** → **Save** → wait ~1 minute → the page is live at
-      `https://<your-github-username>.github.io/igra/`. (Alternatives per root
-      `RELEASE_CHECKLIST.md` §3: a personal site, even a public Gist — "Play Console
-      just needs a working link, not a specific host.")
+- [x] CHK040 Policy text picked: the final text of `docs/PRIVACY_POLICY_FINAL.md` (EN + RU),
+      which is what the live page serves; `store/privacy-policy-template.md` holds the same
+      text with the same filled values (root `RELEASE_CHECKLIST.md` §3 says either is fine;
+      the Data Safety answers in STEP 5 match both).
+- [x] CHK041 Contact placeholder replaced — the published address is
+      `maxzimkasky@gmail.com`, filled into the EN and the RU text of
+      `docs/PRIVACY_POLICY_FINAL.md` and of `store/privacy-policy-template.md` (4 slots),
+      and on the `gh-pages` page. Verified 2026-11-09: the live page names it 4 times.
+- [x] CHK042 Published at a stable URL — GitHub repo →
+      **Settings → Pages** → Source: **Deploy from a branch** → branch `gh-pages` /
+      **(root)** → **Save**. **DONE**: the page is live at
+      `https://maxxxxx55555.github.io/igra/` (HTTP 200, verified 2026-11-09). Paste that
+      URL into the Play Console privacy-policy field.
 - [ ] CHK043 If AppLovin's SDK key has gone live before today, update the AppLovin
       paragraph to match what actually ships (`docs/PRIVACY_POLICY.md` "Before
       publishing" item 2). If no key is live, the text is accurate as-is.

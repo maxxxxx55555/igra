@@ -95,18 +95,23 @@ created** — cannot be changed afterward for this listing.
 ## (c) Privacy policy — gh-pages page already built and pushed this pass
 
 A ready-to-publish page was generated from `store/privacy-policy-template.md` (EN + RU, with
-a language toggle) and pushed to a new `gh-pages` branch on `origin` this pass — **2 owner
-clicks + 1 text edit** remain, since publishing your real contact and flipping a repo setting
-are both identity/account actions this session can't make for you:
+a language toggle) and pushed to the `gh-pages` branch on `origin`.
+
+**Steps 1 and 2 are DONE (verified 2026-11-09):** the page is live at
+`https://maxxxxx55555.github.io/igra/` (HTTP 200) and serves the final texts with the contact
+and the dates filled in — `maxzimkasky@gmail.com`, effective date 2026-10-28.
 
 1. Edit `index.html` on the `gh-pages` branch (GitHub's web editor is fine for this) and
    replace both `[REPLACE BEFORE PUBLISHING: contact email / support URL]` /
-   `[ЗАПОЛНИТЬ ПЕРЕД ПУБЛИКАЦИЕЙ: ...]` spans with a real, monitored contact.
+   `[ЗАПОЛНИТЬ ПЕРЕД ПУБЛИКАЦИЕЙ: ...]` spans with a real, monitored contact. — **DONE**:
+   the published contact is `maxzimkasky@gmail.com`, the same address as in
+   `docs/PRIVACY_POLICY_FINAL.md`.
 2. Repo → **Settings → Pages** → Source: **Deploy from a branch** → branch **gh-pages** /
-   **(root)** → **Save**.
+   **(root)** → **Save**. — **DONE**: Pages is switched on and serving that branch.
 3. Wait ~1 minute, then the page is live at `https://<your-github-username>.github.io/igra/`
    — paste that URL into the Play Console Data Safety form (§b) and `store/listing.md`'s
-   privacy-policy field.
+   privacy-policy field. — **the one step left for the owner**: the URL is
+   `https://maxxxxx55555.github.io/igra/`.
 
 `gh api`/`gh` CLI is installed on this machine but not authenticated (`gh auth status` →
 not logged in), so enabling Pages via the API wasn't attempted — logging in as you is an
