@@ -11,11 +11,12 @@ status record, not a marketing sheet: a check that did not run is named as not r
 |---|---|
 | Source integration (the other AI's 38 files + this pass's fixes) | DONE, committed |
 | Static battery `tools/check.sh --static` | **PASS 72/72** (with the project venv Python) |
-| Full battery `tools/check.sh --all` | **PASS 103/103** (two window-only checks recorded as `MANUAL_WINDOWED_REQUIRED`, never as passes) |
+| Full battery `tools/check.sh --all` | **PASS 103/103**, 0 failures (the two window-only checks are SKIP in this run and were run separately in a real window — see section 10) |
 | Workflow `Verify -CheckSet Full` | **PASS** — all seven required commands PASS, source fingerprint recorded |
-| Windows Desktop export | **CANDIDATE** — `LastStreetlight.exe`, SHA-256 `45c6601f85f57ed728a46bde86dd3fb2b517df6300701a0f03c441ad051eb8f9`; opens outside the editor, 0 errors in its log |
-| Merge into protected `main` | **MERGED** — PR #57, `main` = `d2205586`; CI green on the merge commit |
-| Physical devices, signing, asset rights, store acceptance | **NOT VERIFIED** (owner-side, cannot be automated here) |
+| Windows Desktop export | **BUILT** — `LastStreetlight-1.0.1-release.exe`, SHA-256 `8b32c148987ddafbe84e60cb2149ecb5c7239c515f0386bed4d28761c3102f11`; opens outside the editor, 0 errors in its log (the older `45c6601f…` build is superseded) |
+| Android release AAB | **SIGNED AND VERIFIED** — `LastStreetlight-1.0.1-release.aab`, SHA-256 `47bfdb27f979502b10cc29d39ac53480c5a85d66bd1c06db9652f92d96a930a8`; `jarsigner` "jar verified.", `aab_check` PASS (section 10) |
+| Merge into protected `main` | **MERGED** — PR #57 (`d2205586`), PR #58 (`b19fae22`), PR #59 (`b9e52cb5`, the final release work); CI green on `main` |
+| Windows Authenticode signing, physical devices, asset rights, store acceptance | **NOT VERIFIED** (owner-side, cannot be automated here) |
 
 The release workflow is deliberately conservative: even a fully green automated run leaves
 `release_status = NOT_READY` until a human reviews the PR, checks a real windowed build on real
@@ -145,8 +146,10 @@ for admins (`enforce_admins=true`, 0 required approvals), so a direct push is im
 
 The workflow's own state is in
 `C:\Users\Maxsim\Desktop\igra-release-runs\20261107-112445-cd7797a6b4\run-state.json`. Its
-`release_status` stays `NOT_READY`: a green automated run is not a human review, and signing,
-device, windowed-appearance and store acceptance remain owner-side.
+`release_status` stayed `NOT_READY` at that point: a green automated run is not a human review,
+and signing, device, windowed-appearance and store acceptance were owner-side. Section 10 records
+what was subsequently done: the Android AAB is now signed, the windowed GPU/audio gates were run,
+and only Windows Authenticode signing, a physical-device pass and store acceptance remain.
 
 ## 7. Branch analysis and cleanup
 
