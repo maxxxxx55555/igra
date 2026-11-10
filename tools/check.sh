@@ -17,7 +17,11 @@ PY="${PY:-}"
 [[ -z "$PY" ]] && for c in python3 python py; do "$c" -c '' 2>/dev/null && { PY="$c"; break; }; done
 [[ -z "$PY" ]] && { echo "Python не найден"; exit 1; }
 STATIC_ONLY=0
-[[ "${1:-}" == "--static" ]] && STATIC_ONLY=1
+REQUIRE_FULL=0
+for _a in "$@"; do
+  [[ "$_a" == "--static" ]] && STATIC_ONLY=1
+  [[ "$_a" == "--require-full-toolchain" ]] && REQUIRE_FULL=1
+done
 ALL=0
 [[ "${1:-}" == "--all" ]] && ALL=1   # the full battery and the 30/60/120 FPS equivalence run (tools/qa_sim/timing_equiv)
 
@@ -327,7 +331,11 @@ if "$PY" -m ruff --version >/dev/null 2>&1; then
 elif "$PY" -m pyflakes --version >/dev/null 2>&1; then
   if "$PY" -m pyflakes tools scripts >/dev/null 2>&1; then ok "pyflakes on tools/ and scripts/"; else bad "pyflakes (см. 'python -m pyflakes tools scripts')"; fi
 else
-  echo "  ${DIM}пропуск${OFF} python lint (ни ruff, ни pyflakes не установлены)"
+  if [[ $REQUIRE_FULL -eq 1 ]]; then
+    bad "python lint: ruff and pyflakes both missing — required by --require-full-toolchain"
+  else
+    echo "  ${DIM}пропуск${OFF} python lint (ни ruff, ни pyflakes не установлены)"
+  fi
 fi
 # Shell syntax: every .sh, every hook and every extensionless wrapper under tools/qa_sim.
 sh_bad=0
@@ -351,10 +359,19 @@ else
   bad "af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')"
 fi
 # U0: gdparse, gdlint (gdlintrc: defect-class rules), ruff, shellcheck and actionlint on the files changed since the rc15 tag; the self-check first.
-if lint_out=$("$PY" tools/lint_changed.py --demo 2>&1) && lint_out=$("$PY" tools/lint_changed.py 2>&1); then
+# A2: a partial toolchain must NOT read as green. lint_changed.py exits 0 and prints
+# "skipped tools for: <list>" when a linter is not installed, so a dev box without
+# A2: shellcheck/actionlint would report "static passed" while CI is red. Fail on any skip.
+lint_demo_out=$("$PY" tools/lint_changed.py --demo 2>&1); lint_demo_rc=$?
+lint_run_out=$("$PY" tools/lint_changed.py 2>&1); lint_rc=$?
+if [[ $lint_demo_rc -ne 0 ]]; then
+  bad "lint_changed self-check (--demo) failed: $(printf '%s' "$lint_demo_out" | tr '\n' ' ' | cut -c1-400)"
+elif [[ $lint_rc -ne 0 ]]; then
+  bad "lint_changed (см. 'python tools/lint_changed.py'): $(printf '%s' "$lint_run_out" | tr '\n' ' ' | cut -c1-600)"
+elif printf '%s' "$lint_run_out" | grep -q "skipped tools for: none"; then
   ok "lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)"
 else
-  bad "lint_changed (см. 'python tools/lint_changed.py'): $(printf '%s' "$lint_out" | tr '\n' ' ' | cut -c1-600)"
+  bad "lint_changed ran with a partial toolchain ($(printf '%s' "$lint_run_out" | grep -o 'skipped tools for: [^,]*' | head -1)) — local result is not comparable to CI"
 fi
 if [[ -f tools/af5_check.py ]]; then
   if "$PY" tools/af5_check.py --demo >/dev/null 2>&1 && "$PY" tools/af5_check.py >/dev/null 2>&1; then
@@ -405,7 +422,11 @@ if "$PY" -c "import numpy, PIL" >/dev/null 2>&1; then
     bad "art_slots / harvest_sheets / music_audit demos (см. 'python tools/art_slots.py --demo')"
   fi
 else
-  echo "  ${DIM}пропуск${OFF} art_slots, harvest_sheets, music_audit demos (no numpy and Pillow here)"
+  if [[ $REQUIRE_FULL -eq 1 ]]; then
+    bad "art_slots / harvest_sheets / music_audit demos: numpy and Pillow required by --require-full-toolchain"
+  else
+    echo "  ${DIM}пропуск${OFF} art_slots, harvest_sheets, music_audit demos (no numpy and Pillow here)"
+  fi
 fi
 if "$PY" tools/qa_sim/achievements_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/achievements_sim.py >/dev/null 2>&1; then
   ok "achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)"

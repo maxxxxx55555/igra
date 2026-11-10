@@ -45,15 +45,33 @@ def git(*args):
 
 
 def tool(name):
-    """The command of an installed tool, or None. pip --user puts scripts in a directory that is not on PATH on Windows."""
+    """The command of an installed tool, or None.
+
+    pip --user puts scripts in a directory that is not on PATH on Windows, and a
+    plain `pip install` puts them in the *prefix* scheme (e.g. the interpreter's
+    own Scripts/) rather than the *user* scheme. Check PATH, the running
+    interpreter's prefix, and the user scheme so a tool that is genuinely
+    installed is never reported as SKIPPED (the false-green class of rc16 U0).
+    """
     found = shutil.which(name)
     if found:
         return found
-    scheme = "nt_user" if os.name == "nt" else "posix_user"
-    for ext in ("", ".exe"):
-        candidate = pathlib.Path(sysconfig.get_path("scripts", scheme)) / (name + ext)
-        if candidate.is_file():
-            return str(candidate)
+    exe = pathlib.Path(sys.executable)
+    roots = [exe.parent, exe.parent / "Scripts", exe.parent / "bin"]
+    if os.name == "nt":
+        roots.append(pathlib.Path(sysconfig.get_path("scripts", "nt_user")))
+    else:
+        try:
+            roots.append(pathlib.Path(sysconfig.get_path("scripts", "posix_user")))
+        except Exception:
+            pass
+    for root in roots:
+        if not root:
+            continue
+        for ext in ("", ".exe"):
+            candidate = root / (name + ext)
+            if candidate.is_file():
+                return str(candidate)
     return None
 
 
