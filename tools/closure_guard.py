@@ -22,7 +22,6 @@ Exit code 0 = clean, 1 = at least one finding.
 Usage:
   python tools/closure_guard.py [--demo]
 """
-import argparse
 import pathlib
 import re
 import subprocess
@@ -296,7 +295,6 @@ def project_state(paths):
 
 def demo():
     """Prove every rule fires on a fixture, then passes when corrected."""
-    import tempfile
     d = ROOT / ".closure_guard_demo"
     d.mkdir(exist_ok=True)
     (ROOT / "data" / "i18n").mkdir(parents=True, exist_ok=True)
@@ -323,7 +321,6 @@ def demo():
         "Version 1.0.1 here.\n" % ("0" * 40), encoding="utf-8")
 
     origin_main = "0" * 40
-    paths = [bad, good]
     rb = ["origin/main", "origin/gh-pages"]
     f_bad = (rule_locale([bad], 2) + rule_main_sha([bad], origin_main) + rule_version([bad])
              + rule_status_closed([bad], "CLOSED") + rule_backed_claim([bad]) + rule_branch([bad], rb))
