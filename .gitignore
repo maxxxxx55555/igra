@@ -29,6 +29,9 @@ __pycache__/
 *.log
 # rc16 AF1: the full engine log a proof_run command attaches next to its .out is evidence, kept in git
 !docs/artifacts/rc16/proofs/*.attach.*.log
+# Closure evidence (FINAL_CLOSURE_PROMPT): keep the phase proof logs and artifacts in git
+!docs/artifacts/2026-11-10-phaseA/*.log
+!docs/artifacts/*-closure/**
 verify_shot.png
 
 # Backups

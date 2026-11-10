@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 ﻿# Known issues
 
 ## CLOSED (2026-11-06, Session 39k): the export script's Gradle stop named the uninstalled JDK 17 (Session 39j); it now names Android Studio's bundled JDK 21 and the export runs without a step by hand. The store description holds the owner's rules (`docs/RUN_STATE.md` S39K-LISTING).

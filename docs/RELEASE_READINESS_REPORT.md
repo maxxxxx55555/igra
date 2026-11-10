@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Release readiness report v7.5 — 2026-09-21 (owner-machine ideal pass: security hardening, 2 critical NEW findings)
 
 Supersedes v7.3.2 below (kept as history, same date). This pass ran on the owner's own machine

@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # OWNER_RELEASE_PACKET.md — one copy-paste-ready document
 
 Everything below is either a command to run, a link to click, or text to paste. It's a
@@ -83,7 +85,7 @@ godot --headless --export-release "Android" build/TLS.aab
      IDs* + *App activity*, "for advertising", not shared, only once a real AppLovin key is
      live — ships with none).
    - Government apps → No.
-3. **Main store listing** — paste from `store/listing.md` (13/13 locale-parity certified,
+3. **Main store listing** — paste from `store/listing.md` (2/2 locale-parity certified,
    `docs/CERT_STORESYNC.md`), see §(d) for the per-locale paste order.
 4. **Release → Testing → Open testing → Create new release** → upload the signed `.aab` from
    §(a) → release notes from `store/changelog.md`'s v1.0 block (EN inside `<en-US>`, RU inside
@@ -119,7 +121,7 @@ account action, not something to do on your behalf.
 
 ## (d) Per-locale listing — paste order
 
-`store/listing.md` has all 13 locale sections, certified byte-consistent with
+`store/listing.md` has the 2 locale sections (en, ru), certified byte-consistent with
 `data/i18n/*.json` (`docs/CERT_STORESYNC.md`, `docs/artifacts/store-sync/verify_listing.py`).
 Not duplicated here — copying 700+ lines into a second document would just create a second
 place for it to go stale. Paste order in Play Console **Store listing → Manage translations**:

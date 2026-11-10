@@ -385,6 +385,15 @@ if "$PY" tools/qa_sim/doc_ctrl_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa
 else
   bad "doc_ctrl_check (см. 'python tools/qa_sim/doc_ctrl_check.py')"
 fi
+# B3 (FINAL_CLOSURE_BRIEF): doc-truth drift guard. The mechanical guarantee that the
+# project cannot silently re-open development: locales vs data/i18n, main SHA, version,
+# CLOSED-status residue, unbacked READY/SHIPPED claims, and dead-branch references.
+if "$PY" tools/closure_guard.py >/dev/null 2>&1; then
+  ok "closure_guard (doc-truth: locales, main SHA, version, status, backed claims, dead branches — see tools/closure_guard.py)"
+else
+  cg_out=$("$PY" tools/closure_guard.py 2>&1 | head -c 800)
+  bad "closure_guard (см. 'python tools/closure_guard.py'): $(printf '%s' "$cg_out" | tr '\n' ' ')"
+fi
 if "$PY" tools/gen_integrity_manifest.py --demo >/dev/null 2>&1 && "$PY" tools/gen_integrity_manifest.py --check >/dev/null 2>&1; then
   ok "integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON; the game scans it at start)"
 else

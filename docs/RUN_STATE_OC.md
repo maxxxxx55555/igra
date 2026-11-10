@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Single-file source delivery — 2026-10-28
 
 Branch: work/single-script-final, based on public PR #31 bf563cc9.
@@ -26,3 +28,12 @@ real windowed performance/audio, signed AAB and physical device review.
 Old frames retain their actual dates; no threshold was weakened for a pass.
 Owner provides contact, existing key, rights decisions and Console actions.
 Continue: docs/RELEASE_HANDOFF_20261027.md, embedded in the PowerShell.
+
+## Phase A — CI to green (2026-11-10)
+PR #69 → merged main 04d54aae. A1: dropped unused `import os` in export_current.py (F401 that reddened static/pr-sims).
+A2: killed the lint false-green class — check.sh now fails on any skipped linter; new `--require-full-toolchain`; static.yml+weekly-full.yml use it; lint_changed.py tool() also resolves the prefix-scheme scripts dir.
+A3: proven both ways. Green (full toolchain): 72 pass / 0 fail. Red (shellcheck hidden): 1 fail "lint_changed ran with a partial toolchain". Artifacts: docs/artifacts/2026-11-10-phaseA/.
+A4: weekly-full now installs soundfile+ffmpeg → success (run 42849108468), ending the 4-week failure.
+A5: all four workflows green on main (static, pr-sims, weekly-full, release-wrapper); issues #21/#30/#48/#62 closed.
+A6: branch protection now requires the `static` status check (force-push stays disabled).
+Next: Phase B — doc-truth reconciliation + tools/closure_guard.py (6 rules).

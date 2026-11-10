@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # RELEASE NOTES — THE LAST STREETLIGHT
 
 ## v1.0 — Финальная сборка (2026-08-09)

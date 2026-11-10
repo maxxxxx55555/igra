@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Known owner-only items (FINAL CONSOLIDATION pass, 2026-09-13)
 
 Everything an agent session can do from this repo is done. What's left
@@ -24,8 +26,8 @@ they should hold.
 ## 2. Play Console — app creation, IARC, upload (`docs/OWNER_RELEASE_PACKET.md` §b)
 
 Create the app, answer the IARC content-rating questionnaire (exact
-answers already drafted), paste the 13-locale listing from
-`store/listing.md` (13/13 parity certified, `docs/CERT_STORESYNC.md`),
+answers already drafted), paste the 2-locale (en, ru) listing from
+`store/listing.md` (2/2 parity certified, `docs/CERT_STORESYNC.md`),
 upload screenshots per the packet's §e (8 gallery + 3 touch, 5 of 8
 gallery shots still need in-game capture), upload the signed `.aab`,
 start Open Testing rollout. Needs a live Google account and their

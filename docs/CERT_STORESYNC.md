@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # STORE-SYNC CERTIFICATE — THE LAST STREETLIGHT (2026-09-13)
 
 Owner: CONTENT+ASSETS+STORE agent, pass-name **store-sync**. Scope: final Play-Store
@@ -44,7 +46,7 @@ unmerged branch.
 | 18 | No paywalled content, no season pass | no IAP SDK; `data/economy/shop_catalog.json` prices are in-game coins only; AdService grants no paid goods | ✅ backed |
 | 19 | Fully offline | game code opens no connections; only INTERNET declared for the inert optional ad plugin (`export_presets.cfg`) | ✅ backed |
 | 20 | Short description EN 70/80, RU 66/80 (hook + genre terms) | script `verify_listing.py` re-counts real `len()` vs labels — equal, ≤80 | ✅ backed |
-| 21 | Titles ≤30 in all 13 locales, EN/RU byte-identical to shipped `menu_title`/`menu_subtitle` | `verify_listing.py` + `data/i18n/{en,ru}.json` diff (git: untouched) | ✅ backed |
+| 21 | Titles ≤30 in both locales (en, ru), EN/RU byte-identical to shipped `menu_title`/`menu_subtitle` | `verify_listing.py` + `data/i18n/{en,ru}.json` diff (git: untouched) | ✅ backed |
 | 22 | Tags/keywords incl. new ASO terms (blackout, flashlight, survival puzzle, story-driven, offline) | density audit per locale — §4 | ✅ backed |
 | 23 | Data-safety: no account, no analytics, no data collected | privacy §2/§3 same facts; no analytics SDK in build | ✅ backed |
 | 24 | Data-safety (rewritten): no multiplayer ships; AppLovin plugin inert w/o key, offline placeholder only; 2 permissions only | `scripts/ui/lobby_menu.gd` header "ARCHIVED … no button opens it"; `ad_service.gd` `_default_provider()` stub path; `export_presets.cfg` | ✅ backed (LAN claim DELETED as unbacked) |
@@ -117,7 +119,7 @@ sources recorded in `aso-research.md`). Findings applied:
 **67 exact + 6 glob cited paths re-stat'd, 0 missing** across the five synced files; 27 PNGs
 IHDR size-checked against filename claims (all 1920×1080 / 1080×1920 / 1600×900 / 1024×500 /
 512×512 as named). Press-kit numbers recomputed from shipped data:
-11 districts, 88 lore notes (8×11 recounted), 13 locales, 31 achievements, 30 challenges,
+11 districts, 88 lore notes (8×11 recounted), 2 locales (en, ru), 31 achievements, 30 challenges,
 12 enemy scripts, 5 endings, 4 skill branches — **all reproduce**; release-state quotables
 (10/10 static, 22/23 gates, MISSING: 0, 3–6 h, 11/11 autoplay) verified present in
 `docs/artifacts/final_gate_report.md` before quoting.

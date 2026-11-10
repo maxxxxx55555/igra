@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Play Store listing kit — LAST STREETLIGHT
 
 Play-Store-ready listing text. English and Russian (the game's two store-listing languages;
@@ -223,7 +225,7 @@ story-driven, survival game, offline horror game, flashlight game.
 
 ---
 
-<!-- BEGIN GENERATED 6-LOCALE BLOCK -->
+<!-- BEGIN GENERATED LISTING BLOCK -->
 
 ## Listing sections (English and Russian; the four other locales were cut on 2026-11-05)
 

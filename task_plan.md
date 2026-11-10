@@ -1,3 +1,7 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
+> **HISTORICAL — superseded by `docs/PROJECT_STATE.md` (2026-11-10).** This file is a dated development record, not current status. See `docs/PROJECT_STATE.md` and `docs/CLOSURE.md` for the authoritative state.
+
 # THE LAST STREETLIGHT — финальная доводка игрового процесса
 
 ## Goal

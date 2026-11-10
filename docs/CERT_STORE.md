@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # STORE RELEASE CERTIFICATE — THE LAST STREETLIGHT (2026-09-11)
 
 Owner: CONTENT+ASSETS+STORE agent. Scope: the six store deliverables —
@@ -7,7 +9,7 @@ Method: static + script verification only (repo verification policy — no
 engine GUI runs; no window opened). Every number below was produced by a
 command run on the day stated, not quoted from memory.
 
-**Verdict: PASS — 13/13 locales console-paste-ready, 0 defects.**
+**Verdict: PASS — 2/2 locales (en, ru) console-paste-ready, 0 defects.**
 
 ## 1. Character limits (Play Store hard limits)
 
@@ -131,8 +133,8 @@ promises a date or a guaranteed recovery.
 shipped i18n; de `dein→deine Trophäe`.
 
 **Certificate:** the STORE deliverables are COMPLETE and
-CONSOLE-PASTE-READY at 13/13 locales: char limits hold (shorts ≤80,
-titles ≤30), locale parity 13/13 with shipped in-game strings, EN/RU
+CONSOLE-PASTE-READY at 2/2 locales (en, ru): char limits hold (shorts ≤80,
+titles ≤30), locale parity 2/2 with shipped in-game strings, EN/RU
 masters byte-untouched, 0 placeholder leaks in paste-ready fields, 0
 open defects. Known owner steps are human-checklist items (§8.3), not
 copy defects.
