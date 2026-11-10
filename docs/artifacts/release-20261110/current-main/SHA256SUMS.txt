@@ -1,0 +1,3 @@
+92acec452973f8aaf2349346007acfd11cefeb2135808dbbf179cd471eacbfea  export-report.json
+68e8c888b4a715c935c95b2775140d1536be921e3b632ca911145966bcc5e945  LastStreetlight-1.0.1-web.zip
+52a557ef4e20850fb35b7cdfa0fd3c8128a5e8e19c5680aa90a17f8ce48cc152  LastStreetlight-1.0.1-windows.zip
