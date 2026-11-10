@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # STORE RELEASE CERTIFICATE — THE LAST STREETLIGHT (2026-09-11)
 
 Owner: CONTENT+ASSETS+STORE agent. Scope: the six store deliverables —
@@ -7,7 +9,7 @@ Method: static + script verification only (repo verification policy — no
 engine GUI runs; no window opened). Every number below was produced by a
 command run on the day stated, not quoted from memory.
 
-**Verdict: PASS — 13/13 locales console-paste-ready, 0 defects.**
+**Verdict: PASS — 2/2 locales (en, ru) console-paste-ready, 0 defects.**
 
 ## 1. Character limits (Play Store hard limits)
 
@@ -50,7 +52,7 @@ fr tagline verb (`Rendez sa lumière à la ville.`), pt_BR title
 
 ## 3. EN/RU masters byte-untouched
 
-Everything in `store/listing.md` above the `BEGIN GENERATED 13-LOCALE
+Everything in `store/listing.md` above the `BEGIN GENERATED LISTING
 BLOCK` marker (title, tagline, short, EN+RU full descriptions, EN+RU
 bullets, tags, category, data-safety notes) is byte-identical to the
 pre-polish state: prefix sha256
@@ -131,8 +133,8 @@ promises a date or a guaranteed recovery.
 shipped i18n; de `dein→deine Trophäe`.
 
 **Certificate:** the STORE deliverables are COMPLETE and
-CONSOLE-PASTE-READY at 13/13 locales: char limits hold (shorts ≤80,
-titles ≤30), locale parity 13/13 with shipped in-game strings, EN/RU
+CONSOLE-PASTE-READY at 2/2 locales (en, ru): char limits hold (shorts ≤80,
+titles ≤30), locale parity 2/2 with shipped in-game strings, EN/RU
 masters byte-untouched, 0 placeholder leaks in paste-ready fields, 0
 open defects. Known owner steps are human-checklist items (§8.3), not
 copy defects.
@@ -145,7 +147,7 @@ python3 tools/gen_store_listing_locales.py --check   # short<=80 + 13 sections
 python3 - <<'EOF'
 import hashlib, pathlib
 t = pathlib.Path('store/listing.md').read_text(encoding='utf-8')
-p = t[:t.index('<!-- BEGIN GENERATED 13-LOCALE BLOCK -->')]
+p = t[:t.index('<!-- BEGIN GENERATED LISTING BLOCK -->')]
 print(hashlib.sha256(p.encode()).hexdigest(), len(p.encode()))
 EOF
 ```

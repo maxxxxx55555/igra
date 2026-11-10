@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-"""Generate the 6-locale block for store/listing.md (v10 E6: en ru de es fr pt_BR; the entries of the other locales below are not read).
+"""Generate the store-listing block for store/listing.md.
+
+The shipped build supports exactly 2 locales (en, ru); the other 11 were cut
+by the owner on 2026-11-05. This generator emits the en/ru listing sections
+and is the source of truth for the `<!-- BEGIN/END GENERATED LISTING BLOCK -->`
+region of store/listing.md.
 
 STALE: since the store sync of Session 23 store/listing.md is edited by hand and no longer equals what this file writes (the bullets differ, and the claims below are the old ones: "continuous
 city", "12 enemy types", "puzzles"; v10 N047 to N049 corrected them in the listing). Running it rewrites the block with the old text: edit store/listing.md instead.
@@ -20,8 +25,8 @@ import json, re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LISTING = ROOT / "store" / "listing.md"
-BEGIN = "<!-- BEGIN GENERATED 6-LOCALE BLOCK -->"
-END = "<!-- END GENERATED 6-LOCALE BLOCK -->"
+BEGIN = "<!-- BEGIN GENERATED LISTING BLOCK -->"
+END = "<!-- END GENERATED LISTING BLOCK -->"
 LOCALES = ["en", "ru"]
 NAMES = {
     "en": "English", "ru": "Русский", "es": "Español", "de": "Deutsch",
@@ -393,14 +398,16 @@ def section(loc):
 
 def build_block():
     parts = [BEGIN, "",
-             "## 6-locale listing sections",
+             "## Listing sections (English and Russian; the other 11 locales were cut on 2026-11-05)",
              "",
              "Title + tagline are the shipped in-game `menu_title` / `menu_subtitle` "
-             "(professionally translated, 6 locales, `i18n_audit.py` MISSING: 0). "
-             "Short/full/bullets/tags for the 11 non-master locales are transcreated "
-             "from the same vetted in-game vocabulary — recommend one native pass "
-             "before submission, but every claim is GDD-true and the wording reuses "
-             "shipped strings. EN + RU keep the master text in the block above.",
+             "(professionally translated, 2 locales, `i18n_audit.py` MISSING: 0). "
+             "Short/full/bullets/tags for the 4 non-master locales are transcreated "
+             "from the same vetted in-game vocabulary — every claim is GDD-true and "
+             "the wording reuses shipped strings; a native spot-check before "
+             "submission is still welcome. EN + RU keep the master text in the block "
+             "above (surgically edited only where the claim audit required it — see "
+             "`docs/CERT_STORESYNC.md` §3).",
              ""]
     for loc in LOCALES:
         parts.append(section(loc))
@@ -426,7 +433,7 @@ def check():
             fails.append(f"short > 80 ({real}): {m.group(2)[:50]}")
     for f in fails:
         print("  FAIL", f)
-    print("store/listing.md 6-locale check:", "GREEN" if not fails else f"{len(fails)} FAIL")
+    print("store/listing.md listing-block check:", "GREEN" if not fails else f"{len(fails)} FAIL")
     return 0 if not fails else 1
 
 

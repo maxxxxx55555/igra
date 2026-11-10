@@ -106,3 +106,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\release\Finish-IgraR
 On a machine without the sandbox bulk-delete guard, that driver re-runs the complete
 verification and rebuilds Windows/Web from the newest main. Android additionally needs the
 existing release signing environment, SDK and JDK 17.
+
+## Correction note (2026-11-10, FINAL_CLOSURE_BRIEF §B2)
+
+The static / engine / verification results above apply to the **source commit recorded in this
+file** (`06c782dd` as built here). Per the FINAL_CLOSURE_BRIEF, the GitHub `main` tip at
+brief-authoring time was CI-red and was restored green by Phase A; do not read this dated build
+record as the live CI status of the current tip. The authoritative, machine-checked status is
+`docs/PROJECT_STATE.md` (enforced by `tools/closure_guard.py`).

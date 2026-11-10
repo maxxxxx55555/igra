@@ -27,6 +27,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: python tools/lint_changed.py --base "$BASE"
       - run: bash tools/check.sh --static --require-full-toolchain
+      - name: "closure_guard (doc-truth drift guard — FINAL_CLOSURE_BRIEF B3)"
+        run: python tools/closure_guard.py
   sims:
     runs-on: ubuntu-latest
     timeout-minutes: 10

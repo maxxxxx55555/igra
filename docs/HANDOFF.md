@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Handoff
 
 ## SHIP STATE: RELEASE CANDIDATE FINAL v5 — 2026-09-13 (MEGA FINAL PASS)

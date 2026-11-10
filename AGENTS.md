@@ -1,6 +1,11 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # AGENTS.md — OpenCode Desktop zone contract
 
-Branch: `oc/visual-w10` (create from `main` if missing; never push an empty branch).
+> **Branch policy (verified 2026-11-10):** work on `main` only. `origin` has exactly two
+> branches — `main` and `gh-pages` (`git ls-remote --heads origin` confirms this). The historical
+> historical `oc/*` and `arena/*` branches **do not exist on origin** and must not be
+> created, checked out, or referenced. The shipped spec on `main` is authoritative.
 
 ## Zone (touch nothing outside this list)
 `scripts/world_env_setup.gd`, `shaders/**`, `assets/shaders/**`, visual `.tres` (materials,
@@ -12,7 +17,7 @@ and `res://_QUARANTINE/` entries — **only** ones marked `AUTO-DELETABLE` in
 number stale). **Never** touch an entry marked `UNCERTAIN` — that's owner-eyes, not yours to judge.
 
 **Already delivered by an arena session, merged into `main` — do not redo:**
-- `docs/STORE_KIT.md` §Full listings (13/13 locale ledger) and `store/screens_spec/shotlist.json`
+- `docs/STORE_KIT.md` §Full listings (2-locale ledger) and `store/screens_spec/shotlist.json`
   (the 8-shot capture spec, machine-readable) — both real, both merged (`ff863c3`).
 - `docs/QUARANTINE_AUDIT.md` + `tools/quarantine_audit.py` — the deletion manifest itself.
 - `docs/SURFACES_UI_NARROWING.md` — `assets/textures/{surfaces,ui}/` per-file audit.
@@ -26,14 +31,12 @@ disk, zero consumers. Two real findings from investigating this, not guesses:
    today (`world_environment_path`/`district_root_path` exports never set by its instantiator).
    The real ground rendering may be scene-file authored (up to 11 district `.tscn` files), not
    script-driven — verify which before writing code, don't assume the script path.
-2. **A conflicting `docs/GAMEFEEL_SPEC.md` exists on unmerged branch `arena/01a0ab24-igra`** — more
-   detailed than the version on `main` (specific numeric caps: hit-stop budgets, shake-px
-   measurement method, `reduce_time_fx`/`reduce_flash`/`reduce_ui_motion` toggle semantics tied to
-   specific QA rows in a companion `docs/QA_MATRIX.md`). `main`'s current juice code
-   (`wow_director.gd`, `toast_manager.gd`, `uisfx.gd`) was built against the shipped version, not
-   that one. Before wiring more juice/accessibility effects: read both versions, reconcile by hand
-   (this is a real content decision, not a mechanical merge — `git merge-tree` shows a genuine
-   conflict on this file), and note which spec you followed in your commit.
+2. **The `docs/GAMEFEEL_SPEC.md` conflict is MOOT (verified 2026-11-10).** The unmerged variant
+   on the historical arena branch no longer exists anywhere: `git ls-remote origin` shows no such branch,
+   and `git log --all -- docs/GAMEFEEL_SPEC.md` returns only the `main`-side history. There is now a
+   single authoritative `docs/GAMEFEEL_SPEC.md` on `main`. `main`'s juice code
+   (`wow_director.gd`, `toast_manager.gd`, `uisfx.gd`) is built against that shipped spec. Wire new
+   juice/accessibility effects directly to `main`'s spec; no cross-branch reconciliation is needed.
 
 ## Scope order
 Windowed BEFORE stills capture → `docs/VISUAL_PASS.md` §8 W2-W10 (mobile-tier fallbacks; every

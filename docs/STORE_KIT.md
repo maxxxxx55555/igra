@@ -1,3 +1,5 @@
+<!-- LOCALE TRUTH (2026-11-10): the shipped build supports exactly 2 locales (en, ru); the owner cut the other 11 on 2026-11-10. Body mentions of other (pre-cut) locale counts are historical records, not the current build. -->
+
 # Store kit
 
 ## Listing copy — reuse, don't duplicate
@@ -9,9 +11,9 @@ English listing copy already exists and is GDD-sourced:
 re-write that copy — it adds what's missing: the 11 non-master full listings (§Full listings),
 locale coverage, a privacy skeleton, and the screenshot list.
 
-## Locale coverage — EN + 12
+## Locale coverage — 2 locales (en, ru)
 
-Matches `SettingsManager.LANGUAGES` (the 13 locales the game itself ships in — store listing
+Matches `SettingsManager.LANGUAGES` (the 2 locales (en, ru) the game itself ships in — store listing
 languages should track playable languages, not diverge from them). Two tiers, not conflated:
 
 - **Full long-form listing** (description, bullets, keywords — `docs/store/play_store.md` shape):
