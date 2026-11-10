@@ -1,0 +1,49 @@
+{
+  "source_commit": "06c782ddf8fdaf9538b36e0f19f145f0b6e1213a",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "builds": [
+    {
+      "platform": "windows",
+      "archive": "LastStreetlight-1.0.1-windows.zip",
+      "bytes": 121169018,
+      "sha256": "52a557ef4e20850fb35b7cdfa0fd3c8128a5e8e19c5680aa90a17f8ce48cc152",
+      "files": [
+        "BUILD_INFO.json",
+        "LastStreetlight.exe",
+        "THIRD_PARTY_NOTICES/ASSET_LICENSES.md",
+        "THIRD_PARTY_NOTICES/LICENSED_MUSIC_REFRESH.md",
+        "THIRD_PARTY_NOTICES/RobotoCondensed-Full-VF.LICENSE.md",
+        "THIRD_PARTY_NOTICES/RobotoCondensed-Full-VF.SOURCE.md",
+        "THIRD_PARTY_NOTICES/THIRD_PARTY_FONTS.md"
+      ]
+    },
+    {
+      "platform": "web",
+      "archive": "LastStreetlight-1.0.1-web.zip",
+      "bytes": 96355881,
+      "sha256": "68e8c888b4a715c935c95b2775140d1536be921e3b632ca911145966bcc5e945",
+      "files": [
+        "BUILD_INFO.json",
+        "index.apple-touch-icon.png",
+        "index.audio.position.worklet.js",
+        "index.audio.worklet.js",
+        "index.html",
+        "index.icon.png",
+        "index.js",
+        "index.pck",
+        "index.png",
+        "index.wasm",
+        "THIRD_PARTY_NOTICES/ASSET_LICENSES.md",
+        "THIRD_PARTY_NOTICES/LICENSED_MUSIC_REFRESH.md",
+        "THIRD_PARTY_NOTICES/RobotoCondensed-Full-VF.LICENSE.md",
+        "THIRD_PARTY_NOTICES/RobotoCondensed-Full-VF.SOURCE.md",
+        "THIRD_PARTY_NOTICES/THIRD_PARTY_FONTS.md"
+      ]
+    }
+  ],
+  "started_utc": "2026-11-10T13:28:27.951582+00:00",
+  "project_godot_restored": true,
+  "finished_utc": "2026-11-10T13:38:07.033143+00:00",
+  "state": "BUILDS_CREATED_MANUAL_REVIEW_PENDING",
+  "notices_added_utc": "2026-11-10T13:46:24.116291+00:00"
+}
