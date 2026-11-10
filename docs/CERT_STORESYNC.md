@@ -61,14 +61,16 @@ unmerged branch.
   the single biggest vaporware item on the page. Row 24 now states the opposite truth.
 - Press-kit "20 Achievements" — stale since Batch 13 (31 shipped; recount in §5).
 
-## 2. 13-locale parity — 13/13
+## 2. 2-locale parity — 2/2 (en, ru)
 
 Recomputed by `docs/artifacts/store-sync/verify_listing.py` (raw output: `verify_listing.out`):
-13 generated sections (en, ru, es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW, ar); every locale
+2 generated sections (en, ru); every locale
 carries Title / Tagline / labeled Short / full description / 8 benefit-led bullets / ASO tags;
 every `Short (N/80)` label equals the real string length; 0 over-limit; every WHAT'S-INSIDE
-code-block list is 9 lines (8 original + the new daily/achievements line) in all 13 — the two
+code-block list is 9 lines (8 original + the new daily/achievements line) in both locales — the two
 new facts exist in every language, wording transcreated from the shipped vetted vocabulary.
+(The other 11 locales — es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW, ar — were cut by the owner
+on 2026-11-05; this section records the post-cut 2-locale build, not the pre-cut 13-locale plan.)
 Repo gate `python3 tools/gen_store_listing_locales.py --check`: **GREEN**.
 EN/RU title+tagline still byte-identical to shipped `data/i18n/{en,ru}.json`
 (`menu_title`/`menu_subtitle`), which this pass did not touch (git diff clean — recorded §3).
@@ -142,7 +144,8 @@ pad-never-crop for phone aspect).
    (80–81); docs owner should mirror row 24. `store/trailer/README.md` file table matches
    disk (all 9 masters exist) ✅ no action.
 3. Play Console-side only (unchanged, `known_owner_only_items.md`): keystore + signed AAB,
-   IARC answers, 13-locale paste, privacy URL hosting with the 4 remaining `[email/URL]`
+   IARC answers, 2-locale paste (en, ru; the other 11 locales were cut on 2026-11-05), privacy
+   URL hosting with the 4 remaining `[email/URL]`
    placeholders filled, and the AppLovin key **decision** — if the key is ever set, re-run
    this sync because rows 18/24 and privacy §4/§5 must change with it.
 

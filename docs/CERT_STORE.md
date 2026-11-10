@@ -52,7 +52,7 @@ fr tagline verb (`Rendez sa lumière à la ville.`), pt_BR title
 
 ## 3. EN/RU masters byte-untouched
 
-Everything in `store/listing.md` above the `BEGIN GENERATED 13-LOCALE
+Everything in `store/listing.md` above the `BEGIN GENERATED LISTING
 BLOCK` marker (title, tagline, short, EN+RU full descriptions, EN+RU
 bullets, tags, category, data-safety notes) is byte-identical to the
 pre-polish state: prefix sha256
@@ -147,7 +147,7 @@ python3 tools/gen_store_listing_locales.py --check   # short<=80 + 13 sections
 python3 - <<'EOF'
 import hashlib, pathlib
 t = pathlib.Path('store/listing.md').read_text(encoding='utf-8')
-p = t[:t.index('<!-- BEGIN GENERATED 13-LOCALE BLOCK -->')]
+p = t[:t.index('<!-- BEGIN GENERATED LISTING BLOCK -->')]
 print(hashlib.sha256(p.encode()).hexdigest(), len(p.encode()))
 EOF
 ```

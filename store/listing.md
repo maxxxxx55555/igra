@@ -249,4 +249,4 @@ Title + tagline are the shipped in-game `menu_title` / `menu_subtitle`, byte-ide
 - **Feature bullets:** see the EN/RU master block above.
 - **ASO tags:** Выживание, Хоррор, Шутер, Атмосферный, Стелс, Одиночная игра, Офлайн, Крафт, Сюжетный, Инди
 
-<!-- END GENERATED 6-LOCALE BLOCK -->
+<!-- END GENERATED LISTING BLOCK -->
