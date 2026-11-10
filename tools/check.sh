@@ -611,11 +611,16 @@ else
       [[ "$(_hash)" == "$before" ]] || { echo "         profile differs after recovery"; return 1; }
       # A copy that fails its manifest must stop an unguarded QA run before its first frame.
       mkdir -p "$snap/files"; printf x > "$snap/files/lang.cfg"; printf '{"pid": 1, "files": {"lang.cfg": "0"}}' > "$snap/manifest.json"
-      _e2e --write && { echo "         damaged copy did not abort the run"; rm -rf -- "$snap"; return 1; }
-      [[ ! -e "$probe" && -d "$snap" ]] || { echo "         abort was not airtight"; rm -rf -- "$snap"; return 1; }
+      # Windows: udg_dir() is "C:\Users\...\Last Streetlight" (an embedded drive
+      # prefix). A bare `rm -rf` on it is refused by the safe-delete wrapper, so the
+      # fake damaged copy survives the test and QaLaunchGuard._block() then crashes
+      # every later engine gate (code 132). user_data_guard.sh's _udg_rm_rf converts
+      # the path with cygpath first; use it here too, so cleanup really happens.
+      _e2e --write && { echo "         damaged copy did not abort the run"; _udg_rm_rf "$snap"; return 1; }
+      [[ ! -e "$probe" && -d "$snap" ]] || { echo "         abort was not airtight"; _udg_rm_rf "$snap"; return 1; }
       # Normal play must not start over it either: its saves would be reverted by the restore that follows.
-      env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 >/dev/null 2>&1 && { echo "         normal launch ran over an unrestorable copy"; rm -rf -- "$snap"; return 1; }
-      rm -rf -- "$snap"  # the fake copy made just above
+      env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 >/dev/null 2>&1 && { echo "         normal launch ran over an unrestorable copy"; _udg_rm_rf "$snap"; return 1; }
+      _udg_rm_rf "$snap"  # the fake copy made just above
     }
     if qa_guard_e2e; then ok "QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле"; else bad "QaLaunchGuard: жизненный цикл на реальном профиле"; fi
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
