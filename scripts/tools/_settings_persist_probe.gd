@@ -24,7 +24,8 @@ func _run() -> void:
 	var root: Node3D = Node3D.new()
 	get_tree().root.add_child(root)
 	get_tree().current_scene = root
-	var env_setup := preload("res://scripts/world_env_setup.gd").new()
+	var WorldEnvSetupClass := preload("res://scripts/world_env_setup.gd")
+	var env_setup := WorldEnvSetupClass.new()
 	root.add_child(env_setup)
 	await get_tree().process_frame
 
@@ -76,7 +77,7 @@ func _run() -> void:
 	var t2_root := Node3D.new()
 	get_tree().root.add_child(t2_root)
 	get_tree().current_scene = t2_root
-	var t2_setup := preload("res://scripts/world_env_setup.gd").new()
+	var t2_setup := WorldEnvSetupClass.new()
 	t2_root.add_child(t2_setup)
 	await get_tree().process_frame
 	var t2_we: WorldEnvironment = t2_root.find_child("WorldEnvironment", true, false)
