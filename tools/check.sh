@@ -220,6 +220,13 @@ if "$PY" tools/qa_sim/msaa_guard_check.py >/dev/null 2>&1; then
 else
   bad "msaa_guard_check (no unguarded msaa_3d assignment on a null viewport)"
 fi
+# T7 (2026-11-11): a HUD touch handler must not restrict activation to the
+# first finger (index == 0) — the KNOWN_ISSUES.md:11 second-finger bug.
+if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then
+  ok "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+else
+  bad "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+fi
 gate_missed=0
 for f in docs/stills/evidence/r0_before_*.png docs/stills/evidence/magenta_corruption_suburbs.png docs/stills/evidence/r1_scale08*.png; do
   if "$PY" tools/qa_sim/visual_truth_gate.py "$f" >/dev/null 2>&1; then gate_missed=$((gate_missed + 1)); fi
