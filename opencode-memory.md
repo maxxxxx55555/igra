@@ -275,3 +275,7 @@ JSON/secret hygiene: .signing/ gitignored, no password read. JDK=Android Studio 
 
 ## 2026-11-11 — P1 wave 1 (G-MSAA)
 Fixed the real runtime defect found at P0: _apply_graphics_tier wrote msaa_3d on a null viewport when QualityManager ticked before the node entered the tree. Null guard added; tools/qa_sim/msaa_guard_check.py (--demo mutation BITES) wired into check.sh. headless_suite (proof p1_msaa_headless_20261111) EXIT=0; explicit qa_headless_suite_scene (p1_msaa_scene_20261111) RC=0, DONE fails=0, zero SCRIPT ERROR.
+
+## 2026-11-11 — P1 wave 2 (T7 + T3)
+T7: headless two-finger touch probe + biting gate (tools/qa_sim/two_finger_touch_check.py). PR #73 stacked on #72 (g-msaa). Hard headless constraint: Input.parse_input_event() does not dispatch synthetic GUI input to a Control in --headless, so a real touch cannot be injected into Godot's BaseButton; the game's own touch code is index-agnostic (proven). 
+T3: key-hint strings — wired InputRemap.key_of/key_text into the 3 live call-sites (help_ui.gd tutorial_move/HINT_FLASHLIGHT, inventory_ui.gd INV_HINTS) so hints show the real bound key after a remap; en+ru `%s` parity (1/1/2). The other named keys (HINT_INVENTORY, TUT_FIND_FLASHLIGHT, WORKBENCH_CLOSE, tip4, tutorial_map) have no active call-site — flagged to owner. Gates green.

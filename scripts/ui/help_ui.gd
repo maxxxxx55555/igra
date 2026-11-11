@@ -69,13 +69,21 @@ func _build() -> void:
 
 	_section_header(col, "controls", "controls")
 	for row in CONTROLS:
-		_control_row(col, LocalizationManager.t(String(row["label"])),
+		var label_text: String = LocalizationManager.t(String(row["label"]))
+		if String(row["label"]) == "tutorial_move":
+			# KNOWN_ISSUES.md:1831 — show the real bound key, not the hard-coded "WASD".
+			label_text = LocalizationManager.tf("tutorial_move", [_keycap_for(String(row["action"]))])
+		_control_row(col, label_text,
 			_keycap_for(String(row["action"])), LocalizationManager.t(String(row["touch"])))
 
 	_section_header(col, "HELP_GLOSSARY", "controls")
 	for g in GLOSSARY:
+		var desc_text: String = LocalizationManager.t(String(g["desc"]))
+		if String(g["desc"]) == "HINT_FLASHLIGHT":
+			# KNOWN_ISSUES.md:1831 — show the real bound key, not the hard-coded "F".
+			desc_text = LocalizationManager.tf("HINT_FLASHLIGHT", [_keycap_for("flashlight_toggle")])
 		_glossary_entry(col, LocalizationManager.t(String(g["title"])),
-			LocalizationManager.t(String(g["desc"])), String(g["icon"]))
+			desc_text, String(g["icon"]))
 
 	if not embedded:
 		var close_btn := Button.new()
