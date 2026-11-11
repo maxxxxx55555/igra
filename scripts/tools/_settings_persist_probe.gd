@@ -69,6 +69,33 @@ func _run() -> void:
 		bad += 1
 	reloaded.queue_free()
 
+	# --- T2 / X5 (BEAUTY_RC16): the district colour-correction LUT must survive a
+	# graphics-tier change even when High Contrast is OFF. set_graphics_tier() schedules
+	# _apply_high_contrast() on a 0.5 s HIGH_CONTRAST_DELAY timer; the fixed code keeps
+	# adjustment_enabled true while a LUT is present instead of switching it off.
+	var t2_root := Node3D.new()
+	get_tree().root.add_child(t2_root)
+	get_tree().current_scene = t2_root
+	var t2_setup := preload("res://scripts/world_env_setup.gd").new()
+	t2_root.add_child(t2_setup)
+	await get_tree().process_frame
+	var t2_we: WorldEnvironment = t2_root.find_child("WorldEnvironment", true, false)
+	var t2_env: Environment = t2_we.environment
+	# Simulate a district LUT being present (the live game loads one per district).
+	t2_env.adjustment_color_correction = GradientTexture1D.new()
+	SettingsManager.set_high_contrast(false)
+	var t2_before_c: float = t2_env.adjustment_contrast
+	var t2_before_s: float = t2_env.adjustment_saturation
+	SettingsManager.set_graphics_tier(0)  # Low -> schedules the 0.5 s HC re-apply timer
+	await get_tree().create_timer(SettingsManager.HIGH_CONTRAST_DELAY + 0.2).timeout
+	var t2_lut_on: bool = t2_env.adjustment_enabled
+	var t2_contrast_kept: bool = is_equal_approx(t2_env.adjustment_contrast, t2_before_c)
+	var t2_sat_kept: bool = is_equal_approx(t2_env.adjustment_saturation, t2_before_s)
+	print("[settings-persist] T2/X5 LUT survives tier change (HC off): on=%s contrast_kept=%s sat_kept=%s" % [t2_lut_on, t2_contrast_kept, t2_sat_kept])
+	if not (t2_lut_on and t2_contrast_kept and t2_sat_kept):
+		bad += 1
+	t2_root.queue_free()
+
 	# Restore whatever was actually on disk before this probe ran.
 	SettingsManager.set_graphics_tier(orig_tier)
 	SettingsManager.set_high_contrast(orig_hc)

@@ -1,0 +1,20 @@
+# proof p1_t7_final_20261111
+# utc 20261111T194820Z
+# head b06c0d31 (uncommitted paths: 35)
+# env TLS_SKIP_REIMPORT=1 
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/two_finger_touch_probe_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[2finger] OK   joystick holds first finger (index=0) -> move_dir active
+[2finger] OK   joystick reports active while first finger held
+[2finger] OK   joystick keeps first finger when a SECOND finger (index=1) touches it (no hijack)
+[2finger] OK   joystick _touch_index stays 0 under a second-finger touch
+[2finger] OK   HUD exposes a quick slot (Slot0)
+[2finger] OK   second finger (index=1) InputEventScreenTouch delivered to Slot0 gui_input (no index restriction)
+[2finger] OK   emulation-device touch also accepted by the handler (guarded by device, not index)
+[2finger] OK   HUD exposes BtnInteract + BtnAttack
+[2finger] OK   BtnInteract.button_down has a listener (wired to InputService.interact_requested)
+[2finger] OK   BtnAttack.button_down has a listener (wired to InputService.attack_requested)
+[2finger] DONE fails=0
+[qa-guard] profile restored byte-identical
+# EXIT=0
