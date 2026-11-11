@@ -2951,3 +2951,12 @@ Foreign dirty files still untouched (§1.6). Registry G-MSAA row updated in RELE
 AF3 F4: the G-MSAA guard changed a runtime path (world_env_setup.gd), so the 8 store stills with hash a2672e77 correctly went stale (af3 8/8 FAIL). NOT bypassed via af3_f4_scope.tsv (a lighting owner reaches every frame; a '*' row would be self-approval, R6).
 Re-shot 8 frames via proof_run --launch p1_store_frames_20261111 -> guarded_windowed release_frames_scene.tscn, TLS_CAPTURE_HASH=718a4fad, real windowed GPU (AMD Radeon / OpenGL 3.3 Compatibility), RC=0. Old frames backed up to ..\_BACKUPS\2026-11-11_p1-store-frames.
 af3 frames=8 fail=0 after the frame commit; store_frames_check 10 frames / 0 faults. press_kit.py --write store/PRESS_KIT.md regenerated the 8 picture rows (code-owned gate); --check now green.
+
+## P1 wave 2 — T7 two-finger touch (2026-11-11)
+T7 (two-finger HUD press while joystick held): closed-with-evidence. Owner directive v2.0 §9 P1 wave 2 first row.
+Branch p1/t7-two-finger-20261111 (to be opened). Qwen 0 of 0.
+Worker qa: new probe scripts/tools/_two_finger_probe.gd + scene scenes/tools/two_finger_touch_probe_scene.tscn; gate tools/qa_sim/two_finger_touch_check.py with --demo mutation (real=PASS, mutation=FAIL -> BITES), wired into tools/check.sh, tools/qa_sim/headless_suite, tools/release/pipeline.py by the lead.
+Lead engine runs (proof_run --launch): p1_t7_final_20261111 two_finger_touch_probe_scene DONE fails=0, # EXIT=0, zero SCRIPT ERROR. Raw log: docs/artifacts/rc16/proofs/p1_t7_final_20261111.out.
+Hard headless constraint discovered: Input.parse_input_event() does NOT dispatch synthetic GUI input (InputEventScreenTouch or InputEventMouseButton) to a Control in --headless — so a real touch cannot be injected into Godot's BaseButton headless (that is exactly why the old touch probe used button_down.emit()). The probe therefore exercises the game's OWN touch code: joystick keeps first finger + rejects second (no hijack), HUD quick-slot accepts index=1 with no index==0 restriction (guarded by device != EMULATION), main buttons wired button_down -> request_interact/request_attack.
+Findings: the game's touch code is index-agnostic; NO code-level second-finger bug. Residual device-only risk (Godot touch->emulated-mouse pointer collision on a real phone) delegated to P4 device pass. No gate weakened (R6). Zero line shift: the probe/scene/check are all new files; hud_3d.gd / virtual_joystick.gd are unchanged.
+Next P1 wave 2: T3 (key hints), then T2 (X5 LUT frame evidence).

@@ -275,3 +275,6 @@ JSON/secret hygiene: .signing/ gitignored, no password read. JDK=Android Studio 
 
 ## 2026-11-11 — P1 wave 1 (G-MSAA)
 Fixed the real runtime defect found at P0: _apply_graphics_tier wrote msaa_3d on a null viewport when QualityManager ticked before the node entered the tree. Null guard added; tools/qa_sim/msaa_guard_check.py (--demo mutation BITES) wired into check.sh. headless_suite (proof p1_msaa_headless_20261111) EXIT=0; explicit qa_headless_suite_scene (p1_msaa_scene_20261111) RC=0, DONE fails=0, zero SCRIPT ERROR.
+
+## 2026-11-11 — P1 wave 2 (T7 two-finger touch)
+Built scripts/tools/_two_finger_probe.gd + two_finger_touch_probe_scene.tscn + tools/qa_sim/two_finger_touch_check.py (--demo BITES). T7 closed-with-evidence: the game's own touch code is index-agnostic (joystick keeps first finger via _touch_index==-1 and rejects a second; HUD quick-slot handler at hud_3d.gd:1887 guards by device!=EMULATION, not index). CRITICAL headless constraint discovered: Input.parse_input_event() does NOT dispatch synthetic GUI input (touch or mouse) to a Control in --headless — so a real touch cannot be injected into Godot's BaseButton headless; that is why the old touch probe used button_down.emit(). Residual device-only risk (Godot touch->emulated-mouse pointer collision) delegated to P4. Don't try to inject real touches into Buttons headless — it won't route.
