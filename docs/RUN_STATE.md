@@ -2946,3 +2946,8 @@ Worker qa: tools/qa_sim/msaa_guard_check.py with --demo mutation (real=PASS, mut
 Lead engine runs (proof_run --launch): p1_msaa_headless_20261111 headless_suite EXIT=0; p1_msaa_scene_20261111 explicit qa_headless_suite_scene RC=0, DONE fails=0, zero SCRIPT ERROR/msaa_3d.
 Known non-blocking at exit: ObjectDB leak warning + 22 resources still in use (headless shutdown, not a script error) - META, not GAME-AFFECTING.
 Foreign dirty files still untouched (§1.6). Registry G-MSAA row updated in RELEASE_GAP_FINAL.md.
+
+## P1 wave 1 — frames + press kit (2026-11-11)
+AF3 F4: the G-MSAA guard changed a runtime path (world_env_setup.gd), so the 8 store stills with hash a2672e77 correctly went stale (af3 8/8 FAIL). NOT bypassed via af3_f4_scope.tsv (a lighting owner reaches every frame; a '*' row would be self-approval, R6).
+Re-shot 8 frames via proof_run --launch p1_store_frames_20261111 -> guarded_windowed release_frames_scene.tscn, TLS_CAPTURE_HASH=718a4fad, real windowed GPU (AMD Radeon / OpenGL 3.3 Compatibility), RC=0. Old frames backed up to ..\_BACKUPS\2026-11-11_p1-store-frames.
+af3 frames=8 fail=0 after the frame commit; store_frames_check 10 frames / 0 faults. press_kit.py --write store/PRESS_KIT.md regenerated the 8 picture rows (code-owned gate); --check now green.
