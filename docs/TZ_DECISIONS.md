@@ -4,8 +4,21 @@ Every row below is a case `docs/TZ_COMPLIANCE_AUDIT.md` scored GAP-OWNER, or a G
 straight verbatim fix wasn't the right call. DR numbers are `docs/EXEC_PLAN.md` §2. One row per
 decision, added as C4 reaches it — not written in advance of the work.
 
+**UNFREEZE (2026-11-11, owner directive "TLS -> RELEASE" v2.0 §0):** the owner has REOPENED the
+agent-closable remainder. The 2026-11-10 "repository is frozen / all agent work complete" status
+in `docs/PROJECT_STATE.md` is superseded as a status statement (it stays as a dated historical
+record). Scope is strictly `1.0.1 -> release`; features beyond the backlog go to
+`docs/POST_RELEASE_BACKLOG.md`. Terminal state is `RELEASE-READY / BLOCKED(owner-only)`, never
+`CLOSED` / `SHIPPED` without owner proof (`tools/closure_guard.py`). The single work queue is
+`docs/RELEASE_GAP_FINAL.md`. Already-decided and NOT to be re-asked: music=variant A
+(`docs/MUSIC_RIGHTS_MEMO.md`), KEPT-27, DAILY-27, NGCFG-27, SLAB-27, HALO-27, the 2-locale cut,
+the name "Last Streetlight". Owner veto is a single revert of one batch commit.
+
 | ID | DR | Decision | Reason |
 |---|---|---|---|
+| UNFREEZE-20261111 | owner directive §0 | Reopen agent work for the sole purpose of finishing 1.0.1; keep the freeze text as dated history. | The previous closure declared the repo frozen while W-wiring, story, perf and QA rows were still open; the owner issued a new written scope. Dated, reversible by one revert. |
+| W-TRUTH-20261111 | §1.2 code-truth rule 1 | `AGENTS.md:25-29`'s "only W1 connected, W2-W10 zero consumers" is STALE, not an open job. W2-W10 have live consumers; ground is script-driven; `district_scene_factory.gd` has no second WorldEnvironment on current main. | Verified by `git grep` per asset; full file:line table in `docs/RELEASE_GAP_FINAL.md` §2. Code wins over docs. |
+| QWEN-CAP-DELEGATION | §6 / §11 | `QWEN_WEEKLY_CAP = {{N}}` was left unset. Default if the owner is silent: `N = 0`, zero Qwen calls, Hy4 covers the three optional review roles. | Reversible: one line in `docs/BUDGET_LEDGER.md` + this row. Recorded as "approved by delegation" on 2026-11-11. |
 | V03 | DR-6 | No Bebas Neue **Bold** file exists anywhere in `assets/fonts/` (checked: only `-Regular.ttf` for all four families). Not wired. | Owner supplies the font file; this is an asset gap, not a code gap. |
 | G01 | DR-2 | FPS is the default via `fps_mode=true` on the main-scene camera; TPS is the opt-in path. The `player_fps.tscn` filename the audit expected doesn't exist, but the TZ only requires FPS-as-canon/TPS-as-option, which the live behavior already satisfies. | The audit's own quote says TPS is «опция» — met by any code path, not a specific filename. |
 | D02 | DR-2 | Every district's `powered_by` prerequisite is an earlier district in the D01 canonical order (suburbs→park/residential, park→police/gas_station, residential→school/hospital, hospital→warehouses, warehouses+police→industrial→substation→power_station). The TZ states the 11-district order, not that the unlock graph must be strictly linear. | No contradiction between D01's quote and the live branching graph; nothing to change. |
