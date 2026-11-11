@@ -270,5 +270,5 @@
 UNFREEZE: owner reopened agent work for 1.0.1 -> release; terminal RELEASE-READY / BLOCKED(owner-only), never CLOSED without owner proof.
 Single queue docs/RELEASE_GAP_FINAL.md; decisions docs/TZ_DECISIONS.md; env docs/ENVIRONMENT.md; budget docs/BUDGET_LEDGER.md; skills docs/WORKBUDDY_SKILLS.md.
 W1-W11 conflict resolved by code: W2-W10 HAVE live consumers (file:line table in RELEASE_GAP_FINAL.md §2); AGENTS.md:25-29 is stale. Ground script-driven, one WorldEnvironment.
-P0 battery: 6 FAIL / 97 PASS, EXIT=6 on dirty tree. Real defects: msaa_3d null at world_env_setup.gd:197; af5 FAIL from foreign untracked docs/AUTHENTICATION.md:23 (do not touch).
+P0 battery: 6 FAIL / 97 PASS, EXIT=6 on dirty tree. Real defects: msaa_3d null at world_env_setup.gd:197; af5 FAIL from foreign untracked docs/AUTHENTICATION.md (line 23) (do not touch).
 JSON/secret hygiene: .signing/ gitignored, no password read. JDK=Android Studio JBR 21, JAVA_HOME env var stale (points at deleted JDK17).

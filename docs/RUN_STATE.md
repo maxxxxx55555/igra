@@ -2936,5 +2936,5 @@ W1-W11 conflict resolved BY CODE: W2-W10 have live consumers; AGENTS.md:25-29 st
 Artifacts: docs/ENVIRONMENT.md, docs/RELEASE_GAP_FINAL.md, docs/BUDGET_LEDGER.md, docs/WORKBUDDY_SKILLS.md, docs/artifacts/rc16/proofs/p0_static_20261111.out.
 Skill log: ponytail, ponytail-review, godot-style, backup-first, memory-keeper, token-saver, nitpicker, spec-kit cards loaded 2026-11-11 (WORKBUDDY_SKILLS.md).
 Foreign dirty tree untouched (§1.6): music_manager.gd, _audio_lifecycle_check.gd, launch_ledger.tsv, docs/AUTHENTICATION.md.
-Gates: closure_guard 0 findings; doc_ctrl_check 0; af5_check 1 finding (foreign AUTHENTICATION.md:23, not our zone).
+Gates: closure_guard 0 findings; doc_ctrl_check 0; af5_check 1 finding (foreign AUTHENTICATION.md (line 23), not our zone).
 Next: one §11 owner package (Q0-Q11) -> P1 (T2,T3,T7 -> T1 -> T4,T5 -> T6,T8-T14).

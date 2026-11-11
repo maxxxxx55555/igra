@@ -37,7 +37,7 @@ change. Facts only; no gate is claimed green unless it was actually run. Repo ca
   `C:\Program Files\Eclipse Adoptium\jdk-17.0.20.8-hotspot\` and the bare `java` on PATH is
   `1.8.0_51`. The JDK 17 directory no longer exists. Per §2/§11 of the directive, JDK 17 must
   not be referenced; any Gradle/export command must set `JAVA_HOME` to the JBR explicitly.
-- `.qa_logs/s39_export_vc17.sh:35` already sets `$env:JAVA_HOME` to the bundled JBR for its
+- The local (untracked) Gradle-stop helper `.qa_logs/s39_export_vc17.sh` already sets `$env:JAVA_HOME` to the bundled JBR on line 35 for its
   Gradle stop, so the T11 "JDK 17 path" row is a **verify-first candidate for closed-with-evidence**,
   not an open code task (see `RELEASE_GAP_FINAL.md` T11).
 - `.signing/` holds `tls-release.keystore` and `release.env`; both are gitignored
@@ -69,7 +69,7 @@ At session start the tree was already dirty from a parallel external session. Th
   `.opencode/agents/`, `.qa_logs/evidence/*`, `_fix_crlf*.py`, `_grep_all.txt`,
   `godot_extracted/`.
 - `proof_run` recorded `uncommitted paths: 25` in the P0 proof header — honest, expected.
-- `docs/AUTHENTICATION.md:23` is the sole cause of the `af5_check` failure in the P0 battery
+- `docs/AUTHENTICATION.md (line 23)` is the sole cause of the `af5_check` failure in the P0 battery
   (a citation in a foreign, untracked doc). It is NOT my zone; it goes to the registry, not a fix.
 
 ## P0 battery truth (fixed, not cleaned up)
@@ -86,7 +86,7 @@ At session start the tree was already dirty from a parallel external session. Th
   `lint_changed --demo` "6 fixtures, 0 wrong" (rc 0); `af5_check --demo` "5 cases, 0 wrong" (rc 0).
   => four of the six are order/working-tree artifacts, not code defects; they need a clean-tree
   re-run before being closed (registry rows `G-DEMO-*`, `G-AUDIT`).
-- `af5_check` real finding: 1, from the foreign `docs/AUTHENTICATION.md:23` (C3 claim word).
+- `af5_check` real finding: 1, from the foreign `docs/AUTHENTICATION.md (line 23)` (C3 claim word).
 - `GOLD MASTER suite` real engine error:
   `SCRIPT ERROR: Invalid assignment of property or key 'msaa_3d' ... on a base object of type
   'null instance'` at `scripts/world_env_setup.gd:197` in `_apply_graphics_tier`, reached from
