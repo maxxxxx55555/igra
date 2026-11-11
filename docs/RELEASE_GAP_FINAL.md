@@ -162,9 +162,14 @@ rewrite (irreversible, default NO); Q5 L-1 Russian comments; Q6 two shop skin st
 (irreversible for saves, needs explicit decision); Q7 monsters/boss primitives + CC0 after;
 Q8 UNLOCK-27 (real unlocks vs remove, -300 coins); Q9 ENDART-27 / Gemini music timing;
 Q10 S-15/S-16; Q11 tag v1.0.1 + Production rollout moment.
-Defaults of reversible items may continue by delegation as "approved by delegation" with a
-revert path recorded in `docs/TZ_DECISIONS.md`; irreversible items require an explicit "yes".
-**Answers or silence-by-default are recorded once and not re-asked.**
+
+**ANSWERED ONCE 2026-11-11 — all defaults by delegation ("approved by delegation"), dated with
+a revert path in `docs/TZ_DECISIONS.md` §11 package table. Not re-asked.** Owner answers:
+Q0 `N = 0` (zero Qwen calls, Hy4 covers the three optional review roles); Q1 PEGI 16;
+Q2 ads stub / plugin off; Q4 K-1 **NO** (irreversible, not performed); Q6 shop skins **kept**
+(irreversible action not performed); Q7 primitives accepted, CC0 post-release; Q3/Q5/Q9 by
+default; Q8/Q10/Q11 remain owner decisions deferred to P4 (no economy or content change made).
+`docs/BUDGET_LEDGER.md` updated from "cap unknown" to `cap = 0`.
 
 ## 9. Completeness statement
 

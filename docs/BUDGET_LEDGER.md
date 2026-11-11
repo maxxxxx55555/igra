@@ -1,19 +1,20 @@
 # BUDGET_LEDGER — Qwen weekly cap (owner directive v2.0 §6)
 
-`QWEN_WEEKLY_CAP = {{N}}` — the directive left `N` as a placeholder. The numeric cap is
-**unknown**. Per §6 and §11 the lead does not invent a number. Until the owner supplies `N`
-(question Q0 in the §11 package), the ledger operates in **static-only / Hy-models-only mode**:
-zero Qwen calls, so no cap can be crossed. No phase is blocked by that, because Qwen is
-reserved for (a) an independent final phase review, (b) lead-vs-nitpicker arbitration,
-(c) targeted en/ru wording QA — all optional accelerators, not gates.
+`QWEN_WEEKLY_CAP = 0` — **resolved 2026-11-11**: the directive left `{{N}}` as a placeholder,
+the owner answered Q0 with `N = 0` in the one §11 package. Recorded as "approved by delegation"
+in `docs/TZ_DECISIONS.md` (§11 package table). **Zero Qwen calls for this release.** The three
+optional review roles (independent final phase review, lead-vs-nitpicker arbitration, targeted
+en/ru wording QA) are handled by Hy4. No phase is blocked, and no cap can be crossed.
+Revert path: one line here + the Q0 row in `TZ_DECISIONS.md`.
 
 Ledger columns: `date | model | requests | phase | remaining`. Updated after EVERY call.
 
 | Date | Model | Requests | Phase | Remaining |
 |---|---|---|---|---|
-| 2026-11-11 | Hy4 (lead) | 0 Qwen | P0 audit & registry | cap unknown (N unset) |
-| 2026-11-11 | Hy3 (workers) | 0 Qwen | P0 (no workers spawned, audit-only) | cap unknown (N unset) |
-| 2026-11-11 | Qwen | **0** | P0 | cap unknown (N unset) |
+| 2026-11-11 | Hy4 (lead) | 0 Qwen | P0 audit & registry | 0 of 0 |
+| 2026-11-11 | Hy3 (workers) | 0 Qwen | P0 (no workers spawned, audit-only) | 0 of 0 |
+| 2026-11-11 | Qwen | **0** | P0 | 0 of 0 (cap = 0, frozen) |
+| 2026-11-11 | Qwen | **0** | §11 owner package answered (N=0) | 0 of 0 (cap = 0, frozen) |
 
 ## Routing contract (recording it here so future sessions do not re-litigate it)
 
@@ -31,8 +32,8 @@ Ledger columns: `date | model | requests | phase | remaining`. Updated after EVE
   `docs/RUN_STATE_OC.md` for visual) and `docs/HANDOFF.md`, <= 40 lines: done | hashes | next |
   budget. Never through chat history.
 
-## Missing input (goes into the §11 package, asked once)
+## Resolved input (§11 package, asked once, answered 2026-11-11)
 
-- **Q0 (budget):** what is `N` for `QWEN_WEEKLY_CAP`? Default if the owner is silent: `N = 0`,
-  i.e. no Qwen calls this release, all three optional review roles handled by Hy4. Reversible
-  ("approved by delegation", revert path: one line in this ledger + one `TZ_DECISIONS` row).
+- **Q0 (budget):** `N = 0` — no Qwen calls this release; the three optional review roles are
+  handled by Hy4. Reversible ("approved by delegation"; revert path: one line in this ledger +
+  the Q0 row in `docs/TZ_DECISIONS.md`). Not re-asked.
