@@ -9,6 +9,7 @@ const QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const QUICK_CELL := preload("res://scripts/ui/quick_slot_cell.gd")
 const ITEM_ICONS := preload("res://scripts/ui/item_icons.gd")
 const SURVIVOR := preload("res://assets/textures/screens_v2/character_dim.png")
+const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 ## The survivor of that art, cut out of its 1920 x 1080 frame for the equipment column.
 const SURVIVOR_CROP := Rect2(640.0, 300.0, 640.0, 693.0)
 const CANVAS := Vector2(1280.0, 720.0)
@@ -255,7 +256,11 @@ func _refresh() -> void:
 	_equip_title.text = LocalizationManager.t("INV_EQUIPMENT").to_upper()
 	_quick_title.text = LocalizationManager.t("INV_QUICK_ACCESS").to_upper()
 	_quick_hint.text = LocalizationManager.t("INV_QUICKSLOT_HINT")
-	_hints.text = LocalizationManager.t("INV_HINTS")
+	# KNOWN_ISSUES.md:1831 — inject the real bound keys (Tab / Esc) instead of the
+	# hard-coded letters, so a remap is reflected here too.
+	_hints.text = LocalizationManager.tf("INV_HINTS", [
+		_InputRemap.key_text(_InputRemap.key_of("inventory_toggle")),
+		_InputRemap.key_text(_InputRemap.key_of("ui_cancel"))])
 	_sort_label.text = LocalizationManager.t("INV_SORT_LABEL").to_upper() + " "
 	for i in SORT_MODES.size():
 		_sort_buttons[i].text = LocalizationManager.t(String(SORT_KEYS[SORT_MODES[i]])).to_upper()

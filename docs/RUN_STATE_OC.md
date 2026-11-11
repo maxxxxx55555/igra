@@ -43,3 +43,12 @@ P0 DONE: base 965ec095 | battery 6 FAIL / 97 PASS (dirty tree) | Qwen 0 | UNFROZ
 Visual lane: W1-W11 conflict RESOLVED BY CODE — W2-W10 have live consumers; AGENTS.md:25-29 stale; ground script-driven; one WorldEnvironment. Table: docs/RELEASE_GAP_FINAL.md §2.
 Artifacts: ENVIRONMENT.md, RELEASE_GAP_FINAL.md, BUDGET_LEDGER.md, WORKBUDDY_SKILLS.md, p0_static_20261111.out.
 Next: one §11 owner package -> P1 (T2,T3,T7 real bugs -> T1 wiring -> T4,T5 perf -> T6,T8-T14).
+
+## P1 wave 1 — G-MSAA (2026-11-11)
+Visual lane: null-guarded msaa_3d tier write (world_env_setup.gd); regression gate msaa_guard_check.py + mutation; headless suite + explicit scene both green (proofs p1_msaa_*).
+Next P1: T2 (X5 LUT), then T1/T4/T5, then T6/T8-T14.
+Frames: 8 store stills re-shot at 718a4fad (AF3 F4), PRESS_KIT.md regenerated. af3 8/8 green. No scope-file bypass.
+
+## P1 wave 2 — T7 + T3 (2026-11-11)
+T7 (two-finger probe) closed-with-evidence: PR #73 stacked on #72. Hard headless constraint documented (parse_input_event cannot drive a Control in --headless); game touch code is index-agnostic (joystick holds first finger, HUD slot accepts any index, BtnInteract/BtnAttack wired to InputService). Gate two_finger_touch_check.py BITES under --demo.
+T3 (key hints) closed-with-evidence: 3 live call-sites (`help_ui.gd`, `inventory_ui.gd`) now show the real bound key via InputRemap.key_of/key_text; en+ru `%s` parity kept. Remaining named keys are dead (no call-site) — flagged to owner.

@@ -2938,3 +2938,27 @@ Skill log: ponytail, ponytail-review, godot-style, backup-first, memory-keeper, 
 Foreign dirty tree untouched (§1.6): music_manager.gd, _audio_lifecycle_check.gd, launch_ledger.tsv, docs/AUTHENTICATION.md.
 Gates: closure_guard 0 findings; doc_ctrl_check 0; af5_check 1 finding (foreign AUTHENTICATION.md (line 23), not our zone).
 Next: one §11 owner package (Q0-Q11) -> P1 (T2,T3,T7 -> T1 -> T4,T5 -> T6,T8-T14).
+
+## P1 wave 1 — G-MSAA (2026-11-11)
+P1 W1: branch p1/g-msaa-20261111 | base 24b970a1 | G-MSAA closed-with-evidence | Qwen 0 of 0.
+Worker visual: single-line null guard `if get_viewport() != null:` before the msaa_3d write (scripts/world_env_setup.gd _apply_graphics_tier). Zero line shift: 22 docs cite that file, so adding lines broke AAA_BENCHMARK.md:50 -> :217 (af5 C3). Fixed by keeping one line replaced by one line.
+Worker qa: tools/qa_sim/msaa_guard_check.py with --demo mutation (real=PASS, mutation=FAIL -> BITES); lead wired it into check.sh.
+Lead engine runs (proof_run --launch): p1_msaa_headless_20261111 headless_suite EXIT=0; p1_msaa_scene_20261111 explicit qa_headless_suite_scene RC=0, DONE fails=0, zero SCRIPT ERROR/msaa_3d.
+Known non-blocking at exit: ObjectDB leak warning + 22 resources still in use (headless shutdown, not a script error) - META, not GAME-AFFECTING.
+Foreign dirty files still untouched (§1.6). Registry G-MSAA row updated in RELEASE_GAP_FINAL.md.
+
+## P1 wave 1 — frames + press kit (2026-11-11)
+AF3 F4: the G-MSAA guard changed a runtime path (world_env_setup.gd), so the 8 store stills with hash a2672e77 correctly went stale (af3 8/8 FAIL). NOT bypassed via af3_f4_scope.tsv (a lighting owner reaches every frame; a '*' row would be self-approval, R6).
+Re-shot 8 frames via proof_run --launch p1_store_frames_20261111 -> guarded_windowed release_frames_scene.tscn, TLS_CAPTURE_HASH=718a4fad, real windowed GPU (AMD Radeon / OpenGL 3.3 Compatibility), RC=0. Old frames backed up to ..\_BACKUPS\2026-11-11_p1-store-frames.
+af3 frames=8 fail=0 after the frame commit; store_frames_check 10 frames / 0 faults. press_kit.py --write store/PRESS_KIT.md regenerated the 8 picture rows (code-owned gate); --check now green.
+
+## P1 wave 2 — T7 two-finger touch (2026-11-11)
+T7 (two-finger HUD press while joystick held): closed-with-evidence. Owner directive v2.0 §9 P1 wave 2 first row.
+Branch p1/t7-two-finger-20261111 (to be opened). Qwen 0 of 0.
+Worker qa: new probe scripts/tools/_two_finger_probe.gd + scene scenes/tools/two_finger_touch_probe_scene.tscn; gate tools/qa_sim/two_finger_touch_check.py with --demo mutation (real=PASS, mutation=FAIL -> BITES), wired into tools/check.sh, tools/qa_sim/headless_suite, tools/release/pipeline.py by the lead.
+Lead engine runs (proof_run --launch): p1_t7_final_20261111 two_finger_touch_probe_scene DONE fails=0, # EXIT=0, zero SCRIPT ERROR. Raw log: docs/artifacts/rc16/proofs/p1_t7_final_20261111.out.
+Hard headless constraint discovered: Input.parse_input_event() does NOT dispatch synthetic GUI input (InputEventScreenTouch or InputEventMouseButton) to a Control in --headless — so a real touch cannot be injected into Godot's BaseButton headless (that is exactly why the old touch probe used button_down.emit()). The probe therefore exercises the game's OWN touch code: joystick keeps first finger + rejects second (no hijack), HUD quick-slot accepts index=1 with no index==0 restriction (guarded by device != EMULATION), main buttons wired button_down -> request_interact/request_attack.
+Findings: the game's touch code is index-agnostic; NO code-level second-finger bug. Residual device-only risk (Godot touch->emulated-mouse pointer collision on a real phone) delegated to P4 device pass. No gate weakened (R6). Zero line shift: the probe/scene/check are all new files; hud_3d.gd / virtual_joystick.gd are unchanged.
+
+## P1 wave 2 — T3 (2026-11-11)
+T3 key-hint strings: the live defect was 3 active call-sites that hard-coded the default key letter — `help_ui.gd` (`tutorial_move`, `HINT_FLASHLIGHT`) and `inventory_ui.gd` (`INV_HINTS`). Wired `LocalizationManager.tf(key, [InputRemap.key_text(InputRemap.key_of(action))])` so the real bound key shows after a remap. en+ru carry `%s` placeholders with identical specifier counts (1/1/2). The other named keys (`HINT_INVENTORY`, `TUT_FIND_FLASHLIGHT`, `WORKBENCH_CLOSE`, `tip4`, `tutorial_map`) have NO active call-site (only in data/i18n + `_QUARANTINE/scripts/ui/onboarding.gd`; tip4/tutorial_map flagged unused) — left as-is, flagged to owner. Gates green: i18n_truth PASS, i18n_placeholder_fuzz 0 findings, hardcoded_text_gate 0 hits, gdtoolkit parse OK. Registry T3 row closed-with-evidence.
