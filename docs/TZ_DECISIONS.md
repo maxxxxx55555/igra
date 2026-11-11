@@ -4,8 +4,49 @@ Every row below is a case `docs/TZ_COMPLIANCE_AUDIT.md` scored GAP-OWNER, or a G
 straight verbatim fix wasn't the right call. DR numbers are `docs/EXEC_PLAN.md` §2. One row per
 decision, added as C4 reaches it — not written in advance of the work.
 
+**UNFREEZE (2026-11-11, owner directive "TLS -> RELEASE" v2.0 §0):** the owner has REOPENED the
+agent-closable remainder. The 2026-11-10 "repository is frozen / all agent work complete" status
+in `docs/PROJECT_STATE.md` is superseded as a status statement (it stays as a dated historical
+record). Scope is strictly `1.0.1 -> release`; features beyond the backlog go to
+`docs/POST_RELEASE_BACKLOG.md`. Terminal state is `RELEASE-READY / BLOCKED(owner-only)`, never
+`CLOSED` / `SHIPPED` without owner proof (`tools/closure_guard.py`). The single work queue is
+`docs/RELEASE_GAP_FINAL.md`. Already-decided and NOT to be re-asked: music=variant A
+(`docs/MUSIC_RIGHTS_MEMO.md`), KEPT-27, DAILY-27, NGCFG-27, SLAB-27, HALO-27, the 2-locale cut,
+the name "Last Streetlight". Owner veto is a single revert of one batch commit.
+
 | ID | DR | Decision | Reason |
 |---|---|---|---|
+| UNFREEZE-20261111 | owner directive §0 | Reopen agent work for the sole purpose of finishing 1.0.1; keep the freeze text as dated history. | The previous closure declared the repo frozen while W-wiring, story, perf and QA rows were still open; the owner issued a new written scope. Dated, reversible by one revert. |
+| W-TRUTH-20261111 | §1.2 code-truth rule 1 | `AGENTS.md:25-29`'s "only W1 connected, W2-W10 zero consumers" is STALE, not an open job. W2-W10 have live consumers; ground is script-driven; `district_scene_factory.gd` has no second WorldEnvironment on current main. | Verified by `git grep` per asset; full file:line table in `docs/RELEASE_GAP_FINAL.md` §2. Code wins over docs. |
+| QWEN-CAP-DELEGATION | §6 / §11 | `QWEN_WEEKLY_CAP = {{N}}` was left unset. Default if the owner is silent: `N = 0`, zero Qwen calls, Hy4 covers the three optional review roles. | Reversible: one line in `docs/BUDGET_LEDGER.md` + this row. Recorded as "approved by delegation" on 2026-11-11. |
+
+## §11 owner package — answered once, 2026-11-11 (no re-asking)
+
+The one §11 package was presented after P0 and answered by the owner on 2026-11-11:
+**"accept all defaults by delegation"**, PEGI **16**, ads **stub / plugin off**, `QWEN_WEEKLY_CAP`
+**N = 0**. Per §11 these answers and the silence-defaults are recorded here, dated, once, and
+**are not re-asked**. Every reversible item below is **"approved by delegation"** — the lead may
+proceed without a further owner turn. Revert path for the whole batch: one `git revert` of the
+P0/P1 batch commit plus restoring this section's pre-2026-11-11 text from
+`..\_BACKUPS\2026-11-11_p0-docs\docs\TZ_DECISIONS.md`. Owner veto = revert of one batch commit.
+
+| Q | Decision (dated 2026-11-11) | Class | Revert path |
+|---|---|---|---|
+| Q0 | `N = 0`; zero Qwen calls; Hy4 covers final review, arbitration, en/ru QA | reversible | one `BUDGET_LEDGER.md` line |
+| Q1 | PEGI **16** (was 12 in the older checklist) | reversible | one IARC answer / line in `docs/store/HUMAN_CHECKLIST.md` |
+| Q2 | Ads **off at launch**: stub provider, plugin disabled (rc14 behaviour); enabling = a separate wave with a Data Safety update | reversible | one config toggle + Data Safety row |
+| Q3 O-1 | High tier **ship as is**; QualityManager + dynamic resolution handle phones; device decides at P4 | reversible | one settings default |
+| Q4 K-1 | **NO** repository history rewrite (~979 MB). Irreversible | **irreversible — NOT performed** | n/a |
+| Q5 L-1 | **NO** Russian-comment cleanup (1656 lines) in 1.0.1 | reversible | one future wave |
+| Q6 R10 | **Keep** the two shop skin stubs. Removing them is irreversible for owner saves | **irreversible — NOT performed** | n/a |
+| Q7 | **Accept** monster/boss primitives in 1.0.1; CC0 mesh wave is post-release (B9, already decided S37V7-WORLD) | reversible | `POST_RELEASE_BACKLOG.md` row |
+| Q8 UNLOCK-27 | **Deferred to owner decision**; `district_one` / `shadow_slayer` / `secret_hunter` stay as-is. No economy change (-300 coins) without an explicit owner choice | reversible | one content batch |
+| Q9 ENDART-27 / Gemini music | **post-release** by default; music stays variant A (already decided, `docs/MUSIC_RIGHTS_MEMO.md`). No new Gemini session | reversible | backlog row + owner sign-in |
+| Q10 S-15 / S-16 | **Deferred to owner decision**; 22 unplaced notes and bible-file wording are not rewritten by the agent | reversible | one content batch |
+| Q11 | Tag `v1.0.1` and the Production-rollout moment stay with the **owner** (P4). No tag is pushed by the agent at P0–P3 | owner-only | n/a |
+
+Consequence: all reversible design questions are closed for this release; only the owner-only
+residue of §11 and P4 remains. No `CLOSED` / `SHIPPED` status may be set on this basis.
 | V03 | DR-6 | No Bebas Neue **Bold** file exists anywhere in `assets/fonts/` (checked: only `-Regular.ttf` for all four families). Not wired. | Owner supplies the font file; this is an asset gap, not a code gap. |
 | G01 | DR-2 | FPS is the default via `fps_mode=true` on the main-scene camera; TPS is the opt-in path. The `player_fps.tscn` filename the audit expected doesn't exist, but the TZ only requires FPS-as-canon/TPS-as-option, which the live behavior already satisfies. | The audit's own quote says TPS is «опция» — met by any code path, not a specific filename. |
 | D02 | DR-2 | Every district's `powered_by` prerequisite is an earlier district in the D01 canonical order (suburbs→park/residential, park→police/gas_station, residential→school/hospital, hospital→warehouses, warehouses+police→industrial→substation→power_station). The TZ states the 11-district order, not that the unlock graph must be strictly linear. | No contradiction between D01's quote and the live branching graph; nothing to change. |

@@ -2927,3 +2927,14 @@ OpenCode/Cline session has started work).
 - `coverage_matrix`: 51/60 mechanics, 9 log-matching misses with no waiver (FOV kick, salvage, barrels, radio, four hiding types, truth ending) - the mechanics exist and the closeout checks them; the follow-up is a waiver or a run log per row.
 - The true remainder of the pass is the two tool-drift rows `G-TIMING` (engine semantics) and `G-MUT` (stale mutation rows + subset baselines) plus `G-COV`; everything else in the queue is PASS, DEFER with a reason, or SKIP.
 - **The tag `v10.0.0` is withheld by the pass's own DoD (R10: tag only when §7 holds), which now needs an owner decision:** either (a) accept the engine-semantics note (the game itself is green: closeout 611/0, perf, bot, audio, soak) and authorize the tag, or (b) authorize a compat patch of `timing_equiv` and `s26_mutations` (a change of the gate semantics, not a tuning to pass) after which the tag can be pushed by a later pass.
+
+## P0 — audit & registry (2026-11-11, owner directive "TLS -> RELEASE" v2.0)
+
+P0 DONE: branch p0/audit-20261111 | base 965ec095 | battery 6 FAIL / 97 PASS / EXIT=6 (dirty tree) | Qwen 0 (cap N unset).
+UNFREEZE recorded as dated rows in docs/TZ_DECISIONS.md (UNFREEZE-20261111, W-TRUTH-20261111, QWEN-CAP-DELEGATION).
+W1-W11 conflict resolved BY CODE: W2-W10 have live consumers; AGENTS.md:25-29 stale. Table: docs/RELEASE_GAP_FINAL.md §2.
+Artifacts: docs/ENVIRONMENT.md, docs/RELEASE_GAP_FINAL.md, docs/BUDGET_LEDGER.md, docs/WORKBUDDY_SKILLS.md, docs/artifacts/rc16/proofs/p0_static_20261111.out.
+Skill log: ponytail, ponytail-review, godot-style, backup-first, memory-keeper, token-saver, nitpicker, spec-kit cards loaded 2026-11-11 (WORKBUDDY_SKILLS.md).
+Foreign dirty tree untouched (§1.6): music_manager.gd, _audio_lifecycle_check.gd, launch_ledger.tsv, docs/AUTHENTICATION.md.
+Gates: closure_guard 0 findings; doc_ctrl_check 0; af5_check 1 finding (foreign AUTHENTICATION.md (line 23), not our zone).
+Next: one §11 owner package (Q0-Q11) -> P1 (T2,T3,T7 -> T1 -> T4,T5 -> T6,T8-T14).

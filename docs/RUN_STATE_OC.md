@@ -37,3 +37,9 @@ A4: weekly-full now installs soundfile+ffmpeg → success (run 42849108468), end
 A5: all four workflows green on main (static, pr-sims, weekly-full, release-wrapper); issues #21/#30/#48/#62 closed.
 A6: branch protection now requires the `static` status check (force-push stays disabled).
 Next: Phase B — doc-truth reconciliation + tools/closure_guard.py (6 rules).
+
+## P0 — audit & registry (2026-11-11)
+P0 DONE: base 965ec095 | battery 6 FAIL / 97 PASS (dirty tree) | Qwen 0 | UNFROZEN by owner directive v2.0.
+Visual lane: W1-W11 conflict RESOLVED BY CODE — W2-W10 have live consumers; AGENTS.md:25-29 stale; ground script-driven; one WorldEnvironment. Table: docs/RELEASE_GAP_FINAL.md §2.
+Artifacts: ENVIRONMENT.md, RELEASE_GAP_FINAL.md, BUDGET_LEDGER.md, WORKBUDDY_SKILLS.md, p0_static_20261111.out.
+Next: one §11 owner package -> P1 (T2,T3,T7 real bugs -> T1 wiring -> T4,T5 perf -> T6,T8-T14).

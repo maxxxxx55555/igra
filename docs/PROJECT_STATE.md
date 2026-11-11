@@ -8,20 +8,45 @@ Machine-readable header block first, then prose.
 ```yaml
 version: 1.0.1
 version_code: 17
-main_sha: 04d54aae806310cbf90f115c820e505172cc6e0a
+main_sha: 965ec095c945f976edab4a58ec6c66243a8d89e0
 locales: [en, ru]
 districts: 11
 status: BLOCKED
+status_detail: UNFROZEN-IN-PROGRESS (owner directive 2026-11-11; terminal state RELEASE-READY / BLOCKED(owner-only))
 owner_only_items: 6
-last_verified: 2026-11-10
+last_verified: 2026-11-11
 ```
 
-## Status: BLOCKED (owner-only residue)
+<!-- UNFREEZE (2026-11-11, owner directive "TLS -> RELEASE" v2.0 §0): the 2026-11-10
+"frozen for agent work" status below is a dated historical record, SUPERSEDED as a status
+statement. The owner reopened the agent-closable remainder for the sole purpose of taking
+1.0.1 to release. The single work queue is docs/RELEASE_GAP_FINAL.md; the decision log is
+docs/TZ_DECISIONS.md. `CLOSED` / `SHIPPED` remain forbidden without owner proof. -->
 
-The repository is **frozen for agent work**. All agent-closable work across Phases A–H has been
-completed or explicitly deferred to the owner. The remaining open items are **owner-only** (they
-require secrets, store accounts, or business decisions the agent cannot perform) and are listed in
-`docs/artifacts/known_owner_only_items.md` (6 items):
+<!-- W TRUTH (2026-11-11, §1.2 resolved by code, PR-dated): the claim in AGENTS.md:25-29 that
+only W1 of VISUAL_PASS.md's W1-W11 is connected and W2-W10 have "zero consumers" is STALE.
+git grep on current main shows live consumers for W2 (world_env_setup.gd:46,108),
+W3 (district_dressing.gd:31), W4 (lamp_head.gd:6, street_props.gd:217),
+W5 (street_wetness.gd:6, street_props.gd:316), W6 (contact_shadows.gd:34, visual_quality.tres:9-12),
+W7 (weather_particles.gd:6-7, player_3d.gd:1503), W8 (menu_parallax.gd, main_menu.gd),
+W9 (theme_setup.gd:18, theme_provider.gd:18-24), W10 (streetlight_3d.gd:27,50,68-69).
+Ground rendering is script-driven (district_grading.gd tints ground; world_env_setup.gd is the
+single WorldEnvironment writer); district_scene_factory.gd has no WorldEnvironment on main.
+Full file:line table: docs/RELEASE_GAP_FINAL.md §2. Code wins over docs. -->
+
+## Status: UNFROZEN — agent work reopened (2026-11-11), owner-only residue unchanged
+
+**Historical (2026-11-10):** the repository was declared frozen and the Phase A–H agent work
+declared complete. The 2026-11-11 owner directive reopened the agent-closable remainder; that
+freeze statement is retained above only as a dated witness, not as the current status.
+
+**Current (2026-11-11, P0):** the single registry `docs/RELEASE_GAP_FINAL.md` lists all open
+agent rows (T1-T14, P0 battery defects, KNOWN_ISSUES verify-first rows) and all owner/decision
+rows. P0 battery truth: 6 failed / 97 passed on a dirty tree
+(`.qa_logs/proofs/p0_static_20261111.out`, `docs/ENVIRONMENT.md`). Terminal state after P1-P3
+must be `RELEASE-READY` or `BLOCKED(owner-only)`; `CLOSED` / `SHIPPED` require owner proof.
+The following 6 items remain **owner-only** (secrets, store accounts, or business decisions)
+and are listed in `docs/artifacts/known_owner_only_items.md`:
 
 1. Windows Authenticode signing (owner code-signing certificate / keystore).
 2. Android upload signing (owner upload key + Play Console account).

@@ -2,6 +2,27 @@
 
 # Handoff
 
+## CURRENT — P0 audit, 2026-11-11 (owner directive "TLS -> RELEASE" v2.0)
+
+- **UNFROZEN** by written owner scope 2026-11-11. The 2026-11-10 freeze below is a dated
+  historical record, not the current status. Terminal state: `RELEASE-READY` /
+  `BLOCKED(owner-only)`; `CLOSED`/`SHIPPED` forbidden without owner proof.
+- Verified against origin/main at P0 (2026-11-11): `965ec095c945f976edab4a58ec6c66243a8d89e0`;
+  2 locales (en, ru); version 1.0.1 / code 17. Re-read the live SHA before acting.
+- **Single work queue:** `docs/RELEASE_GAP_FINAL.md`. Decisions: `docs/TZ_DECISIONS.md`.
+  Environment facts: `docs/ENVIRONMENT.md`. Budget: `docs/BUDGET_LEDGER.md`.
+  Protocol cards: `docs/WORKBUDDY_SKILLS.md` (load first each session).
+- **W1-W11 conflict resolved BY CODE:** W2-W10 have live consumers; `AGENTS.md:25-29` is stale.
+  Full file:line table in `docs/RELEASE_GAP_FINAL.md` §2. Ground is script-driven; one
+  WorldEnvironment (`scripts/world_env_setup.gd`).
+- **P0 battery truth:** 6 failed / 97 passed, `EXIT=6` on a dirty tree
+  (`docs/artifacts/rc16/proofs/p0_static_20261111.out`). Real defect: `msaa_3d` null instance
+  at `scripts/world_env_setup.gd:197`. `af5_check` FAIL is from a foreign untracked
+  `docs/AUTHENTICATION.md` — NOT to be touched by this session.
+- Next: answer the one §11 owner package, then P1 (T2, T3, T7 -> T1 -> T4, T5 -> rest),
+  P2 juice (spec-kit), P3 build (code 18), P4 owner injection, P5 launch.
+- Session context travels ONLY through `docs/RUN_STATE.md`, `docs/RUN_STATE_OC.md` and this file.
+
 ## SHIP STATE: RELEASE CANDIDATE FINAL v5 — 2026-09-13 (MEGA FINAL PASS)
 
 `origin/main` is **RELEASE CANDIDATE FINAL v5**. Two consecutive full regressions on the

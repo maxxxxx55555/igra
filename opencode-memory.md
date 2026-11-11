@@ -265,3 +265,10 @@
 ## 2026-11-06 Session 39k, the owner's rules in the store description (Claude Opus 5.5)
 - Changed: the store description (en, ru) and its bullets carry the owner's rules (darkness, the lit-architecture map, items found by exploring, a button for every action); the GDD no longer lists the radar and the minimap; larger skill cards; version code 17 rebuilt from `439e9ae2`.
 - Lessons: the guard hook reads `git push` followed anywhere by `-f` (an `rm -f` later in the same command) as a force push: keep a push in its own command.
+
+## 2026-11-11 — P0 audit (owner directive "TLS -> RELEASE" v2.0)
+UNFREEZE: owner reopened agent work for 1.0.1 -> release; terminal RELEASE-READY / BLOCKED(owner-only), never CLOSED without owner proof.
+Single queue docs/RELEASE_GAP_FINAL.md; decisions docs/TZ_DECISIONS.md; env docs/ENVIRONMENT.md; budget docs/BUDGET_LEDGER.md; skills docs/WORKBUDDY_SKILLS.md.
+W1-W11 conflict resolved by code: W2-W10 HAVE live consumers (file:line table in RELEASE_GAP_FINAL.md §2); AGENTS.md:25-29 is stale. Ground script-driven, one WorldEnvironment.
+P0 battery: 6 FAIL / 97 PASS, EXIT=6 on dirty tree. Real defects: msaa_3d null at world_env_setup.gd:197; af5 FAIL from foreign untracked docs/AUTHENTICATION.md (line 23) (do not touch).
+JSON/secret hygiene: .signing/ gitignored, no password read. JDK=Android Studio JBR 21, JAVA_HOME env var stale (points at deleted JDK17).
