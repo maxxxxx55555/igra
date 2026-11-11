@@ -1,0 +1,28 @@
+# proof p1_msaa_headless_20261111
+# utc 20261111T175056Z
+# head 24b970a1 (uncommitted paths: 28)
+# env TLS_SKIP_REIMPORT=1 
+# cmd bash tools/qa_sim/headless_suite
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+── Engine gates (headless, per-gate timeout)
+  [32mOK  [0m compile all scripts
+  [32mOK  [0m signal arity
+  [32mOK  [0m autoload API
+  [32mOK  [0m i18n
+  [32mOK  [0m assets
+  [32mOK  [0m save integrity
+  [32mOK  [0m boot-flow
+  [32mOK  [0m footstep mapper
+  [32mOK  [0m qa launch guard
+  [32mOK  [0m audio silence-before-input
+  [32mOK  [0m theme unify
+  [2mskip[0m perf budget (self-skips headless) (windowed-only, same exit 3 as check.sh run_gate)
+  [32mOK  [0m touch input probe
+── Extended scenario driver (districts / save+lang / endings / i18n x13 / soak)
+  [32mOK  [0m qa headless suite
+
+──────────────────────────────────────
+[32mHeadless suite green.[0m
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

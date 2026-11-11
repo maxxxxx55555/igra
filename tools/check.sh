@@ -213,6 +213,13 @@ if "$PY" tools/qa_sim/visual_truth_gate.py --demo >/dev/null 2>&1; then
 else
   bad "visual_truth_gate --demo (defect patterns fail, canon patterns pass)"
 fi
+# G-MSAA (2026-11-11): a tier change arrived before the node was in the tree and
+# assigned msaa_3d on a null viewport (SCRIPT ERROR in the headless suite).
+if "$PY" tools/qa_sim/msaa_guard_check.py >/dev/null 2>&1; then
+  ok "msaa_guard_check (no unguarded msaa_3d assignment on a null viewport)"
+else
+  bad "msaa_guard_check (no unguarded msaa_3d assignment on a null viewport)"
+fi
 gate_missed=0
 for f in docs/stills/evidence/r0_before_*.png docs/stills/evidence/magenta_corruption_suburbs.png docs/stills/evidence/r1_scale08*.png; do
   if "$PY" tools/qa_sim/visual_truth_gate.py "$f" >/dev/null 2>&1; then gate_missed=$((gate_missed + 1)); fi

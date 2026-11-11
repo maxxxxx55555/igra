@@ -194,7 +194,7 @@ func _apply_stage_of(district_id: StringName) -> void:
 ## before the district stage/LUT/postfx application below, which refine
 ## rather than replace this base — matches the wiring spec's stated order.
 func _apply_graphics_tier(tier: int) -> void:
-	get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
+	if get_viewport() != null: get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]  # QualityManager can tick before this node is in the tree
 	if _env == null:
 		return
 	var vq := load(VISUAL_QUALITY)

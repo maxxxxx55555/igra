@@ -1,0 +1,60 @@
+# proof p1_msaa_final_20261111
+# utc 20261111T181151Z
+# head 24b970a1 (uncommitted paths: 34)
+# env TLS_SKIP_REIMPORT=1 
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/qa_headless_suite_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[qa] t=0.0s P0 autoloads: 12 checked, 0 missing
+[qa] t=3.9s P1 New Game OK, player spawned
+[qa] t=5.6s P1b input coverage: 29/29 actions exercised, 0 crash
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[qa] t=9.2s P2 districts: 11 checked
+[qa] t=9.5s P2b combat: hp 30.0 -> 5.0 — OK
+[qa] t=9.6s P3 save/load round-trip with language switch OK
+[qa] t=9.6s P4 endings: 5 checked
+[qa] t=9.7s P5 i18n: 2 locales x (1586 en keys + 10 surface keys), 0 MISSING
+[qa] t=10.3s P2c finale boss race: boss spawned and alive in power_station after Travel - OK
+[qa] t=10.3s P2d document id race: real _spawn_document -> _ready sees id -> collect unlocks it - OK
+[qa] t=11.1s P2e skill stack race: one rank of move_speed survives 2 real restarts at 3.3, no compounding - OK
+[qa] t=11.1s P2f secret full-backpack: secret preserved, not recorded as found - OK
+[qa] t=11.2s P2g quest reward full-backpack: stays open when full, completes once there's room - OK
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[qa] t=11.5s P2h kill pays wallet: 9420 -> 9432 - OK
+[qa] t=11.7s P2i district save position race: no stale marker write, saved position matches post-transition spawn - OK
+[qa] t=11.7s P2j locked district travel blocked: transition_to() correctly refused - OK
+[qa] t=11.7s P2k streetlight_activated fires exactly once per district - OK
+[qa] t=11.9s P2l import survives the next event-driven autosave - OK
+[qa] t=12.7s P2m periodic autosave writes the real save Continue reads - OK
+[qa] t=12.8s P2n Q1 answer: after travel to 'park', first-tick player state: valid=true in_tree=true finite=true pos=(-8.0, 0.859892, -8.0)
+[qa] t=12.8s P2n Q1 answered: player is valid, in-tree and finite after travel to park - the report's ppos=(inf,inf,inf) heartbeat entries are the _player_ok()==false fallback sentinel, not evidence of a broken transform
+[qa] t=12.8s P2o offline player correctly does not treat OfflineMultiplayerPeer as a live network - OK
+[qa] t=13.0s P2p fall recovery armed on spawn (mark_spawn_as_grounded wired into WorldRuntime._place_player) - OK
+[qa] t=13.1s P2q autoload behavioural asserts run - OK
+[qa] t=13.6s P2r respawn keeps district/stage, HP 50%, battery not refilled - OK
+[qa] t=13.6s P2r flashlight upgrades survive respawn (energy 28.8, stability L5) - OK
+[qa] t=13.6s P6 soak: 120s sustained gameplay target
+[qa] t=23.6s P6 heartbeat 10/120s — playing, player alive, no freed-instance/state errors
+[qa] t=33.6s P6 heartbeat 20/120s — playing, player alive, no freed-instance/state errors
+[qa] t=43.6s P6 heartbeat 30/120s — playing, player alive, no freed-instance/state errors
+[qa] t=53.6s P6 heartbeat 40/120s — playing, player alive, no freed-instance/state errors
+[qa] t=63.6s P6 heartbeat 50/120s — playing, player alive, no freed-instance/state errors
+[qa] t=73.6s P6 heartbeat 60/120s — playing, player alive, no freed-instance/state errors
+[qa] t=83.6s P6 heartbeat 70/120s — playing, player alive, no freed-instance/state errors
+[qa] t=93.6s P6 heartbeat 80/120s — playing, player alive, no freed-instance/state errors
+[qa] t=103.6s P6 heartbeat 90/120s — playing, player alive, no freed-instance/state errors
+[qa] t=113.6s P6 heartbeat 100/120s — playing, player alive, no freed-instance/state errors
+[qa] t=123.6s P6 heartbeat 110/120s — playing, player alive, no freed-instance/state errors
+[qa] t=133.6s P6 heartbeat 120/120s — playing, player alive, no freed-instance/state errors
+[qa] t=133.6s P6 soak: 120s sustained, clean
+[qa] DONE fails=0
+[qa-guard] profile restored byte-identical
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+# EXIT=0

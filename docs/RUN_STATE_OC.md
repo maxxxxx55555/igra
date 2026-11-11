@@ -43,3 +43,7 @@ P0 DONE: base 965ec095 | battery 6 FAIL / 97 PASS (dirty tree) | Qwen 0 | UNFROZ
 Visual lane: W1-W11 conflict RESOLVED BY CODE — W2-W10 have live consumers; AGENTS.md:25-29 stale; ground script-driven; one WorldEnvironment. Table: docs/RELEASE_GAP_FINAL.md §2.
 Artifacts: ENVIRONMENT.md, RELEASE_GAP_FINAL.md, BUDGET_LEDGER.md, WORKBUDDY_SKILLS.md, p0_static_20261111.out.
 Next: one §11 owner package -> P1 (T2,T3,T7 real bugs -> T1 wiring -> T4,T5 perf -> T6,T8-T14).
+
+## P1 wave 1 — G-MSAA (2026-11-11)
+Visual lane: null-guarded msaa_3d tier write (world_env_setup.gd); regression gate msaa_guard_check.py + mutation; headless suite + explicit scene both green (proofs p1_msaa_*).
+Next P1: T2 (X5 LUT), T3 (key hints), T7 (two-finger probe), then T1/T4/T5, then T6/T8-T14.

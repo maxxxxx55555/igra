@@ -2938,3 +2938,11 @@ Skill log: ponytail, ponytail-review, godot-style, backup-first, memory-keeper, 
 Foreign dirty tree untouched (§1.6): music_manager.gd, _audio_lifecycle_check.gd, launch_ledger.tsv, docs/AUTHENTICATION.md.
 Gates: closure_guard 0 findings; doc_ctrl_check 0; af5_check 1 finding (foreign AUTHENTICATION.md (line 23), not our zone).
 Next: one §11 owner package (Q0-Q11) -> P1 (T2,T3,T7 -> T1 -> T4,T5 -> T6,T8-T14).
+
+## P1 wave 1 — G-MSAA (2026-11-11)
+P1 W1: branch p1/g-msaa-20261111 | base 24b970a1 | G-MSAA closed-with-evidence | Qwen 0 of 0.
+Worker visual: single-line null guard `if get_viewport() != null:` before the msaa_3d write (scripts/world_env_setup.gd _apply_graphics_tier). Zero line shift: 22 docs cite that file, so adding lines broke AAA_BENCHMARK.md:50 -> :217 (af5 C3). Fixed by keeping one line replaced by one line.
+Worker qa: tools/qa_sim/msaa_guard_check.py with --demo mutation (real=PASS, mutation=FAIL -> BITES); lead wired it into check.sh.
+Lead engine runs (proof_run --launch): p1_msaa_headless_20261111 headless_suite EXIT=0; p1_msaa_scene_20261111 explicit qa_headless_suite_scene RC=0, DONE fails=0, zero SCRIPT ERROR/msaa_3d.
+Known non-blocking at exit: ObjectDB leak warning + 22 resources still in use (headless shutdown, not a script error) - META, not GAME-AFFECTING.
+Foreign dirty files still untouched (§1.6). Registry G-MSAA row updated in RELEASE_GAP_FINAL.md.

@@ -272,3 +272,6 @@ Single queue docs/RELEASE_GAP_FINAL.md; decisions docs/TZ_DECISIONS.md; env docs
 W1-W11 conflict resolved by code: W2-W10 HAVE live consumers (file:line table in RELEASE_GAP_FINAL.md §2); AGENTS.md:25-29 is stale. Ground script-driven, one WorldEnvironment.
 P0 battery: 6 FAIL / 97 PASS, EXIT=6 on dirty tree. Real defects: msaa_3d null at world_env_setup.gd:197; af5 FAIL from foreign untracked docs/AUTHENTICATION.md (line 23) (do not touch).
 JSON/secret hygiene: .signing/ gitignored, no password read. JDK=Android Studio JBR 21, JAVA_HOME env var stale (points at deleted JDK17).
+
+## 2026-11-11 — P1 wave 1 (G-MSAA)
+Fixed the real runtime defect found at P0: _apply_graphics_tier wrote msaa_3d on a null viewport when QualityManager ticked before the node entered the tree. Null guard added; tools/qa_sim/msaa_guard_check.py (--demo mutation BITES) wired into check.sh. headless_suite (proof p1_msaa_headless_20261111) EXIT=0; explicit qa_headless_suite_scene (p1_msaa_scene_20261111) RC=0, DONE fails=0, zero SCRIPT ERROR.
