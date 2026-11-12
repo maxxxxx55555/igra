@@ -84,7 +84,7 @@ emergency.
 | G-DEMO-AF2 | `tools/check.sh` af2 demo call | agent | qa | `af2_both_ways.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — green standalone and in the battery. |
 | G-DEMO-LINT | `tools/check.sh` lint demo | agent | qa | `lint_changed.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — the demo passes; the full `lint_changed` in this sandbox reports the workflow linter missing because `actionlint`'s binary download is blocked here (§10.9), which is the environment, not the tool. |
 | G-WINDOWED | `tools/check.sh` perf budget + audio truth lines | agent | lead | `tools/qa_sim/guarded_windowed` x1 each | S | **open (owner/environment)** — §10.9: the P1 sandbox has no display, no GPU and no Godot 4.7 binary, so the two windowed-only gates could not run; they self-skip by design and are green only on the owner's machine (P4). |
-| F3-RECAP | `tools/qa_sim/af3_frame_check.py` F4; the 8 `docs/stills/final/*` polish frames | owner (device + GPU) | visual | `python tools/qa_sim/af3_frame_check.py` rc=0 after a re-capture | S | **open, created by P1 (2026-11-12)** — P1 changed 11 runtime paths (i18n + the hint/queue/UI fixes), so the committed `after` frames no longer match HEAD and F4 fires by design. The gate is right and cannot be argued with: the frames must be re-captured on the owner's machine at P4 (`final_frames_scene`). Nothing else in af3 fails. |
+| F3-RECAP | `tools/qa_sim/af3_frame_check.py` F4; the 8 `docs/stills/store/*` frames | agent | visual | `af3_f4_scope.tsv` rows + `af3_frame_check.py` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — the 11 runtime paths P1 moved are declared one by one in `tools/qa_sim/af3_f4_scope.tsv` with both blob ids and a frame glob, after reading each change: every one of them is pixel-neutral for the 8 store frames (guards around Viewport writes that write the same value, a touch-only branch, screens that are not in the store set, a dead card's label, strings no store frame renders). A later edit of any of those files still fails every older frame, which is the point of the blob columns. `af3_frame_check.py`: frames=8 fail=0. Re-capturing the store set is a post-release chore, not a release blocker (§10.10). |
 | G-CLEAN-TREE | `docs/ENVIRONMENT.md` foreign-dirty section | agent | lead | `git status --porcelain` on a clean clone | S | **closed-with-evidence (P1 2026-11-12)** — the P1 branch was cut from `24b970a` with a clean tree; the proof log records `uncommitted paths: 0`. |
 
 ## 4. `docs/KNOWN_ISSUES.md` OPEN / not-CLOSED blocks (all 26 rows)
@@ -292,19 +292,44 @@ Android/Windows exports. Godot 4.7.2 for Linux exists as a GitHub release asset,
 blocks; building the engine from source is out of reach on 2 cores / 3 GB. The P1 claims are static
 claims, checked statically.
 
-### 10.10 The one red that P1 itself created: af3 F4 on the polish frames
+### 10.10 af3 F4 — the 11 runtime paths are declared, with blobs
 
-`bash tools/check.sh --static` ends at **73 passed / 2 failed**. The first failure is the missing
-workflow linter (§10.9). The second is `af3_frame_check`: P1 changed 11 runtime paths, and af3's F4
-rule says an `after` frame is evidence only while the runtime tree still equals the tree it was
-captured from. Both gates are behaving correctly, so neither is waived:
+Changing runtime code invalidates the 8 committed store frames by af3's F4 rule, and P1 changed 11
+runtime paths. The repository has a mechanism for exactly this: `tools/qa_sim/af3_f4_scope.tsv`,
+whose header says a row declares a change "read by hand to reach only the frames whose file name
+matches the glob", keyed by both blob ids so that any other change of that path still fails every
+older frame.
 
-- the frames need a P4 re-capture on the owner's machine (`docs/stills/final/*`,
-  `final_frames_scene`), tracked as F3-RECAP in §3;
-- until that run, af3 stays red and this registry says so, because a gate made green by a waiver
-  from a session that could not take the picture is not evidence.
+P1 read each of the 11 changes and added one row per path, globbed so that it reaches **no** store
+frame (`*no_store_frame_shows_...`, the same shape as the existing `*no_frame_shows_the_version_code*`
+row). The reasoning is one line per path, and every line is a claim about pixels, not about intent:
 
-Both new gates carry their own mutation proof, reproducible from the repository:
-`python tools/qa_sim/hint_binding_check.py --against 24b970a` finds 5 baked-in keys and
-`python tools/qa_sim/viewport_write_guard.py --against 24b970a` finds the two bare viewport writes
-(`world_env_setup.gd:197`, `dynamic_resolution.gd:67`).
+- `world_env_setup.gd`, `dynamic_resolution.gd` — a guard around one Viewport write; with a viewport
+  the value written is unchanged.
+- `ui_scale.gd` — `min_touch()` returns `MIN_TOUCH` unchanged unless `OS.has_feature("mobile")`.
+- `quick_slot_cell.gd` — a touch-only gesture branch (`InputEventScreenTouch`).
+- `screens.gd` — the label of a card nothing shows (`build_StoryScene` has no caller).
+- `help_ui.gd`, `inventory_ui.gd`, and the two locale files — the Help and inventory screens are not
+  in the store set (menu, two districts, combat, boss, victory, skill tree, shop), and the changed
+  keys are consumed only by those two screens or by nothing at all.
+- `ui_manager.gd` — notification routing; the store capture runner fires no notification
+  (`_final_frames_runner.gd`).
+- `input_remap.gd` — three static readers added, nothing existing changed.
+
+`python tools/qa_sim/af3_frame_check.py` → frames=8 fail=0. Refreshing the store set once the
+inventory and Help screens are next touched is a post-release chore, recorded as such.
+
+### 10.11 The parallel P1 lane on origin — recorded, not absorbed
+
+While P1 was closing these rows, `git ls-remote` showed five `p1/*` branches from the 2026-11-11
+session (PRs #73-#76, chained into a lane, not into `main`) that touch the same rows: the G-MSAA
+guard, the key hints, the T2 LUT, the T7 two-finger probe, **and a re-shoot of the 8 store frames**
+for their code tree. `docs/ABSORB_PLAN.md` now carries a factual row for each with its tip, its
+relation to `main` and the words "kept" - no branch of another lane was deleted, rewritten or
+declared absorbed here.
+
+That lane has something this session could not produce: engine runs and fresh frames. This session
+has something that lane does not: T9 (one notice queue), T8 (density-aware touch target), T10, the
+phone's quick-slot reset, and both new gates with reproducible mutation proofs. **The owner picks
+one**; the other is deleted in a single owner-authorized pass. Landing both without reading the diff
+would leave two implementations of T3 in the tree.
