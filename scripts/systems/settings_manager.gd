@@ -445,13 +445,17 @@ func set_high_contrast(enabled: bool) -> void:
 func _apply_high_contrast() -> void:
 	var env: Environment = _find_environment()
 	if env:
-		env.adjustment_enabled = _settings.get("high_contrast", false)
-		if _settings.get("high_contrast", false):
+		var hc: bool = _settings.get("high_contrast", false)
+		# X5 (BEAUTY_RC16): keep the adjustment layer on whenever a colour-correction
+		# LUT is present. The previous code set adjustment_enabled = hc, which switched
+		# the district LUT OFF 0.5 s after every graphics-tier change -- the
+		# HIGH_CONTRAST_DELAY timer in set_graphics_tier() / _on_node_added() re-runs
+		# this with hc=false, so frames 06-07 came out LUT-off (hue 35/45).
+		env.adjustment_enabled = hc or (env.adjustment_color_correction != null)
+		if hc:
 			env.adjustment_contrast = 1.3
 			env.adjustment_saturation = 1.2
-		else:
-			env.adjustment_contrast = 1.1
-			env.adjustment_saturation = 1.05
+		# else: leave the tier's contrast/saturation untouched (do not clobber to 1.1/1.05)
 
 func set_auto_aim(enabled: bool) -> void:
 	_settings["auto_aim"] = enabled

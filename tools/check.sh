@@ -324,6 +324,13 @@ if "$PY" tools/qa_sim/touch_target_gate.py --demo >/dev/null 2>&1 && "$PY" tools
 else
   bad "touch_target_gate (MIN_TOUCH dropped below 48 raw-px floor — see tools/qa_sim/touch_target_gate.py)"
 fi
+# T7 (2026-11-11): a HUD touch handler must not restrict activation to the
+# first finger (index == 0) — the KNOWN_ISSUES.md:11 second-finger bug.
+if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then
+  ok "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+else
+  bad "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+fi
 # overflow_check.py is a reporting tool (unconditional exit 0, no pass/fail
 # assertion) - deliberately not wired as a gate here, see docs/RUN_STATE.md.
 if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then
