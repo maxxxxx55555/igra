@@ -8,13 +8,15 @@ extends Control
 ## locale-translated hint/onboarding strings (ponytail: reuse before
 ## write) rather than authoring new prose.
 
+const _InputRemap := preload("res://scripts/systems/input_remap.gd")
+
 var embedded: bool = false
 
 ## action name -> display label key, and the touch HUD control that does
 ## the same thing (fixed reference text — InputMap has no touch mapping
 ## to read, unlike the keyboard column).
 const CONTROLS: Array[Dictionary] = [
-	{"action": "move_up", "label": "tutorial_move", "touch": "TOUCH_JOYSTICK"},
+	{"action": "move_up", "label": "HELP_MOVE", "touch": "TOUCH_JOYSTICK"},
 	{"action": "flashlight_toggle", "label": "SCR_FONARIK", "touch": "TOUCH_FLASH_BTN"},
 	{"action": "interact", "label": "PROMPT_INTERACT", "touch": "TOUCH_INTERACT_BTN"},
 	{"action": "stealth", "label": "HUD_STEALTH", "touch": "TOUCH_STEALTH_BTN"},
@@ -153,15 +155,22 @@ func _icon(parent: Node, icon_id: String, px: int) -> void:
 ## First bound key/button for an action, as display text ("E", "Space" ...).
 ## Falls back to the action name if nothing is bound (still readable, never
 ## a raw KEY_NONE).
+## T3: the key column reads the live binding through InputRemap (the same table the
+## remap screen writes), so a rebound action shows the player's own key here, and a
+## mouse action shows a localized button name instead of an English "Mouse 1". The
+## movement row is the one action drawn as one hint ("WASD", or each key after a remap).
 func _keycap_for(action: String) -> String:
-	if not InputMap.has_action(action):
-		return action
+	if action == "move_up":
+		return _InputRemap.move_text()
 	for ev in InputMap.action_get_events(action):
 		if ev is InputEventKey:
 			var k := ev as InputEventKey
-			var label := OS.get_keycode_string(k.physical_keycode if k.physical_keycode != 0 else k.keycode)
+			var code: int = k.physical_keycode if k.physical_keycode != 0 else k.keycode
+			var label := _InputRemap.key_text(code)
 			if label != "":
 				return label
 		elif ev is InputEventMouseButton:
-			return "Mouse %d" % (ev as InputEventMouseButton).button_index
-	return action
+			return _InputRemap.mouse_text((ev as InputEventMouseButton).button_index)
+	if not InputMap.has_action(action):
+		return action
+	return _InputRemap.action_text(action)

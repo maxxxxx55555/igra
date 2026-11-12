@@ -78,10 +78,14 @@ static func _refusal_toast(r: Node) -> void:
 		r._ok(false, "E1D the New Game+ screen is not there to press (%s)" % [screen])
 		return
 	var level: int = NewGamePlus.get_current_ng_plus()
+	var seen: Array = []
+	var on_toast := func(text: String, _kind: String) -> void: seen.append(text)
+	EventBus.toast_requested.connect(on_toast)
 	screen.call("_on_activate")
-	var toast: Label = UIManager._toast
-	r._ok(NewGamePlus.get_current_ng_plus() == level and toast != null and toast.visible and toast.text == LocalizationManager.t(NOTICE_KEY),
-		"E1D a refused activation shows its reason on the screen (level %d of %d, toast %s)" % [NewGamePlus.get_current_ng_plus(), level, toast.text if toast != null else "none"])
+	var wanted: String = LocalizationManager.t(NOTICE_KEY)
+	EventBus.toast_requested.disconnect(on_toast)
+	r._ok(NewGamePlus.get_current_ng_plus() == level and seen.has(wanted),
+		"E1D a refused activation shows its reason on the screen (level %d of %d, queued %s)" % [NewGamePlus.get_current_ng_plus(), level, ", ".join(seen)])
 
 ## E1C: a forged ledger (5000-character strings, a dictionary, numbers, 500 entries) loads as well-formed names only, the newest
 ## LEDGER_CAP of them. The old code has no ledger to load.

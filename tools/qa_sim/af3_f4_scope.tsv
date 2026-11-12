@@ -55,3 +55,14 @@ export_presets.cfg	7fdf0b1077d8c078dc69bacf52df4f23625c2d60	edc75c3e0d50cf4f1190
 export_presets.cfg	edc75c3e0d50cf4f1190c5766cfde18a2f3a06cc	d65ba37cc204be3d11b3e88c97ff4acb5646a0a6	*no_frame_shows_the_android_version_code*
 # 1.0.1 font-licence audit: assets/fonts/THIRD_PARTY_FONTS.md is a licence record added to assets/fonts/; not loaded by any runtime script, so no kept frame shows it.
 assets/fonts/THIRD_PARTY_FONTS.md		2c0c71047fc89566e32a2156b61c1f257b7b6e9a	*no_kept_frame_shows_a_font_licence_file*
+data/i18n/en.json	37f1c550ff53	420a68520dc6	*no_store_frame_shows_the_inventory_or_help_hint*
+data/i18n/ru.json	3c5cfadcf849	b887ff7fefe0	*no_store_frame_shows_the_inventory_or_help_hint*
+scripts/systems/dynamic_resolution.gd	e2fade057d3e	a9884b9ab09a	*null_guard_only_same_scale*
+scripts/systems/input_remap.gd	546f6cb5f291	2ea65d2b928d	*added_read_helpers_only*
+scripts/ui/help_ui.gd	27ddd961ba79	f753300fc60e	*help_screen_not_in_the_store_set*
+scripts/ui/inventory_ui.gd	5fec02aabd2a	db6daf0542de	*inventory_screen_not_in_the_store_set*
+scripts/ui/quick_slot_cell.gd	01cf8592b2b9	fe7dc7e4ca39	*touch_double_tap_only*
+scripts/ui/screens.gd	5b0d56732997	86fe55be14eb	*dead_story_card_label_only*
+scripts/ui/ui_manager.gd	72ec23b06dac	f1a213d65195	*notification_routing_no_capture_fires_one*
+scripts/ui/ui_scale.gd	a3c7210096c3	dda01b582360	*mobile_density_path_only*
+scripts/world_env_setup.gd	5e9a6628da3a	4c8aa2033edf	*null_guard_only_same_msaa*

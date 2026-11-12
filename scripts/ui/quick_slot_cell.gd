@@ -56,3 +56,12 @@ func _gui_input(event: InputEvent) -> void:
 	if slot >= 0 and click != null and click.pressed and click.button_index == MOUSE_BUTTON_RIGHT:
 		QUICK_SLOTS.clear(slot)
 		accept_event()
+		return
+	## T3 / Android parity: resetting a slot was a right-click only, so on the phone -
+	## the primary platform - a wrongly bound quick slot could not be reset at all.
+	## A double tap is the gesture this game already teaches for the dodge
+	## (TUT_DODGE), and Godot reports it on the touch event itself.
+	var tap := event as InputEventScreenTouch
+	if slot >= 0 and tap != null and tap.pressed and tap.double_tap:
+		QUICK_SLOTS.clear(slot)
+		accept_event()

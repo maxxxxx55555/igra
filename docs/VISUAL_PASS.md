@@ -181,7 +181,9 @@ replace, the preset base).
   per fog district (warehouses/industrial/substation/power_station),
   0–2 elsewhere (creeks/valleys only). Skip entirely on low
   (`fog_cards=false`).
-- **W4 Lamp flicker + hum sync.** Assign `mat_lamp_flicker.tres` as
+- **W4 Lamp flicker + hum sync.** *Hum-sync: DROPPED by the owner's audio decision (music=A, no
+  hum; the Hum bus left with the hum in rc14, `scripts/world/lamp_head.gd:4` records it). Only the
+  flicker half below is in scope — nothing wires a Hum bus back.* Assign `mat_lamp_flicker.tres` as
   `StreetlightLampsBatched.material_override` and the `Lamp` material
   in `streetlight_3d` instances; set `lit` 0/1 (tween on restore) per
   district stage. Set `StreetlightHumPool` players' `bus = &"Hum"`;

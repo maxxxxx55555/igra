@@ -3945,5 +3945,33 @@
   ],
   "commit": "c353736",
   "frames": []
+ },
+ {
+  "id": "P1-STATIC",
+  "claim": "P1 static battery on a clean tree after T3/T8/T9/T10/T13/G-MSAA: 73 passed, 2 failed; the failures are the missing workflow linter (its binary download is blocked in the P1 sandbox) and af3_frame_check's F4, which fires because P1 moved 11 runtime paths and the 8 polish frames must be re-captured at P4. Both new static gates pass.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "p1_static_20261112",
+  "quotes": [
+   "hint_binding_check (no live key hint",
+   "viewport_write_guard (every Viewport property write",
+   "FAIL af3_frame_check",
+   "skipped tools for: workflow",
+   "Провалено: 2, пройдено: 73"
+  ],
+  "frames": [],
+  "commit": "46a29510"
+ },
+ {
+  "id": "P1-MUT",
+  "claim": "Both new gates are proved to bite, from the repository, against the commit P1 started from (24b970a): the hint gate finds the 5 baked-in key hints in both locales and the viewport gate finds the two bare viewport writes, G-MSAA's world_env_setup.gd:197 among them.",
+  "cmd": "python3 tools/qa_sim/hint_binding_check.py --against 24b970a; python3 tools/qa_sim/viewport_write_guard.py --against 24b970a",
+  "proof": "p1_mutations_20261112",
+  "quotes": [
+   "hint_binding_check --against 24b970a: 5 finding(s)",
+   "world_env_setup.gd:197: write to Viewport.msaa_3d",
+   "viewport_write_guard --against 24b970a: 2 unguarded write(s)"
+  ],
+  "frames": [],
+  "commit": "46a29510"
  }
 ]

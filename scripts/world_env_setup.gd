@@ -194,7 +194,18 @@ func _apply_stage_of(district_id: StringName) -> void:
 ## before the district stage/LUT/postfx application below, which refine
 ## rather than replace this base — matches the wiring spec's stated order.
 func _apply_graphics_tier(tier: int) -> void:
-	get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
+	## G-MSAA (RELEASE_GAP_FINAL §3): the tier is applied from SettingsManager's
+	## settings_changed signal, and the headless suite drives that signal on an
+	## instance that is not inside a tree yet - get_viewport() is null there and the
+	## bare dereference threw "Cannot call method 'set_msaa_3d' on a null value"
+	## mid-apply, which also skipped the environment half of the tier. The MSAA write
+	## needs a viewport; the rest of the tier only needs this node's own Environment,
+	## so only the viewport write is guarded (same shape as settings_manager.gd's
+	## set_render_scale/set_shadow_quality). Regression lock:
+	## tools/qa_sim/viewport_write_guard.py.
+	var vp := get_viewport()
+	if vp != null:
+		vp.msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
 	if _env == null:
 		return
 	var vq := load(VISUAL_QUALITY)
