@@ -316,6 +316,14 @@ if "$PY" tools/qa_sim/a11y_check.py --mutations >/dev/null 2>&1; then
 else
   bad "a11y_check"
 fi
+# T8 (RELEASE_GAP_FINAL §8): MIN_TOUCH floor regression guard. ui_scale.gd defines
+# `const MIN_TOUCH: float = 48.0` and (on this branch) DPI-scales it at runtime, so
+# the floor is the lower bound of the clamp. The gate bites its own --demo mutant.
+if "$PY" tools/qa_sim/touch_target_gate.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/touch_target_gate.py >/dev/null 2>&1; then
+  ok "touch_target_gate (MIN_TOUCH >= 48 raw-px floor; DPI-scaling present, P4 device decision not fabricated)"
+else
+  bad "touch_target_gate (MIN_TOUCH dropped below 48 raw-px floor — see tools/qa_sim/touch_target_gate.py)"
+fi
 # overflow_check.py is a reporting tool (unconditional exit 0, no pass/fail
 # assertion) - deliberately not wired as a gate here, see docs/RUN_STATE.md.
 if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then

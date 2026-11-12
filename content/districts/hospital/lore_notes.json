@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_HOSPITAL_06_TITLE", "text": "LORE_HOSPITAL_06_TEXT" },
       "en": {
         "title": "Archive Box 14 — Sub-Feed Four",
-        "text": "A works requisition, nine years old, carbon copy, stamped twice. Sub-feed four: dedicated night circuit, hospital to park line, \"to be metered separately and not entered on the building plan\". Purpose field, typed: to store what the lamps have seen. Programme name, typed: PROJECT ARCHITECT. Authorising signature, hand-written, and beneath it a pencil note from whoever filed the box: \"Council says this program does not exist. Council also says do not shred this.\""
+        "text": "A works requisition, nine years old, carbon copy, stamped twice. Sub-feed four: dedicated night circuit, hospital to park line, \"to be metered separately and not entered on the building plan\". Purpose field, typed: to store what the lamps have seen. Program name, typed: PROJECT ARCHITECT. Authorising signature, hand-written, and beneath it a pencil note from whoever filed the box: \"Council says this program does not exist. Council also says do not shred this.\""
       },
       "location_hint": "Archive box on the floor of the records room (z_records)",
       "min_stage": 2,
