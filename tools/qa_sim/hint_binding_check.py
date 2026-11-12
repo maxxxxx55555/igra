@@ -17,10 +17,13 @@ Two rules, both static:
      this rule closes the other half - the bare t() that fills nothing.
 
 Run: python tools/qa_sim/hint_binding_check.py        (--demo: self-check on synthetic text)
+     python tools/qa_sim/hint_binding_check.py --against <rev>  (judge that revision's locales: the
+     mutation proof - a gate nobody has seen fail is a gate nobody knows works)
 """
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -118,9 +121,31 @@ def demo() -> int:
     return 0
 
 
+def from_revision(rev: str) -> list:
+    """(name, strings) for data/i18n/*.json as they stood at `rev`."""
+    out = []
+    for locale in LOCALES:
+        rel = locale.relative_to(ROOT).as_posix()
+        r = subprocess.run(["git", "show", f"{rev}:{rel}"], cwd=ROOT, capture_output=True, text=True, check=False)
+        if r.returncode != 0:
+            sys.exit(f"hint_binding_check: {rel} does not resolve at {rev}")
+        out.append((rel, json.loads(r.stdout)))
+    return out
+
+
 def main() -> int:
     if "--demo" in sys.argv:
         return demo()
+    if "--against" in sys.argv:
+        rev = sys.argv[sys.argv.index("--against") + 1]
+        live = live_keys()
+        fails = 0
+        for name, strings in from_revision(rev):
+            for key, value, bad in check_strings(strings, live):
+                fails += 1
+                print(f"FOUND {name}: {key} names a control literally - {value[:70]}")
+        print(f"hint_binding_check --against {rev}: {fails} finding(s)")
+        return 0 if fails == 0 else 1
     live = live_keys()
     sources = {}
     for path in list(ROOT.rglob("*.gd")) + list(ROOT.rglob("*.tscn")):

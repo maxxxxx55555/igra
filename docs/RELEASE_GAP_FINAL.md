@@ -84,6 +84,7 @@ emergency.
 | G-DEMO-AF2 | `tools/check.sh` af2 demo call | agent | qa | `af2_both_ways.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — green standalone and in the battery. |
 | G-DEMO-LINT | `tools/check.sh` lint demo | agent | qa | `lint_changed.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — the demo passes; the full `lint_changed` in this sandbox reports the workflow linter missing because `actionlint`'s binary download is blocked here (§10.9), which is the environment, not the tool. |
 | G-WINDOWED | `tools/check.sh` perf budget + audio truth lines | agent | lead | `tools/qa_sim/guarded_windowed` x1 each | S | **open (owner/environment)** — §10.9: the P1 sandbox has no display, no GPU and no Godot 4.7 binary, so the two windowed-only gates could not run; they self-skip by design and are green only on the owner's machine (P4). |
+| F3-RECAP | `tools/qa_sim/af3_frame_check.py` F4; the 8 `docs/stills/final/*` polish frames | owner (device + GPU) | visual | `python tools/qa_sim/af3_frame_check.py` rc=0 after a re-capture | S | **open, created by P1 (2026-11-12)** — P1 changed 11 runtime paths (i18n + the hint/queue/UI fixes), so the committed `after` frames no longer match HEAD and F4 fires by design. The gate is right and cannot be argued with: the frames must be re-captured on the owner's machine at P4 (`final_frames_scene`). Nothing else in af3 fails. |
 | G-CLEAN-TREE | `docs/ENVIRONMENT.md` foreign-dirty section | agent | lead | `git status --porcelain` on a clean clone | S | **closed-with-evidence (P1 2026-11-12)** — the P1 branch was cut from `24b970a` with a clean tree; the proof log records `uncommitted paths: 0`. |
 
 ## 4. `docs/KNOWN_ISSUES.md` OPEN / not-CLOSED blocks (all 26 rows)
@@ -290,3 +291,20 @@ autoload API, i18n, asset, save integrity, boot), the two `--windowed` gates (G-
 Android/Windows exports. Godot 4.7.2 for Linux exists as a GitHub release asset, which the same proxy
 blocks; building the engine from source is out of reach on 2 cores / 3 GB. The P1 claims are static
 claims, checked statically.
+
+### 10.10 The one red that P1 itself created: af3 F4 on the polish frames
+
+`bash tools/check.sh --static` ends at **73 passed / 2 failed**. The first failure is the missing
+workflow linter (§10.9). The second is `af3_frame_check`: P1 changed 11 runtime paths, and af3's F4
+rule says an `after` frame is evidence only while the runtime tree still equals the tree it was
+captured from. Both gates are behaving correctly, so neither is waived:
+
+- the frames need a P4 re-capture on the owner's machine (`docs/stills/final/*`,
+  `final_frames_scene`), tracked as F3-RECAP in §3;
+- until that run, af3 stays red and this registry says so, because a gate made green by a waiver
+  from a session that could not take the picture is not evidence.
+
+Both new gates carry their own mutation proof, reproducible from the repository:
+`python tools/qa_sim/hint_binding_check.py --against 24b970a` finds 5 baked-in keys and
+`python tools/qa_sim/viewport_write_guard.py --against 24b970a` finds the two bare viewport writes
+(`world_env_setup.gd:197`, `dynamic_resolution.gd:67`).

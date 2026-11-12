@@ -13,9 +13,12 @@ property write on a bare `get_viewport()` is a failure unless the same line or o
 the viewport is not null (`if vp != null`, `if get_viewport() != null`).
 
 Run: python tools/qa_sim/viewport_write_guard.py        (--demo: self-check on synthetic text)
+     python tools/qa_sim/viewport_write_guard.py --against <rev>  (judge that revision's scripts: the
+     mutation proof - G-MSAA is exactly one line of this output on the tree before the fix)
 """
 import pathlib
 import re
+import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -76,6 +79,23 @@ def demo() -> int:
 def main() -> int:
     if "--demo" in sys.argv:
         return demo()
+    if "--against" in sys.argv:
+        rev = sys.argv[sys.argv.index("--against") + 1]
+        listing = subprocess.run(["git", "ls-tree", "-r", "--name-only", rev, "scripts"], cwd=ROOT,
+                                 capture_output=True, text=True, check=False)
+        if listing.returncode != 0:
+            sys.exit(f"viewport_write_guard: {rev} does not resolve")
+        bad = []
+        for rel in listing.stdout.split():
+            if not rel.endswith(".gd") or rel.split("/")[1] in EXEMPT_DIRS:
+                continue
+            text = subprocess.run(["git", "show", f"{rev}:{rel}"], cwd=ROOT,
+                                  capture_output=True, text=True, check=False).stdout
+            bad.extend(violations(text, rel))
+        for name, line, prop, src in bad:
+            print(f"FOUND {name}:{line}: write to Viewport.{prop} through a bare get_viewport() - {src}")
+        print(f"viewport_write_guard --against {rev}: {len(bad)} unguarded write(s)")
+        return 0 if not bad else 1
     bad = []
     for path in sorted(SCRIPTS.rglob("*.gd")):
         rel = path.relative_to(SCRIPTS)
