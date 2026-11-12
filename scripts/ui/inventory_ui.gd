@@ -4,6 +4,8 @@ extends Control
 ## Tab opens it (UIManager), Esc or Tab closes it, Delete drops the selected stack. The operations are the ones that were there (use, equip, drop, sort, the rarity filter, the quick bar by drag);
 ## the kit of inv_kit.gd draws their states.
 
+const _InputRemap := preload("res://scripts/systems/input_remap.gd")
+
 const KIT := preload("res://scripts/ui/inv_kit.gd")
 const QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const QUICK_CELL := preload("res://scripts/ui/quick_slot_cell.gd")
@@ -254,8 +256,16 @@ func _refresh() -> void:
 		_used_slots(), InventoryManager.slots.size()]
 	_equip_title.text = LocalizationManager.t("INV_EQUIPMENT").to_upper()
 	_quick_title.text = LocalizationManager.t("INV_QUICK_ACCESS").to_upper()
-	_quick_hint.text = LocalizationManager.t("INV_QUICKSLOT_HINT")
-	_hints.text = LocalizationManager.t("INV_HINTS")
+	# T3: both lines name a control, so neither may hardcode one. On a desktop the
+	# inventory key is read live (a rebind shows the new key) and the reset is the right
+	# mouse button, named in the player's language; on a phone there is no Tab, Esc, Del
+	# or right-click at all, so the lines say the gestures the touch build really has.
+	if InputService.is_touch_device():
+		_hints.text = LocalizationManager.t("INV_HINTS_TOUCH")
+		_quick_hint.text = LocalizationManager.tf("INV_QUICKSLOT_HINT", [LocalizationManager.t("KEY_DOUBLE_TAP")])
+	else:
+		_quick_hint.text = LocalizationManager.tf("INV_QUICKSLOT_HINT", [_InputRemap.mouse_text(MOUSE_BUTTON_RIGHT)])
+		_hints.text = LocalizationManager.tf("INV_HINTS", [_InputRemap.action_text(&"inventory_toggle")])
 	_sort_label.text = LocalizationManager.t("INV_SORT_LABEL").to_upper() + " "
 	for i in SORT_MODES.size():
 		_sort_buttons[i].text = LocalizationManager.t(String(SORT_KEYS[SORT_MODES[i]])).to_upper()

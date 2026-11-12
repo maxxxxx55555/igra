@@ -296,6 +296,21 @@ if "$PY" tools/qa_sim/tscn_header_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim
 else
   bad "tscn_header_check (см. 'python tools/qa_sim/tscn_header_check.py')"
 fi
+# T3 (RELEASE_GAP_FINAL §1): a hint that names a control has to name the control the player has after a rebind
+# (Settings > Controls > Key Bindings), and a templated hint must go through tf(), never through t().
+if "$PY" tools/qa_sim/hint_binding_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim/hint_binding_check.py --demo >/dev/null 2>&1; then
+  ok "hint_binding_check (no live key hint bakes in a remappable key; every %s template goes through tf())"
+else
+  bad "hint_binding_check (см. 'python tools/qa_sim/hint_binding_check.py')"
+fi
+# G-MSAA (RELEASE_GAP_FINAL §3): a Viewport property write through a bare get_viewport() is a null dereference the
+# moment the node is not in a tree - the headless tier-change path threw it for real. The guard is proved to bite: the
+# pre-fix world_env_setup.gd:197 is one of its demos' shapes.
+if "$PY" tools/qa_sim/viewport_write_guard.py >/dev/null 2>&1 && "$PY" tools/qa_sim/viewport_write_guard.py --demo >/dev/null 2>&1; then
+  ok "viewport_write_guard (every Viewport property write in scripts/ is null-guarded; the bare write bites)"
+else
+  bad "viewport_write_guard (см. 'python tools/qa_sim/viewport_write_guard.py')"
+fi
 if "$PY" tools/qa_sim/a11y_check.py --mutations >/dev/null 2>&1; then
   ok "a11y_check (every a11y toggle traces UI -> real effect; 9 of 9 features; every single removal of a reader, row, key or default is caught)"
 else

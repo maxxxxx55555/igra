@@ -37,6 +37,37 @@ static func key_of(action: StringName) -> int:
 static func key_text(code: int) -> String:
 	return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(code as Key))
 
+## The player-facing name of the action's key, read from the live InputMap: after a
+## remap (Settings > Controls > Key Bindings) this is the key the player now presses,
+## not the letter project.godot shipped with. "" when the action has no keyboard event
+## at all (attack is a mouse button on a desktop build, the touch HUD on a phone).
+## Used by the key-hint strings that used to say a fixed "Tab"/"E"/"Space" (T3).
+static func action_text(action: StringName) -> String:
+	var code := key_of(action)
+	return "" if code == KEY_NONE else key_text(code)
+
+## The four movement keys as one hint: "WASD" while the movement actions keep exactly
+## those four letters (the wording the tutorial and the Help screen have always used),
+## otherwise each key as bound ("Up/Left/Down/Right" after an arrow-key remap). A touch
+## build has no keyboard event to read and keeps "WASD": the phone HUD shows a stick.
+static func move_text() -> String:
+	var letters: Array[String] = []
+	for action: StringName in [&"move_up", &"move_left", &"move_down", &"move_right"]:
+		var code := key_of(action)
+		if code == KEY_NONE:
+			return "WASD"
+		letters.append(key_text(code))
+	if letters == ["W", "A", "S", "D"]:
+		return "WASD"
+	return "/".join(letters)
+
+## The localized name of a mouse button ("Left click"/"Right click"): a mouse button is
+## not remappable through the key-bindings screen, but the hint strings still must not
+## hardcode English "Right-click" into a Russian line.
+static func mouse_text(button: MouseButton) -> String:
+	var key := "KEY_MOUSE_LEFT" if button == MOUSE_BUTTON_LEFT else "KEY_MOUSE_RIGHT"
+	return LocalizationManager.t(key)
+
 ## Puts the saved choices on the InputMap; an action that is not saved goes back to its default.
 static func apply(saved: Dictionary) -> void:
 	_capture()

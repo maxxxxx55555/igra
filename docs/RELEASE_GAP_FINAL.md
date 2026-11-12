@@ -27,18 +27,18 @@ Environment: `docs/ENVIRONMENT.md`. Budget: `docs/BUDGET_LEDGER.md`.
 |---|---|---|---|---|---|---|
 | T1 | `docs/VISUAL_PASS.md:159-226` (§8), `AGENTS.md:25-42` | agent | visual + world + lead | static + `drawcall_estimate.py` + headless gate scene + before/after frames (af3) | L | **verify-first: partially done** — W2-W10 have real live consumers (see §2 below); the conflict in `AGENTS.md` is stale, not an open wiring job. Remaining: strict application order check, two-WorldEnvironment unification, per-effect a11y gating evidence. |
 | T2 | `BEAUTY_RC16.md` X5; `scripts/systems/settings_manager.gd:441-450,514,527,535,548` | agent | ui (menus) | X5 before/after frames + `settings_persist` gate | M | **verify-first** — `HIGH_CONTRAST_DELAY` timers at `:514`, `:527` still re-apply after tier change; needs frame evidence before declaring open/closed. |
-| T3 | 13 key-hint strings (`tutorial_move`, `TUT_FIND_FLASHLIGHT`, `HINT_INVENTORY`, `WORKBENCH_CLOSE`, `INV_HINTS`); pattern `scripts/ui/hud_3d.gd` | agent | ui | `hardcoded_text_gate.py`, `i18n_truth_gate.py`, `af5_check.py`, placeholder parity | M | **open** — `hud_3d.gd` uses `tf()` at `:1241,:1244` but no `InputRemap.key_of()`/`key_text()` in the hint call-sites; en+ru needed. |
+| T3 | 13 key-hint strings (`tutorial_move`, `TUT_FIND_FLASHLIGHT`, `HINT_INVENTORY`, `WORKBENCH_CLOSE`, `INV_HINTS`); pattern `scripts/ui/hud_3d.gd` | agent | ui | `hint_binding_check.py` (new), `i18n_truth_gate.py`, `af5_check.py`, placeholder parity | M | **closed-with-evidence (P1 2026-11-12)** — §10.1: the live hints read the live binding (`InputRemap.action_text/move_text/mouse_text`), the 10 strings with no consumer were removed, the phone got a reset gesture it never had, and `hint_binding_check.py` is proved to bite on the pre-fix locales. |
 | T4 | GDD primitive budget 50k/district; `docs/SIZE_BUDGET.md` | agent | world + qa | `drawcall_estimate.py` + windowed perf gate | M | **open** — whole-frame 135k/199k numbers are informational; GDD decision on what counts must be written first (§9.1 T4). |
 | T5 | `docs/RUN_STATE.md` ST-1; district-build hitch 0.13-0.15 s | agent | world | windowed perf measurement before/after; IRON RULE if behaviour changes | M | **open** — measurement first, then batching. |
 | T6 | `docs/artifacts/councils/story_audit_20261031.txt:33-40` (S-14, S-17, S-22, S-27, S-29, S-31, S-32) | agent | content | `audit_content_depth.py`, integrity manifest, content mirrors, `af5_check.py` | M | **open** — 7 rows; each closed with a wording fix or an honest won't-fix note. |
 | T7 | `docs/KNOWN_ISSUES.md:11,19`; `scripts/tools/_qa_autoplay_runner.gd` | agent | qa + ui | new headless two-finger `InputEventScreenTouch` probe + mutation that bites | M | **open** — real potential phone bug; current probe presses buttons by signal (not a proof). |
-| T8 | `scripts/ui/ui_scale.gd:5,15` (`MIN_TOUCH = 48.0`) | agent | ui | static gate + owner device confirmation at P4 | S | **open** — no `DisplayServer.screen_get_dpi()`; final value is owner/device. |
-| T9 | `scripts/ui/toast_manager.gd:91,125`, `scripts/ui/ui_manager.gd:58,88-95`, `docs/KNOWN_ISSUES.md:9,13` | agent | ui + qa | `hud_checks` / `sec_checks` (they read `UIManager._toast`) | M | **verify-first** — two toast implementations exist (`toast_manager.gd` signal-driven, `ui_manager.gd` own `_toast`); single-queue claim must be proven, not assumed. Radar streets: `docs/KNOWN_ISSUES.md:13` says done in S39e/S39i. |
-| T10 | `docs/KNOWN_ISSUES.md` T10 manifest: `skyline.gd`, `ui_scale.gd` `narrow_layout`, facade shader comments R14/R15 | agent | world + visual | `quarantine_audit.py --check` + zero-consumer grep | S | **open, deletion only on proven death** — `ui_scale.gd` is live (T8), so `narrow_layout` must be checked separately. |
+| T8 | `scripts/ui/ui_scale.gd` (`MIN_TOUCH = 48.0`) | agent | ui | `python tools/qa_sim/a11y_check.py` + owner device confirmation at P4 | S | **agent part closed (P1 2026-11-12); owner row open** — §10.2: `min_touch()` now scales with `DisplayServer.screen_get_dpi()` normalised to the reference density and is clamped to 48..88 design px; the physical size on the owner's phone is still the P4 confirmation. |
+| T9 | `scripts/ui/toast_manager.gd:91,125`, `scripts/ui/ui_manager.gd`, `docs/KNOWN_ISSUES.md:9,13` | agent | ui + qa | `hud_checks` TRLR1 / `sec_checks` E1D (rewritten to read the queue) | M | **closed-with-evidence (P1 2026-11-12)** — §10.3: `UIManager.show_notification` was a second pipeline (own Label, own 2 s tween, no log, no stamp, drew while the HUD was blocked). It now emits `EventBus.toast_requested`; the two checks that read the removed `_toast` field read the one queue instead. |
+| T10 | `docs/KNOWN_ISSUES.md` T10 manifest: `skyline.gd`, `ui_scale.gd` `narrow_layout`, facade shader comments R14/R15 | agent | world + visual | `quarantine_audit.py --check` + zero-consumer grep | S | **closed-with-evidence (P1 2026-11-12)** — §10.4: `narrow_layout` + `NARROW_WIDTH` had zero consumers in any `.gd`/`.tscn`/tool and were deleted; `skyline.gd` is live (`district_dressing.gd:13`, `street_props.gd:156` describe the nodes it builds); the facade shader comments stay as design notes. |
 | T11 | `docs/KNOWN_ISSUES.md:5` (S39k) + local Gradle-stop helper | agent | lead | `grep JAVA_HOME` + one export dry-run | S | **closed-with-evidence candidate** — the local (untracked) `.qa_logs/s39_export_vc17.sh` sets `$env:JAVA_HOME` to the bundled JBR on line 35; `docs/KNOWN_ISSUES.md:5` says S39k closed it. Confirm at P3 export. |
-| T12 | `docs/RUN_STATE.md` S30 round 4 (`G-TIMING`, `G-MUT`, `G-COV`) | agent | qa | `s26_mutations.py`, `coverage_matrix`, `check.sh --all` | M | **open (tool-drift, separate PR)** — stale mutation rows (SECV2B/SECV9L), subset baselines, 9 coverage log-matching misses without waiver. Fix the tool, not the gate (§1.5). |
-| T13 | `default_bus_layout.tres`; `docs/VISUAL_PASS.md:184-190` W4 | agent | audio | `audio_truth_gate` windowed x1, `hum_scan`, ducking matrix | M | **open** — `grep -n Hum default_bus_layout.tres` returns nothing; `docs/TZ_DECISIONS.md:45` says the Hum bus was removed with the hum. W4 hum-sync cannot be wired until the owner decides (music=A, no hum rule, `PRODUCTION_BIBLE` §3). |
-| T14 | `docs/PROJECT_STATE.md`, `RELEASE_CHECKLIST.md`, `docs/STORE_KIT.md`, `docs/CERT_STORE.md`, `docs/CERT_STORESYNC.md` | agent | lead | `closure_guard.py` (6 rules), `af5_check.py`, `title_check.py` | S | **open** — `PROJECT_STATE.md` yaml `main_sha: 04d54aae` is stale vs `965ec095`; prose says "frozen" but the 2026-11-11 directive unfreezes. Fixed in this P0 PR with a dated note. |
+| T12 | `docs/RUN_STATE.md` S30 round 4 (`G-TIMING`, `G-MUT`, `G-COV`) | agent | qa | `s26_mutations.py run`, `coverage_matrix` (needs the engine logs) | M | **open, re-read not closed (P1 2026-11-12)** — §10.7: `--demo` of both tools passes, but the coverage misses are matched against `.qa_logs/*` engine logs that exist only on the owner's machine; nothing here can prove tool drift, and writing a waiver from this session would be the false green §1.5 forbids. Needs one engine chain (P3). |
+| T13 | `default_bus_layout.tres`; `docs/VISUAL_PASS.md` W4 | agent | audio | `hum_scan --demo`, `audio_truth_gate` (windowed, owner) | M | **closed-with-evidence (P1 2026-11-12)** — §10.5: the owner decision (music=A, no hum) is already what the code does (`lamp_head.gd:4` leaves the hum at 1.0). The stale W4 hum-sync instruction is now marked as a dropped sub-item in `VISUAL_PASS.md`, so the row is a record, not an open wiring job. |
+| T14 | `docs/PROJECT_STATE.md`, `RELEASE_CHECKLIST.md`, `docs/STORE_KIT.md`, `docs/CERT_STORE.md`, `docs/CERT_STORESYNC.md` | agent | lead | `closure_guard.py` (6 rules), `af5_check.py`, `title_check.py` | S | **closed-with-evidence (P1 2026-11-12)** — §10.6: `PROJECT_STATE.md` carries the P1 dated block; `closure_guard`, `af5_check` (873 citations, 0 findings) and `title_check` are green in the P1 battery. |
 
 ## 2. W1-W11 wiring conflict — RESOLVED BY CODE (§1.2 of the directive)
 
@@ -77,14 +77,14 @@ emergency.
 
 | id | source | disposition | zone | gate-check | estimate | status |
 |---|---|---|---|---|---|---|
-| G-MSAA | `.qa_logs/gate_qa_headless_suite_scene.log:44`; `scripts/world_env_setup.gd:197` via `settings_manager.gd:526` -> `quality_manager.gd:72` | agent | visual + lead | GOLD MASTER suite, zero engine-error lines | S | **open, GAME-AFFECTING** — `get_viewport().msaa_3d` on a null instance during tier change in the headless suite. Real runtime script error; fix with a null guard + regression gate, not a gate tune. |
+| G-MSAA | `.qa_logs/gate_qa_headless_suite_scene.log:44`; `scripts/world_env_setup.gd` (MSAA tier) via `settings_manager.gd` -> `quality_manager.gd` | agent | visual + lead | `viewport_write_guard.py` (new) + zero engine-error lines | S | **closed-with-evidence (P1 2026-11-12)** — §10.8: the viewport write is guarded, `dynamic_resolution.gd` had the same bare write and is guarded too, and the new gate is proved to fail the pre-fix `world_env_setup.gd:197`. |
 | G-AF5-FOREIGN | `docs/AUTHENTICATION.md (line 23)` (foreign untracked) | decision | lead (external zone) | `python tools/af5_check.py` | S | **verify-first / not my zone** — C3 claim-word mismatch in a doc from the parallel session. Owner/lane decision: fix the citation or drop the doc. Must not be touched by this session (§1.6, §12). |
-| G-AUDIT | `tools/check.sh:182-185` (`audit_content_depth`) | agent | qa | isolated re-run rc=0 (0 ERROR / 1 WARN / 31 INFO) | S | **verify-first** — fails only inside `--all`; clean-tree re-run required. |
-| G-DEMO-VIS | `tools/check.sh:211-214` | agent | qa | `visual_truth_gate.py --demo` rc=0 ("demo OK (16 patterns)") | S | **verify-first** — passes in isolation. |
-| G-DEMO-AF2 | `tools/check.sh` af2 demo call | agent | qa | `af2_both_ways.py --demo` rc=0 | S | **verify-first** — passes in isolation. |
-| G-DEMO-LINT | `tools/check.sh:365-368` | agent | qa | `lint_changed.py --demo` rc=0 ("6 fixtures, 0 wrong") | S | **verify-first** — traceback at `:191` only inside the battery (temp-dir race suspected). |
-| G-WINDOWED | `tools/check.sh` perf budget + audio truth lines | agent | lead | `tools/qa_sim/guarded_windowed` x1 each | S | **open** — two checks self-skip by design; not green until P2/P3 windowed runs. |
-| G-CLEAN-TREE | `docs/ENVIRONMENT.md` foreign-dirty section | agent | lead | `git status --porcelain` on a clean frozen clone | S | **open** — P3 requires a clean clone; the current 25 uncommitted paths are foreign. |
+| G-AUDIT | `tools/check.sh` (`audit_content_depth`) | agent | qa | isolated re-run rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — passes standalone and inside the P1 static battery (73 passed / 2 environment-only failures, §10.9). |
+| G-DEMO-VIS | `tools/check.sh` visual judge | agent | qa | `visual_truth_gate.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — the earlier FAIL was a missing `numpy` in the P0 sandbox; with the pinned toolchain installed the demo, the R0 lock and the sign-off frames all pass (16 patterns). |
+| G-DEMO-AF2 | `tools/check.sh` af2 demo call | agent | qa | `af2_both_ways.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — green standalone and in the battery. |
+| G-DEMO-LINT | `tools/check.sh` lint demo | agent | qa | `lint_changed.py --demo` rc=0 | S | **closed-with-evidence (P1 2026-11-12)** — the demo passes; the full `lint_changed` in this sandbox reports the workflow linter missing because `actionlint`'s binary download is blocked here (§10.9), which is the environment, not the tool. |
+| G-WINDOWED | `tools/check.sh` perf budget + audio truth lines | agent | lead | `tools/qa_sim/guarded_windowed` x1 each | S | **open (owner/environment)** — §10.9: the P1 sandbox has no display, no GPU and no Godot 4.7 binary, so the two windowed-only gates could not run; they self-skip by design and are green only on the owner's machine (P4). |
+| G-CLEAN-TREE | `docs/ENVIRONMENT.md` foreign-dirty section | agent | lead | `git status --porcelain` on a clean clone | S | **closed-with-evidence (P1 2026-11-12)** — the P1 branch was cut from `24b970a` with a clean tree; the proof log records `uncommitted paths: 0`. |
 
 ## 4. `docs/KNOWN_ISSUES.md` OPEN / not-CLOSED blocks (all 26 rows)
 
@@ -189,3 +189,104 @@ G-WINDOWED, G-CLEAN-TREE, KI verify-first rows, AG-42, HC-3.
 
 P0 DoD: battery fixed (6/97, raw log committed), registry complete, W-conflict resolved by code,
 §11 package asked once. No code was changed in P0.
+
+---
+
+## 10. P1 session — agent-closable residue (2026-11-12)
+
+Branch `arena/8966ccea-igra`, cut from `24b970a` (merge of PR #71) with a clean tree. Everything
+below was **run**, not asserted; the battery is P1 static, the engine half is out of reach in this
+environment (§10.9). No owner-only row was touched.
+
+### 10.1 T3 — key hints now read the live binding
+
+- `scripts/systems/input_remap.gd:45` `action_text()` (the key the player actually presses, `""`
+  for a mouse-only action), `:53` `move_text()` (`WASD`, or each key as bound after an arrow-key
+  remap, `WASD` on a touch build with no keyboard event), `:67` `mouse_text()` (a localized button
+  name, so a Russian line no longer carries English "Right-click").
+- Live consumers fixed: `scripts/ui/inventory_ui.gd:268` (the inventory key) and `:267` (the mouse
+  button), `scripts/ui/help_ui.gd:164` (`move_text`) and `:173` (`mouse_text`, replacing the
+  untranslatable `"Mouse %d"`), and `HINT_FLASHLIGHT`, whose `F — ` prefix was a second copy of the
+  key column right above it.
+- The phone had no reset gesture for a quick slot at all (right-click only, `MOUSE_BUTTON_RIGHT`);
+  `scripts/ui/quick_slot_cell.gd:65` accepts the double tap this game already teaches for the dodge,
+  and the touch build gets `INV_HINTS_TOUCH` instead of "Tab / Esc / Del".
+- Liveness was checked per string, not assumed: `tutorial_interact`, `tutorial_flash`,
+  `tutorial_map`, `tutorial_jump`, `tutorial_shoot`, `tutorial_move`, `TUT_FIND_FLASHLIGHT`,
+  `HINT_INVENTORY`, `WORKBENCH_CLOSE` and `SCR_PROPUSTIT_SPACE` had **zero** consumers in
+  `scripts/`, `scenes/`, `data/` or `content/` and were removed from both locales (1579 → 1581 keys,
+  en/ru parity kept). `SCR_PROPUSTIT_SPACE` was the label of an unreachable card that promised a
+  SKIP key nothing handled; the label went with the string.
+- New gate `tools/qa_sim/hint_binding_check.py` (rule A: a string a real path shows must not name a
+  remappable key or a mouse button literally; rule B: a `%s` template must go through `tf()`, never
+  `t()`). **Mutation proof:** run against the pre-fix `en.json` it reports 3 findings
+  (`HINT_FLASHLIGHT`, `INV_HINTS`, `INV_QUICKSLOT_HINT`); against the current tree it reports 0.
+
+### 10.2 T8 — the touch target follows the device's density
+
+`scripts/ui/ui_scale.gd:23` reads `DisplayServer.screen_get_dpi()` and normalises the phone's
+dp width to the reference the 48 px value was judged on (`:14`, 411 dp ≈ 1080 px at 420 dpi), clamped
+to 48..88 design px (`:30`). A driver that reports a fake 72 dpi, or a window narrower than 320 px,
+keeps the flat 48 px, so an emulator cannot reshape the HUD. The physical size on the owner's phone
+is still the P4 confirmation — the row stays owner-visible for that reason.
+
+### 10.3 T9 — one notice queue, proved
+
+`scripts/ui/ui_manager.gd:92` is the whole of `show_notification` now: it emits
+`EventBus.toast_requested` and nothing else. The second pipeline (its own Label, its own 2 s tween,
+no run stamp, no type colour, no log entry, drawn even while the HUD was blocked) is gone, and with
+it the `_toast` field. The two checks that used that field were rewritten to assert the surviving
+queue: `hud_checks` TRLR1 (the reason reaches the queue while Trailer Mode mutes the stack, and both
+come back) and `sec_checks` E1D (a refused New Game+ activation reaches the queue). Static
+consumers of `UIManager._toast`: 0 (`grep`).
+
+### 10.4 T10 — `narrow_layout` was dead, `skyline.gd` was not
+
+`narrow_layout()` and `NARROW_WIDTH` had zero consumers across every `.gd`, `.tscn`, `.py` and `.sh`
+in the tree and were deleted. `skyline.gd` is live (it builds the backdrop the district dressing and
+the street props account for). The facade shader R14/R15 comments stay as design notes, not claims.
+
+### 10.5 T13 — the hum row is a decision, not a job
+
+The code already does what the owner decided: `lamp_head.gd:4` leaves `hum` at 1.0 because the Hum
+bus was removed in rc14, and `default_bus_layout.tres` has no Hum bus. The stale W4 instruction in
+`docs/VISUAL_PASS.md` is now marked as a dropped sub-item, so nothing in the tree asks for a
+wiring that cannot exist.
+
+### 10.6 T14 — the status documents are dated, not rewritten
+
+`docs/PROJECT_STATE.md` carries a P1 block (what closed, what is owner-only, what this environment
+could not run). `closure_guard` (6 rules), `af5_check` and `title_check` are green in the P1 battery.
+Two citations in `docs/AAA_BENCHMARK.md` and `docs/KNOWN_ISSUES.md` were re-pointed after the code
+moved under them — af5 caught both, which is the gate doing its job.
+
+### 10.7 T12 — stays open, honestly
+
+`coverage_matrix` and `s26_mutations --demo` pass, but the coverage misses are matched against
+`.qa_logs/*` engine logs that only the owner's machine produces. From here it is impossible to tell
+a stale row from a missing log, and a waiver written on that guess is exactly the false green §1.5
+forbids. One engine chain at P3 closes it.
+
+### 10.8 G-MSAA — the null dereference is fixed and locked
+
+`scripts/world_env_setup.gd:206` guards the MSAA write (`:208`) — the tier's environment half now
+runs even when the node is detached. `scripts/systems/dynamic_resolution.gd:73` had the same bare
+write on the same signal-driven path and is guarded too. New gate
+`tools/qa_sim/viewport_write_guard.py`: **mutation proof** — against `24b970a`'s `world_env_setup.gd`
+it reports the bare write at line 197; against the current tree it reports none.
+
+### 10.9 P1 battery truth — what this environment could and could not run
+
+`bash tools/check.sh --static`: **73 passed / 2 failed**, and both failures are the environment:
+
+1. `lint_changed` — the workflow linter is missing because `actionlint`'s Go binary is downloaded
+   from a GitHub release asset, which this sandbox's proxy refuses. `gdlint`, `gdparse`, `ruff` and
+   `shellcheck` are installed; every changed `.gd` passes `gdlint` ("11 files, no problems") and
+   `gdparse`, and the two new tools pass `ruff`. No workflow file is part of this change.
+2. `ffmpeg` — installed from the pinned `imageio-ffmpeg` wheel; the audio demos it gates now run.
+
+Not runnable here at all, and therefore **not claimed**: every engine gate (compile, signal arity,
+autoload API, i18n, asset, save integrity, boot), the two `--windowed` gates (G-WINDOWED) and the
+Android/Windows exports. Godot 4.7.2 for Linux exists as a GitHub release asset, which the same proxy
+blocks; building the engine from source is out of reach on 2 cores / 3 GB. The P1 claims are static
+claims, checked statically.
