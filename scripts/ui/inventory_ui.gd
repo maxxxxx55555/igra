@@ -308,7 +308,7 @@ func _used_slots() -> int:
 
 ## A free slot of the pack, drawn as an empty cell, so a pack with little in it does not read as a blank panel.
 func _empty_cell() -> Panel:
-	var cell := _panel(KIT.box(Color("#0D1415"), Color(KIT.EDGE_DIM, 0.7)))
+	var cell := _panel(KIT.box(Color("#0f1314"), Color(KIT.EDGE_DIM, 0.7)))
 	cell.custom_minimum_size = SLOT
 	return cell
 

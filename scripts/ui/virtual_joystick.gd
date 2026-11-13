@@ -5,9 +5,9 @@ extends Control
 ## push still reaches max speed fast, a Settings-driven sensitivity
 ## multiplier, a light haptic tick on touch-down, and a knob that visibly
 ## scales up while held. Base/knob art: assets/textures/touch/touch_joy_*.
-const BASE_COLOR := Color("15181d")
-const BASE_RIM := Color("3a3f47")
-const KNOB_COLOR := Color("e8a13a")
+const BASE_COLOR := Color("#0f1314")
+const BASE_RIM := Color("#5a4a2a")
+const KNOB_COLOR := Color("#c9a24a")
 const KNOB_RADIUS: float = 26.0
 const PRESS_SCALE: float = 1.18
 ## The ring rests see-through and is full while the thumb is on it (the HUD's other touch controls rest at the same alpha: hud_3d.gd _TOUCH_REST).

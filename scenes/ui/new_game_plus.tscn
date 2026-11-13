@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.02, 0.05, 0.92)
+color = Color(0.0235294, 0.0588235, 0.0745098, 0.92)
 
 [node name="Scroll" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -44,7 +44,7 @@ layout_mode = 2
 text = "New Game+ Level: 0 / 3"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_colors/font_color = Color(0.7882353, 0.6352941, 0.2901961, 1)
 
 [node name="CurrentLevel" type="Label" parent="Scroll/Center/VBoxContainer"]
 layout_mode = 2
@@ -57,7 +57,7 @@ layout_mode = 2
 text = "XP: x1.00\nEnemy HP: x1.00\nEnemy Damage: x1.00\nPlayer Damage: x1.00\nLoot Chance: x1.00"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(0.847059, 0.835294, 0.8, 1)
 
 [node name="ActivateButton" type="Button" parent="Scroll/Center/VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
