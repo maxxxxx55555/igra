@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>THE LAST STREETLIGHT — A first-person night horror</title>
+<meta name="description" content="THE LAST STREETLIGHT is a first-person 3D horror game. When the city grid died at 22:14, the streets belonged to something else. Built in Godot 4.7." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Condensed:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="The Last Streetlight home">
+    <span class="nav__mark">▌</span> THE&nbsp;LAST&nbsp;STREETLIGHT
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#media">Media</a>
+    <a href="#features">Gameplay</a>
+    <a href="#story">Story</a>
+    <a href="#specs">Specs</a>
+    <a class="nav__cta" href="#wishlist">Wishlist</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__fog" aria-hidden="true"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+
+    <div class="hero__inner">
+      <p class="hero__kicker">FIRST-PERSON NIGHT HORROR · GODOT 4.7</p>
+      <h1 class="hero__title">THE LAST<br />STREETLIGHT</h1>
+      <p class="hero__tag">The city grid died at <span class="mono">22:14</span>. The streets belong to something else now. Keep the beam alive, stay quiet, and count the ones that are already here.</p>
+      <div class="hero__actions">
+        <a class="btn btn--solid" href="#wishlist">Wishlist on Steam</a>
+        <a class="btn btn--ghost" href="#media">Watch the footage</a>
+      </div>
+      <a class="hero__scroll" href="#media" aria-label="Scroll to media">▾</a>
+    </div>
+  </section>
+
+  <!-- MEDIA -->
+  <section class="section" id="media">
+    <div class="section__head reveal">
+      <p class="section__kicker">Real footage</p>
+      <h2 class="section__title">Eight frames from the build</h2>
+      <p class="section__lead">Every screenshot below is a frame rendered from the current candidate build in a real windowed run — no concept art, no mockups.</p>
+    </div>
+
+    <div class="gallery">
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/01_main_menu_after_f37072d7_20261113T150418Z.png" alt="Main menu of The Last Streetlight" />
+        <figcaption>Main menu</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/02_district_day_full_after_f37072d7_20261113T150433Z.png" alt="District during the day" />
+        <figcaption>District — day</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/03_district_night_dark_after_f37072d7_20261113T150429Z.png" alt="District at night" />
+        <figcaption>District — night</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/04_combat_after_f37072d7_20261113T150439Z.png" alt="Combat encounter" />
+        <figcaption>Combat</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/05_boss_after_f37072d7_20261113T150442Z.png" alt="Boss encounter" />
+        <figcaption>Boss</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/06_victory_ngplus_after_f37072d7_20261113T150445Z.png" alt="Victory and New Game Plus screen" />
+        <figcaption>Victory / New Game+</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/07_skill_tree_after_f37072d7_20261113T150435Z.png" alt="Skill tree screen" />
+        <figcaption>Skill tree</figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img loading="lazy" src="assets/images/08_shop_after_f37072d7_20261113T150436Z.png" alt="Shop screen" />
+        <figcaption>Shop</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section section--raise" id="features">
+    <div class="section__head reveal">
+      <p class="section__kicker">Gameplay</p>
+      <h2 class="section__title">Survive the blackout</h2>
+    </div>
+    <div class="features">
+      <article class="feature reveal">
+        <span class="feature__no mono">01</span>
+        <h3>The beam is your lifeline</h3>
+        <p>A single flashlight cuts the dark — but light draws attention. Manage the battery, the cone, and the silence between pulses.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="feature__no mono">02</span>
+        <h3>Stay below the noise</h3>
+        <p>Enemies track sound and sight. Break line of sight, hug the fog, and let the district's own clutter hide you.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="feature__no mono">03</span>
+        <h3>Four districts, one grid failure</h3>
+        <p>Hospital, police precinct, industrial dock, and the sealed school — each carries its own lore, its own count, and its own way to end you.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="feature__no mono">04</span>
+        <h3>Progress, then begin again</h3>
+        <p>A New Game+ loop carries your build forward. The streets remember what you learned.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="feature__no mono">05</span>
+        <h3>Listen to the radio</h3>
+        <p>Diaries and scattered transmissions piece the night together — if you can hold still long enough to hear them.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="feature__no mono">06</span>
+        <h3>Built for the couch and the commute</h3>
+        <p>Full gamepad and touch support with a 48px-minimum hit-target policy, so the controls never punish the hardware.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="section" id="story">
+    <div class="story">
+      <div class="story__text reveal">
+        <p class="section__kicker">Story</p>
+        <h2 class="section__title">Tuesday. The grid died at 22:14.</h2>
+        <p>One diarist counted them. Another read the ledger: <span class="mono">219</span> at the dock. The numbers do not agree, and neither does the city. You are the only light still moving — and the streetlight at the end of the block keeps flickering like it is counting you back.</p>
+        <p>Explore the districts, recover the recordings, and decide what to do with the power when you finally reach the source.</p>
+      </div>
+      <div class="story__frame reveal">
+        <img loading="lazy" src="assets/images/03_district_night_dark_after_f37072d7_20261113T150429Z.png" alt="Night district with the last streetlight" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="section section--raise" id="specs">
+    <div class="section__head reveal">
+      <p class="section__kicker">System requirements</p>
+      <h2 class="section__title">What it needs to run</h2>
+      <p class="section__lead">Indicative desktop targets for the Godot 4.7 export. Final published requirements are set at store submission.</p>
+    </div>
+    <div class="specs">
+      <div class="spec reveal">
+        <h4>Minimum</h4>
+        <ul>
+          <li>OS: Windows 10 64-bit / Linux (glibc 2.31+)</li>
+          <li>CPU: 4-core x86-64</li>
+          <li>GPU: OpenGL 3.3 / Vulkan 1.0 capable</li>
+          <li>Memory: 4 GB RAM</li>
+          <li>Storage: 2 GB available</li>
+        </ul>
+      </div>
+      <div class="spec reveal">
+        <h4>Recommended</h4>
+        <ul>
+          <li>OS: Windows 11 / recent Linux</li>
+          <li>CPU: 6-core x86-64</li>
+          <li>GPU: Discrete Vulkan 1.1, 4 GB VRAM</li>
+          <li>Memory: 8 GB RAM</li>
+          <li>Input: Gamepad or touch supported</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WISHLIST / CTA -->
+  <section class="cta" id="wishlist">
+    <div class="cta__inner reveal">
+      <h2 class="cta__title">Be there when the lights go out</h2>
+      <p class="cta__lead">Add THE LAST STREETLIGHT to your wishlist and get the blackout alert the moment it ships.</p>
+      <div class="cta__actions">
+        <a class="btn btn--solid" href="#" aria-disabled="true">Wishlist on Steam</a>
+        <a class="btn btn--ghost" href="#" aria-disabled="true">Follow on itch.io</a>
+      </div>
+      <p class="cta__note">Store links are placeholders pending publisher account setup.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <p class="foot__brand">▌ THE LAST STREETLIGHT</p>
+    <p class="foot__meta">Built in Godot 4.7 · First-person survival horror</p>
+    <p class="foot__legal">© 2026 — All rights reserved. Screenshots captured from the integration candidate build. Not yet rated.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox__close" id="lightboxClose" aria-label="Close">✕</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
