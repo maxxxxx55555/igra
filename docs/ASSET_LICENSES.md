@@ -628,3 +628,33 @@ The owner requested pleasant music and rejected generic AI/procedural sound. The
 Attribution, source-page links, license link and the modification notice appear in the in-game credits in both supported locale flows. The existing localized Google Lyria disclosure remains because other generated music still ships. No endorsement by the composer is implied. Preserve these notices when redistributing the audio; do not apply restrictions to these licensed works beyond the license.
 
 Reproduction: download the exact official sources outside the repository as `hymn.mp3` and `moonlight.mp3`, then run `python tools/qa_sim/master_licensed_music.py SOURCE_DIRECTORY REPORT_JSON`. The recipe refuses incomplete or changed source hashes and reuses `music_post.py` for mastering, then decodes the actual OGG and enforces level, peak, duration and seam bounds. Vorbis container bytes may differ between encoders/runs; remeasure and update this ledger if regenerated. These numerical checks and the composer's published genre descriptions do not constitute a perceptual listening approval; model audio input was unavailable.
+
+## Added 2026-11-13: B9 production prop meshes (project-authored, no third-party art)
+
+The seven binary `ArrayMesh` resources below were authored inside this repository by
+`scripts/tools/_gen_meshes_b9.gd`, which reuses the winding, planar-UV and normal
+framework of `scripts/tools/_gen_meshes.gd`. No model pack, stock mesh, CC0 download,
+image model or generated concept sheet was used; the geometry is built from boxes,
+tubes, domes and slabs in the generator, baked to `.res` by Godot 4.7, and committed
+as the runtime asset. Provenance is the generator script and its scene
+`scenes/tools/gen_meshes_b9_scene.tscn`; the baking command and the triangle, UV and
+normal verification of every file are recorded in the run log.
+
+| Path | What it is | Rights | Consumer in the shipped game |
+| --- | --- | --- | --- |
+| `assets/mesh/mesh_car.res` | Parked sedan with glazed cabin, wheels, lamps and bumpers | Project-owned, no third-party rights, no attribution required | `B9Cars` batch of `scripts/world/production_props.gd` |
+| `assets/mesh/mesh_cabinet.res` | Street-side electrical cabinet with louvres, conduits and rain hood | Project-owned | `B9Cabinets` batch |
+| `assets/mesh/mesh_fence.res` | Fence bay with posts, rails, pickets and a diagonal brace | Project-owned | `B9Fences` batch |
+| `assets/mesh/mesh_cart.res` | Handcart with a plank tray, wheels and handles | Project-owned | `B9Carts` batch |
+| `assets/mesh/mesh_crate.res` | Plank crate with corner braces, 0.7 m on a side | Project-owned | `Crates` batch of `scripts/world/district_dressing.gd`, replacing the primitive `BoxMesh` |
+| `assets/mesh/mesh_barrel.res` | Riveted drum with three hoops, 0.28 m radius by 0.9 m | Project-owned | `Barrels` batch of `scripts/world/district_dressing.gd`, replacing the primitive `CylinderMesh` |
+| `assets/mesh/mesh_debris.res` | Rubble pile of broken slabs, bricks, a pipe and a plank | Project-owned | `B9Debris` batch |
+
+Every resource carries normals, planar UVs and an indexed triangle surface; the
+generator reloads each file from disk with the cache bypassed and prints its
+triangle count and AABB. `tools/qa_sim/production_asset_check.py` holds the size,
+authorship and live-consumer rules, and its `--demo` proves that a missing mesh, a
+stub mesh, an orphaned mesh, an unbuilt node and a return to the primitive crate
+all fail. `scenes/tools/b9_turntable_scene.tscn` renders the seven meshes on one
+lit plane so the silhouettes can be read by eye. No licence obligation arises from
+this batch; these files are not a claim that the whole world uses production assets.
