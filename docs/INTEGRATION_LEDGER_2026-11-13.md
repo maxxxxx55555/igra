@@ -30,7 +30,8 @@ not demonstrated).
 | R12 | Music bus not silent, stems cross over with the threat level | none | windowed `audio_truth_gate_scene`, rc 0, Music bus peak -11.2 dB, PASS overall | same | verified on this machine; listening to an exported build is `owner` |
 | R13 | Rendered English and Russian checks | none | windowed `final_frames_scene`, 18 frames, EN and RU at text size 2 read by eye | `docs/artifacts/integration-20261113/01_menu_en_s2.png`, `01_menu_ru_s2.png` | verified; no clipped or overflowing text, all glyphs drawn |
 | R14 | Production reusable 3D assets (facades, props, creatures, hands) | `f37072d7` (B9) | `production_asset_check --demo` BITES 5 mutants, real 0 findings in both batteries; 7 triangulated project-authored `ArrayMesh` resources in `assets/mesh/`, every `.gd` preload resolves, each has a live world consumer | `docs/artifacts/integration-20261113/RECHECK_2026-11-14.md`, `docs/artifacts/rc16/all_2026-11-14.out` | closed for props (car, cabinet, fence, cart, crate, barrel, debris); facades, creatures and hands still NOT_READY |
-| R15 | Exported-package startup, physical device stability, signing, store publication | none | not run: no device, no account rights, no signing identity in this session | — | NOT_READY, `owner` |
+| R15a | Exported-package startup (Windows Desktop and Web) | 15 Nov 2026 (this pass) | real `--export-release` for both presets, exit 0; Windows exe launched headless and windowed (OpenGL 3.3 / AMD Radeon), 0 script/parse errors, 4 real 1920x1080 frames captured from the exported exe, 0% magenta, non-blank; Web wasm/pck magic valid, all 6 local refs resolve; user-data restored byte-identical on every launch | `docs/artifacts/rc16/windows_export_2026-11-15.out`, `web_export_2026-11-15.out`, `windows_startup_2026-11-15.out`, `windows_startup_windowed_2026-11-15.out`, `windows_frame_capture2_2026-11-15.out`, `docs/artifacts/integration-20261113/windows_export_frame.png` | closed for Windows/Web startup; builds are unsigned and local, in gitignored `build/` |
+| R15b | Android signed `.aab`, physical device stability, signing, store publication | none | not run: Android SDK/build template absent, JDK 1.8 only, keystore fields empty (owner-held secret), no device, no account rights | `export_presets.cfg`, `docs/RELEASE_CHECKLIST.md` | NOT_READY, `owner` |
 | R16 | Sustained frame times and touch targets on a real phone, rendered before/after pairs with identical settings from this pass | none | not demonstrated | — | NOT_READY, `owner` |
 | R17 | Owner decisions: T4 primitive-budget definition, T11 export environment confirmation, T12 mutation/coverage engine chain, premium-art scope | none | T12 coverage re-measured 103/106 (3 waived misses); both engine self-checks pass; the 18-set mutation chain was interrupted after 8 sets, set 2 has 8 vacuous checks, sets 8-17 never ran — judge returns FAIL, not claimed as evidence | `docs/artifacts/rc16/t12_coverage.txt`, `docs/artifacts/integration-20261113/RECHECK_2026-11-14.md` | `owner` (decisions remain open; coverage measured, mutation chain incomplete) |
 | R18 | Release landing page self-contained, canon-correct and keyboard-accessible | 2026-11-15 (this pass) | `release_page_check --demo` bites all 4 mutants, real 0 findings, wired into `check.sh`; 14 local refs resolve, 0 external URLs | `web/store/`, `docs/artifacts/integration-20261113/RECHECK_2026-11-14.md` | closed |
@@ -48,6 +49,7 @@ not demonstrated).
 - `coverage_matrix.py` re-measured 103/106, exit 0, the same 3 waived misses (FOV kick, exploding barrels, radio — A3, Session 30). `s26_mutations.py --demo` and `coverage_matrix.py --demo` both pass. The full T12 mutation chain is NOT complete: 8 of 18 set logs exist, set 2 has 8 vacuous checks, sets 8-17 never ran. Not claimed as a pass.
 - Two standalone closeout re-runs on 15 November: 655 checks / 0 fails / exit 0 each, profile restored byte-identical.
 - Release landing page: four defects fixed (external font CDN, owner title canon, "Four districts" vs the real 11, no keyboard focus), locked by `release_page_check.py` whose `--demo` bites all four mutants; real page 0 findings. `lint_changed` 292 gd / 96 py / 24 sh, 0 findings, no skipped tools.
+- Real exports on 15 November 2026: the older checklist claim that export templates are missing is stale — Godot 4.7.stable templates (2.0 GiB) are installed. `--export-release` produced a 233,849,760-byte Windows exe (sha256 `0da91bee…`) and a Web set (39.5 MiB wasm, 124.7 MiB pck), both exit 0. The exported exe was launched headless (`--quit-after 120`) and windowed (`--resolution 1280x720`), both exit 0 with 0 script/parse errors; 4 real frames captured from the exported exe at 1920x1080 (mean luminance 0.114, std 0.098, 0.00% magenta) show the shipped main menu and street. Every launch ran under the user-data guard with byte-identical restore. These are local, unsigned builds in gitignored `build/` — no publication. Android remains blocked (R15b).
 
 ## 3. Branch selection record
 
@@ -77,11 +79,18 @@ closed for props; facades, creatures and hands remain NOT_READY (the shipped
 creature, weapon-viewmodel and facade geometry is procedural in-code, not a
 reusable modelled asset). The release landing page is now self-contained,
 canon-correct and keyboard-accessible (R18), and gameplay stability was
-re-verified twice (R19). The release state is still NOT_READY because
-production assets for facades/creatures/hands, physical-device testing,
-exported-package startup, signing, a hosted privacy-policy URL and store
-publication were not demonstrated, because the T12 mutation chain is
-incomplete, and because the owner decisions of R17 remain open. No gate was
-weakened, no F4 exemption was added, and no art, device, audio, signature or
-publication proof was fabricated. AI key-art was not generated: no
-`OPENAI_API_KEY` is configured in this environment.
+re-verified twice (R19). Exported-package startup is now demonstrated for
+Windows Desktop and Web (R15a): both presets exported with exit 0, the
+exported exe launched headless and windowed with 0 errors, and four real
+1920x1080 frames were captured from that packaged build — one is committed
+as `docs/artifacts/integration-20261113/windows_export_frame.png`. Those
+builds are local and unsigned in gitignored `build/`, not a store release.
+The release state is still NOT_READY because production assets for
+facades/creatures/hands, the signed Android `.aab` (R15b: no Android SDK or
+build template, JDK 1.8 only, empty owner-held keystore), physical-device
+testing, signing, a hosted privacy-policy URL and store publication were not
+demonstrated, because the T12 mutation chain is incomplete, and because the
+owner decisions of R17 remain open. No gate was weakened, no F4 exemption was
+added, and no art, device, audio, signature or publication proof was
+fabricated. AI key-art was not generated: no `OPENAI_API_KEY` is configured
+in this environment.
