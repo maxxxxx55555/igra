@@ -1,0 +1,16 @@
+coverage 103/106 (1648 passing evidence lines from 17 logs)
+  AUDIO        5/5
+  COMBAT       11/11
+  CRAFTING     2/2
+  ENEMIES      15/15
+  FLASHLIGHT   5/5
+  INVENTORY    5/5
+  META         18/18
+  MOVEMENT     3/4
+  PROGRESSION  5/5
+  STEALTH      11/11
+  UI           3/3
+  WORLD        20/22
+MISS MOVEMENT     the FOV kick
+MISS WORLD        exploding barrels  [waiver: A3 (Session 30): no passing line names it - the compile gate lists res://scenes/gameplay/exploding_barrel.tscn without a marker, _probe_inst.gd would print it (ok: <path>) but no scene runs that probe (orphaned), and the full closeout 611 checks, a11y and the static battery never name it; follow-up: spawn barrels in a district or drop the scene]
+MISS WORLD        the radio  [waiver: A3 (Session 30): no passing line names it - the HUD radio (scripts/ui/radio.gd) appears only in minimap.gd comments, the pickup family table and a11y_check's internal mutation table, never in gate output; follow-up: a HUD check that logs the panel, or an owner row if the panel is cut content]

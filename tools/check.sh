@@ -339,6 +339,14 @@ if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then
 else
   bad "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
 fi
+# Release landing page (2026-11-15): self-contained local fonts, no external URL,
+# the owner's "Last Streetlight" title canon and visible keyboard focus. Four
+# mutants (CDN, missing asset, bad title, no focus) must bite.
+if "$PY" tools/qa_sim/release_page_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/release_page_check.py >/dev/null 2>&1; then
+  ok "release_page_check (landing page is offline-capable, canon-correct and keyboard-accessible)"
+else
+  bad "release_page_check (an external URL, broken asset, bad title or missing focus ring returned)"
+fi
 # AF-MENU-STYLE: the owner's "every screen dressed like the main menu" requirement.
 # Gates the canon palette of main_menu.tscn / ThemeProvider over all UI chrome.
 if "$PY" tools/qa_sim/menu_style_unify_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/menu_style_unify_check.py >/dev/null 2>&1; then
