@@ -14,7 +14,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `CAPTION_GALLERY_HOSPITAL` | The generators held longest here. So did the nurses. |
 | `CAPTION_GALLERY_INDUSTRIAL` | The presses stopped mid-stroke. The dark likes the echo in here. |
 | `CAPTION_GALLERY_LAST_STREETLIGHT` | The last streetlight. While it burns, the city lives. |
-| `CAPTION_GALLERY_NIGHT_ZERO` | Night Zero. 03:14. The city exhaled, and the dark inhaled. |
+| `CAPTION_GALLERY_NIGHT_ZERO` | Night Zero. 22:14. The city exhaled, and the dark inhaled. |
 | `CAPTION_GALLERY_PARK` | The lamps here drink the fog. Pretty. Hungry. Both. |
 | `CAPTION_GALLERY_POLICE` | The holding cells are empty. The radio isn't. Don't ask. |
 | `CAPTION_GALLERY_POWER_STATION` | The center. My forty years end here — one way or another. |
@@ -131,7 +131,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DOC_OLD_WOMAN_TEXT` | “Sonny, if you're reading this, you're alive, and that's what matters. Babka Manya says: the light in this city isn't electricity.” |
 | `DOC_OLD_WOMAN_TITLE` | Letter from the Old Woman at House 24 |
 | `DOC_PROTOCOL_DAWN_TEXT` | Secret EON order No. 7: in case of irreversible failure of the power grid, launch Protocol DAWN. |
-| `DOC_RADIO_DIARY_01_TEXT` | “Friday. The grid died at 03:14. The radio still picks up static from the north.” |
+| `DOC_RADIO_DIARY_01_TEXT` | “Tuesday. The grid died at 22:14. The radio still picks up static from the north.” |
 | `DOC_RADIO_DIARY_01_TITLE` | Radio Operator's Diary: Day 1 |
 | `DOC_RADIO_DIARY_02_TEXT` | “The Morse from the north has become clearer. They are transmitting: ‘LIGHT-LIGHT-LIGHT-NOT-LIGHT-LIGHT’.” |
 | `DOC_RADIO_DIARY_02_TITLE` | Radio Operator's Diary: Day 12 |

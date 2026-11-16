@@ -227,6 +227,15 @@ if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then
 else
   bad "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
 fi
+# T8 (2026-11-12): MIN_TOUCH floor regression guard. MIN_TOUCH is a fixed raw-px
+# constant (no DisplayServer.screen_get_dpi() scaling anywhere in scripts/); the
+# final physical target size is an OWNER/DEVICE decision at P4. This gate only
+# blocks a silent drop below the 48 raw-px floor; it never picks the device value.
+if "$PY" tools/qa_sim/touch_target_gate.py >/dev/null 2>&1; then
+  ok "touch_target_gate (MIN_TOUCH >= 48 raw px floor; DPI-scaling owner decision at P4)"
+else
+  bad "touch_target_gate (MIN_TOUCH dropped below 48 raw-px floor — see tools/qa_sim/touch_target_gate.py)"
+fi
 gate_missed=0
 for f in docs/stills/evidence/r0_before_*.png docs/stills/evidence/magenta_corruption_suburbs.png docs/stills/evidence/r1_scale08*.png; do
   if "$PY" tools/qa_sim/visual_truth_gate.py "$f" >/dev/null 2>&1; then gate_missed=$((gate_missed + 1)); fi
