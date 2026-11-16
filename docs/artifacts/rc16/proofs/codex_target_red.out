@@ -1,0 +1,14 @@
+# proof codex_target_red
+# utc 20261116T091037Z
+# head 765831f4 (uncommitted paths: 30)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/hud_target_regression_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[hud-target] FAIL Aim keeps the actual instance when another enemy shares its species
+[hud-target] PASS Aimed instance health is shown
+[hud-target] FAIL An unseen same-species enemy cannot suppress the visible aimed target
+[hud-target] PASS The actual target losing perception hides its readout
+[hud-target] DONE fails=2
+[qa-guard] profile restored byte-identical
+# EXIT=1

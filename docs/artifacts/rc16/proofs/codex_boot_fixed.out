@@ -1,0 +1,24 @@
+# proof codex_boot_fixed
+# utc 20261116T093729Z
+# head 0cf5fde7 (uncommitted paths: 76)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/boot_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[boot] t=0.0s phase0 runner ready
+[boot] t=1.0s phase1 menu reachable
+[boot] t=3.9s phase2 New Game started, player spawned
+[boot] t=5.1s phase2b no ad before input — OK
+[boot] t=5.1s phase3 sustaining 60s gameplay
+[boot] t=15.1s heartbeat 10/60s — playing, player alive
+[boot] t=25.1s heartbeat 20/60s — playing, player alive
+[boot] t=35.1s heartbeat 30/60s — playing, player alive
+[boot] t=45.1s heartbeat 40/60s — playing, player alive
+[boot] t=55.1s heartbeat 50/60s — playing, player alive
+[boot] t=65.1s heartbeat 60/60s — playing, player alive
+[boot] t=65.1s phase4 save
+[boot] t=65.2s phase5 quit-to-menu
+[boot] t=65.3s phase6 load
+[boot] DONE fails=0
+[qa-guard] profile restored byte-identical
+# EXIT=0

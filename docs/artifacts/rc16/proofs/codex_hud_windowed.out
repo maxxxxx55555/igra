@@ -1,0 +1,20 @@
+# proof codex_hud_windowed
+# utc 20261116T094243Z
+# head 110af564 (uncommitted paths: 77)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --path . res://scenes/tools/hud_target_regression_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[hud-target] PASS Aim keeps the actual instance when another enemy shares its species
+[hud-target] PASS Aimed instance health is shown
+[hud-target] PASS An unseen same-species enemy cannot suppress the visible aimed target
+[hud-target] PASS Ambiguous species-only damage cannot overwrite the aimed instance health
+[hud-target] PASS Ambiguous species-only spotting cannot invent an instance
+[hud-target] PASS The actual target losing perception hides its readout
+[hud-target] PASS An unambiguous species-only health event still updates the unique instance
+[hud-target] PASS Freeing the actual target safely hides its readout
+[hud-target] PASS Detached HUD ignores late inventory notices
+[hud-target] DONE fails=0
+[qa-guard] profile restored byte-identical
+# EXIT=0

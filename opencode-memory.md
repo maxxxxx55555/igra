@@ -287,3 +287,10 @@ T3: key-hint strings — wired InputRemap.key_of/key_text into the 3 live call-s
 - Authentication document citation check now passes; the earlier G-AF5-FOREIGN failure is historical, not a current finding.
 - Cleanup audit labels conflict with explicit KEEP-PLANNED decisions; no tracked deletion established safe. Preserve history and retained assets.
 - Unslop by Damir Sokolovsky (CC BY 4.0, https://github.com/heydamir/unslop): reference-based review, quiet charcoal/brass chrome, existing authored street image retained. No newly generated art or listening acceptance claimed.
+
+## 2026-11-16 — Integrated continuation
+- Existing checkout: merged origin/main 6667fd92, committed scoped touch/HUD/contrast fixes as 0cf5fde7. No clone or history deletion.
+- Direct regression and real viewport touch dispatch pass; distinguish viewport-local injection from physical phone testing. Eight obsolete current screenshots replaced by fresh captures, with history retained in Git; AF3 passes eight frames.
+- Static pass: 76 passed, two failed (AF3 and AF5); both subsequently corrected and individually passed. Full serial suite remains the release authority. Preserve the generated i18n inventory edit; automatic review rejected restoring it despite an empty whitespace-insensitive diff.
+- Release is not yet approved. Earlier signed binaries predate these changes; device/performance/art/listening acceptance remains pending. Do not infer READY from scoped green checks.
+- Final runtime 110af564 also guards detached HUD notices during scene replacement. Integrated battery completed 103 passes/2 failures; both corrected and focused checks passed, without relabeling the original full result. Current frames refreshed again against 110af564. Windows candidate exported and smoke-tested successfully; see CODEX_RELEASE_PASS_20261116.md for hash, evidence and unresolved acceptance.

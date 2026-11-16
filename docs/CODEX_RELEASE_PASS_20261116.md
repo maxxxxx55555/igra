@@ -2,6 +2,12 @@
 
 Status: NOT READY. Scoped runtime fixes are verified; full release acceptance is not.
 
+Latest result (runtime 110af564): the serial integrated full battery completed with 103 passes and two failures, restoring all 12 player-profile files byte-identically. One failure was the static checker missing inherited Node methods; its exact static block passes after recognizing `find_children` and `set_process`. The other was a real detached-HUD notification error during return-to-menu. The lifecycle guard and deterministic detached-signal regression fix it; codex_boot_fixed repeats the complete boot/play/save/menu/load flow with fails=0 and no script errors. This is a completed battery followed by focused corrections, not a claim that the original full log was green. Headless HUD teardown still reports audio playback/resource warnings; no production memory-leak fix is claimed.
+
+Final evidence: codex_final_frames captured 18 frames from 110af564; eight current evidence frames replace the obsolete set, AF3 passes 8/8. Capture staging now follows the real pause-to-shop route, dismisses the tutorial and lets notices expire. Reviewed shop and boss frames no longer carry the earlier overlay clutter. The separate 50k primitive target and physical-device/art/listening acceptance remain unresolved.
+
+Windows candidate: `build/windows/codex-110af564/LastStreetlight.exe`, 223257880 bytes, SHA-256 `af4ca1cb0e80ef749a951857a09e6185ec73925bb10e7627cf4b72ed6d72b095`. Release export and a windowed exported-binary smoke test both exit 0; smoke test restores the profile byte-identically. This candidate is unsigned, not published, and does not supersede prior signing records as an approved release.
+
 Changed: new-run combat music reset; streetlight stage-energy retention; immediate Reduce Flash updates to lights and existing shared/batched materials; weak material references; regression scenes and older lamp fixture setup.
 
 Evidence: `docs/artifacts/rc16/proofs/codex_20261116_audio.out`, `docs/artifacts/rc16/proofs/codex_20261116_lamps.out`. Both terminate with fails=0, EXIT=0 and byte-identical profile restoration. GDScript lint passes. Flow and scene checks pass; authentication citations pass.

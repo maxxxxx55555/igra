@@ -1,0 +1,19 @@
+# proof codex_touch_red
+# utc 20261116T091103Z
+# head 765831f4 (uncommitted paths: 32)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/touch_ownership_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[touch-ownership] OK fixture separates free look from visible control
+[touch-ownership] FAIL control press cannot join look pinch
+[touch-ownership] FAIL control-origin swipe cannot crouch
+[touch-ownership] FAIL cancel releases ownership without crouch
+[touch-ownership] OK canceled press cannot enter trackers
+[touch-ownership] FAIL inactive player clears pending gesture
+[touch-ownership] OK modal blocks gameplay input
+[touch-ownership] OK modal clears pending gesture
+[touch-ownership] OK free two-finger gesture reaches real camera zoom
+[touch-ownership] mode=direct DONE fails=4
+[qa-guard] profile restored byte-identical
+# EXIT=1

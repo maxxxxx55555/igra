@@ -1,0 +1,16 @@
+# proof codex_contrast_final
+# utc 20261116T092011Z
+# head 765831f4 (uncommitted paths: 48)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/settings_persist_probe_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[settings-persist] tier=Low glow_intensity=0.40 ssao=false
+[settings-persist] tier=High glow_intensity=0.40 ssao=false
+[settings-persist] item12 graphics preset switch applies to live Environment: true
+[settings-persist] item13 restart round-trip: load_from_cfg=true high_contrast=true text_size=2
+[settings-persist] T2/X5 LUT survives tier change (HC off): on=true contrast_kept=true sat_kept=true
+[settings-persist] high contrast off restores tier while retaining LUT: true
+[settings-persist] DONE bad=0
+[qa-guard] profile restored byte-identical
+# EXIT=0
