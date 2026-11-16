@@ -5,6 +5,7 @@ extends Node
 
 const _Looks := preload("res://scripts/enemies/monster_looks.gd")
 const _Shapes := preload("res://scripts/art/monster_meshes.gd")
+const _B10 := preload("res://scripts/art/b10_assets.gd")
 const WINDUP: float = 0.4
 const STRIKE: float = 0.1
 const RECOVER: float = 0.3
@@ -121,6 +122,8 @@ func build(monster: Node3D, id: StringName) -> void:
 	_head = _part("HeadMesh", _look["head"], _torso, -_hip_y, _mat, true)
 	_legs = _limbs(legs, _root, 0.0, "Leg")
 	_arms = _limbs(_look["arms"], _torso, -_hip_y, "Arm")
+	# Share the rig material so hit flashes and rim remain coherent.
+	_B10.add_creature_shell(_torso, id, _look, _mat, _hip_y)
 	if id == &"crawler":
 		_alt(monster)
 

@@ -332,6 +332,11 @@ if "$PY" tools/qa_sim/production_asset_check.py --demo >/dev/null 2>&1 && "$PY" 
 else
   bad "production_asset_check (a production mesh is missing, a stub, orphaned or a primitive again)"
 fi
+if "$PY" tools/qa_sim/b10_asset_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/b10_asset_check.py >/dev/null 2>&1; then
+  ok "b10_asset_check (facade/creature/hand meshes authored, wired to live consumers with materials and LOD)"
+else
+  bad "b10_asset_check (a B10 mesh is missing, a stub, orphaned or unwired — see tools/qa_sim/b10_asset_check.py)"
+fi
 # T7 (2026-11-11): a HUD touch handler must not restrict activation to the
 # first finger (index == 0) — the KNOWN_ISSUES.md:11 second-finger bug.
 if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then

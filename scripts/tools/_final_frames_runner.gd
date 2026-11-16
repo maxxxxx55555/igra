@@ -302,6 +302,7 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
+	TutorialSystem.call("_skip_tutorial")
 	# v10 N002: the weather and the random events change a frame by themselves (a flash of lightning put 5 to 6 % of one combat frame over luma 235 in two of four runs of the energy sweep, 24 and 10, and in none of the other two): pinned as the density runner pins them
 	WeatherSystem.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	WeatherSystem.current = WeatherSystem.Weather.CLEAR

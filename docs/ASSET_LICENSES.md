@@ -658,3 +658,11 @@ stub mesh, an orphaned mesh, an unbuilt node and a return to the primitive crate
 all fail. `scenes/tools/b9_turntable_scene.tscn` renders the seven meshes on one
 lit plane so the silhouettes can be read by eye. No licence obligation arises from
 this batch; these files are not a claim that the whole world uses production assets.
+
+## Added 2026-11-17: B10 modeled details and design workflow
+
+The facade bay, creature shell and hand viewmodel (each with its `_lod` resource) are project-authored geometry baked by `scripts/tools/_gen_meshes_b10.gd`. The playground, Keeper's shed/radio and Workshop B are authored in `scripts/world/b10_setpieces.gd` using existing project materials. No downloaded model pack or generated concept image is embedded in these assets; the B9 prop meshes remain unchanged.
+
+The visual review workflow adapts **Unslop by Damir Sokolovsky (@heydamir)**, licensed **CC BY 4.0**. Credit: [Unslop](https://skills.sh/heydamir/unslop/unslop), [author](https://x.com/heydamir), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Its UI-oriented principles were adapted to the game's existing graphite/brass palette, material and lighting hierarchy; no endorsement is implied.
+
+Gemini supplied advisory visual/music briefs in this pass, not new image or audio files. Original audio and its existing attribution/disclosure are preserved. No new generated-media licence or commercial-use clearance is claimed.

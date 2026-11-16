@@ -11,6 +11,7 @@ const _BENCH := preload("res://assets/mesh/mesh_bench.res")
 const _CRATE := preload("res://assets/mesh/mesh_crate.res")
 const _BARREL := preload("res://assets/mesh/mesh_barrel.res")
 const _PRODUCTION := preload("res://scripts/world/production_props.gd")
+const _SETPIECES := preload("res://scripts/world/b10_setpieces.gd")
 const _LANDMARK := preload("res://scripts/world/district_landmark.gd")
 const _MANHOLE := preload("res://scripts/world/manhole.gd")
 
@@ -162,6 +163,7 @@ func build(district_id: StringName, sb: Node) -> void:
 	_add_fog()
 	_add_manholes()
 	_add_production_props(sb)
+	_add_setpieces()
 	_apply_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 
@@ -172,6 +174,13 @@ func _add_production_props(sb: Node) -> void:
 	production.name = "ProductionProps"
 	add_child(production)
 	production.call("build", _district_id, sb, _clear, _grid)
+
+## B10: the content-plan zones (playground, keeper shed, workshop B) as visual-only set pieces, placed against the same keep-clear list.
+func _add_setpieces() -> void:
+	var setpieces: Node3D = _SETPIECES.new()
+	setpieces.name = "B10Setpieces"
+	add_child(setpieces)
+	setpieces.call("build", _district_id, _clear, _grid)
 
 ## One pool of light for each streetlamp (its pole is a transform of the batched poles of the sibling node), moved toward the block the pole stands beside.
 func _lamp_pools() -> Array[Transform3D]:

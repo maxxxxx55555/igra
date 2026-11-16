@@ -794,7 +794,7 @@ func _add_status_backing() -> void:
 	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
-	style.border_color = Color(ThemeProvider.COLOR_BORDER, 0.72)
+	style.border_color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
