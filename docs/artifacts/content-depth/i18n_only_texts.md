@@ -152,7 +152,6 @@ CODE decides whether to adopt each into a content file or wire it.
 | `Dyslexia Font (OpenDyslexic)` | Dyslexia Font (OpenDyslexic) |
 | `END_NONE_HINT` | No ending conditions were met. |
 | `FIRST_RESTORE` | First district restored! |
-| `HINT_INVENTORY` | Tab — inventory. Watch your weight |
 | `ITEM_BLUEPRINT_ENHANCED_BATTERY` | Blueprint: enhanced battery |
 | `ITEM_BLUEPRINT_PORTABLE_WORKBENCH` | Blueprint: portable bench |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
@@ -182,7 +181,6 @@ CODE decides whether to adopt each into a content file or wire it.
 | `SCR_VOSSTANOVITE_100_FONAREY` | Restore 100 streetlights |
 | `SHOP_ITEM_UPGRADE_FLASHLIGHT_BRIGHTNESS` | Flashlight brightness +1 |
 | `Server created! Waiting for players...` | Server created! Waiting for players... |
-| `TUT_FIND_FLASHLIGHT` | Find the flashlight. Press F to switch it on. |
 | `TUT_FIRST_SHADOW` | A Shadow is close. Hold it in the beam. |
 | `TUT_GENERATOR_STEP1` | Connect the cables in the right order. |
 | `TUT_LIGHT_SHIELD` | Light is your shield. Monsters fear the beam. |
@@ -193,7 +191,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 183 keys.
+Total: 181 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is

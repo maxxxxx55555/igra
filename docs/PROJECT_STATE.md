@@ -34,6 +34,27 @@ Ground rendering is script-driven (district_grading.gd tints ground; world_env_s
 single WorldEnvironment writer); district_scene_factory.gd has no WorldEnvironment on main.
 Full file:line table: docs/RELEASE_GAP_FINAL.md §2. Code wins over docs. -->
 
+## P1 — agent-closable residue closed (2026-11-12, branch `arena/8966ccea-igra`)
+
+Worked from `24b970a` with a clean tree. The registry is still the single queue; §10 of
+`docs/RELEASE_GAP_FINAL.md` holds the evidence of this session.
+
+**Closed with evidence (static proofs in §10):** T3 (key hints read the live binding, dead hint
+strings removed, phone gets a quick-slot reset gesture, new `hint_binding_check.py` proved to bite),
+T8 agent part (`min_touch()` is density-aware), T9 (one notice queue, the two checks that read the
+removed field now read the queue), T10 (`narrow_layout` deleted as dead, `skyline.gd` live), T13
+(the hum row is a recorded owner decision, the stale W4 instruction is marked dropped), T14 (status
+docs dated), G-MSAA (the null dereference is guarded and locked by `viewport_write_guard.py`),
+G-AUDIT, G-DEMO-VIS / G-DEMO-AF2 / G-DEMO-LINT, G-CLEAN-TREE.
+
+**Still open, and correctly so:** T12 (needs one engine chain: the coverage misses match logs only
+the owner's machine writes), G-WINDOWED and the two windowed gates (no display, no GPU, no Godot
+4.7 binary in the P1 sandbox), and every owner-only row of §7 — none of them was touched.
+
+**Not claimed:** no engine gate (compile, signal arity, autoload API, i18n, asset, save integrity,
+boot), no export and no device run was performed in P1. The P1 battery is static: 73 passed, 2
+environment-only failures (`actionlint` binary download blocked, ffmpeg now installed), §10.9.
+
 ## Status: UNFROZEN — agent work reopened (2026-11-11), owner-only residue unchanged
 
 **Historical (2026-11-10):** the repository was declared frozen and the Phase A–H agent work

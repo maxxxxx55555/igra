@@ -55,7 +55,6 @@ var _weather_overlay: Control
 var _photo: Control
 var _quest_hud: Control
 var _subtitles: Control
-var _toast: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -81,27 +80,16 @@ func _mk_overlay(path: String, node_name: String) -> Control:
 	_layer.add_child(c)
 	return c
 
+## T9 (RELEASE_GAP_FINAL §1): this used to be a SECOND toast pipeline - its own label,
+## its own 2 s tween, no run stamp, no type colour, no entry in the log, and it drew
+## even while the HUD was blocked. The same build therefore showed "Level up" in one
+## place and "Save failed" in another (toast_manager.gd owns the queue, the log, the
+## history and the trailer mute). Every caller now lands in that one queue; the mute and
+## the visibility of the stack stay owned by toast_manager, which is the only place that
+## knows about them. Proven by hud_checks TRLR1 / sec_checks E1D, which now read the
+## queue instead of this manager's field.
 func show_notification(msg: String) -> void:
-	var settings := get_node_or_null("/root/SettingsManager")
-	if settings != null and bool(settings.get_setting("trailer_mode", false)):
-		return
-	if _toast == null:
-		_toast = Label.new()
-		_toast.name = "Toast"
-		_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_toast.add_theme_color_override("font_color", Color("#d8d5cc"))  # bone-text
-		_toast.add_theme_color_override("font_outline_color", Color("#060f13"))  # bg-deep: bone on a lit road is 1.5:1 without it
-		_toast.add_theme_constant_override("outline_size", 4)
-		_toast.add_theme_font_size_override("font_size", 20)
-		_toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-		_toast.offset_top = -260.0  # above the quick bar (16 to 64 px up) and the tutorial hint (80 to 200 px up)
-		_toast.offset_bottom = -230.0
-		_layer.add_child(_toast)
-	_toast.text = msg
-	_toast.visible = true
-	var tw := create_tween()
-	tw.tween_interval(2.0)
-	tw.tween_callback(func() -> void: _toast.visible = false)
+	EventBus.toast_requested.emit(msg, "info")
 ## FINAL PERFECTION P2.2: pickup icon flies from its 3D world position to
 ## the HUD's top-left stat panel, then fades - real visual confirmation an
 ## item was gained, on top of (not instead of) the existing text toast.

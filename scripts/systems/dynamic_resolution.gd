@@ -64,4 +64,12 @@ func _apply(drop: bool) -> void:
 	_low_for = 0.0
 	_high_for = 0.0
 	var base: float = float(SettingsManager.get_setting("render_scale", 1.0))
-	get_viewport().scaling_3d_scale = base * (DROP_SCALE if drop else 1.0)
+	## G-MSAA class: this apply can also run on an instance that is not inside a tree
+	## (a headless suite stepping `step()` directly), where get_viewport() is null and
+	## the bare write threw a script error. There is no 3D scale to change in that case,
+	## so the write is skipped; `dropped` above still records the decision, so a later
+	## application of the settings (set_render_scale) starts from the right state.
+	## Regression lock: tools/qa_sim/viewport_write_guard.py.
+	var vp := get_viewport()
+	if vp != null:
+		vp.scaling_3d_scale = base * (DROP_SCALE if drop else 1.0)

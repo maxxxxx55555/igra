@@ -804,14 +804,10 @@ func build_StoryScene(card: ColorRect, cw: float, ch: float, d: Dictionary) -> v
 	dialog_lbl.add_theme_color_override("font_color", STEEL_TEXT)
 	dialog_lbl.add_theme_font_size_override("font_size", 11)
 	dialog_bar.add_child(dialog_lbl)
-	var skip_lbl := Label.new()
-	skip_lbl.text = LocalizationManager.t("SCR_PROPUSTIT_SPACE")
-	skip_lbl.size = Vector2(180, 20)
-	skip_lbl.position = Vector2(cw / 2.0 - 90, ch - 24)
-	skip_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	skip_lbl.add_theme_color_override("font_color", BRASS_DIM)
-	skip_lbl.add_theme_font_size_override("font_size", 10)
-	card.add_child(skip_lbl)
+	# T3: this card used to print "SKIP [SPACE]" while no input handler skipped anything,
+	# and nothing in the game ever shows the card (grep "StoryScene": only this file and
+	# its own router table). The false promise is gone with the label; the dead card
+	# branch itself is a post-release cleanup row in docs/RELEASE_GAP_FINAL.md.
 
 func build_FinalNight(content: ColorRect, card: ColorRect, cw: float, ch: float, d: Dictionary) -> void:
 	var header := Label.new()

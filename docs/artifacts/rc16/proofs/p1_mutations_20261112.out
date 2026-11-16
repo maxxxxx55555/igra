@@ -1,0 +1,16 @@
+# proof p1_mutations_20261112
+# utc 20261112T095830Z
+# head 46a29510 (uncommitted paths: 0)
+# env none
+# cmd bash -c python3 tools/qa_sim/hint_binding_check.py --against 24b970a; echo "---"; python3 tools/qa_sim/viewport_write_guard.py --against 24b970a
+FOUND data/i18n/en.json: HINT_FLASHLIGHT names a control literally - F — flashlight. Light drains the battery but scares the shadows
+FOUND data/i18n/en.json: INV_HINTS names a control literally - Tab / Esc: close · Click: select · Del: drop
+FOUND data/i18n/en.json: INV_QUICKSLOT_HINT names a control literally - Drag an item onto a quick slot. Right-click a slot to reset it.
+FOUND data/i18n/ru.json: HINT_FLASHLIGHT names a control literally - F — фонарик. Свет садит батарею, но отпугивает тени
+FOUND data/i18n/ru.json: INV_HINTS names a control literally - Tab / Esc: закрыть · Клик: выбрать · Del: выбросить
+hint_binding_check --against 24b970a: 5 finding(s)
+---
+FOUND scripts/systems/dynamic_resolution.gd:67: write to Viewport.scaling_3d_scale through a bare get_viewport() - get_viewport().scaling_3d_scale = base * (DROP_SCALE if drop else 1.0)
+FOUND scripts/world_env_setup.gd:197: write to Viewport.msaa_3d through a bare get_viewport() - get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
+viewport_write_guard --against 24b970a: 2 unguarded write(s)
+# EXIT=1
