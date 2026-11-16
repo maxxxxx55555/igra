@@ -6,6 +6,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## порядке сохранённый индекс указывал на чужой язык.
 const LANGUAGES := ["ru", "en"]
 const CFG_PATH := "user://settings.cfg"
+const VISUAL_QUALITY := preload("res://assets/config/visual_quality.tres")
 const _FLOAT_RANGES: Dictionary = {"sensitivity": Vector2(0.05, 4.0), "deadzone": Vector2(0.0, 0.9), "hud_opacity": Vector2(0.0, 1.0), "button_size": Vector2(0.5, 2.0), "render_scale": Vector2(0.5, 1.0), "draw_distance": Vector2(10.0, 500.0), "touch_sensitivity": Vector2(0.5, 2.0)}
 const _INT_RANGES: Dictionary = {"crouch_input": Vector2i(0, 2), "colorblind": Vector2i(0, 3), "text_size": Vector2i(0, 2), "shadows": Vector2i(0, 2), "textures": Vector2i(0, 2), "effects": Vector2i(0, 2)}
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
@@ -455,7 +456,12 @@ func _apply_high_contrast() -> void:
 		if hc:
 			env.adjustment_contrast = 1.3
 			env.adjustment_saturation = 1.2
-		# else: leave the tier's contrast/saturation untouched (do not clobber to 1.1/1.05)
+		else:
+			var names := ["low", "medium", "high", "ultra"]
+			var tier := clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
+			var preset: Dictionary = VISUAL_QUALITY.get_meta(names[tier], {})
+			env.adjustment_contrast = float(preset.get("contrast", 1.0))
+			env.adjustment_saturation = float(preset.get("saturation", 1.0))
 
 func set_auto_aim(enabled: bool) -> void:
 	_settings["auto_aim"] = enabled
@@ -491,8 +497,7 @@ func _particle_ratio() -> float:
 	var names := ["low", "medium", "high", "ultra"]
 	var tier: int = clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
 	if not _particle_ratio_by_tier.has(tier):
-		var vq := load("res://assets/config/visual_quality.tres")
-		var p: Dictionary = vq.get_meta(names[tier], {}) if vq else {}
+		var p: Dictionary = VISUAL_QUALITY.get_meta(names[tier], {})
 		_particle_ratio_by_tier[tier] = float(p.get("particle_ratio", 1.0))
 	return _particle_ratio_by_tier[tier]
 

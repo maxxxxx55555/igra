@@ -430,7 +430,8 @@ var _pinch_dist: float = 0.0
 var _look_touch_index: int = -1
 
 func _input(event: InputEvent) -> void:
-	if not gameplay_active:
+	if not gameplay_active or UIManager.is_hud_blocked():
+		_clear_touch_gestures()
 		return
 	if _net_active and not is_multiplayer_authority():
 		return
@@ -440,6 +441,10 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMagnifyGesture:
 		_zoom_camera((event as InputEventMagnifyGesture).factor)
 	elif event is InputEventScreenTouch:
+		# GUI receives input after this handler; ownership starts at the press.
+		if event.pressed and not event.canceled:
+			if event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO or _touch_on_control(event.position):
+				return
 		_track_swipe(event)
 		_track_pinch(event)
 		_track_look_ownership(event)
@@ -479,7 +484,16 @@ func _touch_on_control(pos: Vector2) -> bool:
 			return true
 	return false
 
+func _clear_touch_gestures() -> void:
+	_look_touch_index = -1
+	_touch_pos.clear()
+	_swipe_start.clear()
+	_pinch_dist = 0.0
+
 func _track_swipe(event: InputEventScreenTouch) -> void:
+	if event.canceled:
+		_swipe_start.erase(event.index)
+		return
 	if event.pressed:
 		_swipe_start[event.index] = {"pos": event.position, "ms": Time.get_ticks_msec()}
 		return
@@ -495,7 +509,7 @@ func _track_swipe(event: InputEventScreenTouch) -> void:
 ## Follows every finger down in the look zone; the moment the second one lands together with the first, the pair
 ## is a pinch and neither of them is a crouch swipe any more.
 func _track_pinch(event: InputEventScreenTouch) -> void:
-	if not event.pressed:
+	if not event.pressed or event.canceled:
 		if _touch_pos.erase(event.index):
 			_pinch_dist = 0.0
 		return

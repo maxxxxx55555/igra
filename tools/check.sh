@@ -724,6 +724,9 @@ else
     #   tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
     run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
+    run_gate "touch: independent pointer ownership" "res://scenes/tools/touch_ownership_check_scene.tscn"
+    run_gate "HUD: actual enemy instance and ambiguous species events" "res://scenes/tools/hud_target_regression_check_scene.tscn"
+    run_gate "lighting: stage brightness and live Reduce Flash" "res://scenes/tools/streetlight_regression_check_scene.tscn"
     if [[ $ALL -eq 1 ]]; then
       if bash tools/qa_sim/timing_equiv check >/dev/null 2>&1; then ok "timing_equiv: gameplay quantities agree at 30, 60 and 120 FPS of simulated time"; else bad "timing_equiv (см. .qa_logs/timing_check.txt)"; fi
     fi

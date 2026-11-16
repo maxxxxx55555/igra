@@ -585,7 +585,7 @@ func _poll_aim_target() -> void:
 	var target: Node3D = best if (best != null and _has_clear_shot(cam, best)) else null
 	_set_aiming_at_enemy(target != null)
 	if target != null:
-		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target))
+		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target), target)
 
 ## One raycast for the single best candidate rather than one per enemy per tick:
 ## the crosshair must not light up on a monster standing behind a wall. The ray
@@ -1171,10 +1171,14 @@ func _monster_perceptible(monster: Node3D) -> bool:
 	return is_instance_valid(monster) and monster.has_method("is_perceptible") and monster.is_perceptible()
 
 func _resolve_monster(monster_id: StringName) -> Node3D:
+	var match_instance: Node3D = null
 	for e: Node in get_tree().get_nodes_in_group("enemies"):
 		if e is Node3D and is_instance_valid(e) and e.get("monster_id") == monster_id:
-			return e as Node3D
-	return null
+			# Species-only events cannot identify which of two instances changed.
+			if match_instance != null:
+				return null
+			match_instance = e as Node3D
+	return match_instance
 
 ## The enemy name/HP readout lives here, fed by three producers: the "spotted"
 ## event, a damage report, and - in the build that actually ships - the aim scan
@@ -1245,20 +1249,26 @@ func _update_enemy_resist(monster_id: StringName) -> void:
 		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	_resist_label.visible = true
 
-func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
+func _show_enemy_bar(monster_id: StringName, ratio: float, monster: Node3D = null) -> void:
 	# Single gate for all three producers (spotted, damage report, aim scan): a target the player cannot
 	# currently perceive gets no readout, and one already on screen loses it the same frame.
-	var monster := _resolve_monster(monster_id)
+	if monster == null:
+		monster = _resolve_monster(monster_id)
+		if monster == null:
+			return
 	if not _monster_perceptible(monster):
 		_hide_enemy_bar()
 		return
+	var same_instance: bool = is_instance_valid(_enemy_bar_monster) and _enemy_bar_monster == monster
 	_enemy_bar_monster = monster
 	_enemy_bar_hold = _ENEMY_BAR_HOLD
+	if ratio < 0.0:
+		ratio = _hp_ratio_of(monster)
 	if ratio >= 0.0:
 		enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
 	# Fresh target: (re)name the readout and fade it in once. Repeated ticks for
 	# the same enemy only move the bar, so the fade cannot thrash at 10 Hz.
-	if String(monster_id) == _enemy_bar_id and enemy_hp_bar.visible:
+	if same_instance and String(monster_id) == _enemy_bar_id and enemy_hp_bar.visible:
 		return
 	_enemy_bar_id = String(monster_id)
 	# C04: routes through the same arachnophobia name-swap the encyclopedia
