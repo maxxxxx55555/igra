@@ -279,3 +279,11 @@ Fixed the real runtime defect found at P0: _apply_graphics_tier wrote msaa_3d on
 ## 2026-11-11 — P1 wave 2 (T7 + T3)
 T7: headless two-finger touch probe + biting gate (tools/qa_sim/two_finger_touch_check.py). PR #73 stacked on #72 (g-msaa). Hard headless constraint: Input.parse_input_event() does not dispatch synthetic GUI input to a Control in --headless, so a real touch cannot be injected into Godot's BaseButton; the game's own touch code is index-agnostic (proven). 
 T3: key-hint strings — wired InputRemap.key_of/key_text into the 3 live call-sites (help_ui.gd tutorial_move/HINT_FLASHLIGHT, inventory_ui.gd INV_HINTS) so hints show the real bound key after a remap; en+ru `%s` parity (1/1/2). The other named keys (HINT_INVENTORY, TUT_FIND_FLASHLIGHT, WORKBENCH_CLOSE, tip4, tutorial_map) have no active call-site — flagged to owner. Gates green.
+
+## 2026-11-16 — Codex scoped release regressions
+- Existing checkout retained; no new clone. Three Astra reviewers checked audio, visuals and authentication/cleanup.
+- MusicManager clears combat hold on a new run. Streetlights preserve stage brightness and apply Reduce Flash immediately to live lights/materials, including paused settings changes. Weak material references avoid retaining unloaded district materials.
+- Current engine regressions: codex_20261116_audio and codex_20261116_lamps both EXIT=0, fails=0; player profile restored byte-identically. Broader release validation is separate and not certified by these focused checks.
+- Authentication document citation check now passes; the earlier G-AF5-FOREIGN failure is historical, not a current finding.
+- Cleanup audit labels conflict with explicit KEEP-PLANNED decisions; no tracked deletion established safe. Preserve history and retained assets.
+- Unslop by Damir Sokolovsky (CC BY 4.0, https://github.com/heydamir/unslop): reference-based review, quiet charcoal/brass chrome, existing authored street image retained. No newly generated art or listening acceptance claimed.

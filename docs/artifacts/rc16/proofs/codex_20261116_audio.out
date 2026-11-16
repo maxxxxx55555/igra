@@ -1,0 +1,36 @@
+# proof codex_20261116_audio
+# utc 20261116T084639Z
+# head c9409e96 (uncommitted paths: 45)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/audio_lifecycle_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[audio-lifecycle] OK notice remains silent before the first input
+[audio-lifecycle] OK menu music waits for the first real input
+[audio-lifecycle] OK first input starts the credited Hymn recording on Music
+[audio-lifecycle] OK restored calm exploration plays the credited Moonlight recording
+[audio-lifecycle] OK unpowered exploration retains its district-specific dark signature
+[audio-lifecycle] OK credits retain AI disclosure and wrapped artist, titles, source, licence and changes: ru
+[audio-lifecycle] OK credits retain AI disclosure and wrapped artist, titles, source, licence and changes: en
+[audio-lifecycle] OK text notice adds no error or generic beep: Found ammunition
+[audio-lifecycle] OK text notice adds no error or generic beep: Rested
+[audio-lifecycle] OK text notice adds no error or generic beep: Checkpoint saved
+[audio-lifecycle] OK explicit purchase rejection has one UI owner
+[audio-lifecycle] OK wallet rejection retains exactly one explicit error cue
+[audio-lifecycle] OK physical pickup plays its existing action-specific loot clip
+[audio-lifecycle] OK physical pickup adds no generic two-note blip or notice beep
+[audio-lifecycle] OK pointer hover remains visual without repetitive audio
+[audio-lifecycle] OK activation retains the existing mechanical UI clip
+[audio-lifecycle] OK victory starts its musical state
+[audio-lifecycle] OK victory starts its one-shot cue
+[audio-lifecycle] OK return from victory resumes menu music
+[audio-lifecycle] OK menu uses its own theme after victory
+[audio-lifecycle] OK victory cue cannot overlap the menu theme
+[audio-lifecycle] OK victory cue cannot overlap a new run
+[audio-lifecycle] OK new run resumes district ambience
+[audio-lifecycle] OK detection starts combat music before retry
+[audio-lifecycle] OK new run clears the previous run's combat hold
+[audio-lifecycle] OK retry without enemies keeps calm music
+[audio-lifecycle] DONE fails=0
+[qa-guard] profile restored byte-identical
+# EXIT=0

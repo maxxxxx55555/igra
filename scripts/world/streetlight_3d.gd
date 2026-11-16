@@ -17,24 +17,19 @@ var _on: bool = false
 ## The flicker clock, negative until the first lit frame: it then starts at a phase of the lamp's own place, so the lamps of a street do not dip together (they all started at 0: the whole street pulsed by
 ## 15 % and fell to a fifth of its light six times a second, and two frames of one view differed by up to 20 %, the "drift" of Session 28).
 var _t: float = -1.0
-## PARTIAL (stage 1) lamps run weaker; _process multiplies this into the
-## flicker so a stage-1 lamp reads dimmer than a STREETS lamp, not just
-## on/off. 1.0 at STREETS/FULL.
-var _energy_scale: float = 1.0
+var _spot_energy: float = 0.0
+var _glow_energy: float = 0.0
 ## VISUAL_PASS.md W10/§3: per-district light punch (fog districts read
 ## brighter through the murk, hospital/police stay dim per canon). 1.0 if
 ## the district has no entry or the config resource is missing.
 var _light_energy_mult: float = 1.0
-## QA_SWARM_FINDINGS.md P1 (accessibility): every lit lamp in every district
-## dipped into a sharp ~6Hz flicker with no accessibility gate at all - only
-## a per-instance scene export existed, nothing player-facing. Cached once
-## like _light_energy_mult above (district scenes rebuild on re-entry per
-## world_runtime.gd, so toggling the setting takes effect next visit).
+## Updated by the settings signal, including while the scene is paused.
 var _reduce_flash: bool = false
 
 func _ready() -> void:
 	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
+	EventBus.settings_changed.connect(_on_setting_changed)
 	var pole := get_node_or_null("Pole")
 	var lamp := get_node_or_null("Lamp")
 	if pole is MeshInstance3D:
@@ -54,19 +49,26 @@ func _ready() -> void:
 	_apply_stage(st)
 
 func _process(delta: float) -> void:
-	if not _on or not lamp_flicker:
+	if not _on or not lamp_flicker or _reduce_flash:
 		return
 	if _t < 0.0:
 		_t = float(absi(hash(Vector2i(roundi(global_position.x), roundi(global_position.z)))) % 628) / 100.0
 	_t += delta
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
-	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
+	var base: float = 0.85 + sin(_t * 12.0) * 0.15
 	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
-	if not _reduce_flash and sin(_t * 15.0) > 0.95:
-		base = 0.2 * _energy_scale
-	spot.light_energy = base * 2.0 * _light_energy_mult
-	glow.light_energy = base * 1.0 * _light_energy_mult
+	if sin(_t * 15.0) > 0.95:
+		base = 0.2
+	spot.light_energy = base * _spot_energy
+	glow.light_energy = base * _glow_energy
+
+func _on_setting_changed(key: String, value: Variant) -> void:
+	if key != "reduce_flash":
+		return
+	_reduce_flash = bool(value)
+	($SpotLight as SpotLight3D).light_energy = _spot_energy
+	($Glow as OmniLight3D).light_energy = _glow_energy
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == district_id:
@@ -79,7 +81,6 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 func _apply_stage(stage: int) -> void:
 	var partial_lit: bool = stage == 1 and _in_partial_set()
 	_on = stage >= 2 or partial_lit or force_on
-	_energy_scale = 0.55 if (partial_lit and stage < 2 and not force_on) else 1.0
 	_update_light(stage)
 
 func _in_partial_set() -> bool:
@@ -110,6 +111,9 @@ func _update_light(stage: int = -1) -> void:
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
 		glow.light_energy = 0.0
+	# Keep stage energies as the baseline; PARTIAL is already dimmed by its table.
+	_spot_energy = spot.light_energy
+	_glow_energy = glow.light_energy
 	# the stealth math asks the light grid whether the player stands in a lit pool (base_monster.gd _sight_ranges)
 	if _on:
 		LightGrid.register_light(glow)

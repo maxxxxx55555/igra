@@ -362,11 +362,10 @@ static func _lamp_dips(r: Node) -> void:
 	var lamp := (load("res://scenes/props/streetlight_3d.tscn") as PackedScene).instantiate() as Node3D
 	r.add_child(lamp)
 	var spot := lamp.get_node("SpotLight") as SpotLight3D
-	lamp.set("_on", true)
 	lamp.set("_reduce_flash", false)
 	lamp.set("lamp_flicker", true)
-	lamp.set("_energy_scale", 1.0)
 	lamp.set("_light_energy_mult", 1.0)
+	lamp.call("_apply_stage", 2)
 	lamp.set("_t", 0.0)
 	var dips: int = 0
 	var dipping: bool = false

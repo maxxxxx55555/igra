@@ -1,0 +1,22 @@
+# proof codex_20261116_lamps
+# utc 20261116T084725Z
+# head c9409e96 (uncommitted paths: 47)
+# env none
+# cmd godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . res://scenes/tools/streetlight_regression_check_scene.tscn
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[streetlight-regression] PASS FULL retains its brighter spot and glow after processing: [(2.125, 0.85), (2.975, 1.275)]
+[streetlight-regression] PASS Reduce Flash restores steady stage energy while paused, before processing
+[streetlight-regression] PASS Reduce Flash immediately keeps existing FULL lamp steady at stage energy
+[streetlight-regression] PASS Reduce Flash immediately stills an existing lamp material
+[streetlight-regression] PASS Reduce Flash immediately stills an existing lamp material
+[streetlight-regression] PASS Disabling Reduce Flash restores light animation
+[streetlight-regression] PASS Disabling Reduce Flash restores existing material animation
+[streetlight-regression] PASS Disabling Reduce Flash restores existing material animation
+[streetlight-regression] PASS PARTIAL applies flicker to its own baseline without a second dimming factor
+[streetlight-regression] PASS A lamp with flicker disabled remains steady across comfort changes
+[streetlight-regression] PASS A lamp with flicker disabled remains steady across comfort changes
+[streetlight-regression] PASS Blackout stays dark after processing
+[streetlight-regression] DONE fails=0
+[qa-guard] profile restored byte-identical
+# EXIT=0
