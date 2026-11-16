@@ -53,11 +53,23 @@ func _run() -> void:
 	aimed.free()
 	hud.call("_process_enemy_bar", 0.01)
 	_expect(not bar.visible, "Freeing the actual target safely hides its readout")
+	# Scene replacement detaches the old HUD before it is freed; autoload signals
+	# may still arrive during that interval (boot_check quit-to-menu regression).
+	var notice: Label = hud.get("notice") as Label
+	notice.text = "before detach"
+	remove_child(hud)
+	EventBus.inventory_notice.emit("late transition notice")
+	_expect(notice.text == "before detach", "Detached HUD ignores late inventory notices")
 	hud.queue_free()
 	camera.queue_free()
-	# The real player_detected signal starts a sting outside the fixture subtree.
-	for player: Node in MusicManager.find_children("*", "AudioStreamPlayer", true, false):
-		(player as AudioStreamPlayer).stop()
+	# The real detection signal starts both a music sting and a pooled WAV growl.
+	MusicManager.set_process(false)
+	AudioManager.set_process(false)
+	for manager: Node in [MusicManager, AudioManager]:
+		for player: Node in manager.find_children("*", "AudioStreamPlayer", true, false):
+			(player as AudioStreamPlayer).stop()
+			(player as AudioStreamPlayer).stream = null
+	await get_tree().create_timer(0.05, true, false, true).timeout
 	# Drain deferred HUD construction and node-owned tweens before engine shutdown.
 	await get_tree().process_frame
 	await get_tree().process_frame

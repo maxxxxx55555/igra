@@ -72,7 +72,8 @@ for n,p in auto:
       |set(re.findall(r'^enum (\w+)',t,re.M)))
 builtin={'has_signal','has_method','call','get','set','connect','emit','is_connected',
  'call_deferred','get_node_or_null','free','queue_free','add_child','get_children','get_child_count',
- 'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent'}
+ 'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent',
+ 'find_children','set_process'}
 errs=[]
 if mem:
     pat=re.compile(r'\b(%s)\.(\w+)'%'|'.join(mem))

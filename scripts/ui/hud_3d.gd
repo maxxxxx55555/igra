@@ -2088,6 +2088,10 @@ func _on_interact_available(avail: bool) -> void:
 		_FADE.fade_to(prompt, 0.0, 0.2, "self_modulate:a", true)
 
 func _show_notice(msg: String) -> void:
+	# Scene replacement detaches the HUD before freeing it; autoload signals
+	# can still arrive in that interval, when there is no tree for a timer.
+	if not is_inside_tree() or is_queued_for_deletion() or not is_instance_valid(notice):
+		return
 	notice.text = msg
 	notice.self_modulate.a = 1.0
 	_FADE.show_for([notice], 2.2, 0.0, false, "self_modulate:a")  # gone before the 3 s timer clears the text

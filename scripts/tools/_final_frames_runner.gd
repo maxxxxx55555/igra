@@ -302,6 +302,7 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
+	TutorialSystem.call("_skip_tutorial")
 	# v10 N002: the weather and the random events change a frame by themselves (a flash of lightning put 5 to 6 % of one combat frame over luma 235 in two of four runs of the energy sweep, 24 and 10, and in none of the other two): pinned as the density runner pins them
 	WeatherSystem.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	WeatherSystem.current = WeatherSystem.Weather.CLEAR
@@ -318,7 +319,7 @@ func _run() -> void:
 	await _hud_states()
 
 	PowerGrid.advance_district(StringName(DistrictManager.current_district), DistrictData.Stage.FULL)
-	await get_tree().create_timer(1.5).timeout
+	await _settle_notices()
 	await _shot("02_district_day_full")
 	await _swept("02_district_day_full")
 
@@ -330,6 +331,8 @@ func _run() -> void:
 	if screens == null:
 		_fail("the main scene has no Screens node")
 		return
+	# Match the player's pause-menu route, which owns HUD blocking while Shop is up.
+	UIManager.open(&"pause")
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
 	await _shot("08_shop")
@@ -339,12 +342,15 @@ func _run() -> void:
 	await _shot("08_shop_de")
 	LocalizationManager.set_language("en")
 	screens.call("hide_all")
+	UIManager.close(&"pause")
 	await get_tree().create_timer(0.6).timeout
 
 	# Combat: the nearest monster that is in the world (pooled ones are parked
 	# far below), the player 6 m from it and aiming at it, one hit for the flash.
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	var monster: Node3D = null
+	if player.has_method("heal"):
+		player.heal(1000.0)
 	for m in get_tree().get_nodes_in_group("monsters"):
 		var m3 := m as Node3D
 		if m3 == null or not m3.is_visible_in_tree() or m3.global_position.y < -5.0:
@@ -389,6 +395,7 @@ func _run() -> void:
 		_fail("no player at the power station")
 		return
 	var boss: Node3D = FinaleDirector._boss
+	await _settle_notices()
 	# the boss frame names the Architect: a monster nearer the reticle took the enemy bar (WATCHER)
 	for m in get_tree().get_nodes_in_group("monsters"):
 		if m != boss and m is Node3D:
@@ -428,6 +435,9 @@ func _run() -> void:
 		hud.set("_enemy_bar_hold", 0.0)
 	_aim(player, boss.global_position + Vector3(0.0, 1.6, 0.0))  # in pitch too: the crawler's aim looked down
 	await get_tree().create_timer(0.6).timeout
+	if player.has_method("heal"):
+		player.heal(1000.0)
+	await get_tree().create_timer(0.6).timeout
 	_where("05")
 	print("[final] 05 boss at %s" % boss.global_position)
 	await _shot("05_boss")
@@ -440,3 +450,14 @@ func _run() -> void:
 	_write_dump()
 	print("[final] DONE frames=18")
 	get_tree().quit(0)
+
+## Let real notifications expire rather than deleting UI or fabricating a clean HUD.
+func _settle_notices() -> void:
+	await get_tree().create_timer(3.2).timeout
+	var toasts := get_tree().current_scene.get_node_or_null("ToastManager")
+	if toasts == null:
+		return
+	var settled := func() -> bool:
+		return int(toasts.get("_visible_count")) == 0 and (toasts.get("_queue") as Array).is_empty()
+	if not await _wait_until(settled, 15.0):
+		_fail("transient notifications did not settle before capture")
