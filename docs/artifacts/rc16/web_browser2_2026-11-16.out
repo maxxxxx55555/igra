@@ -1,0 +1,3 @@
+[18216:8888:1116/134506.928:ERROR:chrome\browser\extensions\external_registry_loader_win.cc:147] Missing value path for key Software\Google\Chrome\Extensions\dngcpimnedloihjnnfngkgjoidhnaolf.
+[18216:8888:1116/134506.929:ERROR:chrome\browser\extensions\external_registry_loader_win.cc:147] Missing value path for key Software\Google\Chrome\Extensions\fcoeoabgfenejglbffodgkkbkcdhcgfn.
+[18216:32620:1116/134508.039:ERROR:components\headless\command_handler\headless_command_handler.cc:403] Page load failed: net::ERR_CONNECTION_REFUSED
