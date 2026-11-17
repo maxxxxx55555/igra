@@ -316,6 +316,55 @@ if "$PY" tools/qa_sim/a11y_check.py --mutations >/dev/null 2>&1; then
 else
   bad "a11y_check"
 fi
+# T8 (RELEASE_GAP_FINAL §8): MIN_TOUCH floor regression guard. ui_scale.gd defines
+# `const MIN_TOUCH: float = 48.0` and (on this branch) DPI-scales it at runtime, so
+# the floor is the lower bound of the clamp. The gate bites its own --demo mutant.
+if "$PY" tools/qa_sim/touch_target_gate.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/touch_target_gate.py >/dev/null 2>&1; then
+  ok "touch_target_gate (MIN_TOUCH >= 48 raw-px floor; DPI-scaling present, P4 device decision not fabricated)"
+else
+  bad "touch_target_gate (MIN_TOUCH dropped below 48 raw-px floor — see tools/qa_sim/touch_target_gate.py)"
+fi
+# B9 production assets (2026-11-13): a reusable mesh is evidence only when it is
+# a real binary resource, authored by the in-repo generator and drawn by shipped
+# world code. Five mutants (missing, stub, orphan, unbuilt, primitive) must bite.
+if "$PY" tools/qa_sim/production_asset_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/production_asset_check.py >/dev/null 2>&1; then
+  ok "production_asset_check (seven triangulated meshes replace world primitives, every one has a live consumer)"
+else
+  bad "production_asset_check (a production mesh is missing, a stub, orphaned or a primitive again)"
+fi
+if "$PY" tools/qa_sim/b10_asset_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/b10_asset_check.py >/dev/null 2>&1; then
+  ok "b10_asset_check (facade/creature/hand meshes authored, wired to live consumers with materials and LOD)"
+else
+  bad "b10_asset_check (a B10 mesh is missing, a stub, orphaned or unwired — see tools/qa_sim/b10_asset_check.py)"
+fi
+# T7 (2026-11-11): a HUD touch handler must not restrict activation to the
+# first finger (index == 0) — the KNOWN_ISSUES.md:11 second-finger bug.
+if "$PY" tools/qa_sim/two_finger_touch_check.py >/dev/null 2>&1; then
+  ok "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+else
+  bad "two_finger_touch_check (HUD touch handlers are index-agnostic, no index==0 restriction)"
+fi
+# Release landing page (2026-11-15): self-contained local fonts, no external URL,
+# the owner's "Last Streetlight" title canon and visible keyboard focus. Four
+# mutants (CDN, missing asset, bad title, no focus) must bite.
+if "$PY" tools/qa_sim/release_page_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/release_page_check.py >/dev/null 2>&1; then
+  ok "release_page_check (landing page is offline-capable, canon-correct and keyboard-accessible)"
+else
+  bad "release_page_check (an external URL, broken asset, bad title or missing focus ring returned)"
+fi
+# AF-MENU-STYLE: the owner's "every screen dressed like the main menu" requirement.
+# Gates the canon palette of main_menu.tscn / ThemeProvider over all UI chrome.
+if "$PY" tools/qa_sim/menu_style_unify_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/menu_style_unify_check.py >/dev/null 2>&1; then
+  ok "menu_style_unify_check (all UI chrome uses the main-menu palette; mutant off-canon colour bites)"
+else
+  bad "menu_style_unify_check (an off-canon UI colour drifted from the main-menu palette)"
+fi
+# AF-CLOSE: a blocking screen must always end hidden (rc15 closeout V.5 soft lock).
+if "$PY" tools/qa_sim/ui_close_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/ui_close_check.py >/dev/null 2>&1; then
+  ok "ui_close_check (close() cannot strand a blocking screen visible; both mutants bite)"
+else
+  bad "ui_close_check (close() relies only on the fade tween again)"
+fi
 # overflow_check.py is a reporting tool (unconditional exit 0, no pass/fail
 # assertion) - deliberately not wired as a gate here, see docs/RUN_STATE.md.
 if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then

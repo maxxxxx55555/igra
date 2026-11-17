@@ -21,6 +21,7 @@ const HOLD_OFFSET := Vector3(0.22, -0.2, -0.45)
 ## The muzzle turns a little toward the middle of the view, which shows the side of the gun and not only its back.
 const HOLD_YAW: float = 0.14
 const _Motion := preload("res://scripts/weapons/viewmodel_motion.gd")
+const _B10 := preload("res://scripts/art/b10_assets.gd")
 
 var equipped: StringName = &""
 var _weapons: Dictionary = {}
@@ -66,6 +67,20 @@ func _spawn(id: StringName) -> void:
 			_emit_ammo())
 	add_child(weapon)
 	weapon.add_child(model)
+	# Hands stay outside WeaponModel's two-part rack animation.
+	_B10.add_hands(weapon, model.position)
+	for mesh: GeometryInstance3D in weapon.find_children("*", "GeometryInstance3D", true, false):
+		mesh.layers = 2
+	var viewmodel_light := OmniLight3D.new()
+	viewmodel_light.name = "ViewmodelLight"
+	viewmodel_light.light_cull_mask = 2
+	viewmodel_light.light_color = Color(0.84, 0.86, 0.88)
+	viewmodel_light.light_energy = 0.6
+	viewmodel_light.light_indirect_energy = 0.0
+	viewmodel_light.omni_range = 1.2
+	viewmodel_light.shadow_enabled = false
+	viewmodel_light.position = Vector3(-0.16, 0.16, 0.08)
+	weapon.add_child(viewmodel_light)
 	_weapons[id] = weapon
 
 ## A weapon found in the world: kept for the run (and the save) and announced.

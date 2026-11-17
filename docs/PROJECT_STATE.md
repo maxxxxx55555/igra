@@ -34,6 +34,17 @@ Ground rendering is script-driven (district_grading.gd tints ground; world_env_s
 single WorldEnvironment writer); district_scene_factory.gd has no WorldEnvironment on main.
 Full file:line table: docs/RELEASE_GAP_FINAL.md §2. Code wins over docs. -->
 
+## Active integration checkpoint — 2026-11-17
+
+Baseline: `115a1e064ff09264ad63fe67d6ffadbc320aebc7`, branch `integration/igra-20261112-141210-a74feb40`. Owner work is preserved; no clone, push, merge, tag or publication.
+
+- B10 meshes are wired into live facades, creatures and weapons. Independent reviews corrected normals, face direction, LOD grouping, placement footprints and hand grip alignment; isolated viewmodel lighting cannot illuminate world layer 1.
+- EN/RU inventory clipping, equipment visibility, empty states and mouse filter/use actions were verified windowed with byte-identical profile restoration. Full battery: 113 passed on the reviewed source. Real-display perception (17 checks), audio routing/metering and performance gates also passed; p95 frame time was 14.90/17.15 ms for suburbs/power_station, with 119/118 draw calls.
+- Android SDK/API 36 and build tools 36.1.0 are available; the Godot Android template is installed. Signed release export failed because the release keystore is absent. No AAB, debug-signature substitute or device test is claimed.
+- Original audio is unchanged in this pass. Gemini MCP supplied visual/music briefs, not new assets: image calls returned HTTP 429 and the signed-in browser view remains hidden. Web work is paused after the owner's redirect.
+
+Verdict: **NOT_READY**; generated media, final commit-pinned captures, packaging and owner-controlled release evidence remain open.
+
 ## P1 — agent-closable residue closed (2026-11-12, branch `arena/8966ccea-igra`)
 
 Worked from `24b970a` with a clean tree. The registry is still the single queue; §10 of

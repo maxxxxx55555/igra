@@ -585,7 +585,7 @@ func _poll_aim_target() -> void:
 	var target: Node3D = best if (best != null and _has_clear_shot(cam, best)) else null
 	_set_aiming_at_enemy(target != null)
 	if target != null:
-		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target))
+		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target), target)
 
 ## One raycast for the single best candidate rather than one per enemy per tick:
 ## the crosshair must not light up on a monster standing behind a wall. The ray
@@ -794,7 +794,7 @@ func _add_status_backing() -> void:
 	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
-	style.border_color = Color(ThemeProvider.COLOR_BORDER, 0.72)
+	style.border_color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
@@ -1245,20 +1245,27 @@ func _update_enemy_resist(monster_id: StringName) -> void:
 		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	_resist_label.visible = true
 
-func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
+func _show_enemy_bar(monster_id: StringName, ratio: float, monster: Node3D = null) -> void:
 	# Single gate for all three producers (spotted, damage report, aim scan): a target the player cannot
 	# currently perceive gets no readout, and one already on screen loses it the same frame.
-	var monster := _resolve_monster(monster_id)
-	if not _monster_perceptible(monster):
+	# GAMEPLAY_AUDIT P1: keep actual instance identity. The aim scan passes the real target; legacy
+	# species-only producers fall back to the first same-species match (their only data) — which is the
+	# documented ambiguity for those events, not a fresh regression.
+	var inst := monster if (monster != null and is_instance_valid(monster)) else _resolve_monster(monster_id)
+	if not _monster_perceptible(inst):
 		_hide_enemy_bar()
 		return
-	_enemy_bar_monster = monster
+	var prev_inst: Node3D = _enemy_bar_monster
+	_enemy_bar_monster = inst
 	_enemy_bar_hold = _ENEMY_BAR_HOLD
 	if ratio >= 0.0:
 		enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
 	# Fresh target: (re)name the readout and fade it in once. Repeated ticks for
-	# the same enemy only move the bar, so the fade cannot thrash at 10 Hz.
-	if String(monster_id) == _enemy_bar_id and enemy_hp_bar.visible:
+	# the same enemy only move the bar, so the fade cannot thrash at 10 Hz. The
+	# early-out now also compares the held instance, so aiming at a different
+	# same-species enemy (two crawlers) follows the newly aimed instance instead of
+	# freezing on the first one.
+	if String(monster_id) == _enemy_bar_id and is_instance_valid(prev_inst) and prev_inst == inst and enemy_hp_bar.visible:
 		return
 	_enemy_bar_id = String(monster_id)
 	# C04: routes through the same arachnophobia name-swap the encyclopedia

@@ -7,6 +7,11 @@ extends Node3D
 const _BIN := preload("res://assets/mesh/mesh_trash_can.res")
 const _HYDRANT := preload("res://assets/mesh/mesh_hydrant.res")
 const _BENCH := preload("res://assets/mesh/mesh_bench.res")
+## B9 (2026-11-13): real plank/hoop meshes instead of the 0.7 m box and the bare cylinder.
+const _CRATE := preload("res://assets/mesh/mesh_crate.res")
+const _BARREL := preload("res://assets/mesh/mesh_barrel.res")
+const _PRODUCTION := preload("res://scripts/world/production_props.gd")
+const _SETPIECES := preload("res://scripts/world/b10_setpieces.gd")
 const _LANDMARK := preload("res://scripts/world/district_landmark.gd")
 const _MANHOLE := preload("res://scripts/world/manhole.gd")
 
@@ -130,8 +135,8 @@ func build(district_id: StringName, sb: Node) -> void:
 	var none: Array[Color] = []
 	_batch("Litter", _flat(), litter, litter_colors, _plain(Color.WHITE, 0.95, 0.0, true), false)
 	_batch("Puddles", _patch(), puddles, none, _soft(Color(0.015, 0.02, 0.03, 0.55), false), false)
-	_batch("Crates", _box(), crates, none, _plain(CRATE_COLOR, 0.9, 0.0, false, "plywood"), true)
-	_batch("Barrels", _drum(), barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true, "rusted_metal"), true)
+	_batch("Crates", _CRATE, crates, none, _plain(CRATE_COLOR, 0.9, 0.0, false, "plywood"), true)
+	_batch("Barrels", _BARREL, barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true, "rusted_metal"), true)
 	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5, false, "rusted_metal"), true)
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4, false, "rusted_metal"), true)
 	_pool_mat = _soft(Color(BRASS, 0.0), true)
@@ -157,8 +162,25 @@ func build(district_id: StringName, sb: Node) -> void:
 	_add_rest_spot()
 	_add_fog()
 	_add_manholes()
+	_add_production_props(sb)
+	_add_setpieces()
 	_apply_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
+
+## Last of the placements, and a seeded stream of its own: adding the B9 set
+## pieces cannot move a single prop, pickup or hiding spot that came before.
+func _add_production_props(sb: Node) -> void:
+	var production: Node3D = _PRODUCTION.new()
+	production.name = "ProductionProps"
+	add_child(production)
+	production.call("build", _district_id, sb, _clear, _grid)
+
+## B10: the content-plan zones (playground, keeper shed, workshop B) as visual-only set pieces, placed against the same keep-clear list.
+func _add_setpieces() -> void:
+	var setpieces: Node3D = _SETPIECES.new()
+	setpieces.name = "B10Setpieces"
+	add_child(setpieces)
+	setpieces.call("build", _district_id, _clear, _grid)
 
 ## One pool of light for each streetlamp (its pole is a transform of the batched poles of the sibling node), moved toward the block the pole stands beside.
 func _lamp_pools() -> Array[Transform3D]:

@@ -55,6 +55,7 @@ const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
 const _FRONTAGE := preload("res://scripts/world/facade_frontage.gd")
+const _B10 := preload("res://scripts/art/b10_assets.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
 ## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
@@ -175,6 +176,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 					y += 2.6
 				_dress_front(trim, pipes, block_frame, Vector3(w, h, d))
 	_frontage.finish(float(SettingsManager.get_setting("graphics_tier", 2)))
+	# B10: reusable recessed masonry bays at walking distance, LOD-switched.
+	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
 	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
 	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))

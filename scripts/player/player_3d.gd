@@ -440,9 +440,9 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMagnifyGesture:
 		_zoom_camera((event as InputEventMagnifyGesture).factor)
 	elif event is InputEventScreenTouch:
+		_track_look_ownership(event)
 		_track_swipe(event)
 		_track_pinch(event)
-		_track_look_ownership(event)
 	elif event is InputEventScreenDrag:
 		if _pinch_drag(event):
 			return
@@ -479,13 +479,40 @@ func _touch_on_control(pos: Vector2) -> bool:
 			return true
 	return false
 
+## A finger eligible for world gestures (look / swipe / pinch): not under a HUD
+## control, not blocked, and in the right (look) half of the screen. The left
+## zone is the virtual joystick. Classifying ownership once here keeps HUD-origin
+## presses out of swipe/pinch, so they can no longer form a look-zone pinch or a
+## crouch toggle. (GAMEPLAY_AUDIT P1: HUD touches still entered pinch/swipe.)
+func _world_gesture_finger(event: InputEventScreenTouch) -> bool:
+	if UIManager.is_hud_blocked():
+		return false
+	if event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+		return false
+	return not _touch_on_control(event.position)
+
+## Clears all in-flight touch/gesture state. Called on focus loss, pause/modal
+## transitions and player deactivation so no held movement/fire/look survives a
+## resume or a returned-to-menu (GAMEPLAY_AUDIT P1: clear gesture state on focus
+## loss, pause/modal transitions and player deactivation).
+func _clear_touch_state() -> void:
+	_touch_pos.clear()
+	_swipe_start.clear()
+	_look_touch_index = -1
+	_pinch_dist = 0.0
+
 func _track_swipe(event: InputEventScreenTouch) -> void:
+	if event.canceled:
+		_swipe_start.erase(event.index)
+		return
 	if event.pressed:
+		if not _world_gesture_finger(event):
+			return
 		_swipe_start[event.index] = {"pos": event.position, "ms": Time.get_ticks_msec()}
 		return
 	var start: Dictionary = _swipe_start.get(event.index, {})
 	_swipe_start.erase(event.index)
-	if start.is_empty() or event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+	if start.is_empty():
 		return
 	var swipe: Vector2 = event.position - start["pos"]
 	if swipe.y >= SWIPE_CROUCH_MIN_PX and absf(swipe.x) <= swipe.y * SWIPE_CROUCH_SLANT \
@@ -499,7 +526,7 @@ func _track_pinch(event: InputEventScreenTouch) -> void:
 		if _touch_pos.erase(event.index):
 			_pinch_dist = 0.0
 		return
-	if event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+	if not _world_gesture_finger(event):
 		return
 	if _touch_pos.has(event.index):
 		_touch_pos.clear()
@@ -778,6 +805,8 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if _footstep_dust_node and is_instance_valid(_footstep_dust_node):
 			_footstep_dust_node.queue_free()
+	elif what == NOTIFICATION_PAUSED or what == NOTIFICATION_WM_WINDOW_FOCUS_OUT or what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_clear_touch_state()
 
 func _speed_for(state: State) -> float:
 	var base: float
@@ -964,6 +993,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 
 	if hp <= 0.0:
 		gameplay_active = false
+		_clear_touch_state()
 		EventBus.game_over.emit()
 
 ## The nearest monster to where the hit came from is the cause shown if this was the last one.
@@ -1514,4 +1544,5 @@ func apply_dot(amount: float, _type: EnemyRosterData.DamageType = EnemyRosterDat
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
 	if hp <= 0.0:
 		gameplay_active = false
+		_clear_touch_state()
 		EventBus.game_over.emit()

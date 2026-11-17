@@ -256,7 +256,7 @@ func _slide_in(id: StringName, scr: Control) -> void:
 ## The screen stays visible while it fades (is_open already says it is closed) and is hidden with its alpha put back when the fade ends.
 func _fade_out(scr: Control) -> void:
 	if scr.has_meta(&"fade_out"):
-		return
+		_cancel_fade_out(scr)  # a stale/stalled fade must not strand the screen open
 	var alpha: float = scr.modulate.a
 	var tween := scr.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -265,7 +265,7 @@ func _fade_out(scr: Control) -> void:
 		scr.visible = false
 		scr.modulate.a = alpha
 		scr.remove_meta(&"fade_out"))
-	scr.set_meta(&"fade_out", [tween, alpha])
+	_arm_fade_out(scr, tween, alpha)
 
 ## A screen opened again while it fades is shown as it was before the fade.
 func _cancel_fade_out(scr: Control) -> void:
@@ -357,4 +357,24 @@ func _on_game_state(state: int) -> void:
 			open(&"death")
 		GameManager.GameState.WIN:
 			open(&"win")
+
+## V.5 (rc15 closeout): a blocking screen must be hidden after close(), always.
+## The 0.15 s fade is cosmetic; a killed tween, a re-entrant open during the fade
+## or a stalled frame used to leave `visible = true` forever (the closeout suite
+## caught it intermittently). Arm a pause-and-time-scale-independent deadline that
+## re-checks the visible flag after the fade should have finished, and settles any
+## fade that is still pending. A re-open clears the meta, so this cannot fight it.
+func _arm_fade_out(scr: Control, tween: Tween, alpha: float) -> void:
+	scr.set_meta(&"fade_out", [tween, alpha])
+	var stamp: int = Time.get_ticks_msec()
+	scr.set_meta(&"fade_out_at", stamp)
+	get_tree().create_timer(_FADE_OUT_SEC + 0.03, true, false, true).timeout.connect(func() -> void:
+		if not is_instance_valid(scr) or not scr.has_meta(&"fade_out"):
+			return
+		if int(scr.get_meta(&"fade_out_at", 0)) != stamp:
+			return  # a newer fade owns this screen now
+		_cancel_fade_out(scr)
+		if scr.visible:
+			scr.modulate.a = alpha
+			scr.visible = false)
 

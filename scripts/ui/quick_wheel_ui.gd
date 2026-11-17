@@ -12,7 +12,7 @@ const DEADZONE: float = 18.0
 const SLOT_COUNT: int = 6
 const PANEL := ThemeProvider.COLOR_BG_PANEL
 const BRASS := ThemeProvider.COLOR_AMBER
-const BRASS_DIM := Color("#3a3226")
+const BRASS_DIM := Color("#5a4a2a")
 const BONE := ThemeProvider.COLOR_TEXT
 
 ## V2 SKIN WIRING P1: same slot chrome as hud_3d.gd's quickslots, drawn under

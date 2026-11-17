@@ -49,6 +49,7 @@ GATES = [
     ("closeout", "closeout_check", r"\[closeout\] DONE .*fails=0\b", 900),
     ("goldmaster", "qa_headless_suite", r"\[qa\] DONE fails=0\b", 240),
     ("touch", "touch_probe", r"\[touch-probe\] DONE fails=0\b", 180),
+    ("t7_two_finger", "two_finger_probe", r"\[2finger\] DONE fails=0\b", 180),
 ]
 
 

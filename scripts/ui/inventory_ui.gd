@@ -1,6 +1,6 @@
 extends Control
 ## GDD §12.2 INVENTORY / CHARACTER and the V.5 sheet, composed as Plate A of the visual recovery brief on a 1280 x 720 design canvas: the survivor and the five equipment slots on the left, the pack in the
-## middle (four columns of 112 px slots at the shown capacity of 12, free slots drawn as empty cells), the selected item's inspector on the right, quick access, the status and the input hints below.
+## middle (four columns of 96 px slots at the shown capacity of 12, free slots drawn as empty cells), the selected item's inspector on the right, quick access, the status and the input hints below.
 ## Tab opens it (UIManager), Esc or Tab closes it, Delete drops the selected stack. The operations are the ones that were there (use, equip, drop, sort, the rarity filter, the quick bar by drag);
 ## the kit of inv_kit.gd draws their states.
 
@@ -14,7 +14,7 @@ const SURVIVOR := preload("res://assets/textures/screens_v2/character_dim.png")
 ## The survivor of that art, cut out of its 1920 x 1080 frame for the equipment column.
 const SURVIVOR_CROP := Rect2(640.0, 300.0, 640.0, 693.0)
 const CANVAS := Vector2(1280.0, 720.0)
-const SLOT := Vector2(112.0, 112.0)
+const SLOT := Vector2(96.0, 96.0)
 const GAP: int = 8
 const COLUMNS: int = 4
 const SORT_MODES: Array[String] = ["type", "weight", "rarity"]
@@ -67,7 +67,7 @@ func _ready() -> void:
 	_stage.size = CANVAS
 	add_child(_stage)
 	_put(_panel(KIT.box(Color(KIT.BG, 0.96), KIT.EDGE, 1, 2)), Rect2(24, 24, 1232, 672))
-	_title = _put(KIT.label("", 30, KIT.AMBER, true), Rect2(60, 52, 360, 40)) as Label
+	_title = _put(KIT.label("", 28, KIT.TEXT, true), Rect2(60, 52, 360, 40)) as Label
 	_put(_bar(KIT.AMBER), Rect2(60, 96, 132, 2))
 	_load = _put(KIT.label("", 18, KIT.TEXT_DIM), Rect2(560, 58, 548, 30)) as Label
 	_load.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -121,29 +121,29 @@ func _bar(color: Color) -> ColorRect:
 
 func _build_equipment() -> void:
 	_put(_panel(KIT.box(KIT.PANEL, KIT.EDGE_DIM)), Rect2(44, 138, 216, 424))
-	_equip_title = _put(KIT.label("", 18, KIT.AMBER, true), Rect2(56, 146, 192, 24)) as Label
-	_put(_panel(KIT.box(KIT.BG, KIT.EDGE_DIM)), Rect2(56, 174, 192, 204))
+	_equip_title = _put(KIT.label("", 18, KIT.TEXT_DIM, true), Rect2(56, 146, 192, 24)) as Label
+	_put(_panel(KIT.box(KIT.BG, KIT.EDGE_DIM)), Rect2(56, 176, 192, 120))
 	var portrait := TextureRect.new()
 	var crop := AtlasTexture.new()
 	crop.atlas = SURVIVOR
 	crop.region = SURVIVOR_CROP
 	portrait.texture = crop
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_put(portrait, Rect2(57, 175, 190, 202))
-	_equip_rows = _put(VBoxContainer.new(), Rect2(56, 388, 192, 170)) as VBoxContainer
+	_put(portrait, Rect2(60, 180, 184, 112))
+	_equip_rows = _put(VBoxContainer.new(), Rect2(56, 304, 192, 256)) as VBoxContainer
 	_equip_rows.add_theme_constant_override("separation", 4)
 
 func _build_items() -> void:
 	_put(_panel(KIT.box(KIT.PANEL, KIT.EDGE_DIM)), Rect2(280, 138, 568, 424))
-	var filters := _put(HBoxContainer.new(), Rect2(288, 144, 544, 28)) as HBoxContainer
+	var filters := _put(HBoxContainer.new(), Rect2(288, 144, 544, 48)) as HBoxContainer
 	filters.add_theme_constant_override("separation", 0)
 	for i in RARITY_KEYS.size() + 1:
 		var tab := _tab(_on_filter.bind(i))
 		filters.add_child(tab)
 		_filter_buttons.append(tab)
-	var sorts := _put(HBoxContainer.new(), Rect2(288, 174, 544, 26)) as HBoxContainer
+	var sorts := _put(HBoxContainer.new(), Rect2(288, 196, 544, 48)) as HBoxContainer
 	sorts.add_theme_constant_override("separation", 0)
 	_sort_label = KIT.label("", 13, KIT.TEXT_DIM)
 	_sort_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -154,7 +154,7 @@ func _build_items() -> void:
 		tab.add_theme_font_size_override("font_size", 14)
 		sorts.add_child(tab)
 		_sort_buttons.append(tab)
-	var scroll := _put(ScrollContainer.new(), Rect2(328, 206, 480, 352)) as ScrollContainer
+	var scroll := _put(ScrollContainer.new(), Rect2(360, 252, 416, 304)) as ScrollContainer
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_grid = GridContainer.new()
 	_grid.columns = COLUMNS
@@ -202,9 +202,9 @@ func _build_footer() -> void:
 		_quick_targets.append(target)
 	_quick_hint = _put(KIT.label("", 13, KIT.TEXT_DIM), Rect2(448, 610, 262, 56)) as Label
 	_quick_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_vitals = _put(KIT.label("", 15, KIT.TEXT), Rect2(718, 596, 262, 68)) as Label
+	_vitals = _put(KIT.label("", 14, KIT.TEXT), Rect2(718, 592, 360, 72)) as Label
 	_vitals.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_hints = _put(KIT.label("", 14, KIT.TEXT_DIM), Rect2(990, 596, 234, 68)) as Label
+	_hints = _put(KIT.label("", 14, KIT.TEXT_DIM), Rect2(1088, 592, 136, 72)) as Label
 	_hints.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_hints.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
@@ -250,12 +250,12 @@ func _shown(index: int) -> bool:
 
 func _refresh() -> void:
 	_drop_armed = false
-	_title.text = LocalizationManager.t("inventory").to_upper()
+	_title.text = LocalizationManager.t("inventory")
 	_close.text = LocalizationManager.t("ui_close")
 	_load.text = "%s   %d / %d" % [LocalizationManager.tf("INV_WEIGHT", [InventoryManager.current_weight, InventoryManager.stats.capacity_kg]),
 		_used_slots(), InventoryManager.slots.size()]
-	_equip_title.text = LocalizationManager.t("INV_EQUIPMENT").to_upper()
-	_quick_title.text = LocalizationManager.t("INV_QUICK_ACCESS").to_upper()
+	_equip_title.text = LocalizationManager.t("INV_EQUIPMENT")
+	_quick_title.text = LocalizationManager.t("INV_QUICK_ACCESS")
 	# T3: both lines name a control, so neither may hardcode one. On a desktop the
 	# inventory key is read live (a rebind shows the new key) and the reset is the right
 	# mouse button, named in the player's language; on a phone there is no Tab, Esc, Del
@@ -266,12 +266,12 @@ func _refresh() -> void:
 	else:
 		_quick_hint.text = LocalizationManager.tf("INV_QUICKSLOT_HINT", [_InputRemap.mouse_text(MOUSE_BUTTON_RIGHT)])
 		_hints.text = LocalizationManager.tf("INV_HINTS", [_InputRemap.action_text(&"inventory_toggle")])
-	_sort_label.text = LocalizationManager.t("INV_SORT_LABEL").to_upper() + " "
+	_sort_label.text = LocalizationManager.t("INV_SORT_LABEL") + " "
 	for i in SORT_MODES.size():
-		_sort_buttons[i].text = LocalizationManager.t(String(SORT_KEYS[SORT_MODES[i]])).to_upper()
-	_filter_buttons[0].text = LocalizationManager.t("INV_FILTER_ALL").to_upper()
+		_sort_buttons[i].text = LocalizationManager.t(String(SORT_KEYS[SORT_MODES[i]]))
+	_filter_buttons[0].text = LocalizationManager.t("INV_FILTER_ALL")
 	for i in RARITY_KEYS.size():
-		_filter_buttons[i + 1].text = LocalizationManager.t(RARITY_KEYS[i]).to_upper()
+		_filter_buttons[i + 1].text = LocalizationManager.t(RARITY_KEYS[i])
 	for i in _filter_buttons.size():
 		KIT.style_button(_filter_buttons[i], &"tab", i == _filter + 1)
 		KIT.fit(_filter_buttons[i], 108.0, 16, 12)
@@ -308,7 +308,7 @@ func _used_slots() -> int:
 
 ## A free slot of the pack, drawn as an empty cell, so a pack with little in it does not read as a blank panel.
 func _empty_cell() -> Panel:
-	var cell := _panel(KIT.box(Color("#0D1415"), Color(KIT.EDGE_DIM, 0.7)))
+	var cell := _panel(KIT.box(Color("#0f1314"), Color(KIT.EDGE_DIM, 0.12)))
 	cell.custom_minimum_size = SLOT
 	return cell
 
@@ -354,7 +354,7 @@ func _refresh_detail() -> void:
 		_detail.add_child(_line(LocalizationManager.t("INV_PACK_EMPTY" if _used_slots() == 0 else "INV_SELECT"), 18, KIT.TEXT_DIM))
 		return
 	var count: int = int(slot["count"])
-	var name_label := _line(_item_name(data), 26, KIT.AMBER)
+	var name_label := _line(_item_name(data), 24, KIT.TEXT)
 	name_label.add_theme_font_override("font", ThemeProvider.heading_font())
 	_detail.add_child(name_label)
 	_detail.add_child(_line(LocalizationManager.t(RARITY_KEYS[clampi(int(data.rarity), 0, RARITY_KEYS.size() - 1)]), 15, KIT.TEXT_DIM))
@@ -363,9 +363,9 @@ func _refresh_detail() -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", GAP)
 	_actions.add_child(row)
-	row.add_child(_action(LocalizationManager.t("INV_USE").to_upper(), data.consumable, LocalizationManager.t("INV_NOT_USABLE"), func() -> void: _on_use()))
-	row.add_child(_action(LocalizationManager.t("INV_EQUIP").to_upper(), data.equip_slot != ItemData.EquipSlot.NONE, LocalizationManager.t("INV_NOT_EQUIPPABLE"), func() -> void: _on_equip()))
-	var drop := _action(LocalizationManager.t("INV_DROP_CONFIRM" if _drop_armed else "INV_DROP").to_upper(), true, "", func() -> void: _on_drop(), &"danger")
+	row.add_child(_action(LocalizationManager.t("INV_USE"), data.consumable, LocalizationManager.t("INV_NOT_USABLE"), func() -> void: _on_use()))
+	row.add_child(_action(LocalizationManager.t("INV_EQUIP"), data.equip_slot != ItemData.EquipSlot.NONE, LocalizationManager.t("INV_NOT_EQUIPPABLE"), func() -> void: _on_equip()))
+	var drop := _action(LocalizationManager.t("INV_DROP_CONFIRM" if _drop_armed else "INV_DROP"), true, "", func() -> void: _on_drop(), &"danger")
 	_actions.add_child(drop)
 	for button: Button in [row.get_child(0), row.get_child(1)]:
 		KIT.fit(button, 164.0, 18, 13)
@@ -410,11 +410,12 @@ func _refresh_equipment() -> void:
 		if not worn.is_empty():
 			var worn_data := ItemDatabase.get_item(worn["item_id"])
 			shown = _item_name(worn_data) if worn_data != null else String(worn["item_id"])
-		var row := _action("%s   %s" % [LocalizationManager.t(String(EQUIP_KEYS[equip_slot])).to_upper(), shown], not worn.is_empty(), "",
+		var row := _action("%s   %s" % [LocalizationManager.t(String(EQUIP_KEYS[equip_slot])), shown], not worn.is_empty(), "",
 			func() -> void: InventoryManager.unequip_item(equip_slot), &"row")
 		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		row.clip_text = true
-		row.custom_minimum_size = Vector2(192.0, 30.0)
+		row.tooltip_text = row.text
+		row.custom_minimum_size = Vector2(192.0, 48.0)
 		row.add_theme_font_size_override("font_size", 15)
 		_equip_rows.add_child(row)
 

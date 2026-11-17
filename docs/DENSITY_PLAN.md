@@ -1,9 +1,11 @@
 # Map density plan (Session 23, D1)
 
-The question of D1: does any part of any district stand empty, and what fills it from the assets the project already has? Nothing here is a new binary:
-every piece is a primitive mesh, one of three meshes that were already in the tree (`_BIN`, `_HYDRANT` and `_BENCH` in `scripts/world/district_dressing.gd:7-9`) or a
-script that builds from them. Everything is visual only: no collision except the iron covers of the roads (a 1 cm plate, flush), no navigation, so no path of the
-spine, no pickup and no monster route moves (the monsters walk a plain 80 x 80 navigation mesh and `move_and_slide`).
+The question of D1: does any part of any district stand empty, and what fills it from the assets the project already has? Nothing in the original pass was a new binary:
+every piece was a primitive mesh, one of three meshes that were already in the tree (`_BIN`, `_HYDRANT` and `_BENCH` in `scripts/world/district_dressing.gd:7-9`) or a
+script that builds from them. The B9 pass of 2026-11-13 then added seven project-authored triangulated meshes under `assets/mesh/` (a car, a cabinet, a fence bay,
+a cart, a plank crate, a riveted barrel and a rubble pile); the crate and barrel replace the primitive box and cylinder in the Crates and Barrels batches, and
+`scripts/world/production_props.gd` places the other five with its own seeded stream. Everything is visual only: no collision except the iron covers of the roads
+(a 1 cm plate, flush), no navigation, so no path of the spine, no pickup and no monster route moves (the monsters walk a plain 80 x 80 navigation mesh and `move_and_slide`).
 
 ## 1. The audit (D1.1, no launch of its own)
 
@@ -42,11 +44,11 @@ dressing alone is a tenth of the D1 budget of 200. The windowed perf gate (`scri
 **Backlog of other agents (D1.1):** none exists. The 32 remote branches were read: 19 are merged into `main`, the 13 that are not carry the August test and fix commits of
 the first arena, art plates of October and agent notes (`docs/ARENA_CLOSURE.md`); `git log --remotes --grep` for prop placement, density, dressing, per-zone and empty zone finds only this pass's own commits.
 
-## 2. The kit (D1.2, from `KIT` in `scripts/world/district_dressing.gd:51`)
+## 2. The kit (D1.2, from `KIT` in `scripts/world/district_dressing.gd:56`)
 
 Per block and per district: litter pieces, leaves, wet patches, crates, barrels, bins. The streams are seeded by the district's name, so a district looks the same
-every run and no other placement moves; a solid piece keeps 1.8 m (`KEEP_CLEAR_M`, line 17) from every node of the groups `interactable` and `hiding_spot`
-(`_solid_spot`, line 186; `_keep_clear`, line 192), which is also what keeps a pickup and a hiding place reachable.
+every run and no other placement moves; a solid piece keeps 1.8 m (`KEEP_CLEAR_M`, line 21) from every node of the groups `interactable` and `hiding_spot`
+(`_solid_spot`, line 231; `_keep_clear`, line 237), which is also what keeps a pickup and a hiding place reachable.
 
 | District | Litter | Leaves | Puddles | Crates | Barrels | Bins | Reading |
 |---|---|---|---|---|---|---|---|

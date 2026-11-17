@@ -187,6 +187,14 @@ static func _one_shots(r: Node, mm: Node) -> void:
 	r._ok(ok, "ONE1 the four one-shots exist with the lengths of the recipe (%s)" % ", ".join(lengths))
 	if ui == null:
 		return
+	# ONE2/ONE4 fire UISFX, whose _can_play() honours the shipped
+	# "silence until first input" rule. The full closeout suite unlocks audio
+	# in an earlier group, but CLOSEOUT_ONLY=s29 (which the mutation harness
+	# uses) does not, so both checks failed on a clean tree for the wrong
+	# reason. Set the precondition here and restore it afterwards, the same
+	# save/restore pattern _swap() uses; the assertions are unchanged.
+	var was_unlocked: bool = bool(mm.get("_audio_unlocked"))
+	mm.set("_audio_unlocked", true)
 	var heard: Dictionary = {}
 	var before: Array[Node] = ui.get_children()
 	_trigger(EventBus.district_restored, ui, [&"suburbs", 3])
@@ -197,6 +205,7 @@ static func _one_shots(r: Node, mm: Node) -> void:
 	var quiet: bool = not _listen(ui, before, {})
 	_trigger(EventBus.item_consumed, ui, [&"medkit", "HEAL", 25.0])
 	_listen(ui, before, heard)
+	mm.set("_audio_unlocked", was_unlocked)
 	var cue: AudioStreamPlayer = mm.get("_wow_cue")
 	cue.stream = null
 	_trigger(EventBus.game_over, mm, [])

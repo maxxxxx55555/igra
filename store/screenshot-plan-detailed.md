@@ -22,10 +22,10 @@ as real gameplay footage) · ⛔ = only obtainable by in-game capture (recipes i
 | 1 — hook, light vs dark | ✅ delivered | `store/screenshots/shot01_light_vs_dark_1920x1080_en.png` (1920×1080) |
 | 1 — art-direct alternative | 🎨 | `store/trailer/hero_first_restore_1920x1080.png`, `store/trailer/still_first_light_1920x1080.png` |
 | 2 — district boundary | ✅ delivered | `store/screenshots/shot02_district_boundary_1920x1080_en.png` |
-| 3 — stealth horror | ⛔ capture needed | target file `shot03_stealth_horror_1920x1080_en.png` (recipe §3 Shot 3; no trailer equivalent — the stills never show HUD/stealth read) |
-| 4 — keeper lore | ⛔ capture needed | target file `shot04_keeper_lore_1920x1080_en.png` (recipe §3 Shot 4; no trailer equivalent) |
+| 3 — stealth horror | ✅ delivered (engine capture) | `store/screenshots/shot03_stealth_horror_1920x1080_en.png` — real 1920×1080 windowed gameplay frame, residential DARK with flashlight on the chalk sun (recipe §3 Shot 3; `d5e77c48`, `STORE_DONE failures=0`) |
+| 4 — keeper lore | ✅ delivered (engine capture) | `store/screenshots/shot04_keeper_lore_1920x1080_en.png` — real 1920×1080 windowed gameplay frame, park DARK Keeper's bench under its brass lamp (recipe §3 Shot 4; `d5e77c48`) |
 | 5 — restored forecourt | ✅ delivered | `store/screenshots/shot05_restored_forecourt_1920x1080_en.png` |
-| 6 — the mystery inside | ⛔ capture needed | target file `shot06_mystery_inside_1920x1080_en.png` (recipe §3 Shot 6; `store/trailer/hero_reactor_room_1920x1080.png` is the power_station reactor hall, NOT industrial — it may stand as separate "final act" art, but is not a substitute frame for this shot) |
+| 6 — the mystery inside | ✅ delivered (engine capture) | `store/screenshots/shot06_mystery_inside_1920x1080_en.png` — real 1920×1080 windowed gameplay frame, industrial DARK Workshop B under its single warm overhead lamp (recipe §3 Shot 6; the power_station reactor hall is not a substitute) |
 | 7 — the last streetlight | ✅ delivered | `store/screenshots/shot07_last_streetlight_1920x1080_en.png` |
 | 7 — art companions | 🎨 | `store/trailer/hero_grid_cascade_1920x1080.png` ("11 districts" bullet visual), `store/trailer/still_first_ending_1920x1080.png` ("5 endings" bullet visual) |
 | 8 — city map (EN) | ✅ delivered | `store/screenshots/shot08_city_map_1920x1080_en.png` |
@@ -186,7 +186,7 @@ camera; there are no camera presets (see §0).
   save — no player-facing down-stage exists; verified). Rebuild a mid-game save and capture
   en route, or substitute the nearest lit-streetlight edge frame with the same composition.
 
-### Shot 3 — stealth horror ⏳en-route (prep) / SAVE-A — ⛔ CAPTURE NEEDED (no trailer equivalent)
+### Shot 3 — stealth horror — ✅ DELIVERED as a real engine capture (`store/screenshots/shot03_stealth_horror_1920x1080_en.png`)
 - **Scene:** `res://scenes/main_3d.tscn`, district **residential** — on SAVE-A walk north
   through suburbs' `z_exit_north`; en-route it is residential's state on first arrival.
 - **District + stage:** residential **DARK or PARTIAL**.
@@ -203,7 +203,7 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot03_stealth_horror_1920x1080_en.png`.
 
-### Shot 4 — the voice / keeper lore ⏳en-route (prep) — ⛔ CAPTURE NEEDED (no trailer equivalent)
+### Shot 4 — the voice / keeper lore — ✅ DELIVERED as a real engine capture (`store/screenshots/shot04_keeper_lore_1920x1080_en.png`)
 - **Scene:** `res://scenes/main_3d.tscn`, district **park** (first arrival in the campaign).
 - **District + stage:** park **DARK** (any stage onward is acceptable; DARK reads best).
 - **Reach:** `z_keeper_shed` (Keeper's workshop, K cell). **Verified locked:** the door is
@@ -232,7 +232,7 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot05_restored_forecourt_1920x1080_en.png`.
 
-### Shot 6 — the mystery inside ⏳en-route (prep) — ⛔ CAPTURE NEEDED (`hero_reactor_room` is power_station, not a substitute)
+### Shot 6 — the mystery inside — ✅ DELIVERED as a real engine capture (`store/screenshots/shot06_mystery_inside_1920x1080_en.png`; `hero_reactor_room` is power_station, not a substitute)
 - **Scene:** `res://scenes/main_3d.tscn`, district **industrial** (first arrival in the
   campaign).
 - **District + stage:** industrial **DARK** (any stage onward acceptable).

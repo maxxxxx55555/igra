@@ -13,7 +13,7 @@ script = ExtResource("1_menu")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.03, 0.03, 0.06, 1)
+color = Color(0.0235294, 0.0588235, 0.0745098, 1)
 
 [node name="Title" type="Label" parent="."]
 anchors_preset = 5
