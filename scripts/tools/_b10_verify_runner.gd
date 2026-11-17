@@ -148,10 +148,12 @@ func _prop_checks() -> void:
 func _store_shots() -> void:
 	get_window().size = Vector2i(1920, 1080)
 	SettingsManager.set_setting("trailer_mode", true)
+	# The eye and the look target are piece-local: the Keeper's shed is turned
+	# 0.6 rad on the ground, so a world offset would frame the wall, not the bench.
 	for spec: Array in [
 		[&"residential", "Playground", Vector3(0.8, 1.0, 6.5), Vector3(0.4, 0.2, 2.8), "shot03_stealth_horror_1920x1080_en"],
-		[&"park", "KeeperShed", Vector3(1.13, 1.0, 1.65), Vector3(0.0, 1.05, -0.6), "shot04_keeper_lore_1920x1080_en"],
-		[&"industrial", "WorkshopB", Vector3(0.0, 1.0, 4.6), Vector3(0.0, 1.3, 0.0), "shot06_mystery_inside_1920x1080_en"],
+		[&"park", "KeeperShed", Vector3(0.30, 1.32, 0.62), Vector3(-0.12, 0.96, -0.58), "shot04_keeper_lore_1920x1080_en"],
+		[&"industrial", "WorkshopB", Vector3(0.05, 1.55, 2.9), Vector3(0.0, 2.25, -0.05), "shot06_mystery_inside_1920x1080_en"],
 	]:
 		await _transition(spec[0], "store")
 		_freeze_monsters()
@@ -165,7 +167,8 @@ func _store_shots() -> void:
 			continue
 		_check_placement(piece)
 		_check(PowerGrid.get_stage(spec[0]) == DistrictData.Stage.DARK, "store district remains DARK")
-		await _pose(piece.global_position + spec[2], piece.global_position + spec[3])
+		var basis := piece.global_transform.basis
+		await _pose(piece.global_position + basis * spec[2], piece.global_position + basis * spec[3])
 		await get_tree().create_timer(60.0 if spec[0] == &"residential" else 3.0).timeout
 		await _frame(spec[4])
 		player.set("_crouch_toggled", false)

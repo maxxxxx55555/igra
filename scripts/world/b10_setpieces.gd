@@ -264,18 +264,38 @@ func _workshop_b(at: Vector3) -> void:
 		for sz in [-1.0, 1.0]:
 			_box(root, "BenchLeg", Vector3(0.09, 0.86, 0.09), Vector3(sx * 0.9, GROUND_Y + 0.43, sz * 0.26), steel)
 	# the impossible overhead: it burns with no feeder, full and warm
-	_tube(root, "LampCord", 0.012, 0.9, Vector3(0.0, GROUND_Y + 3.85, 0.0), steel)
+	_tube(root, "LampCord", 0.018, 0.9, Vector3(0.0, GROUND_Y + 3.85, 0.0), steel)
 	var shade := MeshInstance3D.new()
 	shade.name = "LampShade"
 	var cone := CylinderMesh.new()
-	cone.top_radius = 0.04
-	cone.bottom_radius = 0.24
-	cone.height = 0.2
+	cone.top_radius = 0.05
+	cone.bottom_radius = 0.34
+	cone.height = 0.26
 	cone.radial_segments = 12
 	shade.mesh = cone
 	shade.material_override = steel
 	shade.position = Vector3(0.0, GROUND_Y + 3.35, 0.0)
 	root.add_child(shade)
+	# The lit lens under the shade: from below the lamp has to read as a lamp
+	# and not as a white speck in the dark, so the burning part is a warm disc.
+	var lens := MeshInstance3D.new()
+	lens.name = "LampLens"
+	var disc := CylinderMesh.new()
+	disc.top_radius = 0.30
+	disc.bottom_radius = 0.30
+	disc.height = 0.015
+	disc.radial_segments = 16
+	lens.mesh = disc
+	var lens_mat := StandardMaterial3D.new()
+	lens_mat.albedo_color = SODIUM
+	lens_mat.emission_enabled = true
+	lens_mat.emission = SODIUM
+	lens_mat.emission_energy_multiplier = 1.4
+	lens_mat.roughness = 0.4
+	lens.material_override = lens_mat
+	lens.position = Vector3(0.0, GROUND_Y + 3.22, 0.0)
+	lens.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(lens)
 	_bulb(root, Vector3(0.0, GROUND_Y + 3.28, 0.0), SODIUM, 3.0)
 	var spot := SpotLight3D.new()
 	spot.name = "BenchLight"
