@@ -9,14 +9,34 @@ const ENERGY_BY_STAGE: Array[float] = [1.6, 1.6, 1.6, 2.0]
 const RAMP_SEC: float = 1.2
 
 static var _shared: ShaderMaterial = null
+static var _materials: Array[WeakRef] = []
 
 static func make() -> ShaderMaterial:
 	var mat := (load(MATERIAL) as ShaderMaterial).duplicate() as ShaderMaterial
-	if bool(SettingsManager.get_setting("reduce_flash", false)):
-		mat.set_shader_parameter("flicker_depth", 0.0)
-		mat.set_shader_parameter("hum_shimmer", 0.0)
-		mat.set_shader_parameter("dropout_threshold", 1.0)
+	_prune_materials()
+	_materials.append(weakref(mat))
+	if not EventBus.settings_changed.is_connected(_on_setting_changed):
+		EventBus.settings_changed.connect(_on_setting_changed)
+	_apply_comfort(mat, bool(SettingsManager.get_setting("reduce_flash", false)))
 	return mat
+
+static func _prune_materials() -> void:
+	for i: int in range(_materials.size() - 1, -1, -1):
+		if _materials[i].get_ref() == null:
+			_materials.remove_at(i)
+
+static func _on_setting_changed(key: String, value: Variant) -> void:
+	if key != "reduce_flash":
+		return
+	_prune_materials()
+	for reference: WeakRef in _materials:
+		_apply_comfort(reference.get_ref() as ShaderMaterial, bool(value))
+
+static func _apply_comfort(mat: ShaderMaterial, calm: bool) -> void:
+	# Null restores the authored shader defaults when comfort is switched off.
+	mat.set_shader_parameter("flicker_depth", 0.0 if calm else null)
+	mat.set_shader_parameter("hum_shimmer", 0.0 if calm else null)
+	mat.set_shader_parameter("dropout_threshold", 1.0 if calm else null)
 
 ## The one material of the lamp meshes that stand alone (an unbatched streetlight), lit.
 static func shared() -> ShaderMaterial:

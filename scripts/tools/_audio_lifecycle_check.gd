@@ -28,10 +28,25 @@ func _ready() -> void:
 	MusicManager._on_game_started()
 	_ok(not MusicManager._wow_cue.playing, "victory cue cannot overlap a new run")
 	_ok(MusicManager.mood == MusicDirector.Mood.AMBIENT, "new run resumes district ambience")
+	_check_combat_retry()
 	MusicManager._collect_preloads(true)
 	await get_tree().process_frame
 	print("[audio-lifecycle] DONE fails=%d" % _fails)
 	get_tree().quit(0 if _fails == 0 else 1)
+
+func _check_combat_retry() -> void:
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	EventBus.player_detected.emit(&"retry_fixture")
+	MusicManager._evaluate()
+	_ok(MusicManager.is_in_combat() and MusicManager.mood == MusicDirector.Mood.BATTLE,
+		"detection starts combat music before retry")
+	GameManager._change_state(GameManager.GameState.DEAD)
+	MusicManager._on_game_over()
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	MusicManager._on_game_started()
+	MusicManager._evaluate()
+	_ok(not MusicManager.is_in_combat(), "new run clears the previous run's combat hold")
+	_ok(MusicManager.mood == MusicDirector.Mood.AMBIENT, "retry without enemies keeps calm music")
 
 func _check_notice_before_input() -> void:
 	var before: int = UISFX.get_child_count()

@@ -431,6 +431,7 @@ var _look_touch_index: int = -1
 
 func _input(event: InputEvent) -> void:
 	if not gameplay_active:
+		_clear_touch_state()
 		return
 	if _net_active and not is_multiplayer_authority():
 		return

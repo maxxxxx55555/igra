@@ -27,14 +27,14 @@ var _energy_scale: float = 1.0
 var _light_energy_mult: float = 1.0
 ## QA_SWARM_FINDINGS.md P1 (accessibility): every lit lamp in every district
 ## dipped into a sharp ~6Hz flicker with no accessibility gate at all - only
-## a per-instance scene export existed, nothing player-facing. Cached once
-## like _light_energy_mult above (district scenes rebuild on re-entry per
-## world_runtime.gd, so toggling the setting takes effect next visit).
+## a per-instance scene export existed, nothing player-facing. Read once
+## here, then kept live by the settings signal (also while paused).
 var _reduce_flash: bool = false
 
 func _ready() -> void:
 	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
+	EventBus.settings_changed.connect(_on_setting_changed)
 	var pole := get_node_or_null("Pole")
 	var lamp := get_node_or_null("Lamp")
 	if pole is MeshInstance3D:
@@ -67,6 +67,10 @@ func _process(delta: float) -> void:
 		base = 0.2 * _energy_scale
 	spot.light_energy = base * 2.0 * _light_energy_mult
 	glow.light_energy = base * 1.0 * _light_energy_mult
+
+func _on_setting_changed(key: String, value: Variant) -> void:
+	if key == "reduce_flash":
+		_reduce_flash = bool(value)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == district_id:
