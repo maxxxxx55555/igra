@@ -166,6 +166,12 @@ static func _cartography(r: Node) -> void:
 		if bool(street_lamp.get("_on")):
 			street_lamp.set("_on", false)
 			held.append(street_lamp)
+	# The flashlight charts too: it stays out for every lamp scenario and is lit only for its own (CART2).
+	var beam := r._player.get("flashlight") as SpotLight3D
+	var pivot := r._player.get("flashlight_pivot") as Node3D
+	var beam_on0: bool = r._player.get("flashlight_enabled")
+	r._player.set("flashlight_enabled", false)
+	beam.visible = false
 	var origin: Vector3 = Cartography.district_origin()
 	var foot: Vector3 = origin + Vector3(-900.0, 0.0, -900.0)
 	var prev_cam: Camera3D = r.get_viewport().get_camera_3d()
@@ -191,29 +197,41 @@ static func _cartography(r: Node) -> void:
 		"CART1 a restored lamp charts cells only within its rendered reach and the frustum (%d cells, bounded %s, on camera %s, past the spot pool %s, no far cell %s)" % [cells.size(), bounded, in_frustum, beyond_spot, not cells.has(far_cell)])
 	_free_lamp(lamp)
 	await r.get_tree().process_frame
-	# CART2: flashlight on, no powered lamp: nothing charts.
-	dm.current_district = "qa_cart_dark"
+	# CART2: no powered lamp. The flashlight charts the ground inside its own beam and nothing else; with it out, nothing.
 	var lamp2 := _make_lamp(r, foot, 8.0, 55.0)
 	lamp2.set("_on", false)
-	var flash0: bool = bool(r._player.get("flashlight_enabled"))
-	r._player.set("flashlight_enabled", true)
+	var pivot_rot0: Vector3 = pivot.global_rotation
+	pivot.global_rotation = Vector3(-0.6, pivot_rot0.y, 0.0)
+	dm.current_district = "qa_cart_dark"
+	beam.visible = false
 	for i: int in 4:
 		Cartography.survey()
-	var unpowered: bool = Cartography.charted_cells("qa_cart_dark").is_empty()
-	r._player.set("flashlight_enabled", flash0)
+	var unlit: bool = Cartography.charted_cells("qa_cart_dark").is_empty()
+	dm.current_district = "qa_cart_beam"
+	beam.visible = true
+	for i: int in 8:
+		Cartography.survey()
+	var beam_cells: Dictionary = Cartography.charted_cells("qa_cart_beam")
+	var in_beam := not beam_cells.is_empty()
+	for cell: Vector2i in beam_cells:
+		var to_ground: Vector3 = _cell_ground(origin, cell) - beam.global_position
+		in_beam = in_beam and to_ground.length() <= beam.spot_range * Cartography.BEAM_LIT_SHARE + 0.01 \
+			and (-beam.global_transform.basis.z).angle_to(to_ground) <= deg_to_rad(beam.spot_angle) + 0.001
+	beam.visible = false
+	pivot.global_rotation = pivot_rot0
 	_free_lamp(lamp2)
 	await r.get_tree().process_frame
-	r._ok(unpowered, "CART2 the flashlight on and walking with no powered lamp charts nothing (%s)" % unpowered)
-	# CART3: an authored always-on lamp is not the player's doing.
+	r._ok(unlit and in_beam, "CART2 with no powered lamp the flashlight charts only the ground inside its beam (%d cells, all in the beam %s), and nothing with it out (%s)" % [beam_cells.size(), in_beam, unlit])
+	# CART3: an authored always-on lamp is a lit lamp like any other and charts its pool.
 	dm.current_district = "qa_cart_force"
 	var lamp3 := _make_lamp(r, foot, 8.0, 55.0)
 	lamp3.set("force_on", true)
-	for i: int in 4:
+	for i: int in 6:
 		Cartography.survey()
-	var forced: bool = Cartography.charted_cells("qa_cart_force").is_empty()
+	var forced: bool = not Cartography.charted_cells("qa_cart_force").is_empty()
 	_free_lamp(lamp3)
 	await r.get_tree().process_frame
-	r._ok(forced, "CART3 a force_on lamp charts nothing (%s)" % forced)
+	r._ok(forced, "CART3 a force_on lamp charts its pool (%s)" % forced)
 	# CART4: the limiter hid the glow (visible=false, energy kept): only the still-rendered spot pool charts.
 	# No await between hiding and the passes, so the limiter cannot restore the glow mid-scenario.
 	dm.current_district = "qa_cart_spot"
@@ -264,6 +282,8 @@ static func _cartography(r: Node) -> void:
 	for held_lamp: Node in held:
 		held_lamp.set("_on", true)
 	_restore_camera(prev_cam, cam)
+	r._player.set("flashlight_enabled", beam_on0)
+	beam.visible = beam_on0
 
 ## WX1: the rain overlay hides and stops its draw/tick work on the Low tier, live on settings_changed.
 static func _weather_tier(r: Node) -> void:

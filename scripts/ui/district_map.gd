@@ -1,6 +1,6 @@
 extends Control
-## The map (the owner's rules of 2026-11-05): a north-up architectural drawing of what Cartography has charted in this
-## district, nothing else. Charted ground is stone; where it meets a building the edge is drawn stronger. It shows no
+## The map (the owner's rules of 2026-11-18): a north-up architectural drawing of what Cartography has charted in this
+## district, nothing else. It starts dark and grows only where a lit lamp or the flashlight's beam showed the ground. Charted ground is stone; where it meets a building the edge is drawn stronger. It shows no
 ## player, monster, item, quest, lamp, route or label, and unknown space stays opaque at every zoom. District travel is
 ## its own screen (city_map), opened from here.
 

@@ -1445,7 +1445,7 @@ func _exit_hiding() -> void:
 ## caches the former so _refresh_flashlight_range() can recompute the sum
 ## whenever either one changes, instead of one call overwriting the other.
 var _upgrade_range_bonus: float = 0.0
-## Scene-authored flashlight (24 energy, 16 m) is the base every upgrade and
+## Scene-authored flashlight (14 energy, 16 m) is the base every upgrade and
 ## skill scales; the formulas used to hard-code 1.0 / 8.0, so buying
 ## Brightness dimmed the light ~20x and light_radius shortened it.
 var _scene_flashlight_energy: float = 1.0

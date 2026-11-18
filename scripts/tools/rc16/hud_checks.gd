@@ -112,12 +112,17 @@ static func _one_map_in_play(r: Node, hud: Node) -> void:
 	var screen: bool = UIManager.SCREENS.get(&"district_map", "") == "res://scripts/ui/district_map.gd"
 	r._ok(no_radar and no_minimap and screen, "HUDP3 one map that tracks nothing: no radar (%s), no minimap (%s), the Map opens the charted architecture (%s)" % [no_radar, no_minimap, screen])
 
-## HUDP12: the map charts only what a restored lamp lights and the player sees (the owner's rules of 2026-11-05).
+## HUDP12: the map charts only what a lit lamp or the flashlight's beam lights (the owner's rules of 2026-11-18).
 static func _map_charts_only_restored_light(r: Node) -> void:
 	var map := preload("res://scripts/ui/district_map.gd")
 	Cartography.reset()
 	var fresh: bool = Cartography.charted_cells("suburbs").is_empty()
-	# no lamp the player powered: a pass charts nothing, whatever the flashlight, the walk or the wait
+	# every lamp and the flashlight out: a pass charts nothing, whatever the walk or the wait
+	var player := r.get_tree().get_first_node_in_group(&"player")
+	var beam := player.get("flashlight") as SpotLight3D if player != null else null
+	var beam_on0: bool = beam != null and beam.visible
+	if beam != null:
+		beam.visible = false
 	var held: Array[Node] = []
 	for lamp: Node in r.get_tree().get_nodes_in_group(&"streetlights"):
 		if bool(lamp.get("_on")):
@@ -128,6 +133,8 @@ static func _map_charts_only_restored_light(r: Node) -> void:
 	var unlit: bool = Cartography.to_dict()["districts"].values().all(func(cells: Array) -> bool: return cells.is_empty())
 	for lamp: Node in held:
 		lamp.set("_on", true)
+	if beam != null:
+		beam.visible = beam_on0
 	Cartography.from_dict({"rev": Cartography.LAYOUT_REV, "districts": {"suburbs": [0, 0, -3, 2]}})
 	var kept: bool = Cartography.charted_cells("suburbs").has(Vector2i(-3, 2)) and Cartography.to_dict()["districts"]["suburbs"].size() == 4
 	Cartography.from_dict({"rev": Cartography.LAYOUT_REV + 1, "districts": {"suburbs": [0, 0]}})

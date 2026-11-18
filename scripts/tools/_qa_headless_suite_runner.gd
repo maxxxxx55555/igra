@@ -895,7 +895,7 @@ func _p2r_respawn_keeps_progress() -> void:
 	flm.from_dict(fl_snap)
 	if not cleared:
 		_fail("P2r reset_all kept flashlight upgrades (stability %d)" % st_after)
-	if not maxed or absf(drain_cut - 0.5) > 0.001 or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
+	if not maxed or absf(drain_cut - 0.5) > 0.001 or absf(energy - want_energy) > 0.01 or want_energy < 10.0:
 		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, measured drain cut %s, energy %s, want %s)" % [maxed, drain_cut, energy, want_energy])
 	else:
 		_log("P2r flashlight upgrades survive respawn (energy %0.1f, stability L5) - OK" % energy)
