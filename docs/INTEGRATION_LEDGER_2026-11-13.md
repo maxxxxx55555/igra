@@ -36,7 +36,8 @@ not demonstrated).
 | R17 | Owner decisions: T4 primitive-budget definition, T11 export environment confirmation, T12 mutation/coverage engine chain, premium-art scope | 15 Nov 2026 (this pass) | T12 coverage re-measured 103/106 (3 A3-waived misses). Full 18-set mutation chain: `S26 MUTATIONS verdict=PASS mutations=105 bad=0`, exit 0 — every mutant bites, no stray. Four stale anchors and one QA order dependency were found and repaired on the way (see section 2). | `docs/artifacts/rc16/t12_pass_run.out`, `t12_pass_mutations.txt`, `docs/artifacts/rc16/proofs/t12_pass_mutations.*`, `t12_coverage.txt`, `s29_baseline_2026-11-15.out`, `s29_baseline_fixed_2026-11-15.out` | `closed` for the T12 engine chain; the four owner decisions remain `owner` |
 | R18 | Release landing page self-contained, canon-correct and keyboard-accessible | 2026-11-15 (this pass) | `release_page_check --demo` bites all 4 mutants, real 0 findings, wired into `check.sh`; 14 local refs resolve, 0 external URLs | `web/store/`, `docs/artifacts/integration-20261113/RECHECK_2026-11-14.md` | closed |
 | R20 | Missing store shot03/04/06 captured from real gameplay | 17 Nov 2026 (`d5e77c48`) | windowed `TLS_STORE_SHOTS=1` run of the B10 verifier: `STORE_DONE failures=0`; three real 1920x1080 RGB engine frames of the residential playground under flashlight, the Keeper's shed bench under its brass lamp, and Workshop B under its single warm overhead lamp; 0% blown-out white, non-blank; user-data restored byte-identical | `store/screenshots/shot03_stealth_horror_1920x1080_en.png`, `shot04_keeper_lore_1920x1080_en.png`, `shot06_mystery_inside_1920x1080_en.png`, `.qa_logs/b10_verify_scene.log` | closed (real captures, not painted substitutes) |
-| R21 | Skill tree reads as the same game as the menu (no opaque black wall) | 18 Nov 2026 (`dc43b3f0`) | the 96 % wall and flat paper are gone: the shop's own dim street art, a translucent tactical scrim, an in-project canvas shader vignette, a 1 px steel frame and an amber rule; unlock paths are drawn from the live `requires` table; `skill_tree_canon_check --demo` bites 4 mutants, `menu_style_unify_check` 0 findings, closeout `s29` 89/0 and `finish` 4/0, engine boot 0, real GPU frame read and accepted; AF3 stills re-shot against this commit | `scripts/ui/skill_tree_chrome.gd`, `scripts/ui/skill_paths.gd`, `tools/qa_sim/skill_tree_canon_check.py`, `docs/stills/store/` | closed |
+| R21 | Skill tree reads as the same game as the menu (no opaque black wall) | 18 Nov 2026 (`dc43b3f0`, merged at `5024b288`) | the 96 % wall and flat paper are gone: the shop's own dim street art, a translucent tactical scrim, an in-project canvas shader vignette, a 1 px steel frame and an amber rule; unlock paths are drawn from the live `requires` table; `skill_tree_canon_check --demo` bites 4 mutants, `menu_style_unify_check` 0 findings, closeout `s29` 89/0 and `finish` 4/0, engine boot 0, real GPU frame read and accepted; AF3 stills re-shot against this commit | `scripts/ui/skill_tree_chrome.gd`, `scripts/ui/skill_paths.gd`, `tools/qa_sim/skill_tree_canon_check.py`, `docs/stills/store/` | closed |
+| R22 | Darker, non-blinding night lighting and a map that charts only lit ground (PR #81) | 18 Nov 2026 (`2c48612e`, merged into the candidate) | PR #81 changed 26 runtime files but kept the pre-change stills, so `af3_frame_check` failed every frame with F4; the eight stills were re-shot on the real GPU against the PR's own code, `af3_frame_check` 8/0, `visual_truth_gate` 8 PASS, press kit regenerated, CI green (25 pass, 3 neutral), merged as `2c48612e` and the temporary branch deleted. The candidate then merged the PR, re-shot all eight stills again against the merged tree and re-ran the full battery | `docs/artifacts/rc16/all_merged_final_2026-11-18.out`, `docs/stills/store/` | closed |
 | R19 | Gameplay stability re-runs on the final candidate | none (verification only) | two standalone `closeout_check 420` runs, each 655 checks / 0 fails / exit 0, profile restored byte-identical | `docs/artifacts/rc16/closeout_stability_1_2026-11-15.out`, `closeout_stability_2_2026-11-15.out` | verified |
 
 ## 2. Verified runs
@@ -76,15 +77,18 @@ not demonstrated).
 
 **NOT_READY.** Every enforced code, content, citation, visual-canon, close,
 fresh-frame and engine gate is green on this candidate, re-verified through
-17 November 2026 (final clean full battery 112/0 exit 0 in
-`docs/artifacts/rc16/all_clean_2026-11-16.out`; two standalone closeout re-runs
+18 November 2026 (final full battery 118/0 exit 0 in
+`docs/artifacts/rc16/all_merged_final_2026-11-18.out`; two standalone closeout re-runs
 655/0 each; coverage 103/106; T12 mutation chain 105/105 PASS), and the two windowed-only gates
 pass on real rendering and audio. Seven B9 production 3D prop meshes and six
 B10 meshes (facade bay, creature shell and first-person hands with LOD) were
 authored, wired to live consumers and gated, so R14 is closed for props,
 facades, creatures and hands as project-owned reusable geometry. The three
 missing store shots (03/04/06) are now real 1920x1080 engine captures from the
-windowed game, not painted substitutes (R20), and the AF3 still set was re-shot
+windowed game, not painted substitutes (R20), the skill tree is a translucent
+tactical overlay over the street instead of an opaque wall (R21), and the
+darker night lighting with the light-gated map of PR #81 was merged with its
+own stills re-shot on the real GPU (R22). The AF3 still set was re-shot
 against the final tree with the press kit regenerated. The release landing page is now self-contained,
 canon-correct and keyboard-accessible (R18), gameplay stability was
 re-verified twice (R19), and the T12 mutation/coverage engine chain now has a
