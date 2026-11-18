@@ -71,3 +71,4 @@ scripts/systems/music_manager.gd	d02e100887d5	99b32e00a142	*no_frame_hears_audio
 scripts/ui/hud_3d.gd	551f518add30	fcb2a72e2c40	*species_only_event_and_detached_notice_guards*
 scripts/world/lamp_head.gd	ca20c4dc8699	9b34067576bd	*live_reduce_flash_same_default_uniforms*
 scripts/world/streetlight_3d.gd	17c0542a118b	ed390e5376b3	*live_reduce_flash_flag_same_energy*
+scripts/systems/settings_manager.gd	154be8ecbc19	679e90a138ba	*high_contrast_off_restore_no_frame_enables_it*
