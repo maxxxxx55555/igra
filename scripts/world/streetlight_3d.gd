@@ -27,14 +27,14 @@ var _energy_scale: float = 1.0
 var _light_energy_mult: float = 1.0
 ## QA_SWARM_FINDINGS.md P1 (accessibility): every lit lamp in every district
 ## dipped into a sharp ~6Hz flicker with no accessibility gate at all - only
-## a per-instance scene export existed, nothing player-facing. Cached once
-## like _light_energy_mult above (district scenes rebuild on re-entry per
-## world_runtime.gd, so toggling the setting takes effect next visit).
+## a per-instance scene export existed, nothing player-facing. Read once
+## here, then kept live by the settings signal (also while paused).
 var _reduce_flash: bool = false
 
 func _ready() -> void:
 	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
+	EventBus.settings_changed.connect(_on_setting_changed)
 	var pole := get_node_or_null("Pole")
 	var lamp := get_node_or_null("Lamp")
 	if pole is MeshInstance3D:
@@ -65,8 +65,12 @@ func _process(delta: float) -> void:
 	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
 	if not _reduce_flash and sin(_t * 15.0) > 0.95:
 		base = 0.2 * _energy_scale
-	spot.light_energy = base * 2.0 * _light_energy_mult
-	glow.light_energy = base * 1.0 * _light_energy_mult
+	spot.light_energy = base * 1.6 * _light_energy_mult
+	glow.light_energy = base * 0.8 * _light_energy_mult
+
+func _on_setting_changed(key: String, value: Variant) -> void:
+	if key == "reduce_flash":
+		_reduce_flash = bool(value)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == district_id:
@@ -92,20 +96,20 @@ func _update_light(stage: int = -1) -> void:
 	spot.visible = _on
 	glow.visible = _on
 	if _on and stage >= 3:
-		spot.light_energy = 3.5 * _light_energy_mult
+		spot.light_energy = 2.8 * _light_energy_mult
 		spot.spot_attenuation = 1.0
-		glow.light_energy = 1.5 * _light_energy_mult
+		glow.light_energy = 1.1 * _light_energy_mult
 		glow.omni_range = 8.0
 	elif _on and stage >= 2:
-		spot.light_energy = 2.5 * _light_energy_mult
+		spot.light_energy = 2.0 * _light_energy_mult
 		spot.spot_attenuation = 1.5
-		glow.light_energy = 1.0 * _light_energy_mult
+		glow.light_energy = 0.8 * _light_energy_mult
 		glow.omni_range = 6.0
 	elif _on:
 		# PARTIAL — tighter, weaker pool
-		spot.light_energy = 1.4 * _light_energy_mult
+		spot.light_energy = 1.2 * _light_energy_mult
 		spot.spot_attenuation = 2.0
-		glow.light_energy = 0.5 * _light_energy_mult
+		glow.light_energy = 0.4 * _light_energy_mult
 		glow.omni_range = 4.0
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold

@@ -72,7 +72,8 @@ for n,p in auto:
       |set(re.findall(r'^enum (\w+)',t,re.M)))
 builtin={'has_signal','has_method','call','get','set','connect','emit','is_connected',
  'call_deferred','get_node_or_null','free','queue_free','add_child','get_children','get_child_count',
- 'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent'}
+ 'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent',
+ 'find_children','set_process'}
 errs=[]
 if mem:
     pat=re.compile(r'\b(%s)\.(\w+)'%'|'.join(mem))
@@ -212,6 +213,13 @@ if "$PY" tools/qa_sim/visual_truth_gate.py --demo >/dev/null 2>&1; then
   ok "visual_truth_gate --demo (defect patterns fail, canon patterns pass)"
 else
   bad "visual_truth_gate --demo (defect patterns fail, canon patterns pass)"
+fi
+# G-MSAA (2026-11-11): a tier change arrived before the node was in the tree and
+# assigned msaa_3d on a null viewport (SCRIPT ERROR in the headless suite).
+if "$PY" tools/qa_sim/msaa_guard_check.py >/dev/null 2>&1; then
+  ok "msaa_guard_check (no unguarded msaa_3d assignment on a null viewport)"
+else
+  bad "msaa_guard_check (no unguarded msaa_3d assignment on a null viewport)"
 fi
 gate_missed=0
 for f in docs/stills/evidence/r0_before_*.png docs/stills/evidence/magenta_corruption_suburbs.png docs/stills/evidence/r1_scale08*.png; do
@@ -757,6 +765,9 @@ else
     #   tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
     run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
+    run_gate "touch: independent pointer ownership" "res://scenes/tools/touch_ownership_check_scene.tscn"
+    run_gate "HUD: actual enemy instance and ambiguous species events" "res://scenes/tools/hud_target_regression_check_scene.tscn"
+    run_gate "lighting: live Reduce Flash" "res://scenes/tools/streetlight_regression_check_scene.tscn"
     if [[ $ALL -eq 1 ]]; then
       if bash tools/qa_sim/timing_equiv check >/dev/null 2>&1; then ok "timing_equiv: gameplay quantities agree at 30, 60 and 120 FPS of simulated time"; else bad "timing_equiv (см. .qa_logs/timing_check.txt)"; fi
     fi

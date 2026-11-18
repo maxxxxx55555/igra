@@ -90,7 +90,7 @@ At session start the tree was already dirty from a parallel external session. Th
 - `GOLD MASTER suite` real engine error:
   `SCRIPT ERROR: Invalid assignment of property or key 'msaa_3d' ... on a base object of type
   'null instance'` at `scripts/world_env_setup.gd:197` in `_apply_graphics_tier`, reached from
-  `settings_manager.gd:526` -> `quality_manager.gd:72` (log
+  `settings_manager.gd:524` -> `quality_manager.gd:72` (log
   `.qa_logs/gate_qa_headless_suite_scene.log:44`). Registry row `G-MSAA`.
 - Two `windowed`-only checks self-skip by design (perf budget, audio truth). They are NOT
   failures, but they are NOT green either; P2/P3 must run them through `guarded_windowed`.

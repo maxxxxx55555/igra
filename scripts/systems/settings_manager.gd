@@ -455,7 +455,7 @@ func _apply_high_contrast() -> void:
 		if hc:
 			env.adjustment_contrast = 1.3
 			env.adjustment_saturation = 1.2
-		# else: leave the tier's contrast/saturation untouched (do not clobber to 1.1/1.05)
+		elif is_equal_approx(env.adjustment_contrast, 1.3) and is_equal_approx(env.adjustment_saturation, 1.2): _restore_tier_grade(env)
 
 func set_auto_aim(enabled: bool) -> void:
 	_settings["auto_aim"] = enabled
@@ -491,9 +491,7 @@ func _particle_ratio() -> float:
 	var names := ["low", "medium", "high", "ultra"]
 	var tier: int = clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
 	if not _particle_ratio_by_tier.has(tier):
-		var vq := load("res://assets/config/visual_quality.tres")
-		var p: Dictionary = vq.get_meta(names[tier], {}) if vq else {}
-		_particle_ratio_by_tier[tier] = float(p.get("particle_ratio", 1.0))
+		_particle_ratio_by_tier[tier] = float(_tier_preset().get("particle_ratio", 1.0))
 	return _particle_ratio_by_tier[tier]
 
 func _scale_emitter(n: Node, ratio: float) -> void:
@@ -708,3 +706,15 @@ func from_dict(d: Dictionary) -> void:
 	# Re-apply accessibility effects from the loaded config (deferred: the
 	# root theme / enemy nodes may not exist yet at load time).
 	call_deferred("apply_all_accessibility")
+
+## High Contrast off: only its own 1.3/1.2 is replaced, so an authored grade is never clobbered.
+func _restore_tier_grade(env: Environment) -> void:
+	var p: Dictionary = _tier_preset()
+	env.adjustment_contrast = float(p.get("contrast", 1.0))
+	env.adjustment_saturation = float(p.get("saturation", 1.0))
+
+func _tier_preset() -> Dictionary:
+	var names := ["low", "medium", "high", "ultra"]
+	var tier: int = clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
+	var vq := load("res://assets/config/visual_quality.tres")
+	return vq.get_meta(names[tier], {}) if vq else {}
