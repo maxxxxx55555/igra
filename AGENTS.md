@@ -15,6 +15,7 @@ and `res://_QUARANTINE/` entries — **only** ones marked `AUTO-DELETABLE` in
 `docs/QUARANTINE_AUDIT.md` (10 as of the last audit run: 6 fonts, 4 `_QUARANTINE/scenes/effects/*.tscn`
 — re-run `python3 tools/quarantine_audit.py --check` before trusting the count, don't trust this
 number stale). **Never** touch an entry marked `UNCERTAIN` — that's owner-eyes, not yours to judge.
+**Update 2026-11-18:** the owner ordered `res://_QUARANTINE/` deleted whole (all 52 tracked files, `docs/CLEANUP_LEDGER.md` section 15); the folder no longer exists, so the quarantine part of this zone is closed.
 
 **Already delivered by an arena session, merged into `main` — do not redo:**
 - `docs/STORE_KIT.md` §Full listings (2-locale ledger) and `store/screens_spec/shotlist.json`

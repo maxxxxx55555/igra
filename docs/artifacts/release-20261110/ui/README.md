@@ -15,11 +15,11 @@ All28 current files are untouched1920×1080 native PNGs. [manifest.json](manifes
 | Screen | English High / Low | Russian High / Low |
 |---|---|---|
 | Menu | [High](frames/menu_en_tier2.png) / [Low](frames/menu_en_tier0.png) | [High](frames/menu_ru_tier2.png) / [Low](frames/menu_ru_tier0.png) |
-| Settings | [High](frames/settings_en_tier2.png) / [Low](frames/settings_en_tier0.png) | [High](frames/settings_ru_tier2.png) / [Low](frames/settings_ru_tier0.png) |
+| Settings | [High](frames/settings_en_tier2.png) / [Low](frames/settings_en_tier2.png) | [High](frames/settings_ru_tier2.png) / [Low](frames/settings_ru_tier2.png) |
 | Inventory | [High](frames/inventory_en_tier2.png) / [Low](frames/inventory_en_tier0.png) | [High](frames/inventory_ru_tier2.png) / [Low](frames/inventory_ru_tier0.png) |
-| Shop | [High](frames/shop_en_tier2.png) / [Low](frames/shop_en_tier0.png) | [High](frames/shop_ru_tier2.png) / [Low](frames/shop_ru_tier0.png) |
-| Journal | [High](frames/journal_en_tier2.png) / [Low](frames/journal_en_tier0.png) | [High](frames/journal_ru_tier2.png) / [Low](frames/journal_ru_tier0.png) |
-| Longest real note | [High](frames/journal_longest_note_en_tier2.png) / [Low](frames/journal_longest_note_en_tier0.png) | [High](frames/journal_longest_note_ru_tier2.png) / [Low](frames/journal_longest_note_ru_tier0.png) |
+| Shop | [High](frames/shop_en_tier2.png) / [Low](frames/shop_en_tier2.png) | [High](frames/shop_ru_tier2.png) / [Low](frames/shop_ru_tier2.png) |
+| Journal | [High](frames/journal_en_tier2.png) / [Low](frames/journal_en_tier2.png) | [High](frames/journal_ru_tier2.png) / [Low](frames/journal_ru_tier2.png) |
+| Longest real note | [High](frames/journal_longest_note_en_tier2.png) / [Low](frames/journal_longest_note_en_tier2.png) | [High](frames/journal_longest_note_ru_tier2.png) / [Low](frames/journal_longest_note_ru_tier2.png) |
 | Ending control | [High](frames/ending_en_tier2.png) / [Low](frames/ending_en_tier0.png) | [High](frames/ending_ru_tier2.png) / [Low](frames/ending_ru_tier0.png) |
 
 ## Three actual macro alternatives
@@ -46,3 +46,5 @@ Each candidate directory also contains its real English Low and Russian High/Low
 V03/THEME1 compare actual font bytes, variable weights, EN/RU glyphs and bundled fallback chains. Type-scale, option2px focus and disabled-style coverage remain. No log or text-dump file is packaged here. The font's official upstream/OFL provenance remains beside `assets/fonts/RobotoCondensed-Full-VF.ttf` in the repository.
 
 These are desktop High/Low evidence and bounded integration votes. They do not establish physical-phone DPI/safe-area/max-text comfort, every unseen screen/locale, full-game photographic fidelity or store/release acceptance. The root release report owns final mandatory gates and exports. No accepted UI vote permits silently applying the separately rejected world material candidates.
+
+Cleanup note (2026-11-18): 14 Low (`tier0`) frames whose bytes equal the High (`tier2`) frame of the same screen were deleted on the owner's order (8 in `frames/`: settings, shop, journal and the longest note, en and ru; 6 in `candidates/a|b|c/`: journal, en and ru). Their `Low` links above point at the identical `tier2` file; `manifest.json` keeps their rows, and each row's `sha256` equals that of its `tier2` twin.
