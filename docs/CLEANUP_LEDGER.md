@@ -295,3 +295,82 @@ The owner's commands, in order: `gh pr merge 46 --merge`, then `git push origin 
 | `qoder/premium-visual-recovery` | `352240aa` | ahead of `main`; what `main` wanted of it was absorbed (`docs/ABSORB_PLAN.md` section 3), the rest is superseded; its commits are in `..\_BACKUPS\2026-11-05_branches\unmerged_tips.bundle` (verified) | `git fetch <bundle> 352240aa66f7667b1ebc8a36b52b16342689ef6e` then `git push origin 352240aa66f7667b1ebc8a36b52b16342689ef6e:refs/heads/qoder/premium-visual-recovery` |
 
 **Done on 2026-11-05 (Session 39d), on the owner's direct request:** pull request 46 merged into `main` (`5939c172`); the 24 branches (the 22 of the table, `pass/swarm-final` and `release/finish-20261101`) deleted on origin after a fresh check (21 contained in `main`, 3 in the verified bundle), their tips in `..\_BACKUPS\2026-11-05_branches\remote_tips_before_delete.txt`; origin keeps `main` and `gh-pages`. Locally, 17 branches contained in `main` went with `git branch -d`; `art/monsters-pass2` and `release/1.0.2-sheets` (11 commits in neither) went to `..\_BACKUPS\2026-11-05_branches\local_only_tips.bundle` (verified, `^main` as its prerequisite) before `git branch -D`.
+
+## 15. Session of 2026-11-18: the owner's consolidation and cleanup order
+
+Baseline: `main` at `6e9d7a28` (the merge commit of PR #79). Everything below is restorable from that commit
+(`git checkout 6e9d7a28 -- <path>`).
+
+### 15.1 Branches
+
+PR #79 landed as a merge commit, so the five `p1/*` tips and the PR head became ancestors of `main`; the five
+`p1/*` branches and the PR branch were then deleted on the owner's order, after `arena/8966ccea-igra`,
+`integration/igra-20261112-141210-a74feb40`, `p0/audit-20261111` and `phase-b-doc-truth` (each already an
+ancestor of `main`). `origin` holds `main` and `gh-pages`; `gh-pages` stays because it is the GitHub Pages
+source of the privacy policy page. The rows are in `docs/ABSORB_PLAN.md`.
+
+### 15.2 Deleted
+
+| What | Files | Bytes | The test |
+|---|---|---|---|
+| root notes `ARENA_NEXT_PROMPT.md`, `IDEA.md`, `PROMPT.md`, `knowledge.md`, `opencode-memory.md` | 5 | 81047 | the owner's order; no tool, gate or workflow reads one (section 3 had kept them as working notes). Older documents still name them as history |
+| `_QUARANTINE/` whole | 52 | 14253189 | the owner's order, which overrides the UNCERTAIN and KEEP-PLANNED rows of section 12.3 and of `docs/QUARANTINE_AUDIT.md`. Checked first: no `.gd`, `.tscn`, `.tres`, `.cfg` or `project.godot` holds a `res://_QUARANTINE` path, and none of the 19 `class_name`s declared there is used by a live script or scene (`WeightBar` in the HUD is a node name) |
+| duplicate images under `docs/` (sha256-identical to a kept file) | 33 | 30853049 | the table of 15.3 |
+
+Three `file:line` citations into `_QUARANTINE/` (`docs/CORRECTION_LOG.md`, `docs/SECURITY_REREAD_RC16.md`,
+`docs/VISUAL_CONSISTENCY.md`) became plain mentions of the deleted file.
+
+### 15.3 The duplicate images: deleted file and the identical file that stays
+
+The rule: a gated or shipped path stays (`docs/stills/store`, `docs/stills/final`, `web/`, `assets/`); among
+archives the newest capture stays; of a `tier0`/`tier2` pair the `tier2` frame stays; of the two gameplay
+shots the one the session reports cite stays (`gameplay_shot.png` is the regenerable output of
+`_gameplay_shot_runner.gd`).
+
+| Deleted | Identical file kept |
+|---|---|
+| `docs/artifacts/release-20261110/ui/candidates/a/journal_en_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/a/journal_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/candidates/a/journal_ru_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/a/journal_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/candidates/b/journal_en_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/b/journal_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/candidates/b/journal_ru_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/b/journal_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/candidates/c/journal_en_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/c/journal_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/candidates/c/journal_ru_tier0.png` | `docs/artifacts/release-20261110/ui/candidates/c/journal_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/journal_en_tier0.png` | `docs/artifacts/release-20261110/ui/frames/journal_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/journal_longest_note_en_tier0.png` | `docs/artifacts/release-20261110/ui/frames/journal_longest_note_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/journal_longest_note_ru_tier0.png` | `docs/artifacts/release-20261110/ui/frames/journal_longest_note_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/journal_ru_tier0.png` | `docs/artifacts/release-20261110/ui/frames/journal_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/settings_en_tier0.png` | `docs/artifacts/release-20261110/ui/frames/settings_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/settings_ru_tier0.png` | `docs/artifacts/release-20261110/ui/frames/settings_ru_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/shop_en_tier0.png` | `docs/artifacts/release-20261110/ui/frames/shop_en_tier2.png` |
+| `docs/artifacts/release-20261110/ui/frames/shop_ru_tier0.png` | `docs/artifacts/release-20261110/ui/frames/shop_ru_tier2.png` |
+| `docs/shots/gameplay_shot.png` | `docs/shots/rescue_gameplay_after_p0_fix.png` |
+| `docs/shots/rescue_burst_1.png` | `docs/shots/rescue_burst_0.png` |
+| `docs/shots/rescue_burst_2.png` | `docs/shots/rescue_burst_0.png` |
+| `docs/shots/rescue_burst_3.png` | `docs/shots/rescue_burst_0.png` |
+| `docs/stills/archive/20261031-v16/06_victory_ngplus_after_d0e5f447_20261031T010918Z.png` | `docs/stills/archive/20261105-3bee95a/06_victory_ngplus_after_3bee95a_20261105T005559Z.png` |
+| `docs/stills/archive/20261102-integration/06_victory_ngplus_after_1e91b23_20261102T115354Z.png` | `docs/stills/archive/20261102-756a4f2/06_victory_ngplus_after_756a4f2_20261102T121000Z.png` |
+| `docs/stills/archive/20261102-integration/08_shop_after_1e91b23_20261102T115341Z.png` | `docs/stills/archive/20261102-756a4f2/08_shop_after_756a4f2_20261102T120947Z.png` |
+| `docs/stills/archive/20261104-e2b5497/06_victory_ngplus_after_e2b5497_20261104T235039Z.png` | `docs/stills/archive/20261105-3bee95a/06_victory_ngplus_after_3bee95a_20261105T005559Z.png` |
+| `docs/stills/archive/20261104-e2b5497/08_shop_after_e2b5497_20261104T235028Z.png` | `docs/stills/archive/20261105-3bee95a/08_shop_after_3bee95a_20261105T005549Z.png` |
+| `docs/stills/archive/pre_s40_20261107/06_victory_ngplus_after_650aea4_20261106T173808Z.png` | `docs/stills/archive/pre_s43_20261109/06_victory_ngplus_after_81fe34db_20261108T083850Z.png` |
+| `docs/stills/archive/pre_s41_20261108/06_victory_ngplus_after_b61f669c_20261107T203841Z.png` | `docs/stills/archive/pre_s43_20261109/06_victory_ngplus_after_81fe34db_20261108T083850Z.png` |
+| `docs/stills/archive/pre_s41_20261108/07_skill_tree_after_b61f669c_20261107T203824Z.png` | `docs/stills/archive/pre_s43_20261109/07_skill_tree_after_81fe34db_20261108T083836Z.png` |
+| `docs/stills/archive/pre_s41_20261108/08_shop_after_b61f669c_20261107T203825Z.png` | `docs/stills/archive/pre_s43_20261109/08_shop_after_81fe34db_20261108T083837Z.png` |
+| `docs/stills/archive/pre_s42_20261108/06_victory_ngplus_after_e945d71d_20261108T075420Z.png` | `docs/stills/archive/pre_s43_20261109/06_victory_ngplus_after_81fe34db_20261108T083850Z.png` |
+| `docs/stills/archive/pre_s42_20261108/07_skill_tree_after_e945d71d_20261108T075405Z.png` | `docs/stills/archive/pre_s43_20261109/07_skill_tree_after_81fe34db_20261108T083836Z.png` |
+| `docs/stills/archive/pre_s42_20261108/08_shop_after_e945d71d_20261108T075406Z.png` | `docs/stills/archive/pre_s43_20261109/08_shop_after_81fe34db_20261108T083837Z.png` |
+| `docs/stills/archive/store_c804350c/06_victory_ngplus_after_c804350c_20261113T123131Z.png` | `docs/stills/store/06_victory_ngplus_after_d5e77c48_20261117T184100Z.png` |
+| `docs/stills/archive/store_c804350c/07_skill_tree_after_c804350c_20261113T123120Z.png` | `docs/stills/store/07_skill_tree_after_d5e77c48_20261117T184046Z.png` |
+| `docs/stills/archive/store_c804350c/08_shop_after_c804350c_20261113T123121Z.png` | `docs/stills/store/08_shop_after_d5e77c48_20261117T184047Z.png` |
+
+### 15.4 Duplicates kept, with the reason
+
+A fresh sha256 pass over the tracked tree found 105 duplicate groups (43.6 MB of repeats), not the 25 groups
+(18.7 MB) of section 12.3. After 15.3, these remain:
+
+| Group | Why it stays |
+|---|---|
+| `docs/stills/archive/pre_mega_1.0.1/*` against `docs/stills/final/*` (8 groups, 5.9 MB) | both paths are read: the stamped archive names are the `frames` of a closure in `docs/artifacts/rc16/closures.json` (`docs/PROOFS.md`), the `final` names are the sign-off set of `tools/check.sh` |
+| `docs/stills/store/*` against `web/store/assets/images/*` (3 groups, 3.5 MB) | the first is the frame set `tools/qa_sim/af3_frame_check.py` holds, the second is what the web page serves |
+| raw logs of `docs/artifacts/rc16/proofs/` and `docs/artifacts/release-20261110/engine/` (45 groups, 0.5 MB) and four text pairs of a few hundred bytes | each is the raw log of its own recorded launch (the evidence rule of `CLAUDE.md`) or a row of a `verification.json`; equal bytes mean two runs printed the same thing |
+| `assets/textures/items/*` (10 groups), `assets/store/*`, `assets/ui/icon.png`, `store/icon-512.png`, `assets/store/v2/itch/*`, the fonts of `web/store/assets/fonts/` (2.9 MB) | each path is read by an item definition, an export preset, a store document or the web page; outside `docs/` and outside the order |
