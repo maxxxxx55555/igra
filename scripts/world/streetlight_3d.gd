@@ -65,8 +65,8 @@ func _process(delta: float) -> void:
 	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
 	if not _reduce_flash and sin(_t * 15.0) > 0.95:
 		base = 0.2 * _energy_scale
-	spot.light_energy = base * 2.0 * _light_energy_mult
-	glow.light_energy = base * 1.0 * _light_energy_mult
+	spot.light_energy = base * 1.6 * _light_energy_mult
+	glow.light_energy = base * 0.8 * _light_energy_mult
 
 func _on_setting_changed(key: String, value: Variant) -> void:
 	if key == "reduce_flash":
