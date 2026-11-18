@@ -394,6 +394,19 @@ func _save() -> void:
 		"run_id": _run_id,
 		"run": GameManager.run_data(),
 	}
+	# Guarded mirror: the vault carries the same five core values the owner
+	# asked to protect (coins/skill points are written by their own autoloads).
+	# The JSON remains the canonical Continue payload.
+	var vitals: Dictionary = _read_player_vitals()
+	if not vitals.is_empty():
+		SecurityVault.set_guarded_float(&"health", float(vitals.get("hp", 0.0)))
+		SecurityVault.set_guarded_float(&"battery", float(vitals.get("battery", 0.0)))
+	var player := get_tree().get_first_node_in_group("player")
+	if is_instance_valid(player):
+		var warmth_value: Variant = player.get("warmth")
+		if warmth_value is float or warmth_value is int:
+			SecurityVault.set_guarded_float(&"warmth", float(warmth_value))
+	SecurityVault.save_game()
 	# A full disk fails the write without a word: the player must know the run is not saved.
 	if not _write_atomic(SAVE_PATH, payload):
 		EventBus.toast_requested.emit(LocalizationManager.t("SAVE_FAILED_STORAGE"), "danger")
@@ -545,14 +558,24 @@ func _parse_vitals(v: Variant) -> Dictionary:
 
 ## Called when the loaded game places its player (WorldRuntime), before a respawn's half health is applied over it.
 func apply_pending_vitals(player: Node) -> void:
-	if _pending_vitals.is_empty() or player == null:
+	if _pending_vitals.is_empty():
+		# No Continue payload: a guarded vault from an earlier session can
+		# still restore health and battery. A positive health is the marker
+		# that the slot was really written (player vitals are never zero on
+		# a living save).
+		SecurityVault.load_game()
+		var vault_hp: float = SecurityVault.get_guarded_float(&"health", -1.0)
+		if vault_hp <= 0.0:
+			return
+		_pending_vitals = {"hp": vault_hp, "battery": maxf(0.0, SecurityVault.get_guarded_float(&"battery", 0.0))}
+	if player == null:
 		return
 	var stats: Variant = player.get("stats")
 	var max_hp: float = float(stats.max_hp) if stats != null else 100.0
 	var max_stamina: float = float(stats.stamina_max) if stats != null else 100.0
 	var max_battery: float = float(player.get("battery_max"))
 	player.set("hp", clampf(float(_pending_vitals["hp"]), 1.0, max_hp))
-	player.set("stamina", clampf(float(_pending_vitals["stamina"]), 0.0, max_stamina))
+	player.set("stamina", clampf(float(_pending_vitals.get("stamina", float(player.get("stamina")))), 0.0, max_stamina))
 	player.set("battery", clampf(float(_pending_vitals["battery"]), 0.0, max_battery))
 	_pending_vitals = {}
 	EventBus.player_health_changed.emit(float(player.get("hp")) / max_hp)

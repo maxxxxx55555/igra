@@ -50,7 +50,7 @@ func _build_trees() -> void:
 ## после покупки.
 func _refresh(_skill_id: Variant = null) -> void:
 	close_button.text = LocalizationManager.t("BTN_CLOSE")
-	skill_points_label.text = LocalizationManager.tf("Skill Points: %d", [SkillTreeManager.get_skill_points()])
+	skill_points_label.text = "%s: %d" % [tr("SKILL POINTS"), SkillTreeManager.get_skill_points()]
 
 	for tab in tree_tabs.get_children():
 		if tab is SkillTreeTab:
