@@ -46,8 +46,13 @@ def findings(src=None):
 def demo():
     base = sources()
     assert findings(base) == [], findings(base)
+    # Derive the mutant from the source, not from a hardcoded alpha: changing
+    # the real value must never silently make the self-check vacuous again.
+    value = re.search(r"(bg\.color\s*=\s*Color\(\s*ThemeProvider\.COLOR_BG_PANEL\s*,\s*)([\d.]+)(\s*\))", base["chrome"])
+    assert value is not None, "demo anchor missing: background alpha"
+    opaque = value.group(1) + "0.96" + value.group(3)
     mutants = [
-        ("TREE1", "chrome", base["chrome"].replace("COLOR_BG_PANEL, 0.80", "COLOR_BG_PANEL, 0.96")),
+        ("TREE1", "chrome", base["chrome"].replace(value.group(0), opaque, 1)),
         ("TREE2", "chrome", base["chrome"].replace("ThemeProvider.COLOR_BORDER", "Color(1, 0, 1)")),
         ("TREE3", "chrome", base["chrome"].replace("shader_type canvas_item", "shader_type canvas_lying")),
         ("TREE4", "paths", base["paths"].replace("draw_line(a, b", "draw_circle(a, 1.0")),
