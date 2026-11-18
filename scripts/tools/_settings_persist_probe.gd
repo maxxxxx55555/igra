@@ -95,6 +95,12 @@ func _run() -> void:
 	print("[settings-persist] T2/X5 LUT survives tier change (HC off): on=%s contrast_kept=%s sat_kept=%s" % [t2_lut_on, t2_contrast_kept, t2_sat_kept])
 	if not (t2_lut_on and t2_contrast_kept and t2_sat_kept):
 		bad += 1
+	SettingsManager.set_high_contrast(true)
+	SettingsManager.set_high_contrast(false)
+	var restored: bool = t2_env.adjustment_enabled and is_equal_approx(t2_env.adjustment_contrast, t2_before_c) and is_equal_approx(t2_env.adjustment_saturation, t2_before_s)
+	print("[settings-persist] high contrast off restores the grade, LUT stays on: ", restored)
+	if not restored:
+		bad += 1
 	t2_root.queue_free()
 
 	# Restore whatever was actually on disk before this probe ran.

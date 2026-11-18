@@ -66,3 +66,9 @@ scripts/ui/screens.gd	5b0d56732997	86fe55be14eb	*dead_story_card_label_only*
 scripts/ui/ui_manager.gd	72ec23b06dac	f1a213d65195	*notification_routing_no_capture_fires_one*
 scripts/ui/ui_scale.gd	a3c7210096c3	dda01b582360	*mobile_density_path_only*
 scripts/world_env_setup.gd	5e9a6628da3a	4c8aa2033edf	*null_guard_only_same_msaa*
+scripts/player/player_3d.gd	12103edd09fa	96c8e702df5f	*inactive_player_clears_touch_state_only*
+scripts/systems/music_manager.gd	d02e100887d5	99b32e00a142	*no_frame_hears_audio*
+scripts/ui/hud_3d.gd	551f518add30	fcb2a72e2c40	*species_only_event_and_detached_notice_guards*
+scripts/world/lamp_head.gd	ca20c4dc8699	9b34067576bd	*live_reduce_flash_same_default_uniforms*
+scripts/world/streetlight_3d.gd	17c0542a118b	ed390e5376b3	*live_reduce_flash_flag_same_energy*
+scripts/systems/settings_manager.gd	154be8ecbc19	679e90a138ba	*high_contrast_off_restore_no_frame_enables_it*
