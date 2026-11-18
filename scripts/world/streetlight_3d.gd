@@ -96,20 +96,20 @@ func _update_light(stage: int = -1) -> void:
 	spot.visible = _on
 	glow.visible = _on
 	if _on and stage >= 3:
-		spot.light_energy = 3.5 * _light_energy_mult
+		spot.light_energy = 2.8 * _light_energy_mult
 		spot.spot_attenuation = 1.0
-		glow.light_energy = 1.5 * _light_energy_mult
+		glow.light_energy = 1.1 * _light_energy_mult
 		glow.omni_range = 8.0
 	elif _on and stage >= 2:
-		spot.light_energy = 2.5 * _light_energy_mult
+		spot.light_energy = 2.0 * _light_energy_mult
 		spot.spot_attenuation = 1.5
-		glow.light_energy = 1.0 * _light_energy_mult
+		glow.light_energy = 0.8 * _light_energy_mult
 		glow.omni_range = 6.0
 	elif _on:
 		# PARTIAL — tighter, weaker pool
-		spot.light_energy = 1.4 * _light_energy_mult
+		spot.light_energy = 1.2 * _light_energy_mult
 		spot.spot_attenuation = 2.0
-		glow.light_energy = 0.5 * _light_energy_mult
+		glow.light_energy = 0.4 * _light_energy_mult
 		glow.omni_range = 4.0
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold

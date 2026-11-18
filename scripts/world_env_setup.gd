@@ -29,7 +29,7 @@ const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
 ## The light the fog itself carries, by stage (DARK/PARTIAL/STREETS/FULL): at 0.6 everywhere the teal haze lit every
 ## facade of an unpowered district; a restored street gets the haze back. This live Environment is the single owner.
-const FOG_LIGHT_BY_STAGE: Array[float] = [0.12, 0.28, 0.45, 0.6]
+const FOG_LIGHT_BY_STAGE: Array[float] = [0.08, 0.2, 0.32, 0.42]
 ## The moon casts a shadow only where it is bright enough to show one: at 0.12 (the dark stages) the shadow is invisible and
 ## cost a quarter of the first district's draw calls (66 of 235, windowed perf_check_scene).
 const MOON_SHADOW_MIN: float = 0.2
