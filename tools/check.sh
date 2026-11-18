@@ -359,6 +359,13 @@ if "$PY" tools/qa_sim/menu_style_unify_check.py --demo >/dev/null 2>&1 && "$PY" 
 else
   bad "menu_style_unify_check (an off-canon UI colour drifted from the main-menu palette)"
 fi
+# AF-SKILL-TREE (2026-11-18): the skill tree must be a translucent tactical
+# overlay on the live street, not the opaque black wall the owner flagged.
+if "$PY" tools/qa_sim/skill_tree_canon_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/skill_tree_canon_check.py >/dev/null 2>&1; then
+  ok "skill_tree_canon_check (translucent skill tree, steel frame, amber rule and live unlock paths)"
+else
+  bad "skill_tree_canon_check (the skill tree lost its tactical-overlay canon)"
+fi
 # AF-CLOSE: a blocking screen must always end hidden (rc15 closeout V.5 soft lock).
 if "$PY" tools/qa_sim/ui_close_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/ui_close_check.py >/dev/null 2>&1; then
   ok "ui_close_check (close() cannot strand a blocking screen visible; both mutants bite)"

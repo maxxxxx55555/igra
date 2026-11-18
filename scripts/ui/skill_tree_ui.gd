@@ -9,6 +9,9 @@ class_name SkillTreeUI
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = ThemeProvider.build_theme()
+	var chrome: Node = (load("res://scripts/ui/skill_tree_chrome.gd") as GDScript).new() as Node
+	chrome.name = "SkillTreeChrome"
+	add_child(chrome)
 	scrim.color = Color(ThemeProvider.COLOR_BG_DARK, 0.6)
 	skill_points_label.add_theme_font_override("font", ThemeProvider.heading_font())
 	SkillTreeManager.skill_unlocked.connect(_refresh)
