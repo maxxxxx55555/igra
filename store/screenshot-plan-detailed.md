@@ -105,8 +105,7 @@ hex + localized stage label, and a **Travel** button per row, enabled only when 
 is unlocked (its prerequisite is FULL) and you're not standing in it. Locked rows show
 "MAP_LOCKED_BY".
 
-**Hygiene:** interstitial ads can trigger on district entry in real builds — if anything
-pops up or pauses, dismiss and unpause (Esc) **before** framing. Never capture the death
+**Hygiene:** close open panels and unpause (Esc) **before** framing. Never capture the death
 screen or a mid-attack pose (store rule).
 
 ## 1. One-time prep (do once, NOT inside the 60 minutes)
@@ -226,8 +225,7 @@ camera; there are no camera presets (see §0).
 - **UI state:** Trailer Mode ON; panels closed; flashlight off.
 - **Framing:** canopy sodium pools on the empty wet forecourt, dead pump displays, thin fog;
   queue road dark beyond. Composition: one pump island dead-center, canopy lights reflecting.
-- **Exact moment:** steady frame 3 s after travel-in (after the world streams; dismiss any
-  entry interstitial first). No wow moment fires — correct.
+- **Exact moment:** steady frame 3 s after travel-in (after the world streams). No wow moment fires — correct.
 - **Camera:** none available — eye-level, looking level down the pump row axis.
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot05_restored_forecourt_1920x1080_en.png`.

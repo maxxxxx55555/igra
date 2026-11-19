@@ -61,18 +61,27 @@ func _ready() -> void:
 		hum.volume_db = -16.0
 		_hums.append(hum)
 		_owners.append(0)
+	_drone.bus = &"Music"
+	add_child(_drone)
+	if AudioServer.get_driver_name() != "Dummy":
+		_start_drone()
+	get_tree().node_added.connect(_on_node_added)
+	_sync_director()
+
+func _start_drone() -> void:
 	var generator: AudioStreamGenerator = AudioStreamGenerator.new()
 	generator.mix_rate = RATE
 	generator.buffer_length = 0.25
 	_drone.stream = generator
-	_drone.bus = &"Music"
-	add_child(_drone)
 	_chunk.resize(BLOCK)
 	_drone.play()
 	_playback = _drone.get_stream_playback() as AudioStreamGeneratorPlayback
 	_fill_drone()
-	get_tree().node_added.connect(_on_node_added)
-	_sync_director()
+
+func _exit_tree() -> void:
+	_drone.stop()
+	_playback = null
+	_drone.stream = null
 
 func _on_node_added(node: Node) -> void:
 	if node.has_signal(&"survival_changed") and node.has_signal(&"boss_telegraph"):

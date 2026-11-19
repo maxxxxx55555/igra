@@ -256,8 +256,6 @@ func _run() -> void:
 		var s := String(a)
 		if s.begins_with("--thash="):
 			_hash = s.substr(8)
-	if has_node("/root/AdService"):
-		get_node("/root/AdService").enabled = false
 	var menu_up := func() -> bool: return get_tree().current_scene != null and get_tree().current_scene.scene_file_path == Routes.MENU
 	if not await _wait_until(menu_up, 15.0):
 		Routes.goto(Routes.MENU)

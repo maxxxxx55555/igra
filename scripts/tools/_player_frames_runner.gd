@@ -18,9 +18,6 @@ func _run() -> void:
 		get_tree().quit(3)
 		return
 	_hash = OS.get_environment("TLS_FRAMES_HASH") if OS.has_environment("TLS_FRAMES_HASH") else "unknown"
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	var menu_up := func() -> bool:
 		var cs := get_tree().current_scene
 		return cs != null and cs.scene_file_path == Routes.MENU

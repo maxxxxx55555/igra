@@ -48,7 +48,7 @@ const I18N_SAMPLE: Array[String] = [
 ]
 const AUTOLOADS: Array[String] = [
 	"Routes", "GameManager", "SaveSystem", "EventBus", "InputService",
-	"AdService", "WowDirector", "EndingsManager", "DistrictManager",
+	"WiFiBonusService", "WowDirector", "EndingsManager", "DistrictManager",
 	"LocalizationManager", "ProgressTracker", "SkillTreeManager",
 ]
 ## Toggle-type screens/modes: pressed twice (open, close) so the pair leaves
@@ -773,8 +773,8 @@ func _p2q_autoload_behaviour() -> void:
 		_fail("P2q PlayIntegrityService reports available under headless desktop")
 	if float(NoisePropagation.get_noise_at(Vector2(1e6, 1e6))) != 0.0:
 		_fail("P2q NoisePropagation.get_noise_at() far from every source is not 0")
-	if AdService.COOLDOWN_SEC != 3600.0 or AdService.INTERSTITIAL_COOLDOWN_SEC != 3600.0:
-		_fail("P2q ad cooldowns differ from GDD.md:616 (1 ad per hour)")
+	if WiFiBonusService.COOLDOWN_SEC != 3600:
+		_fail("P2q shared bonus cooldown is not one hour")
 	if BaseMonster.SEARCH_TIME != 10.0 or BaseMonster.SEARCH_RADIUS != 5.0:
 		_fail("P2q S04 search window differs from GDD.md:214-215 (10 s / 5 m)")
 	# TZ G24: from D10 the way back is closed only once D1-D9 are all FULL.

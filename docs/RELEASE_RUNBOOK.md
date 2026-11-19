@@ -6,7 +6,7 @@ repeating them:
 - `store/listing.md`: EN/RU listing masters
 - `docs/STORE_KIT.md`: the other 11 locales
 - `store/privacy-policy-template.md`: EN + RU policy
-- `docs/store/HUMAN_CHECKLIST.md`: AppLovin
+- `docs/store/HUMAN_CHECKLIST.md`: on-device verification
 
 Anything Google may have changed since 2026-09-26 is marked **(check in Play Console)**.
 
@@ -16,7 +16,7 @@ Anything Google may have changed since 2026-09-26 is marked **(check in Play Con
 |---|---|---|---|
 | B1 | ETC2/ASTC texture import | **Done rc14:** `import_etc2_astc=true` in `project.godot`; the textures import BPTC and ASTC | — |
 | B2 | Export format | **Done rc14:** `gradle_build/export_format=1` (AAB), `export_path="build/tls.aab"` | — |
-| B3 | **Ads decision** | Settled for launch as option A unless you choose B: since rc14 a release build without an AppLovin key gets no ad provider, so every reward offer hides itself (`2062558`, SECURITY_SWEEP_V2 #2), and the preset ships with the AppLovin plugin off | **A, no ads at launch (current):** nothing to do; use the A texts in §6–§8. **B, ads at launch:** follow `docs/store/HUMAN_CHECKLIST.md` "AppLovin MAX ads" (SDK key, plugin enabled, consent flow for EEA/UK users), then use the B texts in §6–§8 |
+| B3 | Optional bonus | The game contains no ads. The Android bonus uses the local Wi-Fi transport. | Check the final manifest and exercise the bonus on a phone (§4). |
 | B4 | Templates and build tools | **Done rc14 on this machine:** 4.7.stable export templates, the Android build template in `android/build/` (gitignored), Gradle 8.11.1, SDK Platform 36 and Build-Tools 36.1.0 (`docs/RELEASE_ARTIFACTS.md`) | On another machine: Editor → Manage Export Templates → 4.7.stable; Project → Install Android Build Template; point Editor Settings → Export → Android at JDK 17 and the SDK |
 | B5 | Target SDK | Play enforces a minimum target API **(check in Play Console)**. The preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export, so Godot's default applies: the v8.0.0 bundle's manifest reads min 24 and target 36 (current Godot master: `editor/export/android_sdk_manager.h`) | Leave empty unless the Console asks for more. `docs/store/play_store.md` "min_sdk=29 / target_sdk=34 / com.tls.game" is stale: the preset's package is `com.maxsimkasky.laststreetlight` |
 | B6 | Size | Play caps the base module's compressed download at 200 MB **(check in Play Console)** | rc14 AAB: 183.1 MB file, base module about 27 MB, game data in an install-time asset pack (155.1 MB compressed). Read the final numbers in the App bundle explorer |
@@ -54,13 +54,12 @@ human-readable ("1.0", then "1.0.1", …).
 2. **Dashboard → Set up your app:**
    - **Privacy policy:** the URL from §6.
    - **App access:** "All functionality is available without special access".
-   - **Ads:** A = "No", B = "Yes, my app contains ads".
+   - **Contains ads:** No.
    - **Content rating:** §7.
    - **Target audience:** 16–17 and 18+. Not designed for children; skip the Families program.
    - **News app:** No. **Data safety:** §8.
    - **Government app:** No. **Financial features:** none. **Health:** none.
-   - **Advertising ID:** A = "No" (Godot's default manifest has no AD_ID permission). B = "Yes,
-     Advertising or marketing" (the AppLovin plugin adds AD_ID).
+   - **Advertising ID:** No.
 3. **Main store listing:**
    - Title, short description (≤ 80) and full description (≤ 4000) from §9.
    - App icon: `store/icon-512.png` (512²).
@@ -94,7 +93,7 @@ sentence is an answer, "fine" is not. A step that fails goes to `docs/KNOWN_ISSU
 1. First boot: no crash, the loading screen reads "Last Streetlight", and the language picker works.
 2. New Game → tutorial → first generator runs; the district lights up.
 3. Save, force-close, relaunch, **Continue**: same district, same inventory.
-4. Ads. A: no ad offers anywhere (death screen, HUD battery); this is the case of the bundle of the pass. B: the rewarded ad plays and then grants its reward.
+4. Open a bonus on cellular. Join Wi-Fi without internet, observe the button update, then disconnect and verify the reason beside the disabled button. Repeat on the paused death screen.
 5. Switch language through all 13 locales; titles and HUD fit, and the Sprint and Stealth buttons hold their longest label (pt_BR "FURTIVIDADE": U13).
 6. Suspend and resume mid-district; the daily challenge card still shows.
 
@@ -119,26 +118,7 @@ reviews using `store/review-responses.md`.
 
 ## 6. Privacy policy (host at a stable URL, then paste the URL in §3.2)
 
-**Text:** `docs/PRIVACY_POLICY_FINAL.md` (EN + RU; the same text as `store/privacy-policy-template.md`).
-**Done (2026-11-09):** its 4 contact slots are filled (`maxzimkasky@gmail.com`) and the date is
-2026-10-28; the page is live at `https://maxxxxx55555.github.io/igra/`.
-
-**Variant A:** if SECURITY_SWEEP_V2 #2 is applied, replace the second sentence of §5 with:
-
-> With no key set, the game shows no advertising and loads nothing from the network.
-
-The same change applies to RU §5.
-
-**Variant B, ads at launch:** replace EN §5 with the text below, and mirror it in RU §5:
-
-> **5. Advertising.** The App shows optional rewarded and interstitial ads through AppLovin MAX.
-> To serve and measure ads, AppLovin and its ad partners may collect your device's advertising ID,
-> IP address (used for approximate location), device and operating-system information, and
-> interactions with ads. See AppLovin's privacy policy: https://www.applovin.com/privacy/. You can
-> reset or delete your advertising ID in your device settings. Where the law requires consent
-> (for example in the EEA and UK), the App asks for it before any personalized ad is shown.
-
-Also remove "no advertising SDK enabled in the default build" from §2, and update "Last updated".
+Publish the [English and Russian release policy](../store/privacy-policy-template.md) at https://maxxxxx55555.github.io/igra/ before submission.
 
 ## 7. Content rating (IARC questionnaire, category *Game*)
 
@@ -160,22 +140,7 @@ rating, trust IARC.
 
 ## 8. Data safety form
 
-**Variant A (no ads):**
-- Collects or shares user data: **No**. The app's own traffic is none; the save stays on the device.
-- Deletion: uninstalling removes all data.
-
-**Variant B (AppLovin MAX):** enter exactly what AppLovin's current Google Play Data safety guidance
-lists **(check AppLovin's developer docs at upload)**. Typically:
-
-| Data type | Collected | Shared | Purposes |
-|---|---|---|---|
-| Device or other IDs | yes | yes | advertising, analytics, fraud prevention |
-| Approximate location (from IP) | yes | yes | advertising, analytics |
-| App interactions | yes | yes | advertising, analytics |
-| Diagnostics | yes | no | analytics |
-
-Also: encrypted in transit **yes**; collection is required for ad delivery; users can reset the
-advertising ID.
+Data collected or shared: **No**. Contains ads: **No**. The local connection check sends zero requests. Local deletion instructions for each platform are in the published policy.
 
 ## 9. Store listing per locale (polish applied)
 

@@ -7,7 +7,7 @@ One line per fact, exit 1 when one is wrong:
   jar      `jarsigner -verify` prints "jar verified."
   signer   the signing certificate's SHA-256 (`keytool -printcert -jarfile`, no password needed) is the one docs/RELEASE_ARTIFACTS.md records
   label    the app label "Last Streetlight" occurs in base/resources.pb, the resource table that holds the app_name string (the manifest only points at it)
-  adsdk    no dex entry names Lcom/applovin/ (the ad SDK is not in a build without a key)
+  adsdk    no dex entry names Lcom/applovin/ (the release contains no ad SDK)
   integrity  every file of data/integrity_manifest.json is in the asset pack and hashes as the guard's scan hashes it (the text with CRLF turned into LF, SHA-256): what the scan reads on a phone
   refs     every file that the shipped scripts, scenes and resources name (a literal path, or a format-string pattern, or an autoload) and the export filter does not leave out is in the asset pack as the
            export makes it: tools/qa_sim/export_refs_check.py --bundle, the same reading as its static run against the filter

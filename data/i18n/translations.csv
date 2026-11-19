@@ -40,3 +40,24 @@ SFX,SFX,Звуки
 BRIGHTNESS,Brightness,Яркость
 FULLSCREEN,Fullscreen,На весь экран
 SENSITIVITY,Sensitivity,Чувствительность
+BONUS_TITLE_WIFI,Wi-Fi bonus,Бонус за Wi-Fi
+BONUS_TITLE_NETWORK,Network bonus,Бонус за подключение
+BONUS_CLAIM,Claim free bonus,Получить бесплатный бонус
+BONUS_READY,Your bonus is ready.,Бонус доступен.
+BONUS_REVIVE,Revive for free,Бесплатно возродиться
+BONUS_BATTERY,Recharge battery,Пополнить заряд
+BONUS_COINS,Claim 100 coins,Получить 100 монет
+BONUS_DOUBLE_XP,Double this XP reward,Удвоить опыт за эту награду
+BONUS_HINT,Reveal a hint,Открыть подсказку
+BONUS_DISMISS,Maybe later,Позже
+BONUS_NEEDS_WIFI,Connect to Wi-Fi to claim.,"Подключитесь к Wi-Fi, чтобы получить бонус."
+BONUS_NEEDS_NETWORK,Connect to a network to claim.,"Подключитесь к сети, чтобы получить бонус."
+BONUS_CHECKING,Checking connection…,Проверяем подключение…
+BONUS_UNKNOWN,Couldn’t check the connection. Try again.,Не удалось проверить подключение. Попробуйте ещё раз.
+BONUS_COOLDOWN,Next bonus in %s.,Следующий бонус через %s.
+BONUS_RUN_LIMIT,Already used this run.,Уже использовано в этом забеге.
+BONUS_DAY_LIMIT,Daily bonus limit reached.,Дневной лимит бонусов исчерпан.
+BONUS_DIFFICULTY,Revive is unavailable on this difficulty.,На этой сложности возрождение недоступно.
+BONUS_INAPPLICABLE,This bonus can’t be used right now.,Сейчас этот бонус использовать нельзя.
+BONUS_GRANTED,Bonus received.,Бонус получен.
+BONUS_SAVE_FAILED,Couldn’t save your bonus. Try again.,Не удалось сохранить бонус. Попробуйте ещё раз.

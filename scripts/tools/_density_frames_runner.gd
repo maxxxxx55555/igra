@@ -190,9 +190,6 @@ func _run() -> void:
 			_png = true
 	if _ids.is_empty():
 		_ids.assign(ORDER)
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	var menu_up := func() -> bool:
 		var cs := get_tree().current_scene
 		return cs != null and cs.scene_file_path == Routes.MENU

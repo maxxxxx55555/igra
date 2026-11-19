@@ -37,6 +37,7 @@ func _build() -> void:
 		if visible:
 			_capture_summary()
 			_apply_localization())
+	vb.add_child(preload("res://scripts/ui/bonus_offer.gd").new(&"revive", "BONUS_REVIVE"))
 	_b = Button.new()
 	_b.focus_mode = Control.FOCUS_ALL
 	# respawn_after_death() (G16) не трогает дерево сцен, поэтому одного его

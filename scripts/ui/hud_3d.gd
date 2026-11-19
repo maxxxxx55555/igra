@@ -34,7 +34,8 @@ var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
 var _safe_area_inset: Vector4 = Vector4.ZERO
-var _battery_ad_button: Button = null
+const _BONUS_OFFER := preload("res://scripts/ui/bonus_offer.gd")
+var _battery_offer: _BONUS_OFFER
 var _vignette_default_color: Color
 ## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
 var _vignette_tween: Tween
@@ -129,7 +130,7 @@ func _ready() -> void:
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
-	_add_battery_ad_button()
+	_add_battery_offer()
 	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
@@ -1564,13 +1565,9 @@ func _on_bat(ratio: float) -> void:
 	_tween_fill(bat_fill, _pip_fill(ratio))
 	bat_val.text = str(int(ratio * 100))
 	bat_val.visible = ratio <= _BAT_LOW
-	if _battery_ad_button != null and is_instance_valid(_battery_ad_button) and not _battery_ad_button.disabled:
-		_battery_ad_button.visible = ratio < 0.3
+	if _battery_offer != null:
+		_battery_offer.visible = ratio < _BAT_LOW
 
-## FINAL PERFECTION P5: extra_battery reward was wired end-to-end in
-## GameManager._on_ad_reward() (adds 50 charge) but had no UI trigger -
-## AdService.show_rewarded(&"extra_battery") was never called from
-## anywhere. Same pattern as death_screen.gd's _add_revive_button().
 ## FINAL HARDENING PASS (BLOCKER 3): one-time touch calibration on first
 ## touch-device launch - drag the joystick, tap interact, feel the haptic
 ## pulse. has_touch_ui() already gates every other touch-only setup here.
@@ -1582,27 +1579,13 @@ func _maybe_show_touch_calibration() -> void:
 	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
 	get_tree().root.add_child(overlay)
 
-func _add_battery_ad_button() -> void:
-	if not AdService.can_show_reward(&"extra_battery"):
-		return
-	var bat_row: Control = get_node_or_null("TopLeft/Bat")
-	if bat_row == null:
-		return
-	var btn := Button.new()
-	btn.name = "BatteryAdButton"
-	btn.text = LocalizationManager.t("AD_EXTRA_BATTERY")
-	btn.visible = false
-	# Long locales (ru/fr ~2x the EN length) overflow a fixed 150px button —
-	# wrap to a second line instead of spilling past the edge.
-	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	btn.custom_minimum_size = Vector2(150.0, UiScale.min_touch())
-	btn.position = Vector2(BAR_W + 52.0, -12.0)  # beside the segments: below them it sat on the health row
-	btn.pressed.connect(func() -> void:
-		btn.disabled = true
-		btn.visible = false
-		AdService.show_rewarded(&"extra_battery"))
-	bat_row.add_child(btn)
-	_battery_ad_button = btn
+func _add_battery_offer() -> void:
+	_battery_offer = _BONUS_OFFER.new(&"extra_battery", "BONUS_BATTERY")
+	_battery_offer.name = "BatteryBonus"
+	_battery_offer.preferred_width_px = 200.0
+	_battery_offer.position = Vector2(BAR_W + 52.0, -12.0)
+	_battery_offer.visible = _bat < _BAT_LOW
+	$TopLeft/Bat.add_child(_battery_offer)
 
 ## S04 (GDD §7): inside a hiding spot visibility is 0, and the view dims to say so.
 var _hide_overlay: ColorRect = null

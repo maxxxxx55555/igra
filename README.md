@@ -40,7 +40,7 @@ scripts/         — GDScript (.gd)
   world/         — районы, фонари, атмосфера, генератор
   enemies/       — 12 типов монстров + босс (base_monster.gd — общий FSM)
   weapons/       — pistol/rifle/shotgun (weapon_base.gd — общий класс)
-  monetization/  — AdService (AppLovin MAX, за фича-флагом)
+  monetization/  — WiFiBonusService (необязательные бонусы за локальное подключение)
   tools/         — гейты качества и разовые пробники (_asset_check.gd и т.п.)
 assets/          — текстуры, звук, шрифты, UI-графика
 data/            — i18n (6 языков), предметы, балансировочные .tres
@@ -50,7 +50,7 @@ tools/           — гейты (check.sh, flow_check.py, scene_node_check.py), 
 
 Автозагрузки (`/root/<Name>`) настроены в `project.godot`'s `[autoload]`
 секции — свежий подсчёт: **53 автозагрузки** (`GameManager`, `EventBus`,
-`SaveSystem`, `MusicManager`, `WeatherSystem`, `AdService` и т.д.).
+`SaveSystem`, `MusicManager`, `WeatherSystem`, `WiFiBonusService` и т.д.).
 
 ## Сборка APK (Android)
 

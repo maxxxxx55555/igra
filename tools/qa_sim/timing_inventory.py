@@ -22,7 +22,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 WHITELIST = ROOT / "tools" / "qa_sim" / "timing_whitelist.json"
-SKIP_DIRS = ("scripts/tools/", "addons/applovin_max/")
+SKIP_DIRS = ("scripts/tools/",)
 EVERY_FRAME = ("_process", "_physics_process")
 LERPS = re.compile(r"(?<![\w.])(lerp|lerpf|lerp_angle|move_toward|move_toward_angle|slerp)\(|\.(lerp|slerp|move_toward|interpolate_with)\(")
 STEP = re.compile(r"^\s*[\w.\[\]\"']+\s*([+\-])=\s*(-?[0-9][0-9._]*|[A-Z][A-Z0-9_]{2,})\s*(#.*)?$")

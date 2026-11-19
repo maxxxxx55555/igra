@@ -103,9 +103,6 @@ func _run() -> void:
 	print("[audio-truth] driver=%s output_device=%s devices=%s" % [
 		AudioServer.get_driver_name(), AudioServer.get_output_device(),
 		AudioServer.get_output_device_list()])
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	# Same boot timing shot_tool.gd's _apply_scenario already proved out:
 	# splash+boot_loading take ~6.5s before Routes.start_game() is safe to
 	# call without racing an in-flight transition.

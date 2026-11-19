@@ -80,21 +80,15 @@ Ultra, target 30-60 FPS, degrading shadows/particles/LOD below 30):
 - The local-network multiplayer code (`scripts/net/lan_network.gd`) is in the
   build and no screen reaches it (`docs/STORE_SUBMISSION.md` §9); nothing
   is sent anywhere.
-- AppLovin MAX ad SDK is integrated behind `AdService` (see
-  `docs/store/HUMAN_CHECKLIST.md`) — once a real SDK key is in place,
-  this section needs the AppLovin data-collection disclosure added
-  before submission. Currently ships with no key set, falling back to a
-  debug stub that collects nothing.
-- Privacy policy URL: **TODO — publish a policy page and paste the URL
-  here before submitting.**
+- Contains ads: No. The optional Wi-Fi bonus checks the local connection without transmitting data.
+- Publish the EN/RU policy in `store/privacy-policy-template.md` at https://maxxxxx55555.github.io/igra/ before submission.
 
 ## Rating note
 Expected: **PEGI 16** — sustained horror tension, stylized violence
 against former-human enemies including visible blood/bleed status
 effects (GDD §6.5: `BLEED` status, melee combat), and a narrative thread
 about a deliberately-caused mass-casualty disaster (Truth/Истина
-ending). No sexual content, no gambling, no real-money purchases beyond
-optional ad-based rewards (see Data Safety above).
+ending). No sexual content, no gambling, no real-money purchases.
 
 ## Build steps
 Full walkthrough: `docs/ANDROID_BUILD.md`. Summary for this listing:
@@ -106,7 +100,7 @@ Full walkthrough: `docs/ANDROID_BUILD.md`. Summary for this listing:
    Play Store requires **AAB**, not APK (`docs/release_checklist.md`
    "Build Format").
 3. Confirm `export_presets.cfg`: `package/unique_name="com.maxsimkasky.laststreetlight"`,
-   the launcher icons and `permissions/internet=true` are present. The SDK
+   the launcher icons and `permissions/access_network_state=true` are present and `permissions/internet=false`. The SDK
    levels are Godot's defaults (min 24, target 36): the preset's `min_sdk` and
    `target_sdk` lines are not read (`docs/STORE_SUBMISSION.md` §1).
 4. Run `bash tools/check.sh` clean before every submission build.
