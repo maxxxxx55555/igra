@@ -99,8 +99,9 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		# the owner's plan, module 1.1: the asphalt wears the wet-asphalt shader with its puddles; the tint over the texture's
 		# mean luminance keeps the old brightness of the dry asphalt (the uniform is an sRGB colour)
 		mat.shader = _PUDDLES
-		var surface_tint := Color(tint.x / mean_lum, tint.y / mean_lum, tint.z / mean_lum).linear_to_srgb()
-		mat.set_shader_parameter("asphalt_tint", surface_tint)
+		# The supplied shader has no albedo texture: its asphalt_tint is the
+		# surface itself, not a multiplier over the old texture's mean luminance.
+		mat.set_shader_parameter("asphalt_tint", Color(tint.x, tint.y, tint.z))
 		mat.set_shader_parameter("wet_darkening", 0.45)
 		return mat
 	mat.shader = _ROAD
