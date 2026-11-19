@@ -240,7 +240,7 @@
   "res://scripts/ui/save_slots_ui.gd": "aa3c0f61071f2066464c806a3ea5a93ae67fdfb12d07fc66fc90f4531b8ca468",
   "res://scripts/ui/screen_chrome.gd": "84650767ca7a953d9a4aeddf6a7f714a2eeaf4e5f6af08e4d18f18c40ecd71fd",
   "res://scripts/ui/screen_flow_manager.gd": "cd10477ff71150f60b173bb2679833b50ce7ec5d34a03e0ebbf916dece18d395",
-  "res://scripts/ui/screens.gd": "f641b74a8dc686437f2c760a9b9654c9fe9550ab941d344adf8ba217ca4b01bd",
+  "res://scripts/ui/screens.gd": "abba9ed6ea6cf09cdc2a5805ec3d5a022f1570d164dadb89bf09216b0de64e2c",
   "res://scripts/ui/settings_screen.gd": "2988addcedc225f5f95b953e8300f961a6621b37bf6771f874a81f1de57274b3",
   "res://scripts/ui/shop_layout.gd": "98b82d0d04d8a4087ceb7f26734395e1b639bdcf113cf5f51bad8726003e7a2b",
   "res://scripts/ui/skill_button.gd": "afc92e6bfaa8b81070879461d1dcc1f1615331330edd8e02f54fc1748582993d",

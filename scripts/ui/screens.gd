@@ -252,6 +252,10 @@ func show_screen(name: String) -> void:
 	_populate_screen(name)
 	if name == "Shop":
 		UnslopThemeStyler.style_tree_recursive(d.card)
+		# The release skin supplies the border/hover states; the typeface stays
+		# the bundled heading face so every locale keeps its glyphs.
+		for node: Node in d.card.find_children("*", "Button", true, false):
+			(node as Button).add_theme_font_override(&"font", ThemeProvider.heading_font())
 	EventBus.ui_screen_opened.emit(name)
 
 func _on_viewport_resized() -> void:
