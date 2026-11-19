@@ -96,12 +96,11 @@ func _make_damage_mesh() -> BoxMesh:
 func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	if surface > 1.5:
-		# the owner's plan, module 1.1: the asphalt wears the wet-asphalt shader with its puddles; the tint over the texture's
-		# mean luminance keeps the old brightness of the dry asphalt (the uniform is an sRGB colour)
+		# the owner's plan, module 1.1: the asphalt wears the supplied puddle shader.
 		mat.shader = _PUDDLES
-		# The supplied shader has no albedo texture: its asphalt_tint is the
-		# surface itself, not a multiplier over the old texture's mean luminance.
-		mat.set_shader_parameter("asphalt_tint", Color(tint.x, tint.y, tint.z))
+		# That shader has no albedo texture: asphalt_tint carries the mean sRGB
+		# value of the old asphalt texture, so the street keeps its darkness.
+		mat.set_shader_parameter("asphalt_tint", Color(0.19, 0.20, 0.22))
 		mat.set_shader_parameter("wet_darkening", 0.45)
 		return mat
 	mat.shader = _ROAD

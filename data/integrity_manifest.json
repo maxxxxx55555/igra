@@ -307,7 +307,7 @@
   "res://scripts/world/skyline.gd": "6d0333461762209d51dd0a7fa2755d8e9d190da4bb91a1fbd74c3835bebc3f94",
   "res://scripts/world/soviet_signs.gd": "2c5be8b62df5b7381dd30a435daa13d97fd86d2db7e8eba534fd295f6a915a19",
   "res://scripts/world/story_props.gd": "b58f5d07368a61840649de25351eeac9a777184bd1eaa81abadd7c460288d140",
-  "res://scripts/world/street_builder.gd": "48a8609ea3045fe860194acfa4c9b0ad7a3deeb7981d95ced29d38057c92d206",
+  "res://scripts/world/street_builder.gd": "8010281dedc180ad61f62a5297e0ffcbe0d726ae856ec7f3f5c51ac1b58d44f6",
   "res://scripts/world/street_props.gd": "377186e52d49082d2da2ef0cc25ad356032d5f6328ed8da6713f1e83b41d1256",
   "res://scripts/world/street_wetness.gd": "3a6179a1710a3ac686f7eede505ff12010c138595ff6b0a7beadd954e73990ac",
   "res://scripts/world/streetlight.gd": "853c6499aa963330eacf042b3f99300dd87ba3fc86c0078313d72548a78027fa",
