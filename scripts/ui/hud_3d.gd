@@ -72,7 +72,6 @@ var vignette: ColorRect:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_apply_canonical_theme()
-	UnslopThemeStyler.style_tree_recursive(self)
 	_add_status_backing()
 	_apply_safe_area()
 	_remove_dup_leftbottom()

@@ -21,6 +21,7 @@ var _tween: Tween
 
 func _ready() -> void:
 	_load_icons()
+	UnslopThemeStyler.style_tree_recursive(self)
 	EventBus.player_health_changed.connect(_on_health)
 	EventBus.ammo_changed.connect(_on_ammo)
 	EventBus.player_battery_changed.connect(_on_battery)
