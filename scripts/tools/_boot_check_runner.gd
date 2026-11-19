@@ -77,13 +77,6 @@ func _run() -> void:
 		return
 	_log("phase2 New Game started, player spawned")
 
-	# P0.2: интерстишиал не должен всплывать раньше первого реального ввода.
-	await get_tree().create_timer(1.0).timeout
-	if get_tree().root.get_node_or_null("AdPopupInterstitial") != null:
-		_fail("interstitial всплыл до первого ввода игрока")
-	else:
-		_log("phase2b no ad before input — OK")
-
 	_log("phase3 sustaining %ds gameplay" % int(SUSTAIN_SEC))
 	var elapsed := 0.0
 	while elapsed < SUSTAIN_SEC:
@@ -142,7 +135,7 @@ func _run() -> void:
 	_finish()
 
 func _autoloads_ok() -> bool:
-	for n in ["Routes", "GameManager", "SaveSystem", "EventBus", "InputService", "AdService"]:
+	for n in ["Routes", "GameManager", "SaveSystem", "EventBus", "InputService", "WiFiBonusService"]:
 		if get_node_or_null("/root/" + n) == null:
 			_fail("нет автозагрузки " + n)
 	return _fails.is_empty()

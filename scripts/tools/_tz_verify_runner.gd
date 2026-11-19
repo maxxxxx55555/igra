@@ -65,9 +65,6 @@ func _run() -> void:
 		get_tree().quit(3)
 		return
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT))
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	await get_tree().create_timer(1.0).timeout
 	# Load on the High tier whatever the profile says: its fog preset (0.014) differs
 	# from the fixed 0.015 FogSetup used to force, so the C06 at-load check below can

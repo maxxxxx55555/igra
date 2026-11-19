@@ -57,9 +57,6 @@ func _run() -> void:
 	var tag := OS.get_environment("BEAUTY_TAG")
 	out_dir = "res://docs/stills/beauty/%s/" % (tag if not tag.is_empty() else "after")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	var menu_up := func() -> bool:
 		var cs := get_tree().current_scene
 		return cs != null and cs.scene_file_path == Routes.MENU

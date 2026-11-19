@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 
 ## One reading of the frame rate (the last second), taken `delta` seconds after the one before.
 func step(fps: float, delta: float) -> void:
-	if not enabled or not GameManager.is_playing():
+	if not enabled or GameManager == null or not GameManager.is_playing():
 		_low_timer = 0.0
 		_stable_timer = 0.0
 		return

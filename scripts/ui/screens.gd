@@ -44,6 +44,7 @@ func _ready() -> void:
 	_build_menu_bg()
 	_build_all_screens()
 	get_viewport().size_changed.connect(_on_viewport_resized)
+	CoinWallet.coins_changed.connect(_on_wallet_changed)
 	# Static audit 2026-09-08: every screen's shared "Close" button was
 	# built once in _build_screen() and never retranslated (screens
 	# themselves are cached, never rebuilt, so a language change while a
@@ -978,6 +979,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var header := Label.new()
 	header.text = LocalizationManager.t("SCR_MONETY_0")
 	header.name = "ShopCoinHeader"
+	_shop_coin_header = header
 	# Parent first: a Control placed before it has a parent is mirrored against a zero-width parent under a right-to-left
 	# language and lands one panel width off (Arabic, CORRECTION_LOG 147).
 	content.add_child(header)
@@ -997,8 +999,16 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "ShopScroll"
 	content.add_child(scroll)
-	scroll.size = Vector2(content.size.x, content.size.y - SHOP_TOP - SHOP_CLOSE_ZONE)
-	scroll.position = Vector2(0, SHOP_TOP)
+	var offer := preload("res://scripts/ui/bonus_offer.gd").new(&"bonus_coins", "BONUS_COINS")
+	offer.position = Vector2(0.0, SHOP_TOP)
+	offer.size.x = content.size.x
+	content.add_child(offer)
+	var fit_rows := func() -> void:
+		var top := offer.position.y + offer.size.y + 8.0
+		scroll.position = Vector2(0, top)
+		scroll.size = Vector2(content.size.x, maxf(0, content.size.y - top - SHOP_CLOSE_ZONE))
+	offer.resized.connect(fit_rows)
+	fit_rows.call()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
@@ -1055,6 +1065,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	_tint_prices()
 
 var _shop_prices: Array[Dictionary] = []
+var _shop_coin_header: Label
 
 ## A price the wallet cannot pay reads in ember with what is missing; the others stay brass.
 func _tint_prices() -> void:
@@ -1069,6 +1080,11 @@ func _tint_prices() -> void:
 			pl.text += "  " + LocalizationManager.tf("SHOP_NEED_MORE", [short])
 		pl.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER_TEXT if short > 0 else ThemeProvider.COLOR_AMBER)
 
+func _on_wallet_changed(amount: int) -> void:
+	if _active_screen == "Shop" and is_instance_valid(_shop_coin_header):
+		_shop_coin_header.text = LocalizationManager.t("SCR_MONETY_2") + str(amount)
+		_tint_prices()
+
 func _mark_owned(btn: Button) -> void:
 	btn.disabled = true
 	btn.text = LocalizationManager.t("SHOP_ALREADY_OWNED")
@@ -1076,10 +1092,6 @@ func _mark_owned(btn: Button) -> void:
 ## The purchase is ShopService's: it spends, grants the upgrade or the skin, saves, and the card only reports it.
 func _on_buy(item_id: StringName, btn: Button) -> void:
 	ShopService.buy(item_id)
-	var coins := find_child("ShopCoinHeader", true, false) as Label
-	if coins != null:
-		coins.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
-	_tint_prices()
 	if ShopService.is_owned(item_id):
 		_mark_owned(btn)
 		_show_toast(LocalizationManager.t("SCR_KUPLENO"))
@@ -1112,15 +1124,10 @@ func _on_close() -> void:
 	hide_all()
 
 func _on_loading_done() -> void:
-	if not is_any_open():
+	if _active_screen != "Loading":
 		return
 	hide_all()
-	var gm = get_tree().root.get_node_or_null("GameManager")
-	if gm and gm.has_method("start_new_game"):
-		gm.start_new_game()
-	else:
-		EventBus.game_started.emit()
+	GameManager.resume_game()
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.process_mode = Node.PROCESS_MODE_INHERIT
-	var p_mode = player.process_mode if player else -1

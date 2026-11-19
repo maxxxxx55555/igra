@@ -244,9 +244,6 @@ func _run() -> void:
 			_hash = s.substr(8)
 		elif s.begins_with("--tonly="):
 			_only = s.substr(8)
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	var menu_up := func() -> bool:
 		var cs := get_tree().current_scene

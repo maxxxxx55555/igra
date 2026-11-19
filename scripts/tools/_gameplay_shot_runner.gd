@@ -21,9 +21,6 @@ func _out_path() -> String:
 	return OUT_DEFAULT
 
 func _run() -> void:
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	# Same race-avoidance as _boot_check_runner.gd: wait a beat so
 	# _bootstrap.gd's own current_scene check resolves first, then nudge
 	# only if still stuck (calling goto() immediately races it).

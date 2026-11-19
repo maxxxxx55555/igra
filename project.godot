@@ -79,7 +79,7 @@ CaptionsManager="*res://scripts/systems/captions_manager.gd"
 TutorialSystem="*res://scripts/ui/tutorial_system.gd"
 RewardsManager="*res://scripts/economy/rewards_manager.gd"
 RandomEvents="*res://scripts/systems/random_events.gd"
-AdService="*res://scripts/monetization/ad_service.gd"
+WiFiBonusService="*res://scripts/monetization/wifi_bonus_service.gd"
 PlayIntegrityService="*res://scripts/systems/play_integrity_service.gd"
 IntegrityGuard="*res://scripts/systems/integrity_guard.gd"
 Cartography="*res://scripts/systems/cartography.gd"
@@ -273,12 +273,6 @@ workbench={
 [internationalization]
 
 locale/translations=PackedStringArray("res://data/i18n/translations.en.translation", "res://data/i18n/translations.ru.translation")
-
-[monetization]
-
-applovin_sdk_key=""
-applovin_rewarded_unit_id=""
-applovin_interstitial_unit_id=""
 
 [rendering]
 

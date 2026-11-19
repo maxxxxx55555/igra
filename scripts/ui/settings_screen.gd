@@ -357,7 +357,7 @@ func _toggle(parent: Node, label: String, key: String) -> void:
 	cb.disabled = key == "hardcore" and not GameManager.is_menu()
 	row.add_child(cb)
 
-## Процедурное окно подтверждения (как ad_popup.gd/confirm_quit.gd) —
+## Процедурное окно подтверждения (как confirm_quit.gd) —
 ## отдельной .tscn под это заводить не стоит, этот экран целиком в коде.
 func _confirm_reset_progress() -> void:
 	var layer := CanvasLayer.new()

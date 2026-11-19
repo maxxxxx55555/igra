@@ -10,16 +10,6 @@ const LINE := "The last lamp on this street is out."
 const SUBTITLE_DEFAULTS: Dictionary = {"subtitles": false, "subtitle_size": 1, "subtitle_color": 0, "subtitle_bg": 1}
 const FAR := Vector3(900.0, 0.0, 900.0)
 
-class FakeAds extends RefCounted:
-	func initialize() -> void:
-		pass
-
-	func is_ready() -> bool:
-		return true
-
-	func show(_reward: StringName) -> void:
-		pass
-
 static func run(r: Node) -> void:
 	r._playing()
 	UIManager.close_all_blocking()
@@ -143,16 +133,13 @@ static func _difficulty(r: Node) -> void:
 		spare.append(DistrictLoot._spawn_spare_parts(root, &"hospital"))
 	root.queue_free()
 	var parts_ok: bool = spare == [3, 0, 0]
-	var ads0: Variant = AdService.get("_provider")
-	AdService.set_provider(FakeAds.new())
 	var offers: Array[bool] = []
 	for level: int in 3:
 		SettingsManager.set_difficulty(level)
-		offers.append(AdService.can_show_reward(&"revive"))
-	AdService.set_provider(ads0 as Object)
+		offers.append(SettingsManager.difficulty_scale("revive") > 0.0)
 	SettingsManager.set_difficulty(1)
 	var revive_ok: bool = offers == [true, true, false]
-	r._ok(damage_ok and parts_ok and revive_ok, "A11Y4 difficulty presets: damage taken per 12 hit %s (Easy 8, Normal 12, Hard 12), spare repair parts %s (3, 0, 0), a revive offer %s (yes, yes, no)" % [lost, spare, offers])
+	r._ok(damage_ok and parts_ok and revive_ok, "A11Y4 difficulty presets: damage taken per 12 hit %s (Easy 8, Normal 12, Hard 12), spare repair parts %s (3, 0, 0), revive allowed by difficulty %s (yes, yes, no)" % [lost, spare, offers])
 
 ## A11Y5: with Clear Objectives nothing contextual fades out; without it the same call fades to rest.
 static func _clear_objectives(r: Node) -> void:

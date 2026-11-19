@@ -674,18 +674,19 @@ else
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | grep -aE "FAIL|fails=[1-9]" | head -12 | sed 's/^/         /'; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
-    # ENV RULE (RUN_STATE 2026-09-24): a --headless run cannot regenerate
-    # BPTC-compressed textures, and a stale .godot/imported/ cache for the
-    # enemy portraits breaks the Encyclopedia autoload -> cascading bogus
-    # gate failures (save_slot Nil, "slot B" attack_sim FAIL). One windowed
-    # editor pass reimports with real GPU compression. NEVER `git checkout`
-    # the .import files afterwards: that re-points them at cache files that
-    # do not exist and silently unloads textures. Skip with
-    # TLS_SKIP_REIMPORT=1 (e.g. a display-less CI box with a warm cache).
-    if [[ "${TLS_SKIP_REIMPORT:-0}" != "1" ]]; then
-      if timeout 240 "$GODOT" --editor --quit --path . >/dev/null 2>&1; then ok "реимпорт ассетов (оконный, GPU-сжатие)"; else bad "реимпорт ассетов (оконный) не завершился"; fi
-      git checkout -- default_bus_layout.tres 2>/dev/null || true
+    # The import must finish before launching scenes that preload generated resources.
+    if ! bash tools/qa_sim/bootstrap_imports.sh "$GODOT"; then
+      bad "Godot asset import failed"
+      exit "$FAIL"
     fi
+    ok "Godot resources imported"
+    if timeout 90 "$GODOT" --headless --path . --verbose --quit >.qa_logs/boot_quit.log 2>&1 &&
+       ! grep -aE 'ERROR:|Leaked instance:|ObjectDB.*leaked' .qa_logs/boot_quit.log; then
+      ok "startup and shutdown without engine errors or ObjectDB leaks"
+    else
+      bad "startup/shutdown (see .qa_logs/boot_quit.log)"
+    fi
+    run_gate "network bonus policy, persistence and payout" "res://scenes/tools/wifi_bonus_check_scene.tscn"
     run_gate "компиляция всех скриптов" "res://scenes/tools/compile_gate_scene.tscn"
     run_gate "арность сигналов"          "res://scenes/tools/signal_arity_check_scene.tscn"
     run_gate "API автозагрузок"          "res://scenes/tools/autoload_api_check_scene.tscn"
