@@ -474,7 +474,7 @@ else
   bad "closure_guard (см. 'python tools/closure_guard.py'): $(printf '%s' "$cg_out" | tr '\n' ' ')"
 fi
 if "$PY" tools/gen_integrity_manifest.py --demo >/dev/null 2>&1 && "$PY" tools/gen_integrity_manifest.py --check >/dev/null 2>&1; then
-  ok "integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON; the game scans it at start)"
+  ok "integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON the game scans at start, plus raw-byte hashes of every shipped script, shader and the CSV source in runtime_files)"
 else
   bad "integrity manifest (run 'python tools/gen_integrity_manifest.py')"
 fi

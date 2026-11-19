@@ -20,6 +20,7 @@ func _ready() -> void:
 
 	close_button.pressed.connect(_close)
 	_build_trees()
+	UnslopThemeStyler.style_tree_recursive(self)
 	_refresh()
 
 ## PHASE 4 (live language switch): tab titles and skill_points_label are

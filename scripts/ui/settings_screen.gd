@@ -16,6 +16,7 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
+	UnslopThemeStyler.style_tree_recursive(self)
 
 	var bg := ColorRect.new()
 	bg.color = Color(0.0588235, 0.0745098, 0.0784314, 0.92)
