@@ -7,8 +7,8 @@ extends RefCounted
 ##   * creature     -> MonsterRig "ModeledShell" / "ModeledShellLOD" children
 ##   * hands        -> WeaponManager "FirstPersonHands" / "FirstPersonHandsLOD"
 ##
-## Materials: the facade bays use the shipped painted-brick PBR set with the
-## authored UVs; the creature shell shares the rig's hide material (hit flash,
+## Materials: the facade bays carry the sodium-window facade shader (the lit
+## windows and rain streaks are driven in world space); the creature shell shares
 ## rim, emission); the hands are untextured PBR with authored vertex colours.
 ## Collision comes from the world's existing GroundBody perimeter walls / the
 ## monster capsule, so no new physics bodies or navigation changes are
@@ -22,6 +22,7 @@ const CREATURE_LOD := preload("res://assets/mesh/mesh_creature_shell_lod.res")
 const HANDS := preload("res://assets/mesh/mesh_hand_viewmodel.res")
 const HANDS_LOD := preload("res://assets/mesh/mesh_hand_viewmodel_lod.res")
 const _PBR := preload("res://scripts/world/pbr_sets.gd")
+const _SODIUM_FACADE := preload("res://shaders/building_facade_sodium.gdshader")
 
 const FACADE_RANGE_M: float = 46.0
 const CREATURE_RANGE_M: float = 26.0
@@ -73,7 +74,12 @@ static func add_facade_bays(sky: Node3D, district_id: StringName, fronts: Array,
 			group.append(bay)
 	if near_xf.is_empty():
 		return
-	var mat := _material("painted_brick", Color(0.62, 0.60, 0.56), 0.94)
+	var mat := ShaderMaterial.new()
+	mat.shader = _SODIUM_FACADE
+	mat.set_shader_parameter("wall_tint", Color(0.252, 0.260, 0.272, 1.0))
+	mat.set_shader_parameter("amber_glow", Color("#d99b38"))
+	mat.set_shader_parameter("lit_ratio", 0.25)
+	mat.set_shader_parameter("rain_streaks", 0.55)
 	var directions: Array = near_xf.keys()
 	for i in directions.size():
 		var group: Array[Transform3D] = near_xf[directions[i]]

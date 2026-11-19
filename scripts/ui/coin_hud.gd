@@ -13,4 +13,4 @@ func _ready() -> void:
 	_upd(CoinWallet.get_coins())
 
 func _upd(v: int) -> void:
-	label.text = str(v) + " mon"
+	label.text = "%s: %d" % [tr("COINS"), v]

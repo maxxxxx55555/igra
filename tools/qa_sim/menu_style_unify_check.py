@@ -48,6 +48,10 @@ EXTRA = {
     "9e8645",  # brass-dim
     "e6cf6e",  # legacy subtitle yellow (kept for the A11Y three-colour option)
     "7fc4d9",  # legacy subtitle cyan (kept for the A11Y three-colour option)
+    # Owner-supplied UnslopThemeStyler (Pass 2) — its release palette is canon
+    # for the shop, skill tree, HUD and Settings chrome it styles.
+    "0b0d10", "14181e", "e8ecef", "d99b38", "d96b38", "464443", "8e969e",
+    "232322", "30261a", "111419", "30353a",
 }
 TOL = 0.006
 

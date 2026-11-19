@@ -182,9 +182,18 @@ var _skill_points: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	SecurityVault.load_game()
+	# skill_points has its own guarded slot; a fresh profile starts at zero
+	# exactly as before, an existing vault restores the last earned balance.
+	_skill_points = clampi(SecurityVault.get_guarded_int(&"skill_points", 0), 0, 9999)
+
+func _guard_points() -> void:
+	SecurityVault.set_guarded_int(&"skill_points", _skill_points)
+	SecurityVault.save_game()
 
 func add_skill_points(amount: int) -> void:
 	_skill_points += amount
+	_guard_points()
 	EventBus.settings_changed.emit("skill_points", _skill_points)
 
 func get_skill_points() -> int:
@@ -217,11 +226,12 @@ func can_unlock(skill_id: StringName) -> bool:
 func unlock_skill(skill_id: StringName) -> bool:
 	if not can_unlock(skill_id):
 		return false
-	
+
 	for tree in SKILL_TREES.values():
 		if tree.skills.has(skill_id):
 			var skill = tree.skills[skill_id]
 			_skill_points -= skill.cost
+			_guard_points()
 			_unlocked_skills[skill_id] = _unlocked_skills.get(skill_id, 0) + 1
 			_apply_skill_effect(skill_id, _unlocked_skills[skill_id])
 			skill_unlocked.emit(skill_id)
@@ -322,6 +332,7 @@ func get_unlocked_skills() -> Dictionary:
 func reset() -> void:
 	_unlocked_skills = {}
 	_skill_points = 0
+	_guard_points()
 
 func save_data() -> Dictionary:
 	return {
@@ -349,6 +360,7 @@ func load_data(data: Dictionary) -> void:
 		if cap > 0 and lvl > 0:
 			_unlocked_skills[skill_id] = clampi(lvl, 0, cap)
 	_skill_points = clampi(int(data.get("skill_points", 0)), 0, 9999)
+	_guard_points()
 	# Effects are NOT reapplied here - this runs before the player node
 	# exists (see reapply_all_effects()'s comment). player_3d.gd calls
 	# reapply_all_effects() itself once it's ready.

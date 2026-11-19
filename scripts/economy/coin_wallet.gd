@@ -4,12 +4,22 @@ signal purchase_failed(reason: String)
 @export var start_coins: int = 0
 var coins: int = 0
 func _ready() -> void:
-	coins = start_coins
+	SecurityVault.load_game()
+	# The vault is the guarded mirror of the wallet. A vault written by an
+	# earlier session wins; a fresh profile keeps the scene's start_coins.
+	coins = clampi(SecurityVault.get_guarded_int(&"coins", start_coins), 0, MAX_COINS) if SecurityVault.last_load_error == OK else start_coins
+	_guard()
 	coins_changed.emit(coins)
+
+func _guard() -> void:
+	SecurityVault.set_guarded_int(&"coins", coins)
+	SecurityVault.save_game()
+
 func add(amount: int) -> void:
 	if amount <= 0:
 		return
 	coins += amount
+	_guard()
 	coins_changed.emit(coins)
 func try_spend(amount: int) -> bool:
 	if amount <= 0:
@@ -19,6 +29,7 @@ func try_spend(amount: int) -> bool:
 		EventBus.inventory_notice.emit(LocalizationManager.t("NOT_ENOUGH_COINS"))
 		return false
 	coins -= amount
+	_guard()
 	coins_changed.emit(coins)
 	return true
 ## GDD.md:614 (E03): the ad-skip penalty clamps at 0 rather than refusing
@@ -28,6 +39,7 @@ func spend_clamped(amount: int) -> void:
 	if amount <= 0:
 		return
 	coins = maxi(0, coins - amount)
+	_guard()
 	coins_changed.emit(coins)
 
 func get_coins() -> int:
@@ -61,4 +73,5 @@ func from_dict(d: Dictionary) -> void:
 		for key: Variant in (raw as Array).slice(0, MAX_PAID):
 			if key is String and (key as String).length() <= 40:
 				_paid.append(key)
+	_guard()
 	coins_changed.emit(coins)

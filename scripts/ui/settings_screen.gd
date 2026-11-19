@@ -16,6 +16,7 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
+	UnslopThemeStyler.style_tree_recursive(self)
 
 	var bg := ColorRect.new()
 	bg.color = Color(0.0588235, 0.0745098, 0.0784314, 0.92)
@@ -247,12 +248,18 @@ func _build_graphics_tab(parent: VBoxContainer) -> void:
 func _build_audio_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
 
-	_slider(parent, LocalizationManager.t("Master Volume"), "master", 0.0, 1.0, 0.05,
-		func(v: float) -> void: SettingsManager.set_volume("Master", v))
-	_slider(parent, LocalizationManager.t("Music Volume"), "music", 0.0, 1.0, 0.05,
-		func(v: float) -> void: SettingsManager.set_volume("Music", v))
-	_slider(parent, LocalizationManager.t("SFX Volume"), "sfx", 0.0, 1.0, 0.05,
-		func(v: float) -> void: SettingsManager.set_volume("SFX", v))
+	_slider(parent, tr("MASTER VOLUME"), "master", 0.0, 1.0, 0.05,
+		func(v: float) -> void:
+			SettingsManager.set_volume("Master", v)
+			AtmosphereAudioRig.set_bus_gain(&"Master", v))
+	_slider(parent, tr("MUSIC"), "music", 0.0, 1.0, 0.05,
+		func(v: float) -> void:
+			SettingsManager.set_volume("Music", v)
+			AtmosphereAudioRig.set_bus_gain(&"Music", v))
+	_slider(parent, tr("SFX"), "sfx", 0.0, 1.0, 0.05,
+		func(v: float) -> void:
+			SettingsManager.set_volume("SFX", v)
+			AtmosphereAudioRig.set_bus_gain(&"SFX", v))
 	_slider(parent, LocalizationManager.t("Voice Volume"), "voice", 0.0, 1.0, 0.05,
 		func(v: float) -> void: SettingsManager.set_volume("Voice", v))
 	# PHASE 2 (audio normal): district ambience plays on the "Ambient" bus

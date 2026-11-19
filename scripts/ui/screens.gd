@@ -250,6 +250,13 @@ func show_screen(name: String) -> void:
 	tween.tween_property(d.card, "scale", Vector2(1.0, 1.0), 0.18)
 	tween.play()
 	_populate_screen(name)
+	if name == "Shop" and not d.card.has_meta(&"_sodium_styled"):
+		UnslopThemeStyler.style_tree_recursive(d.card)
+		d.card.set_meta(&"_sodium_styled", true)
+		# The release skin supplies the border/hover states; the typeface stays
+		# the bundled heading face so every locale keeps its glyphs.
+		for node: Node in d.card.find_children("*", "Button", true, false):
+			(node as Button).add_theme_font_override(&"font", ThemeProvider.heading_font())
 	EventBus.ui_screen_opened.emit(name)
 
 func _on_viewport_resized() -> void:
@@ -1037,7 +1044,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		column.add_child(pl)
 		if not ShopService.is_owned(it.id):
 			_shop_prices.append({"label": pl, "price": int(price)})
-		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(220, 44))
+		var btn := _make_btn(tr("BUY"), Vector2.ZERO, Vector2(220, 44))
 		btn.custom_minimum_size = Vector2(220.0, UiScale.min_touch())
 		btn.add_theme_font_size_override("font_size", 22)
 		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER

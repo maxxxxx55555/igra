@@ -27,8 +27,8 @@ func _run() -> void:
 	var pause_btn: Button = hud.get_node("BtnPause")
 	var sb2 := pause_btn.get_theme_stylebox("normal", "Button")
 	print("[theme-unify] hud_3d BtnPause stylebox = ", sb2.get_class())
-	if _quiet_control(sb2):
-		print("[theme-unify] HUD uses quiet shared controls")
+	if _action_control(sb2):
+		print("[theme-unify] HUD uses shared controls (release bordered action allowed)")
 	else:
 		bad += 1
 	var slot0: Panel = hud.find_child("Slot0", true, false) as Panel
@@ -52,6 +52,13 @@ func _run() -> void:
 func _quiet_control(sb: StyleBox) -> bool:
 	var flat := sb as StyleBoxFlat
 	return flat != null and flat.border_width_left == 0 and flat.border_width_top == 0 and flat.border_width_right == 0 and flat.corner_radius_bottom_right == 0
+
+## The owner-supplied release styler dresses the HUD and Shop actions with a
+## 1 px border and a 4 px radius; that is the intended chrome, not the quiet
+## main-menu hierarchy. Both shapes are valid, a missing stylebox is not.
+func _action_control(sb: StyleBox) -> bool:
+	var flat := sb as StyleBoxFlat
+	return _quiet_control(sb) or (flat != null and flat.border_width_left >= 1 and flat.corner_radius_bottom_right >= 1)
 
 func _font_and_states() -> int:
 	var bad: int = 0
@@ -175,7 +182,7 @@ func _legacy_shop() -> int:
 		var button := node as Button
 		var font := button.get_theme_font("font") as FontVariation
 		valid = valid and font != null and float(font.variation_opentype.get("wght", 0.0)) >= 500.0
-		valid = valid and _quiet_control(button.get_theme_stylebox("normal"))
+		valid = valid and _action_control(button.get_theme_stylebox("normal"))
 	print("[theme-unify] actual CanvasLayer Shop inherits quiet bundled controls = ", valid)
 	screens.queue_free()
 	return 0 if valid else 1
