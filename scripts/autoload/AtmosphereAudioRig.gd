@@ -61,6 +61,7 @@ func _ready() -> void:
 		hum.volume_db = -16.0
 		_hums.append(hum)
 		_owners.append(0)
+	_drone.bus = &"Music"
 	add_child(_drone)
 	if AudioServer.get_driver_name() != "Dummy":
 		_start_drone()
@@ -72,7 +73,6 @@ func _start_drone() -> void:
 	generator.mix_rate = RATE
 	generator.buffer_length = 0.25
 	_drone.stream = generator
-	_drone.bus = &"Music"
 	_chunk.resize(BLOCK)
 	_drone.play()
 	_playback = _drone.get_stream_playback() as AudioStreamGeneratorPlayback

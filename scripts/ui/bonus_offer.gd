@@ -41,7 +41,10 @@ func _ready() -> void:
 	_sync_visibility()
 
 func _fit() -> void:
-	var ratio := maxf(float(get_window().size.x) / maxf(get_viewport_rect().size.x, 1.0), 0.1)
+	# Headless windows have no physical display and report a placeholder size.
+	var ratio := 1.0
+	if DisplayServer.get_name() != "headless":
+		ratio = maxf(float(get_window().size.x) / maxf(get_viewport_rect().size.x, 1.0), 0.1)
 	var scale_index := clampi(int(SettingsManager.get_setting("text_size", 1)), 0, 2)
 	var text_scale: float = SettingsManager.TEXT_SCALE[scale_index]
 	for control: Control in [_title, _claim, _reason]:
