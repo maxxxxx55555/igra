@@ -20,9 +20,9 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 | App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name | `docs/artifacts/rc16/proofs/s37_x9_90b6db50.out` (`label ... ok`) |
 | SDK levels | min **29**, **target 36**, as the preset says (`target_sdk` at `export_presets.cfg:29-30`) | the manifest of this bundle (`s37_aab_manifest_90b6db50.out`); Play's minimum target API: **check in Console** |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
-| Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | the manifest of this bundle |
+| Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | historical bundle manifest (the Wi-Fi bonus release instead requires ACCESS_NETWORK_STATE and VIBRATE) |
 | Application flags | `allowBackup=false` (no Android cloud backup of the saves), `isGame=true`, OpenGL ES 3.0 required | the manifest of this bundle |
-| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s27_aab_check_c353736.out` |
+| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` in the historical bundle | `docs/artifacts/rc16/proofs/s27_aab_check_c353736.out` |
 | Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s27_aab_check_c353736.out`, `docs/RELEASE_RUNBOOK.md` §1 |
 | Size | base module 26,974,686 bytes compressed; install-time asset pack 99,196,001 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` (`s27_aab_verify_c353736.out`) |
 | Contents scan | 0 packed files that are not the game, in the scan's classes | `docs/artifacts/rc16/proofs/s27_release_export_check_c353736.out` |
@@ -69,108 +69,9 @@ python -c "import pathlib; from PIL import Image; o=pathlib.Path('build/store_up
 The listing text: `store/listing.md` (English and Russian, the source of truth), `docs/STORE_KIT.md` (the other 11 locales; flagged there for a native
 spot-check); limits: title 30, short description 80, full description 4,000 characters **(check in Console)**.
 
-## 3. Privacy policy: the text to host
+## 3. Privacy policy to publish
 
-Host it at a stable HTTPS URL (any static page) and paste the URL into the Console's
-privacy-policy field and the store listing. **Done (2026-11-09):** the contact and the date
-below are filled in (`maxzimkasky@gmail.com`, 2026-10-28) and the page is live at
-`https://maxxxxx55555.github.io/igra/`. It states only what this build does; each sentence was checked against the code or the manifest
-(§8). Variant A of `docs/RELEASE_RUNBOOK.md` §6 (no ads) is built in, so use this text and not the template's advertising section.
-
-### 3.1 English
-
-> # Privacy Policy: Last Streetlight
->
-> Effective date: **2026-10-28**. Last updated: **2026-10-28**.
->
-> ## 1. Who we are
-> "Last Streetlight" (the "App") is a single-player survival-horror game for Android. This policy explains what data the App handles.
-> The developer can be reached at **maxzimkasky@gmail.com**.
->
-> ## 2. Summary
-> The App does not collect, transmit, sell or share personal data. It has no account system, no analytics, no crash-reporting service,
-> no advertising and no in-app purchases. Everything the App stores stays on your device.
->
-> ## 3. What the App stores on your device
-> - Your game progress (a save file), your settings (language, volume, controls, graphics), the state of the daily challenge and your
->   tutorial progress. They live in the App's private storage and are removed when you uninstall the App or clear its data.
->   Android's automatic cloud backup is switched off for the App.
-> - "Export Save" (Settings) copies your save file to your device's Downloads folder and "Import Save" reads it back, only when you press
->   those buttons. The App sends the file nowhere.
-> - "Share" on the victory screen copies a short text summary of your run to the clipboard. You decide where, if anywhere, to paste it.
->   The App sends nothing.
->
-> ## 4. Permissions and network
-> The Android build declares two permissions: VIBRATE, for haptic feedback, and INTERNET, which comes with the game engine's Android
-> template. The App has no feature that uses the network: none of its screens opens a connection, loads content from the internet or
-> sends data anywhere, and this version has no online or multiplayer mode.
->
-> ## 5. Advertising and third parties
-> No advertising network, analytics provider or other third-party service is built into the App. The App is made with the open-source
-> Godot Engine (godotengine.org, MIT licence); the engine itself includes no analytics or tracking.
->
-> ## 6. Children
-> The App is not designed for children. It collects no personal information from anyone, children included.
->
-> ## 7. Your choices
-> No data about you is held by us, so there is nothing for us to access, correct or delete. To remove what the App stores on your
-> device, use "Reset progress" in its settings, clear its storage in Android's app settings, or uninstall it.
->
-> ## 8. Changes
-> If a later version adds advertising, online features or any data collection, this policy will be updated before that version is
-> released, and the "Last updated" date will change.
->
-> ## 9. Contact
-> **maxzimkasky@gmail.com**
-
-### 3.2 Русский
-
-> # Политика конфиденциальности: «Последний фонарь»
->
-> Дата вступления в силу: **2026-10-28**. Дата последнего обновления: **2026-10-28**.
->
-> ## 1. Кто мы
-> «Последний фонарь» (далее «Приложение») — одиночная игра в жанре survival-horror для Android. Эта политика объясняет, какие данные
-> обрабатывает Приложение. Связаться с разработчиком можно так: **maxzimkasky@gmail.com**.
->
-> ## 2. Коротко
-> Приложение не собирает, не передаёт, не продаёт и не раскрывает персональные данные. В нём нет системы аккаунтов, аналитики, сервиса
-> отчётов о сбоях, рекламы и внутриигровых покупок. Всё, что Приложение хранит, остаётся на вашем устройстве.
->
-> ## 3. Что Приложение хранит на вашем устройстве
-> - Ваш игровой прогресс (файл сохранения), настройки (язык, громкость, управление, графика), состояние ежедневного задания и
->   прогресс обучения. Всё это лежит в закрытом хранилище Приложения и удаляется вместе с ним или при очистке его данных.
->   Автоматическое облачное резервное копирование Android для Приложения выключено.
-> - «Экспорт сохранения» (Настройки) копирует файл сохранения в папку «Загрузки» устройства, «Импорт сохранения» читает его обратно —
->   только по нажатию этих кнопок. Приложение никуда этот файл не отправляет.
-> - Кнопка «Поделиться» на экране победы копирует в буфер обмена короткую текстовую сводку вашего прохождения. Куда её вставить и
->   вставлять ли вообще, решаете вы. Приложение ничего не отправляет.
->
-> ## 4. Разрешения и сеть
-> Сборка для Android объявляет два разрешения: VIBRATE (тактильный отклик) и INTERNET, которое входит в Android-шаблон игрового движка.
-> Ни одна функция Приложения сеть не использует: ни один экран не открывает соединение, не загружает контент из интернета и ничего не
-> отправляет; сетевого и многопользовательского режима в этой версии нет.
->
-> ## 5. Реклама и третьи стороны
-> В Приложение не встроены ни рекламная сеть, ни сервис аналитики, ни другие сторонние сервисы. Приложение сделано на открытом движке
-> Godot Engine (godotengine.org, лицензия MIT); в самом движке нет ни аналитики, ни слежения.
->
-> ## 6. Дети
-> Приложение не рассчитано на детей. Оно не собирает персональные данные ни у кого, включая детей.
->
-> ## 7. Ваш выбор
-> У нас нет данных о вас, поэтому нам нечего показывать, исправлять или удалять. Чтобы удалить то, что Приложение хранит на устройстве,
-> нажмите «Сбросить прогресс» в его настройках, очистите его хранилище в настройках Android или удалите Приложение.
->
-> ## 8. Изменения
-> Если в будущей версии появятся реклама, сетевые функции или сбор данных, мы обновим эту политику до выхода такой версии, и дата
-> «последнего обновления» изменится.
->
-> ## 9. Контакты
-> **maxzimkasky@gmail.com**
-
-`store/privacy-policy-template.md` carries a pointer to this section; its older text said the same in fewer words and is no longer the one
-to host.
+Use the [English and Russian privacy policy](../store/privacy-policy-template.md) for this release. Publish both translations at https://maxxxxx55555.github.io/igra/ before submission. The optional bonus reads local connection status without sending any requests. The developer contact is unchanged.
 
 ## 4. Content rating: the IARC answers (category: Game)
 
@@ -187,7 +88,7 @@ Answer the form with these; **trust the rating IARC computes**. The expected res
 | Crude humour | No | |
 | Users interact / user-generated content | **No.** No chat, no user content, no sharing of location. The "Share" button only copies text to the clipboard | `scripts/ui/win_screen.gd:94` |
 | Digital purchases | **No.** There are no in-app purchases; the shop spends coins earned in play | `scripts/economy/shop_service.gd:3` |
-| Unrestricted internet access | No: the App has no web view, no browser call and no network feature (§3.4 of the policy) | `docs/artifacts/rc16/proofs/s20_net_reach.out` |
+| Unrestricted internet access | No: the App has no web view, no browser call and no request to check bonus eligibility (§3) | `docs/artifacts/rc16/proofs/s20_net_reach.out` |
 
 ## 5. Data safety form: the answers
 
@@ -195,11 +96,11 @@ Because the App collects and shares nothing, the form is one decision.
 
 | Section of the form | Answer | Why |
 |---|---|---|
-| Does your app collect or share any of the required user data types? | **No** | no account, no analytics, no ad SDK, no network call from a screen; saves stay in private storage |
+| Does your app collect or share any of the required user data types? | **No** | no account, no analytics, no ad SDK, local connectivity checks transmit nothing; saves stay in private storage |
 | Data types collected / shared | none selected | |
 | Is all of the user data encrypted in transit? | not asked when nothing is collected; if asked: **not applicable**, nothing is transmitted | |
 | Can users request that their data be deleted? | not applicable: nothing is held by the developer; the user removes local data with "Reset progress", clearing storage or uninstalling | |
-| Privacy policy URL | the URL of §3 | required even for an app that collects nothing |
+| Privacy policy URL | https://maxxxxx55555.github.io/igra/ | required even for an app that collects nothing |
 | Independent security review, "Families" and similar badges | leave off | |
 
 Note for the owner: Google treats data that stays on the device as "not collected". The one transfer the App performs at all is
@@ -211,7 +112,7 @@ the user's own "Export Save" to the Downloads folder. If the Console's wording m
 | Declaration | Answer |
 |---|---|
 | App access | all functionality is available without special access (no login) |
-| Ads | **No** (the bundle holds no ad SDK code) |
+| Contains ads | **No** (no ad SDK or advertising) |
 | Content rating | §4 |
 | Target audience | 16 to 17 and 18 and over; not designed for children, skip the Families program |
 | News app / Government app / Financial features / Health | No / No / none / none |
@@ -243,7 +144,7 @@ Each step names where the detail lives; it does not repeat it.
 | `docs/store/play_store.md` | Data safety "LAN co-op ... talks to devices on the LAN" | the code is in the build, no screen reaches it (§9 of this file, `s20_net_reach`) |
 | `docs/RELEASE_RUNBOOK.md` §3.3 | feature graphic `assets/store/feature_graphic_1024x500.png`, screenshots `assets/store/screenshot_0*.png` | §2 of this file: `store/feature-graphic.png` and the six release frames |
 | `docs/release_checklist.md` (history section) | target 34, compile 34, min 21 | superseded by the numbers of §1 |
-| `store/privacy-policy-template.md` | "the shipped build has no networking at all" | still true of what a player can reach; the policy of §3 says it by what the screens do, which is what was checked |
+| `store/privacy-policy-template.md` | "the shipped build has no networking at all" | the release reads local connection status for optional bonuses without sending requests |
 
 ## 9. What this pass could not do
 

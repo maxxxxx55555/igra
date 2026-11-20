@@ -621,7 +621,7 @@ def main():
                 f.write("| `%s` | %s | `%s` |\n" % (k, json.dumps(v, ensure_ascii=False), sid))
             f.write("\nTotal: %d keys (%d secrets x 2).\n" % (len(pending_locale_keys), len(pending_locale_keys) // 2))
 
-    with open(os.path.join(adir, "i18n_only_texts.md"), "w", encoding="utf-8") as f:
+    with open(os.path.join(adir, "i18n_only_texts.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write("# TASK 3 — texts living ONLY in i18n (CODE-sync table)\n\n")
         f.write("Keys whose prose exists in `data/i18n/*.json` but is backed by no\n")
         f.write("`content/**` entry and referenced by no script/scene. For these the\n")

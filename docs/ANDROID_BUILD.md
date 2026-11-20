@@ -46,5 +46,5 @@ adb install -r build/TLS_debug.apk
 
 ## Известные ограничения
 
-- AdMob: **не подключён** до сборки со смарт-плагином Godot AdMob (см. `docs/ADS.md`). Сейчас работает симуляция (`SimulatedAdProvider`).
+- Бонус за Wi-Fi проверяет тип активного подключения на устройстве. Рекламных SDK нет; в манифесте релизной сборки нужны ACCESS_NETWORK_STATE и VIBRATE.
 - LAN-мультиплеер живёт поверх UDP — на некоторых роутерах нужен UPnP/ручной проброс портов (см. `docs/A10_multiplayer_decision.md`).

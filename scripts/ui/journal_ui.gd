@@ -12,7 +12,7 @@ var _reader_text: RichTextLabel
 var _selected: String = ""
 
 func _ready() -> void:
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	_build()
 	_load_catalog()
 	_refresh()

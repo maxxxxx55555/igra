@@ -3,7 +3,7 @@ extends RefCounted
 const PANEL_COLOR := Color(0.0588235, 0.0745098, 0.0784314, 0.95)
 
 static func build(screen: Control) -> VBoxContainer:
-	screen.theme = ThemeProvider.build_theme()
+	screen.theme = CraftThemeBridge.build()
 	var art := TextureRect.new()
 	art.name = "EndingArt"
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

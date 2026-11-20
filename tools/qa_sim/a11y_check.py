@@ -45,7 +45,7 @@ FEATURES = {
         ["difficulty"],
         [("scripts/enemies/base_monster.gd", 'difficulty_scale("monster_hp")'), ("scripts/enemies/base_monster.gd", 'difficulty_scale("monster_damage")'),
          ("scripts/player/player_3d.gd", 'difficulty_scale("player_hp")'), ("scripts/world/district_loot.gd", '"difficulty_scale", "extra_parts"'),
-         ("scripts/monetization/ad_service.gd", 'difficulty_scale("revive")'), ("scripts/systems/settings_manager.gd", "const DIFFICULTY_PRESETS")],
+         ("scripts/monetization/wifi_bonus_service.gd", 'difficulty_scale("revive")'), ("scripts/systems/settings_manager.gd", "const DIFFICULTY_PRESETS")],
         ["Difficulty", "diff_easy", "diff_normal", "diff_hard", "DIFF_EASY_DESC", "DIFF_NORMAL_DESC", "DIFF_HARD_DESC"], ["difficulty"]),
     "A4 motion comfort (no shake, no FOV punch, no sprint blur, no landing dip, no rain on the lens)": (
         ["reduce_camera_motion"],

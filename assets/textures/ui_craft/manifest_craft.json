@@ -1,0 +1,262 @@
+{
+  "style_lock": {
+    "project": "The Last Streetlight",
+    "seed": 47101,
+    "palette": {
+      "shadow_deep": [
+        6,
+        15,
+        19
+      ],
+      "shadow_mid": [
+        15,
+        19,
+        20
+      ],
+      "iron_dark": [
+        22,
+        30,
+        34
+      ],
+      "iron_edge": [
+        42,
+        54,
+        60
+      ],
+      "fog_cool": [
+        78,
+        102,
+        110
+      ],
+      "sodium_dim": [
+        158,
+        120,
+        50
+      ],
+      "sodium_key": [
+        212,
+        169,
+        78
+      ],
+      "sodium_hot": [
+        240,
+        196,
+        108
+      ],
+      "parchment": [
+        230,
+        223,
+        209
+      ],
+      "danger_rust": [
+        168,
+        59,
+        46
+      ],
+      "cold_fill_lo": [
+        44,
+        91,
+        102
+      ],
+      "cold_fill_hi": [
+        107,
+        167,
+        181
+      ]
+    },
+    "grid_px": 8,
+    "max_seam_delta": 10.0
+  },
+  "asset_count": 21,
+  "assets": [
+    {
+      "path": "assets/textures/ui_craft/panel_dark_9slice.png",
+      "width": 96,
+      "height": 96,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "f34cde1977228aa8caaab35c11292eb095ed5b7a56e9c5befb8e17eeca6a583d"
+    },
+    {
+      "path": "assets/textures/ui_craft/btn_normal_9slice.png",
+      "width": 96,
+      "height": 48,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "5691759defa9d351ca9f2d0482d84c8580aa99e323bc1363875a5cd12a4899a8"
+    },
+    {
+      "path": "assets/textures/ui_craft/btn_hover_9slice.png",
+      "width": 96,
+      "height": 48,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "087c85ba872f67b7157e73683ca6981d9abf53852d004bc6d6a7dacb58648fb7"
+    },
+    {
+      "path": "assets/textures/ui_craft/btn_pressed_9slice.png",
+      "width": 96,
+      "height": 48,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "b445f3433a509dabd9ed09acd42dd6c3cefcd245acc857155761605c51e116ee"
+    },
+    {
+      "path": "assets/textures/ui_craft/btn_disabled_9slice.png",
+      "width": 96,
+      "height": 48,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "a0ce94e472a5339b4258fa8ccd325595d2980e0624d581c2f260567caf8ec7eb"
+    },
+    {
+      "path": "assets/textures/ui_craft/hud_bar_frame_9slice.png",
+      "width": 128,
+      "height": 24,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "af1a6e8f1b98e9771a247a123d200fbc5e2458ccd4cb260dbe4372545f84bda8"
+    },
+    {
+      "path": "assets/textures/ui_craft/hud_bar_fill_amber.png",
+      "width": 64,
+      "height": 16,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "eea884a454dc7226a679174d583ff6cfdff9a41a394de462d277482650e036fc"
+    },
+    {
+      "path": "assets/textures/ui_craft/hud_bar_fill_cold.png",
+      "width": 64,
+      "height": 16,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "22bd58bec7e5ff5ca6b939f52703d5c2fd5c1ee70f65f6a62ac90f6d4e4de381"
+    },
+    {
+      "path": "assets/textures/ui_craft/hud_bar_fill_rust.png",
+      "width": 64,
+      "height": 16,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "edc5de6b18cb0525761b52ad71e8fd4c966f532671e9d624561a05fd7f33bee2"
+    },
+    {
+      "path": "assets/textures/ui_craft/quickslot_craft_72.png",
+      "width": 72,
+      "height": 72,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "91513cd4a0c9b1d06ffb6b5d9a0ba38655914539e576d3df192c89e3f3ccf824"
+    },
+    {
+      "path": "assets/textures/ui_craft/icon_lantern_64.png",
+      "width": 64,
+      "height": 64,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "77505d0ccdfa43f9cf54007e65a2563c7cedd8d38bc78550b96e26c955735f81"
+    },
+    {
+      "path": "assets/textures/ui_craft/icon_battery_64.png",
+      "width": 64,
+      "height": 64,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "34b39597a58ab989369f4136d5e6560133cf25b150ea5ba8958cd3a72c59e2f6"
+    },
+    {
+      "path": "assets/textures/ui_craft/icon_warmth_64.png",
+      "width": 64,
+      "height": 64,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "cf1fc9f4e5439866d19882225c6a83a674af88d516bbcb3d52bceedf3e93fdcf"
+    },
+    {
+      "path": "assets/textures/ui_craft/icon_fuse_64.png",
+      "width": 64,
+      "height": 64,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "1baab407182030c43b6987c8ea2ab0e4e46e206782cc39be2e7ed2f2155b3b43"
+    },
+    {
+      "path": "assets/textures/ui_craft/icon_wifi_bonus_64.png",
+      "width": 64,
+      "height": 64,
+      "tileable": false,
+      "seam_delta": 0.0,
+      "neon_hits": 0,
+      "sha256": "56089c8046bf95fe558bfa165ad6eaf02cadb0b0283086907cbc3c164a7a0cf0"
+    },
+    {
+      "path": "assets/textures/world_craft/asphalt_wet_albedo.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 0.139,
+      "neon_hits": 0,
+      "sha256": "14bb174c21984c1796fe3483cdef1148312645bf98108058a6e05e085c7d1f08"
+    },
+    {
+      "path": "assets/textures/world_craft/asphalt_wet_roughness.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 0.586,
+      "neon_hits": 0,
+      "sha256": "52373b2c19e8aefefbe74e5fde3986fb436209358f845cfdbbc62d7d73e8d215"
+    },
+    {
+      "path": "assets/textures/world_craft/asphalt_wet_normal.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 6.745,
+      "neon_hits": 0,
+      "sha256": "e8a47301d82c94d06472fd731334492da69bf39527398469e98941a38883d085"
+    },
+    {
+      "path": "assets/textures/world_craft/facade_concrete_albedo.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 4.643,
+      "neon_hits": 0,
+      "sha256": "5f064439b0f5ea9cbd4c5706b97bfaf7e767ab5a16868edeb940e6cd29938f5a"
+    },
+    {
+      "path": "assets/textures/world_craft/facade_concrete_roughness.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 6.602,
+      "neon_hits": 0,
+      "sha256": "b4c15362fda5b3076a62ae69ea997f01df5cdadc46da4622f3c576cc0b74810f"
+    },
+    {
+      "path": "assets/textures/world_craft/facade_concrete_normal.png",
+      "width": 256,
+      "height": 256,
+      "tileable": true,
+      "seam_delta": 1.293,
+      "neon_hits": 0,
+      "sha256": "45be94dab202bfbc4e53521e8ba367a9b7391dfaf5411a5debcfbd8bd5221f7e"
+    }
+  ]
+}

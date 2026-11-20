@@ -9,6 +9,7 @@ const BLOCK: int = 256
 const HUM_VOICES: int = 4
 const HUM_RANGE: float = 19.0
 const CUES: Array[StringName] = [&"hum", &"asphalt", &"metal", &"gravel", &"spark", &"surge"]
+const CRAFT_HUM: String = "res://assets/audio/craft/amb_sodium_hum_loop.wav"
 
 @export_range(3, 24) var effect_voices: int = 10
 @export var ogg_paths: Dictionary[StringName, String] = {}
@@ -61,18 +62,40 @@ func _ready() -> void:
 		hum.volume_db = -16.0
 		_hums.append(hum)
 		_owners.append(0)
+	_drone.bus = &"Music"
+	add_child(_drone)
+	if AudioServer.get_driver_name() != "Dummy":
+		_start_drone()
+	get_tree().node_added.connect(_on_node_added)
+	_sync_director()
+
+func _start_drone() -> void:
 	var generator: AudioStreamGenerator = AudioStreamGenerator.new()
 	generator.mix_rate = RATE
 	generator.buffer_length = 0.25
 	_drone.stream = generator
-	_drone.bus = &"Music"
-	add_child(_drone)
 	_chunk.resize(BLOCK)
 	_drone.play()
 	_playback = _drone.get_stream_playback() as AudioStreamGeneratorPlayback
 	_fill_drone()
-	get_tree().node_added.connect(_on_node_added)
-	_sync_director()
+
+func _exit_tree() -> void:
+	_drone.stop()
+	_playback = null
+	_drone.stream = null
+	for player: AudioStreamPlayer3D in _effects:
+		player.stop()
+		player.stream = null
+	for player: AudioStreamPlayer3D in _hums:
+		player.stop()
+		player.stream = null
+	# `_sounds` owns duplicated AudioStreamWAV resources (the craft hum). Drop
+	# them explicitly: the AudioServer holds the last playback a little longer
+	# than the scene tree, and a resource still in this dictionary at exit is
+	# reported as an ObjectDB leak.
+	_sounds.clear()
+	_lamps.clear()
+	_muted_group_lamps.clear()
 
 func _on_node_added(node: Node) -> void:
 	if node.has_signal(&"survival_changed") and node.has_signal(&"boss_telegraph"):
@@ -271,6 +294,14 @@ func _play_at(cue: StringName, at: Vector3, gain_db: float, pitch: float, priori
 		emitter.play()
 
 func _load_sound(cue: StringName) -> AudioStream:
+	if cue == &"hum" and ResourceLoader.exists(CRAFT_HUM):
+		var crafted := load(CRAFT_HUM) as AudioStreamWAV
+		if crafted != null:
+			var copy := crafted.duplicate() as AudioStreamWAV
+			copy.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			copy.loop_begin = 0
+			copy.loop_end = maxi(0, (copy.data.size() / 4) - 1)
+			return copy
 	var path: String = ogg_paths.get(cue, "")
 	if not path.is_empty() and ResourceLoader.exists(path):
 		var imported: AudioStreamOggVorbis = load(path) as AudioStreamOggVorbis

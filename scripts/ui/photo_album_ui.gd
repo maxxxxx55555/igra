@@ -28,7 +28,7 @@ static func category_of(id: String) -> String:
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 8)
 	add_child(root)

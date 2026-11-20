@@ -18,6 +18,7 @@ const CORE_FLOAT_KEYS := [&"battery", &"warmth", &"health"]
 
 var integrity_ok: bool = false
 var last_load_error: Error = OK
+var save_rejected: bool = false
 var _crypto := Crypto.new()
 var _session: PackedByteArray
 var _primary: Dictionary[StringName, PackedByteArray] = {}
@@ -41,6 +42,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	verify_integrity()
+	load_game()
 
 
 func _abs(virtual_path: String) -> String:
@@ -165,7 +167,7 @@ func _plain_value(value: Variant, depth: int) -> bool:
 
 
 func _valid_save(data: Dictionary) -> bool:
-	if data.size() < 6 or data.size() > 8:
+	if data.size() < 6 or data.size() > 9:
 		return false
 	for key: String in ["coins", "skill_points", "streak_days"]:
 		if typeof(data.get(key)) != TYPE_INT or data[key] < 0:
@@ -179,25 +181,67 @@ func _valid_save(data: Dictionary) -> bool:
 		return false
 	if data.has("vault_floats") and typeof(data["vault_floats"]) != TYPE_DICTIONARY:
 		return false
+	if data.has("bonus_ledger") and not _valid_bonus_ledger(data.bonus_ledger):
+		return false
 	return _plain_value(data, 0)
 
 
-func save_game(data: Dictionary = {}) -> Error:
+func _valid_bonus_ledger(value: Variant) -> bool:
+	if not (value is Dictionary) or value.size() != 9:
+		return false
+	for key in ["version", "last_claim_utc", "max_seen_utc", "utc_day", "daily_count"]:
+		if typeof(value.get(key)) != TYPE_INT or value[key] < 0:
+			return false
+	if value.version != 1 or value.max_seen_utc < value.last_claim_utc or value.daily_count > 3:
+		return false
+	if value.utc_day != value.last_claim_utc / 86400:
+		return false
+	if not (value.get("revive_used") is bool and value.get("battery_used") is bool):
+		return false
+	var run: Variant = value.get("run_id")
+	var receipt: Variant = value.get("last_claim_id")
+	if not (run is String and run.length() == 16 and run.is_valid_hex_number(false) and run == run.to_lower()):
+		return false
+	if not (receipt is String):
+		return false
+	if value.last_claim_utc == 0:
+		return receipt.is_empty() and value.daily_count == 0 and not value.revive_used and not value.battery_used
+	return value.daily_count >= 1 and receipt.length() == 32 and receipt.is_valid_hex_number(false) and receipt == receipt.to_lower()
+
+
+func bonus_ledger() -> Dictionary:
+	return (_cached_save.get("bonus_ledger", {}) as Dictionary).duplicate()
+
+
+## Reauthenticate the stored ledger without restoring an older snapshot of live guards.
+func bonus_integrity_ok() -> bool:
+	return integrity_ok and not save_rejected and _ledger_matches_disk()
+
+
+func _ledger_matches_disk() -> bool:
+	var verified := _read_save()
+	if save_rejected:
+		return false
+	if verified.get("bonus_ledger", {}) != _cached_save.get("bonus_ledger", {}):
+		_reject_save()
+		return false
+	return true
+
+
+func save_game(data: Dictionary = {}, vitals: Dictionary = {}) -> Error:
+	if save_rejected or (_cached_save.has("bonus_ledger") and not _ledger_matches_disk()):
+		return ERR_FILE_CORRUPT
 	var payload := _cached_save.duplicate(true)
-	if not data.is_empty():
-		for k: Variant in data:
-			payload[String(k)] = data[k]
-		if data.has("coins") and typeof(data["coins"]) == TYPE_INT:
-			set_guarded_int(&"coins", int(data["coins"]))
-		if data.has("skill_points") and typeof(data["skill_points"]) == TYPE_INT:
-			set_guarded_int(&"skill_points", int(data["skill_points"]))
-	else:
-		payload["coins"] = maxi(0, get_guarded_int(&"coins"))
-		payload["skill_points"] = maxi(0, get_guarded_int(&"skill_points"))
+	payload["coins"] = maxi(0, get_guarded_int(&"coins"))
+	payload["skill_points"] = maxi(0, get_guarded_int(&"skill_points"))
+	for k: Variant in data:
+		payload[String(k)] = data[k]
 	var v_ints: Dictionary = {}
 	for k: StringName in _dynamic_int_keys:
 		v_ints[String(k)] = get_guarded_int(k)
 	var v_floats: Dictionary = {}
+	for k: StringName in CORE_FLOAT_KEYS:
+		v_floats[String(k)] = vitals.get(String(k), get_guarded_float(k))
 	for k: StringName in _dynamic_float_keys:
 		v_floats[String(k)] = get_guarded_float(k)
 	payload["vault_ints"] = v_ints
@@ -232,22 +276,27 @@ func save_game(data: Dictionary = {}) -> Error:
 		DirAccess.remove_absolute(_abs(staging))
 	else:
 		_cached_save = payload.duplicate(true)
+		for k: StringName in CORE_INT_KEYS:
+			if data.has(k):
+				set_guarded_int(k, int(payload[k]))
+		for k: StringName in CORE_FLOAT_KEYS:
+			if vitals.has(k):
+				set_guarded_float(k, float(v_floats[k]))
 	return error
 
 
 func _reject_save() -> Dictionary:
 	last_load_error = ERR_FILE_CORRUPT
+	save_rejected = true
 	_warn(&"save")
-	_cached_save = default_save()
-	return _cached_save.duplicate(true)
+	return default_save()
 
 
-func load_game() -> Dictionary:
+func _read_save() -> Dictionary:
 	last_load_error = OK
 	if not FileAccess.file_exists(SAVE):
 		last_load_error = ERR_FILE_NOT_FOUND
-		_cached_save = default_save()
-		return _cached_save.duplicate(true)
+		return default_save()
 	var raw := _read(SAVE, HEADER + LIMIT + 16 + TAG)
 	var count := raw.size() - HEADER - TAG
 	if count < 16 or count % 16 != 0 or raw.slice(0, 4) != "LSV1".to_ascii_buffer():
@@ -278,7 +327,18 @@ func load_game() -> Dictionary:
 	var decoded: Variant = bytes_to_var(plain)
 	if typeof(decoded) != TYPE_DICTIONARY or not _valid_save(decoded):
 		return _reject_save()
-	var loaded: Dictionary = decoded
+	return decoded
+
+
+func load_game() -> Dictionary:
+	var loaded := _read_save()
+	if save_rejected:
+		return default_save()
+	if last_load_error != OK:
+		if _cached_save.has("bonus_ledger"):
+			return _reject_save()
+		_cached_save = loaded.duplicate(true)
+		return loaded
 	set_guarded_int(&"coins", int(loaded.get("coins", 0)))
 	set_guarded_int(&"skill_points", int(loaded.get("skill_points", 0)))
 	var v_ints: Variant = loaded.get("vault_ints", {})

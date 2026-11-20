@@ -6,6 +6,8 @@ const _TEX_HEALTH     := "res://assets/ui/ui_health.svg"
 const _TEX_AMMO       := "res://assets/ui/ui_ammo.svg"
 const _TEX_BATTERY    := "res://assets/ui/ui_battery.svg"
 const _TEX_FLASHLIGHT := "res://assets/ui/ui_flashlight.svg"
+const _CRAFT_BATTERY := "res://assets/textures/ui_craft/icon_battery_64.png"
+const _CRAFT_LANTERN := "res://assets/textures/ui_craft/icon_lantern_64.png"
 
 @onready var _hp_bar:    ProgressBar = $Bars/HPRow/Bar
 @onready var _ammo_bar:  ProgressBar = $Bars/AmmoRow/Bar
@@ -21,7 +23,6 @@ var _tween: Tween
 
 func _ready() -> void:
 	_load_icons()
-	UnslopThemeStyler.style_tree_recursive(self)
 	EventBus.player_health_changed.connect(_on_health)
 	EventBus.ammo_changed.connect(_on_ammo)
 	EventBus.player_battery_changed.connect(_on_battery)
@@ -32,8 +33,8 @@ func _ready() -> void:
 func _load_icons() -> void:
 	_set_icon(_hp_icon,   _TEX_HEALTH)
 	_set_icon(_ammo_icon, _TEX_AMMO)
-	_set_icon(_bat_icon,  _TEX_BATTERY)
-	_set_icon(_fl_icon,   _TEX_FLASHLIGHT)
+	_set_icon(_bat_icon, _CRAFT_BATTERY if ResourceLoader.exists(_CRAFT_BATTERY) else _TEX_BATTERY)
+	_set_icon(_fl_icon, _CRAFT_LANTERN if ResourceLoader.exists(_CRAFT_LANTERN) else _TEX_FLASHLIGHT)
 
 func _set_icon(tr: TextureRect, path: String) -> void:
 	var tex: Texture2D = load(path)

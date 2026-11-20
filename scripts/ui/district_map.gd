@@ -20,7 +20,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	var bg := ColorRect.new()
 	bg.color = Color(CANVAS_BG, 0.96)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)

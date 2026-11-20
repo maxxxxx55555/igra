@@ -21,7 +21,7 @@ func _ready() -> void:
 	# inheritance does; Window.theme does not - confirmed via probe), so
 	# this screen silently rendered with zero chrome. Every other screen in
 	# the project already opts in exactly like this.
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	var vb: Node = get_node_or_null("VBox")
 	if vb == null:
 		return

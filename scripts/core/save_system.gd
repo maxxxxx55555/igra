@@ -149,9 +149,11 @@ static func clean_run_id(raw: Variant) -> String:
 
 ## A save with no name (every save from before this field) or a forged one starts a new run on load, so it counts as unbanked once.
 func _adopt_run_id(raw: Variant) -> void:
-	_run_id = clean_run_id(raw)
-	if _run_id.is_empty():
-		_run_id = _new_run_id()
+	var saved := clean_run_id(raw)
+	if saved.is_empty():
+		saved = clean_run_id(SecurityVault.bonus_ledger().get("run_id", ""))
+	if not saved.is_empty():
+		_run_id = saved
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -178,6 +180,7 @@ func _process(delta: float) -> void:
 ## The profile fields of the main save (the daily streak, the day of the last claim, the onboarding flag) are read at launch: a New Game after a relaunch used to start them at zero
 ## and the next save wrote the zeros over the file. A file that does not read is left alone here; Continue still goes through _read_validated.
 func _adopt_profile() -> void:
+	_recover_bonus()
 	var data := _read_envelope(SAVE_PATH)
 	if data.is_empty():
 		return
@@ -186,6 +189,7 @@ func _adopt_profile() -> void:
 	_onboard_done = bool(data.get("onboard_done", false))
 
 func has_save() -> bool:
+	_recover_bonus()
 	return FileAccess.file_exists(SAVE_PATH)
 
 ## T16: сейв-целостность. Раньше JSON писался напрямую в целевой файл —
@@ -367,8 +371,8 @@ func autosave() -> void:
 	if bool(SettingsManager.get_setting("autosave", true)):
 		_save()
 
-func _save() -> void:
-	var payload: Dictionary = {
+func _live_payload() -> Dictionary:
+	return {
 		"version": SAVE_VERSION,
 		"wallet": CoinWallet.to_dict(),
 		"shop": ShopService.to_dict(),
@@ -394,6 +398,55 @@ func _save() -> void:
 		"run_id": _run_id,
 		"run": GameManager.run_data(),
 	}
+
+## The vault receipt commits a prepared, signed Continue checkpoint. After a
+## crash between the two renames the same receipt promotes it on next launch.
+const BONUS_STAGE := SAVE_PATH + ".bonus"
+
+func _recover_bonus() -> bool:
+	if not FileAccess.file_exists(BONUS_STAGE):
+		return true
+	var staged := _read_envelope(BONUS_STAGE)
+	var receipt: String = SecurityVault.bonus_ledger().get("last_claim_id", "")
+	if not receipt.is_empty() and staged.get("bonus_receipt", "") == receipt:
+		if FileAccess.file_exists(SAVE_PATH):
+			_rotate_backups(SAVE_PATH)
+		return DirAccess.rename_absolute(BONUS_STAGE, SAVE_PATH) == OK
+	if SecurityVault.save_rejected:
+		return false
+	return DirAccess.remove_absolute(BONUS_STAGE) == OK
+
+func commit_bonus(ledger: Dictionary, target: Dictionary, connection: Callable) -> StringName:
+	if target.is_empty() or not _recover_bonus():
+		return &"BONUS_SAVE_FAILED"
+	var payload := _live_payload()
+	var vault_data := {"bonus_ledger": ledger}
+	var guarded_vitals := {}
+	if target.has("coins"):
+		payload.wallet.coins = target.coins
+		vault_data.coins = target.coins
+	for key: String in ["hp", "battery", "stamina"]:
+		if target.has(key):
+			payload.vitals[key] = target[key]
+	for key: String in ["hp", "battery"]:
+		if payload.vitals.has(key):
+			guarded_vitals["health" if key == "hp" else "battery"] = payload.vitals[key]
+	payload.bonus_receipt = ledger.last_claim_id
+	if not _write_atomic(BONUS_STAGE, payload):
+		return &"BONUS_SAVE_FAILED"
+	var state: StringName = connection.call()
+	if state != &"BONUS_READY" or SecurityVault.save_game(vault_data, guarded_vitals) != OK:
+		DirAccess.remove_absolute(BONUS_STAGE)
+		return state if state != &"BONUS_READY" else &"BONUS_SAVE_FAILED"
+	_recover_bonus()
+	return &"BONUS_READY"
+
+func _save() -> void:
+	var payload := _live_payload()
+	if not _recover_bonus():
+		EventBus.toast_requested.emit(LocalizationManager.t("SAVE_FAILED_STORAGE"), "danger")
+		return
+	WiFiBonusService.checkpoint_clock()
 	# Guarded mirror: the vault carries the same five core values the owner
 	# asked to protect (coins/skill points are written by their own autoloads).
 	# The JSON remains the canonical Continue payload.
@@ -413,6 +466,8 @@ func _save() -> void:
 		UISFX.save_failed()
 
 func load_all() -> bool:
+	if not _recover_bonus():
+		return false
 	var data := _read_validated(SAVE_PATH)
 	if data.is_empty():
 		return false
@@ -465,8 +520,10 @@ func mark_onboard_done() -> void:
 	_onboard_done = true
 	_save()
 
-func reset_all() -> void:
-	_run_id = _new_run_id()
+func reset_all(new_run: bool = true) -> void:
+	if new_run:
+		_run_id = _new_run_id()
+		WiFiBonusService.begin_run(_run_id)
 	GameManager.reset_run()
 	PowerGrid.reset()
 	Cartography.reset()
@@ -764,10 +821,11 @@ func _remove_with_backups(path: String) -> bool:
 ## alone only clears autoload state in memory, it never touched the actual
 ## save files, so a restart would resurrect the old progress via Continue.
 func wipe_all_saves() -> void:
+	_remove_with_backups(BONUS_STAGE)
 	_remove_with_backups(SAVE_PATH)
 	for i in range(1, MAX_SLOTS + 1):
 		delete_slot(i)
-	reset_all()
+	reset_all(false)
 	_daily_streak = 0
 	_last_daily_time = 0
 	# BREAK_REPORT B5: NewGamePlus owns its own save file entirely outside

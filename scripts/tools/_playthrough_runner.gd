@@ -43,7 +43,6 @@ func _ready() -> void:
 		get_tree().quit(0)
 		return
 	print("[pt] mode=%s adapter=%s method=%s" % [_mode, RenderingServer.get_video_adapter_name(), RenderingServer.get_current_rendering_method()])
-	AdService.enabled = false
 	EventBus.crosshair_state_changed.connect(func(state: StringName) -> void: _crosshair = state)
 	var mute := Timer.new()
 	mute.wait_time = 1.5

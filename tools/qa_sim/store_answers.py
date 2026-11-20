@@ -12,9 +12,11 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SKIP = ("scripts/tools/", "scenes/tools/")
-SUFFIXES = {".gd", ".tscn", ".json", ".cfg", ".godot", ".xml", ".gradle", ".tres"}
+SUFFIXES = {".gd", ".tscn", ".json", ".cfg", ".godot", ".xml", ".gradle", ".tres", ".gdap", ".java", ".kt"}
 CODE = ["scripts", "scenes", "addons"]
 EN = ["data/i18n/en.json"]
+ANDROID = ["export_presets.cfg", "project.godot", "android/plugins", "android/build/AndroidManifest.xml",
+           "android/build/build.gradle", "android/build/src"]
 # (form, question, answer, pattern, flags, paths, rule, basis)
 ROWS = [
     ("IARC", "Violence", "Yes: stylized violence against creatures (shooting, melee, thrown fire), blood on a hit", r"vfx_blood", re.I, CODE, "some", "the blood scene is played by the monsters' hits"),
@@ -27,10 +29,10 @@ ROWS = [
     ("IARC", "Shares the user's location", "No", r"Geolocation|get_location|ACCESS_FINE_LOCATION|ACCESS_COARSE_LOCATION", 0, CODE + ["export_presets.cfg"], "none", "no location API or permission"),
     ("IARC", "Digital purchases", "No", r"BillingClient|GodotGooglePlayBilling|InAppPurchase|IAPStore|real.money", re.I, CODE + ["export_presets.cfg", "project.godot"], "none", "no billing API; the shop spends coins earned in play"),
     ("IARC", "Unrestricted internet access", "No", r"WebView|OS\.shell_open|HTTPRequest|HTTPClient", 0, CODE, "none", "no web view, no browser call, no HTTP client (docs/PRIVACY_AUDIT.md)"),
-    ("Data safety", "Collects or shares any required user data type", "No", r"Firebase|Crashlytics|Analytics|Sentry|AppsFlyer", 0, CODE, "none", "no analytics or crash-reporting SDK"),
-    ("Data safety", "Advertising ID", "No", r"AD_ID|advertising_id|AdvertisingId", 0, ["export_presets.cfg", "android/build/AndroidManifest.xml", "android/build/src", "scripts"], "none", "no AD_ID permission, no script that reads an advertising identifier"),
-    ("Data safety", "Camera, microphone, contacts or storage permissions", "No (only INTERNET and VIBRATE are true)", r"^permissions/(?!internet|vibrate)\w+=true", re.M, ["export_presets.cfg"], "none", "export_presets.cfg"),
-    ("Data safety", "Ads", "No (the plugin is not in the build)", r"^gradle_build/plugins_enabled=PackedStringArray\(\)", re.M, ["export_presets.cfg"], "some", "plugins_enabled is empty in every preset line that sets it"),
+    ("Data safety", "Data collected or shared", "No", r"Firebase|Crashlytics|Analytics|Sentry|AppsFlyer|HTTPRequest|HTTPClient", re.I, CODE + ANDROID, "none", "no analytics or crash-reporting SDK or HTTP client; the bonus reads local connection state"),
+    ("Data safety", "Advertising ID", "No", r"AD_ID|advertising_id|AdvertisingId", 0, CODE + ANDROID, "none", "no AD_ID permission, no script that reads an advertising identifier"),
+    ("Data safety", "Camera, microphone, contacts or storage permissions", "No", r"^permissions/(?!(?:access_network_state|vibrate)=)\w+=true", re.M, ["export_presets.cfg"], "none", "export_presets.cfg"),
+    ("Data safety", "Contains ads", "No", r"AppLovin|AdMob|CrazyGames|AdService|com\.google\.android\.gms\.ads", re.I, CODE + ANDROID, "none", "no advertising framework or provider; Android export permissions and plugins are checked by privacy_audit.py"),
 ]
 
 
@@ -80,7 +82,7 @@ def write(path, results):
         "",
         "Target audience (Console): 16 and over; not directed to children, so the Families program is skipped (`docs/PRIVACY_POLICY_FINAL.md`, Children).",
     ]
-    pathlib.Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+    pathlib.Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
 def main(argv):

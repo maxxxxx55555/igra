@@ -53,7 +53,7 @@ var _salvage_btn: Button
 var _selected_salvage: int = -1
 
 func _ready() -> void:
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	if not enable_workbench: return
 	# the screen had no backdrop: the recipe names were 11 px text straight over the street
 	var bg := ColorRect.new()

@@ -46,9 +46,6 @@ func _run() -> void:
 			_monsters = int(s.substr(12))
 		elif s.begins_with("--thash="):
 			_hash = s.substr(8)
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	if not await _boot():
 		return

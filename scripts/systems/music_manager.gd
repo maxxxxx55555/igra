@@ -221,9 +221,6 @@ func _unlock_audio() -> void:
 	_active.play()
 	create_tween().tween_property(_active, "volume_db", FULL_DB, FADE_TIME)
 
-## AdService reads this to hold off interstitials mid-fight (spec: "never
-## during combat"). Reuses the same detection/decay MusicManager already
-## uses to hold combat music — no second combat tracker needed.
 func _on_game_started() -> void:
 	_combat_hold = 0.0
 	if _wow_cue != null:

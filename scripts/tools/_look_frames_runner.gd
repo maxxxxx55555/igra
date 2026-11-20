@@ -96,9 +96,6 @@ func _enter_game() -> bool:
 		get_tree().quit(3)
 		return false
 	_hash = OS.get_environment("TLS_FRAMES_HASH") if OS.has_environment("TLS_FRAMES_HASH") else "unknown"
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	if not await _wait_until(_menu_up, 15.0):
 		Routes.goto(Routes.MENU)
 		if not await _wait_until(_menu_up, 10.0):

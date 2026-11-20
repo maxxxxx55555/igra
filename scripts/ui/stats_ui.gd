@@ -22,7 +22,7 @@ func _rebuild() -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	if not embedded:
 		# V2 SKIN WIRING P4: real background art over the old flat tint.
 		var bg_path := "res://assets/textures/screens_v2/character_dim.png"

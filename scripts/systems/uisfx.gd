@@ -30,6 +30,9 @@ const _UI_GAIN_DB: Dictionary = {
 }
 const _UI_GAIN_DEFAULT_DB: float = 9.0
 
+## Sodium craft pack: deterministic mechanical UI clicks and a seamless lamp hum.
+const _CRAFT_DIR: String = "res://assets/audio/craft/"
+
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
 	# Text notices have no sound; dedicated action signals own their feedback.
@@ -123,14 +126,46 @@ func _in_hud(node: Node) -> bool:
 	return false
 
 func click() -> void:
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_confirm_click.wav"):
+		play_craft("sfx_ui_confirm_click.wav", &"UI", -2.0, randf_range(0.96, 1.04))
+		return
 	if ResourceLoader.exists(_UI_DIR + "ui_menu_click.ogg"):
 		play_ui("menu_click")
 		return
 	_play("ui_click", 800.0, 0.05)
 
 func hover() -> void:
-	# Pointer movement keeps visual feedback; activation retains the mechanical click.
-	pass
+	# Pointer movement keeps visual feedback; the supplied craft hover tick is
+	# quiet enough to answer deliberate pointer focus without the old beep spam.
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_hover_tick.wav"):
+		play_craft("sfx_ui_hover_tick.wav", &"UI", -12.0, randf_range(0.96, 1.04))
+
+func play_craft(file: String, bus: StringName, volume_db: float, pitch: float = 1.0) -> void:
+	if not _can_play():
+		return
+	var path := _CRAFT_DIR + file
+	if not ResourceLoader.exists(path):
+		return
+	var stream := load(path) as AudioStream
+	if stream == null:
+		return
+	var craft_wav := AudioStreamWAV.new()
+	var source := stream as AudioStreamWAV
+	craft_wav.format = source.format
+	craft_wav.mix_rate = source.mix_rate
+	craft_wav.stereo = source.stereo
+	craft_wav.data = source.data.duplicate()
+	craft_wav.loop_mode = AudioStreamWAV.LOOP_DISABLED
+	craft_wav.resource_path = path
+	stream = craft_wav
+	var p := AudioStreamPlayer.new()
+	p.bus = bus
+	p.volume_db = volume_db
+	p.pitch_scale = pitch
+	p.stream = stream
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
 
 ## docs/GAMEFEEL_SPEC.md UI press micro-scale; _wire gives it to every button.
 const PRESS_SCALE: float = 0.95

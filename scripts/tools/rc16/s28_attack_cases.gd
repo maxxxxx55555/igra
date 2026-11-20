@@ -214,11 +214,10 @@ static func _config_tamper(sim: Node) -> void:
 	var paths: Array[String] = [path]
 	var saved: Dictionary = _read_all(paths)
 	var settings0: Dictionary = SettingsManager.to_dict()
-	var ads0: bool = AdService.enabled
 	var bad: Array[String] = []
 	for hostile: Variant in [99, -3, "2", "abc", [1, 2], {"a": 1}, 1.7, "hard"]:
 		var cfg := ConfigFile.new()
-		cfg.set_value("game", "settings", {"difficulty": hostile, "hardcore": hostile, "ads_enabled": false, "revive": 99})
+		cfg.set_value("game", "settings", {"difficulty": hostile, "hardcore": hostile, "revive": 99})
 		cfg.set_value("audio", "volumes", {"Master": 9.0, "Music": -3.0})
 		cfg.save(path)
 		SettingsManager.load_from_cfg()
@@ -226,10 +225,10 @@ static func _config_tamper(sim: Node) -> void:
 		var scale: float = SettingsManager.difficulty_scale("monster_hp")
 		var in_range: bool = level is int and int(level) >= 0 and int(level) <= 2 and is_finite(scale)
 		var hardcore: Variant = SettingsManager.get_setting("hardcore", null)
-		var rules_ok: bool = hardcore is bool and not hardcore and SettingsManager.get_volume("Master") <= 1.0 and SettingsManager.get_volume("Music") >= 0.0 and AdService.enabled == ads0
+		var rules_ok: bool = hardcore is bool and not hardcore and SettingsManager.get_volume("Master") <= 1.0 and SettingsManager.get_volume("Music") >= 0.0
 		if not (in_range and rules_ok):
 			bad.append("%s -> %s" % [str(hostile), str(level)])
-	sim._ok(bad.is_empty(), "CFG1 a hostile settings file (a number out of range, a word, a list, a dictionary in the difficulty and in Hardcore, volumes of 9 and -3, an ads flag) leaves the rules in range; wrong: %s" % [bad])
+	sim._ok(bad.is_empty(), "CFG1 a hostile settings file (a number out of range, a word, a list, a dictionary in the difficulty and in Hardcore, volumes of 9 and -3) leaves the rules in range; wrong: %s" % [bad])
 	_put_back(paths, saved)
 	SettingsManager.from_dict(settings0)
 

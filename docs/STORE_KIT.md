@@ -47,33 +47,9 @@ Long-form listings for es/de/fr/it/pt_BR/tr/ja/ko/zh/zh_TW/ar (11 locales) are a
 a native spot-check of the 11 authored listings before submission (the same review gate the short
 descriptions carry).
 
-## Privacy policy skeleton
+## Privacy policy
 
-No `docs/store/PRIVACY.md` or published policy page exists yet — `play_store.md`'s own Data Safety
-section already flags this as a submission blocker ("Privacy policy URL: TODO — publish a policy
-page"). Skeleton, grounded in the game's actual data footprint (verified this session — no
-analytics SDK, no account system found in `scripts/`):
-
-```
-# Privacy Policy — THE LAST STREETLIGHT
-
-Effective date: <fill in at publish>
-
-This game does not collect, store, or transmit personal data to us or any third party in its
-current build.
-
-- Save data stays on your device (local file, never uploaded).
-- Local-network co-op only connects to devices on the same LAN you explicitly join — no data
-  leaves your network.
-- [IF AppLovin MAX ad SDK key is live at ship time: this build shows ads via AppLovin MAX, which
-  may collect an advertising identifier and usage data per their own policy — link AppLovin's
-  privacy policy here and disclose this in the Play Data Safety section too.]
-- Contact: <owner email/support address>
-```
-
-This is a skeleton, not a filed policy — the owner fills in the effective date, contact, and the
-AppLovin bracket (delete it if shipping without ads; keep and link if the real SDK key is in by
-launch — see `docs/store/HUMAN_CHECKLIST.md`).
+Publish both translations from [the release policy](../store/privacy-policy-template.md). The offline game contains no ads, collects or shares no data, and checks connection status locally for optional bonuses.
 
 ## 8-shot screenshot list
 
