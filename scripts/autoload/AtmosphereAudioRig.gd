@@ -89,6 +89,13 @@ func _exit_tree() -> void:
 	for player: AudioStreamPlayer3D in _hums:
 		player.stop()
 		player.stream = null
+	# `_sounds` owns duplicated AudioStreamWAV resources (the craft hum). Drop
+	# them explicitly: the AudioServer holds the last playback a little longer
+	# than the scene tree, and a resource still in this dictionary at exit is
+	# reported as an ObjectDB leak.
+	_sounds.clear()
+	_lamps.clear()
+	_muted_group_lamps.clear()
 
 func _on_node_added(node: Node) -> void:
 	if node.has_signal(&"survival_changed") and node.has_signal(&"boss_telegraph"):
