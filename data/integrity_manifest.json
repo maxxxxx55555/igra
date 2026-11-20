@@ -76,7 +76,7 @@
   "res://scripts/art/prop_meshes.gd": "e88d0409eacfa41791f372b40553e0b82a82fea59107bc1f6f767a766abfd60b",
   "res://scripts/art/tree_meshes.gd": "cab7cbe85c699b015cf10c332b739f1913b218023664663c1c43aa9e8185a4b1",
   "res://scripts/art/weapon_meshes.gd": "2610973e4519d3bd2952d6408f7de565337306c6cbec5af8fb9380bbb6e68a9d",
-  "res://scripts/autoload/AtmosphereAudioRig.gd": "e68898c4a488cfb00ba5a804360de09a6a714f172bc3833031cfd6825c93c8b0",
+  "res://scripts/autoload/AtmosphereAudioRig.gd": "e89c318b484877c7f71a7594db27ed6c8a867645558c5d2cead408272cc0c8ec",
   "res://scripts/autoload/GameplayDirector.gd": "c40d92589076fde61ec3425ba233195f5d0ffa29df4090aa4b22b8a030e88906",
   "res://scripts/autoload/SecurityVault.gd": "b0d0ffcd9a1518005fdcc6334462a79dd979c513c8f93e03a79efa24a0931a63",
   "res://scripts/boot_loading.gd": "2e19e499bfb1fcd7e8aefc99e2d1cbb9b6aca300ed3a702dc894a18804ddbd4d",
