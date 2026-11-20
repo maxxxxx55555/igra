@@ -17,7 +17,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "integrity_manifest.json"
 SCAN = ("content", "data")
 SKIP_PREFIXES = ("data/i18n/",)
-RUNTIME_GLOBS = ("scripts/**/*.gd", "shaders/**/*.gdshader", "data/i18n/translations.csv")
+RUNTIME_GLOBS = (
+    "scripts/**/*.gd", "shaders/**/*.gdshader", "data/i18n/translations.csv",
+    "assets/textures/ui_craft/*.png", "assets/textures/world_craft/*.png",
+    "assets/audio/craft/*.wav",
+)
 SKIP_RUNTIME = ("scripts/tools/", "scripts/security/attack_sim.gd")
 
 

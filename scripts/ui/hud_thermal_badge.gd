@@ -7,7 +7,7 @@ const HOLD_SEC: float = 8.0
 var comfort_state: StringName = &""
 
 func _ready() -> void:
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_theme_font_size_override("font_size", 18)

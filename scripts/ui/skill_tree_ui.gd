@@ -8,7 +8,7 @@ class_name SkillTreeUI
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	var chrome: Node = (load("res://scripts/ui/skill_tree_chrome.gd") as GDScript).new() as Node
 	chrome.name = "SkillTreeChrome"
 	add_child(chrome)
@@ -20,7 +20,6 @@ func _ready() -> void:
 
 	close_button.pressed.connect(_close)
 	_build_trees()
-	UnslopThemeStyler.style_tree_recursive(self)
 	_refresh()
 
 ## PHASE 4 (live language switch): tab titles and skill_points_label are

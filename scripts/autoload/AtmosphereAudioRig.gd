@@ -9,6 +9,7 @@ const BLOCK: int = 256
 const HUM_VOICES: int = 4
 const HUM_RANGE: float = 19.0
 const CUES: Array[StringName] = [&"hum", &"asphalt", &"metal", &"gravel", &"spark", &"surge"]
+const CRAFT_HUM: String = "res://assets/audio/craft/amb_sodium_hum_loop.wav"
 
 @export_range(3, 24) var effect_voices: int = 10
 @export var ogg_paths: Dictionary[StringName, String] = {}
@@ -82,6 +83,12 @@ func _exit_tree() -> void:
 	_drone.stop()
 	_playback = null
 	_drone.stream = null
+	for player: AudioStreamPlayer3D in _effects:
+		player.stop()
+		player.stream = null
+	for player: AudioStreamPlayer3D in _hums:
+		player.stop()
+		player.stream = null
 
 func _on_node_added(node: Node) -> void:
 	if node.has_signal(&"survival_changed") and node.has_signal(&"boss_telegraph"):
@@ -280,6 +287,14 @@ func _play_at(cue: StringName, at: Vector3, gain_db: float, pitch: float, priori
 		emitter.play()
 
 func _load_sound(cue: StringName) -> AudioStream:
+	if cue == &"hum" and ResourceLoader.exists(CRAFT_HUM):
+		var crafted := load(CRAFT_HUM) as AudioStreamWAV
+		if crafted != null:
+			var copy := crafted.duplicate() as AudioStreamWAV
+			copy.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			copy.loop_begin = 0
+			copy.loop_end = maxi(0, (copy.data.size() / 4) - 1)
+			return copy
 	var path: String = ogg_paths.get(cue, "")
 	if not path.is_empty() and ResourceLoader.exists(path):
 		var imported: AudioStreamOggVorbis = load(path) as AudioStreamOggVorbis

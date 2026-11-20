@@ -780,7 +780,7 @@ func _install_joystick() -> void:
 ## theme once on each top-level Control child here reaches every one of
 ## them via normal Control ancestry, same coverage as before.
 func _apply_canonical_theme() -> void:
-	var t := ThemeProvider.build_theme()
+	var t := CraftThemeBridge.build()
 	for child in get_children():
 		if child is Control:
 			(child as Control).theme = t
@@ -1839,11 +1839,12 @@ func _setup_slot_placeholders() -> void:
 			child.queue_free()
 		# V2 SKIN WIRING P1: real slot chrome texture in place of the flat
 		# color swatch; falls back to the old ColorRect if missing on disk.
-		var chrome_path := "res://assets/textures/ui_v2/quickslot_v2_72.png"
+		var chrome_path := "res://assets/textures/ui_craft/quickslot_craft_72.png"
+		var legacy_chrome := "res://assets/textures/ui_v2/quickslot_v2_72.png"
 		var border: Control
-		if ResourceLoader.exists(chrome_path):
+		if ResourceLoader.exists(chrome_path) or ResourceLoader.exists(legacy_chrome):
 			var tex_border := TextureRect.new()
-			tex_border.texture = load(chrome_path)
+			tex_border.texture = load(chrome_path) if ResourceLoader.exists(chrome_path) else load(legacy_chrome)
 			tex_border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tex_border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			border = tex_border

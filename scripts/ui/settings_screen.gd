@@ -15,8 +15,7 @@ func _on_lang_changed(_lang: String) -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
-	UnslopThemeStyler.style_tree_recursive(self)
+	theme = CraftThemeBridge.build()
 
 	var bg := ColorRect.new()
 	bg.color = Color(0.0588235, 0.0745098, 0.0784314, 0.92)

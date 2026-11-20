@@ -17,7 +17,7 @@ var _btn: Button = null
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 
 	var bg := ColorRect.new()
 	bg.color = Color(0.0235294, 0.0588235, 0.0745098, 0.92)

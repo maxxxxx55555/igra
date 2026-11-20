@@ -41,7 +41,7 @@ func _on_lang_changed(_lang: String) -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	if not embedded:
 		var bg := ColorRect.new()
 		bg.color = Color(0.04, 0.05, 0.07, 0.94)

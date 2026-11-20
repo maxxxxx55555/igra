@@ -2,7 +2,7 @@ extends RefCounted
 ## CanvasLayer-owned cards need an explicit theme; Window inheritance stops here.
 
 static func apply(card: Control, border: ColorRect, rule: ColorRect) -> void:
-	card.theme = ThemeProvider.build_theme()
+	card.theme = CraftThemeBridge.build()
 	border.color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
 	rule.color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
 

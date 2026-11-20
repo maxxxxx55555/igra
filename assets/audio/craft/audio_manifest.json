@@ -1,0 +1,62 @@
+{
+  "style_lock": {
+    "sample_rate": 48000,
+    "mode": "D minor / D Dorian",
+    "max_true_peak_db": -1.5,
+    "max_dc_offset": 0.002,
+    "max_loop_seam": 0.008,
+    "seed": 47202
+  },
+  "files": [
+    {
+      "path": "assets/audio/craft/sfx_ui_hover_tick.wav",
+      "channels": 1,
+      "duration_s": 0.065,
+      "dc_offset": 9e-06,
+      "rms_dbfs": -21.55,
+      "true_peak_dbtp": -7.0,
+      "loop_seam": null,
+      "sha256": "e3cdfb31dcf37c2747faa07b8d1b8bbe7a0098eb77b3959dc54ef1bb0a5c8135"
+    },
+    {
+      "path": "assets/audio/craft/sfx_ui_confirm_click.wav",
+      "channels": 1,
+      "duration_s": 0.12,
+      "dc_offset": 0.000289,
+      "rms_dbfs": -17.51,
+      "true_peak_dbtp": -4.46,
+      "loop_seam": null,
+      "sha256": "0ad57ba22e9541315ac01190ef4236f2422734ff03d2fc4e6190464ce3c81c96"
+    },
+    {
+      "path": "assets/audio/craft/sfx_district_restored_sting.wav",
+      "channels": 2,
+      "duration_s": 6.0,
+      "dc_offset": 3.7e-05,
+      "rms_dbfs": -15.56,
+      "true_peak_dbtp": -2.0,
+      "loop_seam": null,
+      "sha256": "1aeb5ecedf7979029b9148e15170f1c74571168f2171fa7edc1b7e86987fd7f5"
+    },
+    {
+      "path": "assets/audio/craft/sfx_death_cue.wav",
+      "channels": 2,
+      "duration_s": 4.0,
+      "dc_offset": 0.000154,
+      "rms_dbfs": -14.4,
+      "true_peak_dbtp": -2.5,
+      "loop_seam": null,
+      "sha256": "5871002e30844c885c3bd6f2a26a3b35e9da76de4948fe5b6644968a720964de"
+    },
+    {
+      "path": "assets/audio/craft/amb_sodium_hum_loop.wav",
+      "channels": 2,
+      "duration_s": 10.0,
+      "dc_offset": 7.5e-05,
+      "rms_dbfs": -15.54,
+      "true_peak_dbtp": -6.0,
+      "loop_seam": 0.0,
+      "sha256": "8b205a6e92be4bc1b9a32529a0b163d902b5eac2038d6e54a199b035827081eb"
+    }
+  ]
+}

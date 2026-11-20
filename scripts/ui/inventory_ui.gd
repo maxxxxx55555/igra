@@ -58,7 +58,7 @@ var _quick_targets: Array[Button] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	var dim := ColorRect.new()
 	dim.color = Color(0.0, 0.0, 0.0, 0.6)
 	add_child(dim)

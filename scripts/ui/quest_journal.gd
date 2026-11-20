@@ -30,7 +30,7 @@ func _ready() -> void:
 func _build_ui() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 
 	if not embedded:
 		var bg := ColorRect.new()

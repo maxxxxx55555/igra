@@ -16,6 +16,7 @@ const BLUR_IDLE: float = 0.005  # below this the blur cannot be seen
 const PLAYER_RUN: int = 2  # mirrors player_3d.gd: enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
 var _grain: ColorRect = null
+var _grade: ColorRect = null
 var _vignette: ColorRect = null
 var _chroma: ColorRect = null
 var _visibility_overlay: ColorRect = null
@@ -28,6 +29,7 @@ var _pulse_tween: Tween = null
 var _blur: ColorRect = null
 var _blur_copy: BackBufferCopy = null
 var _blur_strength: float = 0.0
+var _grade_copy: BackBufferCopy = null
 var _player: Node = null
 
 func _ready() -> void:
@@ -39,6 +41,7 @@ func _ready() -> void:
 	_build_blur()
 	add_child(_RAIN_LENS.new())
 	_build_chroma()
+	_build_craft_grade()
 	_build_grain()
 	_build_vignette()
 	_build_visibility_overlay()
@@ -54,7 +57,7 @@ func _ready() -> void:
 ## The first draw of a screen shader compiles it, which shows as a hitch at the first sprint, hit or shower. Each is drawn for two frames at the start, at
 ## strength 0 (an identity: the frame is copied as it is), and put back as it was.
 func _warm_shaders() -> void:
-	var layers: Array[CanvasItem] = [_blur, _chroma, get_node("RainLens") as CanvasItem]
+	var layers: Array[CanvasItem] = [_blur, _chroma, _grade, get_node("RainLens") as CanvasItem]
 	var was: Array[bool] = []
 	for layer: CanvasItem in layers:
 		was.append(layer.visible)
@@ -92,6 +95,8 @@ func _set_chroma_pulse(px: float) -> void:
 
 func _apply_tier() -> void:
 	_grain.visible = _tier >= TIER_GRAIN
+	_grade.visible = _tier >= 1
+	_grade_copy.visible = _grade.visible
 	_sync_chroma()
 	if _tier < TIER_BLUR:
 		_blur_strength = 0.0
@@ -232,6 +237,29 @@ func _build_grain() -> void:
 	var mat := ShaderMaterial.new()
 	mat.shader = _grain_shader()
 	_grain.material = mat
+
+func _build_craft_grade() -> void:
+	# The grade samples the frame before grain/vignette and needs its own copy:
+	# without it, a screen-texture layer would read already-graded pixels and
+	# compound the tint/grain twice.
+	_grade_copy = BackBufferCopy.new()
+	_grade_copy.name = "CraftGradeCopy"
+	_grade_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	add_child(_grade_copy)
+	_grade = ColorRect.new()
+	_grade.name = "CraftSodiumGradeOverlay"
+	_grade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_grade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_grade)
+	var mat := ShaderMaterial.new()
+	var shader := load("res://shaders/sodium_cinematic_grade.gdshader") as Shader
+	if shader != null:
+		mat.shader = shader
+		if _tier == 0:
+			mat.set_shader_parameter("grade_strength", 0.18)
+			mat.set_shader_parameter("vignette_strength", 0.12)
+			mat.set_shader_parameter("grain_strength", 0.004)
+	_grade.material = mat
 
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
 ## статичные строки развёртки (mod по Y) — это скан-лайны из CRT-эффекта,

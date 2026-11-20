@@ -44,9 +44,9 @@ const FACADE_TEX := {
 	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.png",
 	&"police": "res://assets/textures/pbr/panel_facade_albedo.png",
 	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"industrial": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"substation": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"power_station": "res://assets/textures/pbr/panel_facade_albedo.png",
+	&"industrial": "res://assets/textures/world_craft/facade_concrete_albedo.png",
+	&"substation": "res://assets/textures/world_craft/facade_concrete_albedo.png",
+	&"power_station": "res://assets/textures/world_craft/facade_concrete_albedo.png",
 }
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")

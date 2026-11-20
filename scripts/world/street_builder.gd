@@ -44,6 +44,9 @@ const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _PUDDLES := preload("res://shaders/wet_asphalt_puddle.gdshader")
+const _CRAFT_ASPHALT_ALBEDO := "res://assets/textures/world_craft/asphalt_wet_albedo.png"
+const _CRAFT_ASPHALT_ROUGH := "res://assets/textures/world_craft/asphalt_wet_roughness.png"
+const _CRAFT_ASPHALT_NORMAL := "res://assets/textures/world_craft/asphalt_wet_normal.png"
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
@@ -102,6 +105,10 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		# value of the old asphalt texture, so the street keeps its darkness.
 		mat.set_shader_parameter("asphalt_tint", Color(0.19, 0.20, 0.22))
 		mat.set_shader_parameter("wet_darkening", 0.45)
+		mat.set_shader_parameter("albedo_tex", load(_CRAFT_ASPHALT_ALBEDO))
+		mat.set_shader_parameter("roughness_tex", load(_CRAFT_ASPHALT_ROUGH))
+		mat.set_shader_parameter("normal_tex", load(_CRAFT_ASPHALT_NORMAL))
+		mat.set_shader_parameter("tex_scale", 0.35)
 		return mat
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):

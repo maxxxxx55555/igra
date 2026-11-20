@@ -132,14 +132,23 @@ func _check_physical_pickup() -> void:
 	_clear_feedback()
 
 func _check_pointer_feedback() -> void:
+	MusicManager._unlock_audio()
 	UISFX.hover()
-	_ok(_ui_players().is_empty(), "pointer hover remains visual without repetitive audio")
+	var hover_players: Array[AudioStreamPlayer] = _ui_players()
+	_ok(hover_players.size() == 1 and hover_players[0].bus == &"UI" and _craft_stream(hover_players[0].stream, 1280, 48000),
+		"pointer focus answers with the supplied mechanical hover tick on UI")
 	_clear_feedback()
 	UISFX.click()
 	var players: Array[AudioStreamPlayer] = _ui_players()
-	_ok(players.size() == 1 and players[0].bus == &"UI" and players[0].stream.resource_path.ends_with("ui_menu_click.ogg"),
-		"activation retains the existing mechanical UI clip")
+	_ok(players.size() == 1 and players[0].bus == &"UI" and _craft_stream(players[0].stream, 2360, 48000),
+		"activation uses the supplied mechanical click on UI")
 	_clear_feedback()
+
+func _craft_stream(stream: AudioStream, frames: float, rate: float) -> bool:
+	if stream is AudioStreamWAV:
+		var wav := stream as AudioStreamWAV
+		return wav.mix_rate == rate and wav.data.size() / (2 if wav.stereo else 1) == frames
+	return false
 
 func _ui_players() -> Array[AudioStreamPlayer]:
 	var players: Array[AudioStreamPlayer] = []

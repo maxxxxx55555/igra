@@ -252,7 +252,6 @@ func show_screen(name: String) -> void:
 	tween.play()
 	_populate_screen(name)
 	if name == "Shop" and not d.card.has_meta(&"_sodium_styled"):
-		UnslopThemeStyler.style_tree_recursive(d.card)
 		d.card.set_meta(&"_sodium_styled", true)
 		# The release skin supplies the border/hover states; the typeface stays
 		# the bundled heading face so every locale keeps its glyphs.

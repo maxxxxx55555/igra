@@ -55,7 +55,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	_build()
 	LocalizationManager.language_changed.connect(_on_language_changed)
 	EventBus.district_stage_changed.connect(func(_a: StringName, _b: int) -> void: _refresh())
