@@ -255,10 +255,10 @@ func _build_craft_grade() -> void:
 	var shader := load("res://shaders/sodium_cinematic_grade.gdshader") as Shader
 	if shader != null:
 		mat.shader = shader
-		if _tier == 0:
-			mat.set_shader_parameter("grade_strength", 0.18)
-			mat.set_shader_parameter("vignette_strength", 0.12)
-			mat.set_shader_parameter("grain_strength", 0.004)
+		if OS.has_feature("mobile") or OS.has_feature("android"):
+			mat.set_shader_parameter("grade_strength", 0.52)
+			mat.set_shader_parameter("vignette_strength", 0.24)
+			mat.set_shader_parameter("grain_strength", 0.016)
 	_grade.material = mat
 
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
