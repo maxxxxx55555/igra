@@ -5,7 +5,7 @@ extends Node
 ## real game state. No state injection, no warps: movement is fed through
 ## InputService.set_joy_move_dir (the virtual-joystick path), turning
 ## through the player's look, interaction through
-## InputService.request_interact, attacks through request_attack, dodges
+## InputService.request_interact, attacks through the melee action, dodges
 ## through request_dodge, travel through the City Map's Travel button.
 ##
 ## Proves: suburbs DARK first-light chain -> the district spine in
@@ -97,7 +97,7 @@ const LOOT_DETOUR_M := 14.0
 const LOOT_GIVE_UP_SEC := 10.0
 const LOOT_BLOCK_SEC := 30.0
 const BATTERY_STOCK := 3
-const MEDKIT_STOCK := 1
+const MEDKIT_STOCK := 5  # one inventory stack for the final fight
 var _loot_since := 0.0
 var _loot_block_until := 0.0
 var _menu_recoveries := 0
@@ -430,8 +430,13 @@ func _tick_boss(delta: float) -> void:
 		return
 	var bp: Vector3 = (boss as Node3D).global_position
 	var d := _player.global_position.distance_to(bp)
-	_face(bp)  # P2's light-gate needs the flashlight cone actually on the boss, not just "on"
-	if _player.get("hp") != null and float(_player.get("hp")) < 30.0:
+	_face(bp)
+	var lamp := _player.get_node("ModelPivot/FlashlightPivot/Flashlight") as SpotLight3D
+	var beam := bp + Vector3.UP - lamp.global_position
+	var pitch := atan2(beam.y, Vector2(beam.x, beam.z).length())
+	var pitch_delta := pitch - lamp.global_rotation.x
+	_player.call("_apply_look", 0.0, -pitch_delta if SettingsManager.is_look_inverted() else pitch_delta)
+	if _player.get("hp") != null and float(_player.get("hp")) < 55.0:
 		_use_item(&"medkit")
 	## The GDD (§6.2) lists the Architect's weakness as "стробоскоп" — the
 	## strobe. Measured: without it the bot's melee-only loop cleared under
@@ -444,14 +449,31 @@ func _tick_boss(delta: float) -> void:
 		_strobe_cd = 1.0
 	_target_pos = bp
 	_have_target = true
-	if d > BOSS_SWING_RANGE:
+	if d > BOSS_CONTACT_RANGE:
 		_move(_approach_dir(bp))
 	else:
-		_move(_dir_to(bp) if d > BOSS_CONTACT_RANGE else Vector2.ZERO)
+		# Standing at the first point within melee reach leaves the beam behind
+		# minions or street cover throughout P2. Circle the target, checking
+		# clearance on both sides, and keep attacking from the new angle.
+		var body := _player as CharacterBody3D
+		var radial := bp - body.global_position
+		radial.y = 0.0
+		var side := radial.normalized().cross(Vector3.UP) * _avoid_side
+		var probe := body.global_transform.translated(Vector3.UP * 0.15)
+		if body.test_move(probe, side * 1.0):
+			side = -side
+			_avoid_side *= -1.0
+		_move(_dir_to(_player.global_position + side) if not body.test_move(probe, side * 1.0) else Vector2.ZERO)
 	# A minion can body-block the approach outside the Architect's reach.
-	if _act_cd <= 0.0 and (d <= BOSS_SWING_RANGE or _monster_near(BOSS_CONTACT_RANGE)):
-		InputService.request_attack()
-		_act_cd = 0.45
+	if _act_cd <= 0.0 and _player.get("_attack_phase") == "none" and (d <= BOSS_SWING_RANGE or _monster_near(BOSS_CONTACT_RANGE)):
+		# The attack button fires an equipped gun, including an empty one.
+		# Use the dedicated melee action after the previous swing has recovered.
+		for pressed in [true, false]:
+			var event := InputEventAction.new()
+			event.action = &"melee"
+			event.pressed = pressed
+			Input.parse_input_event(event)
+		_act_cd = 0.12
 		# occasional dodge away from the boss to shed damage
 		if d <= BOSS_SWING_RANGE and _rng.randf() < 0.18:
 			InputService.request_dodge(_dir_to(bp).orthogonal())
@@ -819,11 +841,15 @@ func _finish() -> void:
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
 	if OS.get_environment("QA_NO_QUIT") != "1":
+		# Freeze gameplay before draining voices so late pickups cannot restart them.
+		get_tree().paused = true
 		# A player still sounding at quit keeps its playback alive in the AudioServer when the engine counts the objects left (46 of the 81 of a run with deaths, v10 R6).
 		for p: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
 			(p as AudioStreamPlayer).stop()
+			(p as AudioStreamPlayer).stream = null
 		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
 			(p3 as AudioStreamPlayer3D).stop()
+			(p3 as AudioStreamPlayer3D).stream = null
 		# Z5 R6: the bot's teardown — the pooled VFX bursts of WowDirector live on the
 		# root to be replayed; freed here so the exit counts a clean tree.
 		var wow := get_node_or_null("/root/WowDirector")
@@ -833,5 +859,5 @@ func _finish() -> void:
 				if fx is Node and is_instance_valid(fx):
 					(fx as Node).free()
 			bursts.clear()
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.3, true, false, true).timeout
 		get_tree().quit(code)

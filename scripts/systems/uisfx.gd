@@ -233,3 +233,9 @@ func _beep(freq: float, dur: float) -> void:
 func _can_play() -> bool:
 	var music := get_node_or_null("/root/MusicManager")
 	return music != null and bool(music.get("_audio_unlocked"))
+
+func _exit_tree() -> void:
+	for voice in get_children():
+		if voice is AudioStreamPlayer:
+			voice.stop()
+			voice.stream = null

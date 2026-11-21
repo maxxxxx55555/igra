@@ -1,0 +1,14 @@
+BebasNeue-Regular.ttf
+Copyright 2019 The Bebas Neue Project Authors (https://github.com/dharmatype/Bebas-Neue)
+
+Rajdhani-Regular.ttf
+Copyright (c) 2014 Indian Type Foundry (info@indiantypefoundry.com)
+
+RobotoCondensed-Full-VF.ttf
+Copyright 2011 Google Inc. All Rights Reserved.
+
+RobotoCondensed-Regular.ttf
+Copyright 2011 Google Inc. All Rights Reserved.
+
+ShareTechMono-Regular.ttf
+Copyright (c) 2012, Carrois Type Design, Ralph du Carrois (post@carrois.com www.carrois.com), with Reserved Font Name 'Share'

@@ -82,7 +82,7 @@ func _check_licensed_music() -> void:
 			text += label.text + "\n"
 			if label.text.contains("Scott Buckley"):
 				wrapped = wrapped and label.autowrap_mode != TextServer.AUTOWRAP_OFF and label.get_global_rect().end.x <= get_viewport().get_visible_rect().end.x
-		_ok(text.contains("Hymn") and text.contains("Moonlight") and text.contains("Scott Buckley") and text.contains("creativecommons.org/licenses/by/4.0/") and text.contains("scottbuckley.com.au/library/") and text.contains("Changes:") and text.contains("Lyria") and wrapped,
+		_ok(text.contains("Hymn") and text.contains("Moonlight") and text.contains("Scott Buckley") and text.contains("creativecommons.org/licenses/by/4.0/") and text.contains("scottbuckley.com.au/library/") and text.contains("Changes:" if code == "en" else "Обработка:") and text.contains("music_battle.ogg") and text.contains("music_tension.ogg") and text.contains("music_combat.ogg") and text.contains("Lyria") and wrapped,
 			"credits retain AI disclosure and wrapped artist, titles, source, licence and changes: " + code)
 		credits.free()
 	LocalizationManager.set_language(lang)

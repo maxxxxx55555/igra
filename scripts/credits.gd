@@ -1,10 +1,6 @@
 extends Control
 
-const LICENSED_MUSIC: Array[String] = [
-	"Hymn — Scott Buckley\nReleased under CC-BY 4.0\nhttps://www.scottbuckley.com.au/library/hymn/",
-	"Moonlight — Scott Buckley\nReleased under CC-BY 4.0\nhttps://www.scottbuckley.com.au/library/moonlight/",
-	"License: https://creativecommons.org/licenses/by/4.0/\nChanges: mono conversion, two-second loop crossfade, level matching and OGG encoding. No pitch or tempo change.",
-]
+const MUSIC_CREDITS := ["CREDITS_COMBAT_TRACKS", "CREDITS_HYMN", "CREDITS_MOONLIGHT", "CREDITS_MUSIC_CHANGES"]
 
 func _ready() -> void:
 	add_to_group("ui_root")
@@ -25,9 +21,9 @@ func _ready() -> void:
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 16)
 	scroll.add_child(column)
-	for credit: String in LICENSED_MUSIC:
+	for credit: String in MUSIC_CREDITS:
 		var label := Label.new()
-		label.text = credit
+		label.text = LocalizationManager.t(credit)
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_font_size_override("font_size", 20)
 		column.add_child(label)
