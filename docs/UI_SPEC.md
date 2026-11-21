@@ -1,3 +1,5 @@
+> **HISTORICAL NOTICE:** Superseded by docs/PRODUCTION_BIBLE.md (§0) and docs/STYLE_GUIDE.md (§8). Active renderer: gl_compatibility (ACES); locales: EN/RU.
+
 # UI_SPEC — The Last Streetlight (раскладка всех экранов по мудбордам)
 Стиль/токены/шрифты — см. docs/ART_UI_STYLE.md (не дублировать). Фото-ассеты внутри плашек = плейсхолдеры ColorRect/процедурные силуэты со слотом texture под .png позже. Все экраны через PanelCard (задача 2). screen_router enum ниже. Микровзаимодействия глобально: tween появления 0.18s, hover/pressed на кнопках, амбиент-фон у меню/загрузки = размытый 3D-кадр (SubViewport или ColorRect-градиент #0c1016->#141a26 если дорого).
 

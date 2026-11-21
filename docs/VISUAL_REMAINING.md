@@ -1,3 +1,5 @@
+> **HISTORICAL NOTICE:** Superseded by docs/PRODUCTION_BIBLE.md (§0) and docs/STYLE_GUIDE.md (§8). Active renderer: gl_compatibility (ACES); locales: EN/RU.
+
 # Visual pass — remaining work (post static-verifiable pass, 2026-09-21)
 
 `docs/VISUAL_PASS.md` W1-W10 status: W1 (env presets) and W9 (ThemeProvider

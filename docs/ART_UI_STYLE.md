@@ -1,3 +1,5 @@
+> **HISTORICAL NOTICE:** Superseded by docs/PRODUCTION_BIBLE.md (§0) and docs/STYLE_GUIDE.md (§8). Active renderer: gl_compatibility (ACES); locales: EN/RU.
+
 # Арт-библия — The Last Streetlight
 
 ## Принцип температуры
