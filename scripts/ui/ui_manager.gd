@@ -236,6 +236,9 @@ func open_codex(tab: StringName) -> void:
 
 ## A screen built from a script slides in and fades out; one built from a scene shows and hides at once, and Reduce UI Motion does both at once.
 func _animates(id: StringName) -> bool:
+	# The map covers the live world from its first frame, including uncharted space.
+	if id == &"district_map":
+		return false
 	return not String(SCREENS.get(id, "")).ends_with(".tscn") and not bool(SettingsManager.get_setting("reduce_ui_motion", false))
 
 func _slide_in(id: StringName, scr: Control) -> void:

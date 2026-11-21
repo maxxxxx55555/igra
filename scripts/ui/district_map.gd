@@ -4,9 +4,9 @@ extends Control
 ## player, monster, item, quest, lamp, route or label, and unknown space stays opaque at every zoom. District travel is
 ## its own screen (city_map), opened from here.
 
-const STONE := Color(0.24, 0.25, 0.26)
-const BUILDING_EDGE := Color(0.54, 0.54, 0.52)
-const CANVAS_BG := Color(0.0235294, 0.0588235, 0.0745098)
+const STONE := AntiSlopThemeDirector.COL_IRON_EDGE
+const BUILDING_EDGE := AntiSlopThemeDirector.COL_SODIUM_KEY
+const CANVAS_BG := ThemeProvider.COLOR_BG_DARK
 const ZOOM_MIN: float = 0.5
 const ZOOM_MAX: float = 4.0
 
@@ -22,7 +22,7 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = CraftThemeBridge.build()
 	var bg := ColorRect.new()
-	bg.color = Color(CANVAS_BG, 0.96)
+	bg.color = ThemeProvider.COLOR_BG_PANEL
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var root := VBoxContainer.new()
@@ -112,25 +112,44 @@ func _to_canvas(cell: Vector2, bounds: Rect2, px: float) -> Vector2:
 	return _canvas.size * 0.5 + _pan + (cell - bounds.get_center()) * px
 
 func _draw_canvas() -> void:
-	_canvas.draw_rect(Rect2(Vector2.ZERO, _canvas.size), CANVAS_BG)
+	var sheet := Rect2(Vector2.ZERO, _canvas.size)
+	_canvas.draw_rect(sheet, CANVAS_BG)
+	_canvas.draw_rect(sheet.grow(-0.5), ThemeProvider.COLOR_BORDER, false, 1.0)
 	var cells := _cells()
 	if cells.is_empty():
 		return
 	var bounds := _bounds(cells)
 	var px: float = minf(_canvas.size.x / maxf(bounds.size.x + 4.0, 1.0), _canvas.size.y / maxf(bounds.size.y + 4.0, 1.0)) * _zoom
-	var sb := get_tree().get_first_node_in_group(&"street_builder") as Node3D
+	var sb := get_tree().get_first_node_in_group(&"street_builder") as StreetBuilder
+	var streets: Array[Rect2] = []
+	if sb != null:
+		streets = sb.road_footprints()
 	var skyline := get_tree().get_first_node_in_group(&"city_skyline") as CitySkyline
+	var paving := {}
+	for cell: Vector2i in cells:
+		var local := (Vector2(cell) + Vector2(0.5, 0.5)) * Cartography.CELL
+		for street: Rect2 in streets:
+			if street.has_point(local):
+				paving[cell] = true
+				break
+		var at := _to_canvas(Vector2(cell), bounds, px)
+		_canvas.draw_rect(Rect2(at, Vector2(px, px)), STONE if paving.has(cell) else ThemeProvider.COLOR_BG_PANEL2)
+	# Outline a surveyed curb only when its road and courtyard sides have both been seen.
+	# Drawing lines after fills keeps a neighbour's fill from covering a one-pixel edge.
 	for cell: Vector2i in cells:
 		var at := _to_canvas(Vector2(cell), bounds, px)
-		_canvas.draw_rect(Rect2(at, Vector2(px, px)), STONE)
-		# the edge of a building the lit street runs along: a neighbour inside a block, never charted itself
 		for side: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 			var next := cell + side
-			if cells.has(next) or sb == null or not _is_building(sb, skyline, next):
+			var edge := BUILDING_EDGE
+			if cells.has(next):
+				if not paving.has(cell) or paving.has(next):
+					continue
+				edge = ThemeProvider.COLOR_BORDER
+			elif sb == null or not _is_building(sb, skyline, next):
 				continue
 			var a := at + Vector2(maxi(side.x, 0), maxi(side.y, 0)) * px
 			var b := a + (Vector2(0, px) if side.x != 0 else Vector2(px, 0))
-			_canvas.draw_line(a, b, BUILDING_EDGE, maxf(1.0, px * 0.12))
+			_canvas.draw_line(a, b, edge, 1.0)
 
 ## Whether a cell's centre lies in a building. Prefers the skyline's recorded footprints (real front widths and
 ## alleys), converting the charted cell from street-builder space into skyline-local XZ; falls back to the outer

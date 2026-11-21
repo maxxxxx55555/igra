@@ -52,7 +52,7 @@ const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
 
 func _ready() -> void:
-	add_to_group(&"street_builder")  # the radar draws the streets of the district from its grid
+	add_to_group(&"street_builder")  # Cartography uses this grid as the district-local origin
 	_ensure_mm()
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))
@@ -174,6 +174,19 @@ func _update_center() -> void:
 		mx = maxf(mx, float(r.end.x) * grid_spacing)
 		mz = maxf(mz, float(r.end.y) * grid_spacing)
 	_center = Vector2(mx, mz) * 0.5
+
+## The asphalt bounds in district-local XZ, using the same tile origins and lane count as the mesh.
+func road_footprints() -> Array[Rect2]:
+	var footprints: Array[Rect2] = []
+	var lanes := maxi(1, roundi(road_width / tile_size))
+	for road: Dictionary in roads:
+		var first := road_step_pos(road, 0)
+		var length := int(road.length / tile_size) * tile_size
+		var along := Rect2(-tile_size * 0.5, -road_width * 0.5, length, lanes * tile_size)
+		if road.dir == "v":
+			along = Rect2(along.position.y, along.position.x, along.size.y, along.size.x)
+		footprints.append(Rect2(Vector2(first.x, first.z) + along.position, along.size))
+	return footprints
 
 func _fill_roads() -> void:
 	# round, а не int: при road_width 6 м и плитке 4 м усечение давало одну

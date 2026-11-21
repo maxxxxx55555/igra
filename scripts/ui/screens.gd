@@ -836,20 +836,6 @@ func build_FinalNight(content: ColorRect, card: ColorRect, cw: float, ch: float,
 	mission.add_theme_font_size_override("font_size", 13)
 	_apply_outline(mission)
 	content.add_child(mission)
-	var minimap := ColorRect.new()
-	minimap.color = INSET_FILL
-	minimap.size = Vector2(120, 120)
-	minimap.position = Vector2(content.size.x - 130, content.size.y - 140)
-	content.add_child(minimap)
-	var mm_lbl := Label.new()
-	mm_lbl.text = tr("FINAL_NIGHT_OBJECTIVE")
-	mm_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	mm_lbl.size = Vector2(120, 40)
-	mm_lbl.position = Vector2(0, 40)
-	mm_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	mm_lbl.add_theme_color_override("font_color", BRASS_DIM)
-	mm_lbl.add_theme_font_size_override("font_size", 10)
-	minimap.add_child(mm_lbl)
 	var objective := Label.new()
 	objective.text = tr("FINAL_NIGHT_OBJECTIVE")
 	objective.size = Vector2(content.size.x, 20)

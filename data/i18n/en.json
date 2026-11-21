@@ -283,7 +283,7 @@
   "MAP_STAGE_3": "Restored",
   "MAP_TITLE": "Map",
   "MAP_TRAVEL": "Travel",
-  "MAP_BLANK": "Restore lighting to chart the area",
+  "MAP_BLANK": "Use your flashlight or restore streetlights to chart the area.",
   "MAP_ZOOM_IN": "Zoom in",
   "MAP_ZOOM_OUT": "Zoom out",
   "MAP_RESET": "Reset view",
