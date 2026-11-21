@@ -6,7 +6,7 @@ extends Node
 const BUDGET_D1: int = 200   ## GDD/Production Bible asset budget, district 1
 const BUDGET_D11: int = 350  ## same, district 11 (busiest)
 const BUDGET_P95_MS: float = 33.0  ## frame time, 95th percentile, 30 FPS (the dev iGPU, windowed); read with the vsync and the frame cap off, see _run()
-const BUDGET_VRAM_MIB: float = 512.0  ## the mobile video memory budget (PRODUCTION_BIBLE: 400 MiB; the directive's 512)
+const BUDGET_VRAM_MIB: float = 400.0  ## production mobile video memory budget
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -55,7 +55,7 @@ func _run() -> void:
 	# budget", it's "not measured" - hard-failing on 0 would be a false
 	# negative, so this specific case is a skip (exit 0, DUMMY-RENDERER
 	# note), not a pass. Session 23: D1<200 fails the gate too (142 draw calls measured in
-	# Session 22), and so do a p95 frame time over 33 ms and a video memory over 512 MiB.
+	# Session 22), and so do a p95 frame time over 33 ms and a video memory over 400 MiB.
 	if draw_calls == 0:
 		print("[perf] SKIP: draw_calls=0 means headless dummy renderer - re-run with --windowed to actually measure")
 		# check.sh's run_gate() maps exit 3 to a printed SKIP, distinct from
@@ -98,9 +98,11 @@ func _run() -> void:
 	var d11_p95 := await _median_p95()
 	print("[perf] district=power_station draw_calls=%d primitives=%d objects_in_frame=%d frame_p95_ms=%0.2f" % [
 		d11_calls, d11_prims, d11_objects, d11_p95])
-	var broke: Array[String] = failures(draw_calls, d11_calls, d1_p95, d11_p95, d1_vram)
+	var d11_vram := Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
+	var peak_vram := maxf(d1_vram, d11_vram)
+	var broke: Array[String] = failures(draw_calls, d11_calls, d1_p95, d11_p95, peak_vram)
 	print("[perf] budget D1<%d: %d; D11<%d: %d; p95<=%.0f ms: %.2f and %.2f; video memory<=%.0f MiB: %.1f; over budget: %s" % [BUDGET_D1, draw_calls,
-		BUDGET_D11, d11_calls, BUDGET_P95_MS, d1_p95, d11_p95, BUDGET_VRAM_MIB, d1_vram, broke])
+		BUDGET_D11, d11_calls, BUDGET_P95_MS, d1_p95, d11_p95, BUDGET_VRAM_MIB, peak_vram, broke])
 	print("[perf] DONE fails=", broke.size())
 	get_tree().quit(1 if not broke.is_empty() else 0)
 

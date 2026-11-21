@@ -126,15 +126,15 @@ static func _warm_up(r: Node) -> void:
 static func _find(overlay: Node, layer_name: String) -> CanvasItem:
 	return overlay.get_node_or_null(layer_name) as CanvasItem
 
-## PERF3: the perf gate fails at every edge: D1 at 200 draw calls (199 passes), D11 at 350, a p95 over 33 ms, a video memory over 512 MiB.
+## PERF3: the perf gate fails at every edge: D1 at 200 draw calls (199 passes), D11 at 350, a p95 over 33 ms, a video memory over 400 MiB.
 static func _gate_edges(r: Node) -> void:
-	var ok: bool = _Gate.failures(199, 349, 33.0, 33.0, 512.0).is_empty()
+	var ok: bool = _Gate.failures(199, 349, 33.0, 33.0, 400.0).is_empty()
 	var d1: bool = _Gate.failures(200, 349, 20.0, 20.0, 100.0) == ["D1 draw calls"]
 	var d11: bool = _Gate.failures(142, 350, 20.0, 20.0, 100.0) == ["D11 draw calls"]
 	var p95: bool = _Gate.failures(142, 129, 20.0, 33.1, 100.0) == ["p95 frame time"]
-	var vram: bool = _Gate.failures(142, 129, 20.0, 20.0, 512.1) == ["video memory"]
+	var vram: bool = _Gate.failures(142, 129, 20.0, 20.0, 400.1) == ["video memory"]
 	var measured: bool = _Gate.failures(142, 129, 28.79, 23.61, 155.8).is_empty()  # the numbers of Session 22
-	r._ok(ok and d1 and d11 and p95 and vram and measured, "PERF3 perf gate edges: all met at the limits (%s), D1 200 fails (%s), D11 350 fails (%s), p95 33.1 ms fails (%s), 512.1 MiB fails (%s), Session 22's numbers pass (%s)" % [ok, d1, d11, p95, vram, measured])
+	r._ok(ok and d1 and d11 and p95 and vram and measured, "PERF3 perf gate edges: all met at the limits (%s), D1 200 fails (%s), D11 350 fails (%s), p95 33.1 ms fails (%s), 400.1 MiB fails (%s), Session 22's numbers pass (%s)" % [ok, d1, d11, p95, vram, measured])
 
 ## LEAK1: what a monster drops lies beside it, so the district that held the monster frees the drop with itself (under the scene root the soak's node count grew by a stale drop per kill, 533 nodes in two hours).
 static func _loot_stays_with_district(r: Node) -> void:
