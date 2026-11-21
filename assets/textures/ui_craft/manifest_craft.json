@@ -166,7 +166,8 @@
       "tileable": false,
       "seam_delta": 0.0,
       "neon_hits": 0,
-      "sha256": "77505d0ccdfa43f9cf54007e65a2563c7cedd8d38bc78550b96e26c955735f81"
+      "sha256": "77505d0ccdfa43f9cf54007e65a2563c7cedd8d38bc78550b96e26c955735f81",
+      "runtime_status": "reserved"
     },
     {
       "path": "assets/textures/ui_craft/icon_battery_64.png",
@@ -175,7 +176,8 @@
       "tileable": false,
       "seam_delta": 0.0,
       "neon_hits": 0,
-      "sha256": "34b39597a58ab989369f4136d5e6560133cf25b150ea5ba8958cd3a72c59e2f6"
+      "sha256": "34b39597a58ab989369f4136d5e6560133cf25b150ea5ba8958cd3a72c59e2f6",
+      "runtime_status": "reserved"
     },
     {
       "path": "assets/textures/ui_craft/icon_warmth_64.png",

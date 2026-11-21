@@ -527,6 +527,9 @@ def main() -> int:
         write_png_rgba(path, w, h, buf)
         rec = verify_png(path, w, h, tileable)
         rec["path"] = path.relative_to(repo).as_posix()
+        # These icons belong to the retired 2D HUD.
+        if path.name in {"icon_lantern_64.png", "icon_battery_64.png"}:
+            rec["runtime_status"] = "reserved"
         records.append(rec)
 
     manifest_path = ui_dir / "manifest_craft.json"
