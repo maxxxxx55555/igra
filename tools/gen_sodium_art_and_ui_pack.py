@@ -409,7 +409,7 @@ def generate_weathered_facade_pbr(size: int = 256) -> tuple[bytearray, bytearray
             stained = lerp_rgb(base, pal["shadow_deep"], min(0.75, drip + (0.45 if in_seam else 0.0)))
             set_px(albedo, size, x, y, stained[0], stained[1], stained[2], 255)
 
-            r_val = 0.92 if in_seam else lerp(0.84, 0.52, min(1.0, drip))
+            r_val = 0.92 if in_seam else lerp(0.84, 0.71, min(1.0, drip))
             rv = clamp_u8(r_val * 255.0)
             set_px(rough, size, x, y, rv, rv, rv, 255)
 

@@ -48,6 +48,8 @@ const FACADE_TEX := {
 	&"substation": "res://assets/textures/world_craft/facade_concrete_albedo.png",
 	&"power_station": "res://assets/textures/world_craft/facade_concrete_albedo.png",
 }
+const CONCRETE_NORMAL := preload("res://assets/textures/world_craft/facade_concrete_normal.png")
+const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_concrete_roughness.png")
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
@@ -93,6 +95,7 @@ var _district_id: StringName = &""
 var _windows: MultiMeshInstance3D
 var _rolls := PackedFloat32Array()
 var _tones := PackedFloat32Array()
+var _concrete_detail: StandardMaterial3D
 var _facade_mat: ShaderMaterial = null
 var _window_mat: ShaderMaterial = null
 var _halos: MultiMeshInstance3D = null
@@ -179,8 +182,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	# B10: reusable recessed masonry bays at walking distance, LOD-switched.
 	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
-	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
-	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
+	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _concrete_material())
+	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _concrete_material())
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055
 	pipe_mesh.bottom_radius = 0.055
@@ -349,6 +352,21 @@ func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D]
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
 
+## Sills and trim use the same poured concrete and retain their existing instance batches.
+func _concrete_material() -> StandardMaterial3D:
+	if _concrete_detail == null:
+		_concrete_detail = _detail_material("panel_facade", Color(0.60, 0.59, 0.56))
+		_concrete_detail.normal_enabled = true
+		_concrete_detail.normal_texture = CONCRETE_NORMAL
+		_concrete_detail.normal_scale = 0.5
+		_concrete_detail.roughness_texture = CONCRETE_ROUGHNESS
+		_concrete_detail.roughness = 1.0
+		_concrete_detail.metallic = 0.0
+	return _concrete_detail
+
+func _exit_tree() -> void:
+	_concrete_detail = null
+
 func _detail_material(set_name: String, tint: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.roughness = 0.88
@@ -383,6 +401,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
+		_facade_mat.set_shader_parameter("facade_roughness", CONCRETE_ROUGHNESS)
 		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
 		var facade_tex_path: String = FACADE_TEX.get(_district_id, FACADE_TEX[&"suburbs"])

@@ -245,9 +245,9 @@
       "width": 256,
       "height": 256,
       "tileable": true,
-      "seam_delta": 6.602,
+      "seam_delta": 5.646,
       "neon_hits": 0,
-      "sha256": "b4c15362fda5b3076a62ae69ea997f01df5cdadc46da4622f3c576cc0b74810f"
+      "sha256": "cc52d7431763ea712d0fd9e7c16906a227c49e8f9f46997365368e5b9dd1f928"
     },
     {
       "path": "assets/textures/world_craft/facade_concrete_normal.png",
