@@ -45,10 +45,6 @@ func _enter_tree() -> void:
 	# audio_truth_gate still measures Music while nothing reaches the speakers.
 	if qa_launch:
 		AudioServer.set_bus_mute.call_deferred(0, true)
-		# The new atmosphere autoload starts its generator drone in _ready.
-		# QA runs must still be silent before the first input: stop its
-		# players once that autoload has finished building them.
-		get_tree().node_added.connect(_qa_silence_added)
 	# Leftovers that can never hold owner data: an interrupted copy (.tmp, never
 	# renamed) and an interrupted discard (a copy whose manifest was already
 	# deleted after a verified restore).
@@ -78,21 +74,6 @@ func _enter_tree() -> void:
 		_owned_snapshot = snap
 	else:
 		_block("cannot copy the profile to %s" % snap)
-
-func _qa_silence_added(node: Node) -> void:
-	if node.name == &"AtmosphereAudioRig":
-		_qa_stop_players.call_deferred(node)
-
-func _qa_stop_players(node: Node) -> void:
-	if not is_instance_valid(node):
-		return
-	for player: Node in node.find_children("*", "", true, false):
-		if player is AudioStreamPlayer:
-			(player as AudioStreamPlayer).stop()
-		elif player is AudioStreamPlayer2D:
-			(player as AudioStreamPlayer2D).stop()
-		elif player is AudioStreamPlayer3D:
-			(player as AudioStreamPlayer3D).stop()
 
 func _exit_tree() -> void:
 	if _owned_snapshot == "":

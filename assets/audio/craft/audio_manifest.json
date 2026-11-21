@@ -50,6 +50,7 @@
     },
     {
       "path": "assets/audio/craft/amb_sodium_hum_loop.wav",
+      "runtime_status": "reserved",
       "channels": 2,
       "duration_s": 10.0,
       "dc_offset": 7.5e-05,

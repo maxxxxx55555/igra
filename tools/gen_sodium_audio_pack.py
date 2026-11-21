@@ -286,6 +286,8 @@ def main() -> int:
         write_wav_16(path, fn())
         rec = verify_wav(path, is_loop=is_loop)
         rec["path"] = path.relative_to(repo).as_posix()
+        if filename == "amb_sodium_hum_loop.wav":
+            rec["runtime_status"] = "reserved"
         records.append(rec)
 
     manifest_path = out_dir / "audio_manifest.json"
