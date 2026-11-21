@@ -6,7 +6,7 @@ var current_state: GameState = GameState.BOOT
 var current_level: int = 1
 var play_time: float = 0.0
 var enemies_killed: int = 0
-
+var _quitting := false
 ## HUD, экономика и инвентарь обращаются к GameManager.player. Ссылку не храним
 ## жёстко: сцена перезагружается при новой игре и старый узел становится битым —
 ## ищем по группе "player" и кэшируем, пока экземпляр валиден.
@@ -52,7 +52,7 @@ func _notification(what: int) -> void:
 			UIManager.back()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		checkpoint_run()
-		get_tree().quit()
+		quit_game()
 
 ## Back in the menus: the main menu asks to quit, the quit question answers No, the other menu screens return to the main menu; the boot and loading screens ignore it.
 func _menu_back() -> void:
@@ -281,3 +281,19 @@ func return_to_menu() -> void:
 	# Поэтому при переходе MENU->MENU шлём событие вручную.
 	if was_menu:
 		EventBus.game_state_changed.emit(int(GameState.MENU))
+
+## Give the audio mixer real time to retire stopped playbacks, even under fixed FPS.
+func quit_game(code: int = 0) -> void:
+	if _quitting:
+		return
+	_quitting = true
+	var tree := get_tree()
+	for type_name in ["AudioStreamPlayer", "AudioStreamPlayer2D", "AudioStreamPlayer3D"]:
+		for voice in tree.root.find_children("*", type_name, true, false):
+			voice.stop()
+			voice.stream = null
+	tree.paused = true
+	var deadline := Time.get_ticks_msec() + 350
+	while Time.get_ticks_msec() < deadline:
+		await tree.process_frame
+	tree.quit(code)

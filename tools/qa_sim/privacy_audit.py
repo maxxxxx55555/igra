@@ -11,7 +11,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SCAN = ["scripts", "scenes", "addons", "android/plugins", "project.godot", "export_presets.cfg", "android/build/build.gradle", "android/build/AndroidManifest.xml"]
+SCAN = ["data/i18n/en.json", "data/i18n/ru.json", "scripts", "scenes", "addons", "android/plugins", "project.godot", "export_presets.cfg", "android/build/build.gradle", "android/build/AndroidManifest.xml"]
 SKIP = ("scripts/tools/", "scenes/tools/", "android/build/build/")
 SUFFIXES = {".gd", ".tscn", ".cfg", ".godot", ".xml", ".gradle", ".gdextension", ".java", ".kt", ".gdap"}
 PATTERNS = {
@@ -28,7 +28,8 @@ PATTERNS = {
 }
 # (kind, file, status, reason)
 ROWS = [
-    ("url", "scripts/credits.gd", "INACTIVE", "plain-text artist, source and CC BY 4.0 attribution labels; no request, clickable link or shell_open call"),
+    ("url", "data/i18n/en.json", "INACTIVE", "plain-text English attribution links in the credits"),
+    ("url", "data/i18n/ru.json", "INACTIVE", "plain-text Russian attribution links in the credits"),
     ("enet", "scripts/multiplayer/network_manager.gd", "INACTIVE", "create_server() and join_server() are called by scripts/ui/lobby_menu.gd only, and no screen opens the lobby (see LOBBY_FILES); no peer is ever made"),
     ("enet", "scripts/net/lan_network.gd", "INACTIVE", "the LAN prototype's peer; no file but the lobby reaches it (docs/A10_multiplayer_decision.md)"),
     ("upnp", "scripts/multiplayer/network_manager.gd", "INACTIVE", "enable_upnp is false by default and the code that would use it is the unreachable lobby's"),

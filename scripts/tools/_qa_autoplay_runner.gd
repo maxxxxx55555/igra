@@ -841,15 +841,6 @@ func _finish() -> void:
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
 	if OS.get_environment("QA_NO_QUIT") != "1":
-		# Freeze gameplay before draining voices so late pickups cannot restart them.
-		get_tree().paused = true
-		# A player still sounding at quit keeps its playback alive in the AudioServer when the engine counts the objects left (46 of the 81 of a run with deaths, v10 R6).
-		for p: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
-			(p as AudioStreamPlayer).stop()
-			(p as AudioStreamPlayer).stream = null
-		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
-			(p3 as AudioStreamPlayer3D).stop()
-			(p3 as AudioStreamPlayer3D).stream = null
 		# Z5 R6: the bot's teardown — the pooled VFX bursts of WowDirector live on the
 		# root to be replayed; freed here so the exit counts a clean tree.
 		var wow := get_node_or_null("/root/WowDirector")
@@ -859,5 +850,4 @@ func _finish() -> void:
 				if fx is Node and is_instance_valid(fx):
 					(fx as Node).free()
 			bursts.clear()
-		await get_tree().create_timer(0.3, true, false, true).timeout
-		get_tree().quit(code)
+		GameManager.quit_game(code)
