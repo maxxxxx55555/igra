@@ -176,7 +176,7 @@ static func _trigger(source: Signal, object: Object, args: Array) -> void:
 ## game_over for the MusicManager.
 static func _one_shots(r: Node, mm: Node) -> void:
 	var ui: Node = r.get_tree().root.get_node_or_null("UISFX")
-	var files: Dictionary = {"res://assets/audio/ui/ui_district_restored_sting.ogg": 2.0, "res://assets/audio/music/cue_death.ogg": 8.0, "res://assets/audio/sfx/ui_xp_tick.wav": 0.06, "res://assets/audio/sfx/ui_heal_soft.wav": 0.3}
+	var files: Dictionary = {"res://assets/audio/craft/sfx_district_restored_sting.wav": 6.0, "res://assets/audio/craft/sfx_death_cue.wav": 4.0, "res://assets/audio/sfx/ui_xp_tick.wav": 0.06, "res://assets/audio/sfx/ui_heal_soft.wav": 0.3}
 	var lengths: PackedStringArray = []
 	var ok: bool = ui != null
 	for path: String in files:
@@ -212,8 +212,8 @@ static func _one_shots(r: Node, mm: Node) -> void:
 	var cue_file: String = cue.stream.resource_path.get_file() if cue.stream != null else "none"
 	var cue_bus: String = String(cue.bus)
 	cue.stop()
-	r._ok(heard.get("ui_district_restored_sting.ogg", "") == "UI", "ONE2 district_restored plays the sting on the UI bus (%s)" % heard)
-	r._ok(cue_file == "cue_death.ogg" and cue_bus == "Music", "ONE3 game_over plays the cue of a death on the Music bus (%s on %s)" % [cue_file, cue_bus])
+	r._ok(heard.get("sfx_district_restored_sting.wav", "") == "UI", "ONE2 district_restored plays the sting on the UI bus (%s)" % heard)
+	r._ok(cue_file == "sfx_death_cue.wav" and cue_bus == "Music", "ONE3 game_over plays the cue of a death on the Music bus (%s on %s)" % [cue_file, cue_bus])
 	r._ok(heard.get("ui_xp_tick.wav", "") == "UI" and heard.get("ui_heal_soft.wav", "") == "UI" and quiet, "ONE4 xp_gained ticks and a healing consumable plays the soft note on the UI bus, a battery does not (%s, battery quiet %s)" % [heard, quiet])
 
 ## The players that appeared under `ui` since `before` are recorded in `heard` (file -> bus), stopped and freed; true when there was one.

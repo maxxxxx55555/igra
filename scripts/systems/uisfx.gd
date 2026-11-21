@@ -30,7 +30,7 @@ const _UI_GAIN_DB: Dictionary = {
 }
 const _UI_GAIN_DEFAULT_DB: float = 9.0
 
-## Sodium craft pack: deterministic mechanical UI clicks and a seamless lamp hum.
+## Sodium craft pack: deterministic mechanical UI clicks and district restoration.
 const _CRAFT_DIR: String = "res://assets/audio/craft/"
 
 func _ready() -> void:
@@ -44,7 +44,7 @@ func _ready() -> void:
 	EventBus.boss_spawned.connect(func() -> void: play_ui("boss_sting"))
 	EventBus.boss_defeated.connect(func() -> void: play_ui("boss_sting"))
 	# v10 M6: the sting of a restored district, a tick for XP and a soft note when a healing consumable is used (the files of the music recipe that no take supplied: tools/gen_one_shots.py)
-	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_ui("district_restored_sting"))
+	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_craft("sfx_district_restored_sting.wav", &"UI", -8.0))
 	EventBus.xp_gained.connect(func(_amount: int) -> void: _play("ui_xp_tick", 1800.0, 0.03))
 	EventBus.item_consumed.connect(func(_id: StringName, effect: String, _value: float) -> void:
 		if effect == "HEAL":
@@ -149,15 +149,6 @@ func play_craft(file: String, bus: StringName, volume_db: float, pitch: float = 
 	var stream := load(path) as AudioStream
 	if stream == null:
 		return
-	var craft_wav := AudioStreamWAV.new()
-	var source := stream as AudioStreamWAV
-	craft_wav.format = source.format
-	craft_wav.mix_rate = source.mix_rate
-	craft_wav.stereo = source.stereo
-	craft_wav.data = source.data.duplicate()
-	craft_wav.loop_mode = AudioStreamWAV.LOOP_DISABLED
-	craft_wav.resource_path = path
-	stream = craft_wav
 	var p := AudioStreamPlayer.new()
 	p.bus = bus
 	p.volume_db = volume_db

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_heart.svg" id="3_heart"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui_v2/bar_track_256x8.png" id="11_bartrack"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui_craft/hud_bar_frame_9slice.png" id="11_bartrack"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/crosshair_64.png" id="9_crosshair"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/hitmarker_64.png" id="10_hitmarker"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_interact.svg" id="4_interact"]
@@ -66,17 +66,24 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="HPT" type="TextureRect" parent="TopLeft/HP"]
+[node name="HPT" type="NinePatchRect" parent="TopLeft/HP"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="HPF" type="ColorRect" parent="TopLeft/HP"]
-color = Color(0.752941, 0.223529, 0.168627, 1.0)
+[node name="HPF" type="TextureRect" parent="TopLeft/HP"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -101,17 +108,24 @@ offset_right = 260.0
 offset_bottom = 64.0
 mouse_filter = 2
 
-[node name="StamT" type="TextureRect" parent="TopLeft/Stam"]
+[node name="StamT" type="NinePatchRect" parent="TopLeft/Stam"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="StamF" type="ColorRect" parent="TopLeft/Stam"]
-color = Color(0.373, 0.541, 0.306, 1.0)
+[node name="StamF" type="TextureRect" parent="TopLeft/Stam"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -146,17 +160,24 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="BatT" type="TextureRect" parent="TopLeft/Bat"]
+[node name="BatT" type="NinePatchRect" parent="TopLeft/Bat"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="BatF" type="ColorRect" parent="TopLeft/Bat"]
-color = Color(0.788, 0.635, 0.290, 1.0)
+[node name="BatF" type="TextureRect" parent="TopLeft/Bat"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0

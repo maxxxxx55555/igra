@@ -49,11 +49,11 @@ var _hp_caption: Label
 var _stam_caption: Label
 var _bat_caption: Label
 
-@onready var hp_fill: ColorRect = $TopLeft/HP/HPF
+@onready var hp_fill: TextureRect = $TopLeft/HP/HPF
 @onready var hp_val: Label = $TopLeft/HP/HPVal
-@onready var stam_fill: ColorRect = $TopLeft/Stam/StamF
+@onready var stam_fill: TextureRect = $TopLeft/Stam/StamF
 @onready var stam_val: Label = $TopLeft/Stam/StamVal
-@onready var bat_fill: ColorRect = $TopLeft/Bat/BatF
+@onready var bat_fill: TextureRect = $TopLeft/Bat/BatF
 @onready var bat_val: Label = $TopLeft/Bat/BatVal
 @onready var ammo_val: Label = $AmmoCounter/AmmoVal
 @onready var prompt: Label = $PromptLabel
@@ -78,9 +78,9 @@ func _ready() -> void:
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
-	hp_fill.color = Color(0.752941, 0.223529, 0.168627)
-	stam_fill.color = Color(0.373, 0.541, 0.306)
-	bat_fill.color = Color(0.788, 0.635, 0.290)
+	hp_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_rust.png")
+	stam_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_cold.png")
+	bat_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_amber.png")
 	var player := get_tree().get_first_node_in_group("player")
 	var hp_ratio := 1.0
 	var stam_ratio := 1.0
@@ -171,6 +171,9 @@ func _ready() -> void:
 	_setup_context_hints()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
+	if _TOUCH_LAYOUT.is_mobile():
+		_apply_mobile_metrics()
+		get_viewport().size_changed.connect(_apply_mobile_metrics)
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
 	_apply_hud_opacity_setting()
@@ -670,7 +673,7 @@ func _on_hud_visibility(v: bool) -> void:
 	_sync_damage_indicator_visibility()
 
 func has_touch_ui() -> bool:
-	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
+	return DisplayServer.is_touchscreen_available() or _TOUCH_LAYOUT.is_mobile()
 
 ## GDD V.1 3.7: the prompt said what the interaction does ("Open", "Search",
 ## "Repair") but never which button does it. The key is read from the project's
@@ -700,7 +703,9 @@ func _apply_touch_visibility() -> void:
 	_apply_button_size()
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
 		if key == "button_size" or key == "one_handed":
-			_apply_button_size())
+			_apply_button_size()
+			if _TOUCH_LAYOUT.is_mobile():
+				_apply_mobile_metrics())
 	_install_joystick()
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
@@ -729,7 +734,30 @@ func _layout_touch_buttons(factor: float = 1.0) -> void:
 	if _one_handed():
 		var half_width: float = get_viewport().get_visible_rect().size.x * 0.5 - _safe_area_inset.x
 		row_limit = minf(row_limit, (half_width - _ONE_HAND_GAP) / factor - _JOYSTICK_W)
-	_action_extent = _TOUCH_LAYOUT.arrange(cluster, row_limit)
+	_action_extent = _TOUCH_LAYOUT.arrange(cluster, row_limit, factor)
+
+## Convert screen pixels to HUD units after viewport stretch and the player's touch-size setting.
+func _apply_mobile_metrics() -> void:
+	var ratio := _TOUCH_LAYOUT.pixel_ratio(get_viewport())
+	for control: Control in find_children("*", "Control", true, false):
+		if not (control is Button or control is Label):
+			continue
+		var factor: float = $BottomRight.scale.x if $BottomRight.is_ancestor_of(control) else 1.0
+		var baseline: int = control.get_meta(&"hud_font_base", control.get_theme_font_size("font_size"))
+		control.set_meta(&"hud_font_base", baseline)
+		control.add_theme_font_size_override("font_size", maxi(baseline, ceili(12.0 / (ratio * factor))))
+	var target := Vector2.ONE * ceilf(48.0 / ratio)
+	var pause_button := $BtnPause as Button
+	pause_button.custom_minimum_size = target
+	pause_button.offset_right = -16.0 - _safe_area_inset.z
+	pause_button.offset_left = pause_button.offset_right - target.x
+	pause_button.offset_bottom = pause_button.offset_top + target.y
+	var map_button := get_node_or_null("MapButton") as Button
+	if map_button != null:
+		map_button.custom_minimum_size = target
+		map_button.size = Vector2(UiScale.min_touch() * 1.5, UiScale.min_touch()).max(target)
+	_layout_touch_buttons($BottomRight.scale.x)
+	_place_action_cluster($BottomRight.scale.x)
 
 func _place_action_cluster(factor: float) -> void:
 	var cluster := get_node_or_null("BottomRight") as Control
@@ -795,7 +823,7 @@ func _add_status_backing() -> void:
 	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
-	style.border_color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
+	style.border_color = ThemeProvider.COLOR_BORDER
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
@@ -831,7 +859,7 @@ func _remove_dup_leftbottom() -> void:
 			if cr.position.x < vp.x * 0.25 and cr.position.y + cr.size.y > vp.y * 0.75:
 				c.queue_free()
 
-## Noise/visibility/ammo/radar captions and the sprint/stealth touch
+## Noise/visibility/ammo captions and the sprint/stealth touch
 ## buttons were hardcoded raw text (mixed Russian/English) in the .tscn
 ## with no code path ever overriding .text - permanently stuck in that
 ## exact mixed-language state in every locale.
@@ -1022,9 +1050,9 @@ var _noise_reduce_flash_t: float = 0.0
 func _process(delta: float) -> void:
 	if _bat < 0.25:
 		var pulse: float = sin(Time.get_ticks_msec() * 0.0095) * 0.5 + 0.5
-		bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.752941, 0.223529, 0.168627), pulse)
+		bat_fill.self_modulate = Color.WHITE.lerp(Color(0.752941, 0.223529, 0.168627), pulse)
 	else:
-		bat_fill.color = Color(0.788, 0.635, 0.290)
+		bat_fill.self_modulate = Color.WHITE
 	_process_noise_vignette(delta)
 	_process_enemy_bar(delta)
 	_process_bar_shake(delta)
@@ -1169,7 +1197,7 @@ func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 ## The shared visibility predicate (BaseMonster.is_perceptible): camera frustum, clear line of sight, and the
 ## flashlight beam or a rendered light pool. Every enemy telemetry path in this file asks it.
 func _monster_perceptible(monster: Node3D) -> bool:
-	return is_instance_valid(monster) and monster.has_method("is_perceptible") and monster.is_perceptible()
+	return is_instance_valid(monster) and monster.is_inside_tree() and monster.has_method("is_perceptible") and monster.is_perceptible()
 
 func _resolve_monster(monster_id: StringName) -> Node3D:
 	var match_instance: Node3D = null
@@ -1663,7 +1691,7 @@ func _apply_ammo_caption() -> void:
 	if ammo_val != null:
 		ammo_val.visible = _weapon_present
 
-func _tween_fill(cr: ColorRect, ratio: float) -> void:
+func _tween_fill(cr: TextureRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
 	var tween := create_tween()
 	tween.tween_property(cr, "offset_right", target, 0.15)
@@ -1677,7 +1705,7 @@ func _on_pause() -> void:
 		GameManager.pause_game()
 
 func _setup_button_feedback() -> void:
-	for b in [$BottomRight/BtnAttack, $BottomRight/BtnSprint, $BottomRight/BtnStealth, $BottomRight/BtnInteract]:
+	for b in [$BtnPause, $BottomRight/BtnAttack, $BottomRight/BtnSprint, $BottomRight/BtnStealth, $BottomRight/BtnInteract]:
 		if b:
 			b.pressed.connect(_on_btn_pressed.bind(b))
 	_wire_action_buttons()
@@ -1709,9 +1737,7 @@ func _wire_action_buttons() -> void:
 	_add_side_buttons(isv)
 
 func _on_btn_pressed(btn: Button) -> void:
-	var tween := create_tween()
-	tween.tween_property(btn, "scale", Vector2(0.92, 0.92), 0.04)
-	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.04)
+	UISFX.press_pulse(btn)
 	if OS.has_feature("mobile") and SettingsManager != null and SettingsManager.haptics_enabled():
 		Input.vibrate_handheld(15)
 
@@ -1755,6 +1781,7 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 		b.focus_mode = Control.FOCUS_NONE
 		b.add_theme_font_size_override("font_size", 22)
 		b.button_down.connect(cb)
+		b.pressed.connect(_on_btn_pressed.bind(b))
 		$BottomRight.add_child(b)  # in the cluster, so Button Size grows them with it
 		return b
 	var jump := mk.call("BtnJump", "", func() -> void: isv.request_jump()) as Button
@@ -1870,7 +1897,7 @@ func _setup_slot_placeholders() -> void:
 		# the badge only means something for the five item slots.
 		badge.visible = item_id != &"flashlight"
 		badge.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
-		badge.add_theme_font_size_override("font_size", 11)
+		badge.add_theme_font_size_override("font_size", 12 if _TOUCH_LAYOUT.is_mobile() else 11)
 		badge.position = Vector2(34, 34)
 		slot.add_child(badge)
 		if inv and item_id != &"":
@@ -2048,6 +2075,7 @@ func _add_map_button() -> void:
 	btn.text = LocalizationManager.t("MAP_TITLE")
 	btn.visible = has_touch_ui()  # a keyboard has the city_map_toggle key
 	btn.pressed.connect(_on_map_btn)
+	btn.pressed.connect(_on_btn_pressed.bind(btn))
 	add_child(btn)
 	get_viewport().size_changed.connect(_place_map_button)
 	_place_map_button()

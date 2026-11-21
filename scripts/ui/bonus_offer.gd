@@ -25,6 +25,8 @@ func _ready() -> void:
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_color_override("font_outline_color", Color.BLACK)
 		label.add_theme_constant_override("outline_size", 3)
+	_claim.icon = preload("res://assets/textures/ui_craft/icon_wifi_bonus_64.png")
+	_claim.add_theme_constant_override("icon_max_width", 20)
 	_claim.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(_title)
 	add_child(_claim)
@@ -49,7 +51,7 @@ func _fit() -> void:
 	var text_scale: float = SettingsManager.TEXT_SCALE[scale_index]
 	for control: Control in [_title, _claim, _reason]:
 		control.add_theme_font_size_override("font_size", ceili(18.0 * text_scale / ratio))
-	_claim.custom_minimum_size.y = maxf(UiScale.min_touch(), 44.0 / ratio)
+	_claim.custom_minimum_size = Vector2.ONE * maxf(UiScale.min_touch(), ceilf(48.0 / ratio))
 	if preferred_width_px > 0.0:
 		custom_minimum_size.x = preferred_width_px / ratio
 		size.x = custom_minimum_size.x

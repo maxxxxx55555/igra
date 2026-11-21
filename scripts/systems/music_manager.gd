@@ -104,7 +104,7 @@ const WOW_CUE_BY_KIND: Dictionary = {
 	"first_light": "res://assets/audio/music/cue_first_light.ogg",
 	"cascade": "res://assets/audio/music/cue_grid_cascade.ogg",
 	"ending": "res://assets/audio/music/cue_victory.ogg",
-	"death": "res://assets/audio/music/cue_death.ogg",
+	"death": "res://assets/audio/craft/sfx_death_cue.wav",
 }
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5

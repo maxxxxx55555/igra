@@ -117,7 +117,7 @@ SETS = [
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.4, 0.0, 1.0)\n", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.8, 0.0, 1.0)\n", "LAY1"),
         ("scripts/systems/music_manager.gd", "\t_boss_phase = clampi(phase, 1, BOSS_PHASES.size())\n", "\t_boss_phase = 1\n", "LAY3"),
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0\n", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.FOG else 0.0\n", "LAY6"),
-        ("scripts/systems/uisfx.gd", "play_ui(\"district_restored_sting\"))", "play_ui(\"district_restored_stingx\"))", "ONE2"),
+        ("scripts/systems/uisfx.gd", "play_craft(\"sfx_district_restored_sting.wav\", &\"UI\", -8.0))", "play_craft(\"sfx_district_restored_stingx.wav\", &\"UI\", -8.0))", "ONE2"),
     ],
     [  # Session 29 (v10 M4, M6), the closeout group s29 again, second half: the fall of the hunted level, the calm delay, the swap of the two players, the death cue and the tick of the XP
         ("scripts/systems/music_manager.gd", "const THREAT_FALL: float = 0.25", "const THREAT_FALL: float = 0.1", "LAY2"),
