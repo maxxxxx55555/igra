@@ -28,15 +28,20 @@ exactly two locales (`en`, `ru`), `Ads = No`, privacy policy
   `P2_DISPOSITION = RECORD_FOR_POST_RELEASE` (music masters, 42 legacy icons and D11 22.44 ms
   accepted as-is and recorded in `docs/TZ_DECISIONS.md`).
 - Final gates on this tree: `check.sh --all` exit 0 / **120/120**; windowed perf `fails=0`,
-  D1 113 calls / 16.67 ms p95, D11 120 calls / 22.44 ms p95, VRAM 238 MiB; windowed audio
-  **PASS overall**, Music -17.7 dB, threat sweep -13.1/-13.9/-13.6 dB, MUS6 PASS.
-- Five-seed bot: 1, 47101, 7, 13, 99 — 5/5 WIN, 0 deaths, 0 nudges, 0 softlocks.
+  D1 113 calls / **15.28 ms** p95, D11 120 calls / **16.67 ms** p95, VRAM 230.9 MiB; windowed
+  audio **PASS overall**, main Music -13.7 dB, threat sweep -14.1/-13.1/-13.7 dB, MUS6 PASS.
+- Five-seed bot on the final tree: 1, 47101, 7, 13, 99 — 5/5 WIN, 0 deaths, 0 nudges,
+  0 softlocks; `.qa_logs/final_five_seeds_final_tree.log`.
 - Android export: Godot 4.7 export templates and the project build template are installed.
-  The export presets now exclude `build/*,build/**`; release keystore fields stay empty in git.
-  `build/tls.aab` is signed with the owner-approved D358 key; final hash, size and source SHA
-  are in `docs/RELEASE_ARTIFACTS.md` after Step 6.
-- Step 4 of the 2026-11-22 pass commits the clean tree on `visual-overhaul-v2`. `main` is not
-  merged, pushed or tagged; the next approval is the real-phone test before any `main` action.
+  The export presets exclude `build/*,build/**`; release keystore fields stay empty in git.
+  Final AAB source commit is `634807f07645bab3ded298363b5c8dcd72c06777`; `build/tls.aab` is
+  132,520,514 bytes, sha256 `95f10d05870679808fc6a140734b146fdd5a2bfeb2c1ab340acea01d1021cbb3`,
+  signed with the D358 key. `build/tls-phone-test.apk` is 209,775,066 bytes, sha256
+  `291e36a6603b71aa69df19b70c6f44f90f195cc5b3803da5c9860cbbfafe7379`, v3-signed by D358.
+  Full facts: `docs/RELEASE_ARTIFACTS.md`.
+- The clean tree is committed on `visual-overhaul-v2` (release commit `634807f0`; a docs-only
+  receipt commit follows). `main` is not merged, pushed or tagged; the next approval is the
+  real-phone test before any `main` action.
 - Remaining owner-only work: install `build/tls-phone-test.apk`, complete the device checklist,
   then create/submit the Play Console listing and roll out Open Testing.
 
