@@ -735,6 +735,29 @@ func _compute_score() -> float:
 			s += (1.0 - float(boss.get("hp")) / maxf(1.0, float(boss.get("max_hp")))) * 400.0
 	return s
 
+## Bug B1 (Wave 3): the old fixed 0.03 m/frame (= 1.8 m/s at 60 fps)
+## mislabelled a legitimately walking, heavily loaded player as stuck. Measured
+## on seeds 13/99: the same boss-circle movement at 34.2/40 kg (walk 1.72 m/s)
+## fired 20 nudges, while 27.8/40 kg (walk 1.96 m/s) fired none. Compare the
+## frame's displacement with the speed the player can actually achieve now,
+## using the same weight multiplier as player_3d.gd:_physics_process.
+func _stuck_distance(delta: float) -> float:
+	var expected: float = 3.0  # player_stats.tres walk_speed, the bot never sprints
+	if _player != null and is_instance_valid(_player):
+		var stats_res: Variant = _player.get("stats")
+		if stats_res != null and stats_res.get("walk_speed") != null:
+			expected = float(stats_res.get("walk_speed"))
+	var im := get_node_or_null("/root/InventoryManager")
+	if im != null and im.get("stats") != null and float(im.get("current_weight")) > 0.0:
+		var im_stats: Variant = im.get("stats")
+		var cap: float = 40.0
+		if im_stats != null and im_stats.get("capacity_kg") != null:
+			cap = float(im_stats.get("capacity_kg"))
+		expected *= 1.0 - clampf(float(im.get("current_weight")) / maxf(cap, 0.001), 0.0, 1.0) * 0.5
+	# 45% of the achievable distance: a genuine block (velocity ~0) is still
+	# caught, slow-but-normal locomotion is not.
+	return maxf(0.004, expected * delta * 0.45)
+
 func _watchdog(delta: float) -> void:
 	# R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY, arena finding): 3
 	# separate headless bot re-runs won clean on the exact build where a
@@ -772,13 +795,22 @@ func _watchdog(delta: float) -> void:
 	if _player_ok():
 		var moved := _player.global_position.distance_to(_last_pos)
 		_last_pos = _player.global_position
-		if _have_target and InputService.get_move_dir().length_squared() > 0.01 and moved < 0.03 * (delta * 60.0):
+		if _have_target and InputService.get_move_dir().length_squared() > 0.01 and moved < _stuck_distance(delta):
 			_stuck_sec += delta
 			if _stuck_sec > STUCK_NUDGE_SEC and _now() > _nudge_until:
 				var base := _dir_to(_target_pos)
 				var perp := Vector2(-base.y, base.x) * (1.0 if _rng.randf() < 0.5 else -1.0)
 				_nudge_dir = (perp + base * 0.3).limit_length(1.0)
 				_nudge_until = _now() + NUDGE_SEC
+				# Wave 3 (bug B1): every nudge prints where the bot was, where it
+				# wanted to go and which way it slipped, so a run that leans on
+				# nudges can be traced to the obstacle that caused them.
+				print("[bot s%d] NUDGE #%d stuck=%.1fs pos=%s target=%s dir=%s phase=%s" % [
+					_seed, _nudge_count + 1, _stuck_sec,
+					str(_player.global_position.round()),
+					str(_target_pos.round()),
+					str(_nudge_dir.round()),
+					_phase])
 				_stuck_sec = 0.0
 				_nudge_count += 1
 		else:

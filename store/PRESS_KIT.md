@@ -44,7 +44,7 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 | Screenshot: skill tree | `docs/stills/store/07_skill_tree_after_b6d38550_20261121T133327Z.png` | 1920 x 1055 | 580259 |
 | Screenshot: shop | `docs/stills/store/08_shop_after_b6d38550_20261121T133329Z.png` | 1920 x 1055 | 1321284 |
 
-The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.
+The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The 11 files in `store/screenshots/shot*_1920x1080_en.png` are final-tree engine captures from 2026-11-22 (8 EN gallery + 3 touch) and are the current Play gallery; the two rows marked `(art)` remain marketing art. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.
 
 ## For a reviewer
 

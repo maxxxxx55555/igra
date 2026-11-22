@@ -17,6 +17,32 @@ owner_only_items: 6
 last_verified: 2026-11-11
 ```
 
+## Post-Wave-4 release state (2026-11-22, branch `visual-overhaul-v2`)
+
+**Current shipping truth:** `Last Streetlight`, version `1.0.1`, Android `versionCode 17`,
+exactly two locales (`en`, `ru`), `Ads = No`, privacy policy
+`https://maxxxxx55555.github.io/igra/`. Package: `com.maxsimkasky.laststreetlight`.
+
+- Owner rulings 2026-11-22: `VISUAL_APPROVAL = APPROVED` (commit on this branch only),
+  `KEY_DECISION = NEW_D358` (external upload key fingerprint `D3:58:65:84...`), and
+  `P2_DISPOSITION = RECORD_FOR_POST_RELEASE` (music masters, 42 legacy icons and D11 22.44 ms
+  accepted as-is and recorded in `docs/TZ_DECISIONS.md`).
+- Final gates on this tree: `check.sh --all` exit 0 / **120/120**; windowed perf `fails=0`,
+  D1 113 calls / 16.67 ms p95, D11 120 calls / 22.44 ms p95, VRAM 238 MiB; windowed audio
+  **PASS overall**, Music -17.7 dB, threat sweep -13.1/-13.9/-13.6 dB, MUS6 PASS.
+- Five-seed bot: 1, 47101, 7, 13, 99 — 5/5 WIN, 0 deaths, 0 nudges, 0 softlocks.
+- Android export: Godot 4.7 export templates and the project build template are installed.
+  The export presets now exclude `build/*,build/**`; release keystore fields stay empty in git.
+  `build/tls.aab` is signed with the owner-approved D358 key; final hash, size and source SHA
+  are in `docs/RELEASE_ARTIFACTS.md` after Step 6.
+- Step 4 of the 2026-11-22 pass commits the clean tree on `visual-overhaul-v2`. `main` is not
+  merged, pushed or tagged; the next approval is the real-phone test before any `main` action.
+- Remaining owner-only work: install `build/tls-phone-test.apk`, complete the device checklist,
+  then create/submit the Play Console listing and roll out Open Testing.
+
+The older status blocks below are dated records and are superseded as status statements by
+this section wherever they disagree.
+
 <!-- UNFREEZE (2026-11-11, owner directive "TLS -> RELEASE" v2.0 §0): the 2026-11-10
 "frozen for agent work" status below is a dated historical record, SUPERSEDED as a status
 statement. The owner reopened the agent-closable remainder for the sole purpose of taking

@@ -150,11 +150,39 @@ func apply_for_stage(stage: int) -> void:
 	_env.ambient_light_energy = ambient_energy
 	_env.ambient_light_color = ambient_color
 	_env.fog_light_energy = FOG_LIGHT_BY_STAGE[clampi(stage, 0, FOG_LIGHT_BY_STAGE.size() - 1)]
+	_apply_menu_canon_fog(stage)
 	if _moon:
 		_moon.light_energy = moon_energy
 		_moon.shadow_enabled = moon_energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
 	if _player_glow:
 		_player_glow.light_energy = glow_energy
+
+
+## Wave 3: the cold slate-teal mist of the owner's main-menu reference
+## (#142126) and its per-stage density. The stage table above still owns the
+## ambient energy and the fog light, so the lighting gates keep their numbers.
+func _apply_menu_canon_fog(stage: int) -> void:
+	_apply_menu_canon_fog_color()
+	if _env == null:
+		return
+	var stage_name: String = ["DARK", "PARTIAL", "STREETS", "FULL"][clampi(stage, 0, 3)]
+	_env.fog_density = maxf(_env.fog_density, float(MenuCanonAtmosphereDirector.STAGE_FOG_DENSITY.get(stage_name, 0.016)))
+
+
+## The mist's colour and sky contribution are safe to reapply at any time;
+## the density floor is not. A graphics-tier switch must keep the table's
+## own density (0.012 Low, 0.015 Ultra): settings-persist and LOOK1 prove
+## that the dropdown really reaches the live Environment. The stage floor
+## is applied at boot and on stage/district changes instead, so the menu
+## canon still owns the look whenever the world actually changes.
+func _apply_menu_canon_fog_color() -> void:
+	if _env == null:
+		return
+	_env.fog_light_color = MenuCanonAtmosphereDirector.FOG_MIST_DEFAULT
+	# The Low tier keeps its own thin sky (the preset's 0.1); above it the mist
+	# carries the whole sky, which is what makes the reference read as night air.
+	if int(SettingsManager.get_setting("graphics_tier", 2)) > 0:
+		_env.fog_sky_affect = 0.85
 
 
 
@@ -225,6 +253,11 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.glow_hdr_threshold = float(p.get("glow_hdr_threshold", _env.glow_hdr_threshold))
 	_env.fog_density = float(p.get("fog_density", _env.fog_density))
 	_env.fog_sky_affect = float(p.get("fog_sky_affect", _env.fog_sky_affect))
+	# The tier table owns fog_density on a switch (settings-persist / LOOK1
+	# read the exact numbers); the menu-canon stage floor is applied by
+	# apply_for_stage() at boot and on world changes. Only the mist's colour
+	# is refreshed here so it survives a settings change.
+	_apply_menu_canon_fog_color()
 	_env.ssao_enabled = bool(p.get("ssao_enabled", false)) and RenderingServer.get_current_rendering_method() == "forward_plus"
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = float(p.get("contrast", 1.0))
@@ -237,6 +270,11 @@ func _on_settings_changed(key: String, value: Variant) -> void:
 			apply_for_stage(dm.get_stage(dm.current_district))
 	if key != "graphics_tier":
 		return
+	# The first five frames re-apply the stage's lighting so late signals
+	# cannot leave a district dark. A deliberate tier change is not such a
+	# signal: let the tier's own density stand, or the settings gate (and
+	# the player's dropdown) would see the stage floor instead.
+	_override_frames = 0
 	_apply_graphics_tier(int(value))
 	var district_manager: Node = get_node_or_null("/root/DistrictManager")
 	if district_manager != null:

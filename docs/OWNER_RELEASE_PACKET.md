@@ -8,6 +8,12 @@ still the source of truth for anything not literally copy-pasteable) plus what c
 2026-09-13 FINAL CONSOLIDATION pass. Refreshed after merging `arena/store-sync` +
 `arena/art-final` and attempting the automatable pieces of this list from the repo.
 
+**CURRENT RELEASE TRUTH (2026-11-22):** `Last Streetlight`, `1.0.1`, Android `versionCode 17`,
+exactly two store locales (`en`, `ru`), `Ads = No`, privacy policy
+`https://maxxxxx55555.github.io/igra/`. The package is `com.maxsimkasky.laststreetlight`.
+The sections below are dated 2026-09/2026-11 working notes; where they say 13 locales, 6
+languages, an old title, "Ads = Yes", or that the AAB/SDK work was blocked, this banner wins.
+
 **Distance to release, after this pass's automation attempts: 4 items** — Play Console
 login/2FA/upload, one real device playtest, the privacy-policy contact placeholder + Pages
 toggle (mostly automated this pass — 2 clicks + 1 text edit left, an identity decision, not a
@@ -41,10 +47,11 @@ keystore/release_user=tlsrelease
 keystore/release_password=<the password you set above>
 ```
 
-**AAB export — blocked, not attempted:** this machine has no Android SDK (`ANDROID_HOME`
-unset, no `sdkmanager`/`adb` on PATH), and `export_presets.cfg` has
-`gradle_build/use_gradle_build=true` (the SDK levels are the template's: minimum 24, target 36), so a signed `.aab` needs the SDK's
-build-tools and a Gradle run, not just the Godot editor. Exact install commands (PowerShell):
+**AAB export — completed 2026-11-22:** the Android SDK, Godot 4.7 export templates and the
+project-local Android build template are installed, and `.qa_logs/build_aab.sh` produces a
+signed `.aab` with the owner-approved external key. `export_presets.cfg` has
+`gradle_build/use_gradle_build=true` (minimum SDK 29, target 36) and all release keystore
+fields remain empty in git. The older toolchain-install notes below are kept as dated history.
 
 ```powershell
 # 1. Download "Command line tools only" from https://developer.android.com/studio#command-tools
@@ -68,11 +75,11 @@ godot --headless --export-release "Android" build/TLS.aab
 
 ## (b) Google Play Console — click path + IARC answers
 
-1. https://play.google.com/console → **Create app** → name `THE LAST STREETLIGHT`, default
+1. https://play.google.com/console → **Create app** → name `Last Streetlight`, default
    language English (US), type Game, Free.
 2. **App content** cards, in order:
    - Privacy policy → paste the URL from §(c) below.
-   - Ads → **Yes** (AppLovin MAX interstitial + rewarded).
+   - Ads → **No** (current build ships the AppLovin plugin off with no SDK key).
    - App access → **All functionality available without special access**.
    - **Content ratings (IARC)** — answer: category **Game**; violence → yes, mild
      (cartoon/fantasy, non-realistic, creatures not humans); fear/horror → yes (dark
@@ -81,9 +88,9 @@ godot --headless --export-release "Android" build/TLS.aab
      Teen-ish back.
    - Target audience → age groups 13-15, 16-17, 18+; **no** to "appeals to children".
    - News app → No. COVID-19 contact tracing → No.
-   - Data safety → collects/shares data **No** (switch to **Yes** + declare *Device or other
-     IDs* + *App activity*, "for advertising", not shared, only once a real AppLovin key is
-     live — ships with none).
+   - Data safety → collects/shares data **No**; no advertising ID, no analytics, no SDK key.
+     This matches `store/IARC_ANSWERS.md` and the live privacy policy. If a real AppLovin key
+     is ever enabled, update this answer and the policy before that build ships.
    - Government apps → No.
 3. **Main store listing** — paste from `store/listing.md` (2/2 locale-parity certified,
    `docs/CERT_STORESYNC.md`), see §(d) for the per-locale paste order.
@@ -125,8 +132,8 @@ account action, not something to do on your behalf.
 `data/i18n/*.json` (`docs/CERT_STORESYNC.md`, `docs/artifacts/store-sync/verify_listing.py`).
 Not duplicated here — copying 700+ lines into a second document would just create a second
 place for it to go stale. Paste order in Play Console **Store listing → Manage translations**:
-en (default listing) first, then the other 12 in whatever order is convenient — each section
-in `store/listing.md` is self-contained (title/short/full description) and locale-labeled.
+en (default listing) first, then ru. Only two store locales ship; each section in
+`store/listing.md` is self-contained (title/short/full description) and locale-labeled.
 
 ## (e) Screenshot upload order
 
@@ -148,10 +155,9 @@ in slot order —
 `store/trailer/hero_{first_restore,grid_cascade,reactor_room}_1920x1080.png`,
 `store/trailer/hero_shorts_cut_1080x1920.png` (vertical, for Shorts/TikTok/Reels).
 
-Shots 3, 4, 6 (and the RU shot 8, if wanted) are the only capture gap left — each needs ~5
-minutes in-game per `screenshot-plan-detailed.md`'s per-shot recipe (exact district/camera/
-power-stage), which is exactly why "one real playtest" (§(g)) and "capture the 3 missing
-shots" are naturally the same sitting.
+Current truth (2026-11-22): all 8 EN gallery shots and all 3 touch shots exist. The "missing
+shots 3, 4, 6" notes above are dated 2026-09 history; Step 3 of the 2026-11-22 release pass
+recaptures the 11 files on the final visual tree before upload.
 
 ## (f) AppLovin MAX — optional, not blocking
 

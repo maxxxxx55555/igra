@@ -29,12 +29,18 @@ const DETAIL_BEDS: Dictionary = {
 }
 var _detail_player: AudioStreamPlayer
 var _detail_district: StringName = &""
+## Wave 3: the damp night air of the owner's reference (drizzle on the roofs
+## and the gutter) rides under every district bed on the Ambient bus.
+const WET_NIGHT_PATH: String = "res://assets/audio/menu_canon/amb_wet_night_rain_loop.wav"
+const WET_NIGHT_DB: float = -26.0
+var _wet_night: AudioStreamPlayer = null
 
 func _ready() -> void:
 	_detail_player = AudioStreamPlayer.new()
 	_detail_player.name = "DistrictDetailBed"
 	_detail_player.bus = "Ambient" if AudioServer.get_bus_index("Ambient") >= 0 else "Master"
 	add_child(_detail_player)
+	_build_wet_night()
 	await get_tree().process_frame
 	var we = get_tree().root.get_node_or_null("Main3D/WorldEnvironment")
 	if we != null and we.environment != null:
@@ -44,6 +50,24 @@ func _ready() -> void:
 		_target_ambient = _env.ambient_light_color
 	if EventBus.has_signal("district_entered"):
 		EventBus.district_entered.connect(_on_district)
+
+## The wet-night bed: one loop, one player, on the Ambient bus under the
+## district detail accents. It is silent until the first input, like the music.
+func _build_wet_night() -> void:
+	if not ResourceLoader.exists(WET_NIGHT_PATH):
+		return
+	var stream := load(WET_NIGHT_PATH) as AudioStream
+	if stream == null:
+		return
+	if stream is AudioStreamWAV:
+		(stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	_wet_night = AudioStreamPlayer.new()
+	_wet_night.name = "WetNightAmbience"
+	_wet_night.bus = "Ambient" if AudioServer.get_bus_index("Ambient") >= 0 else "Master"
+	_wet_night.stream = stream
+	_wet_night.volume_db = WET_NIGHT_DB
+	add_child(_wet_night)
+
 
 func _on_district(id: StringName) -> void:
 	_update_detail_bed(id)

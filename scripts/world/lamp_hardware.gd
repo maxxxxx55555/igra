@@ -4,9 +4,11 @@ extends RefCounted
 ## (HEAD, the same point street_props.gd and streetlight_3d.tscn use), so the light starts where the lens is. The poles are street_props.gd's; the lens is its emissive sphere, flattened.
 
 const HEAD := Vector3(1.16, 4.2, 0.0)
-const CONCRETE := Color("#33322f")
-const STEEL := Color("#14171a")
-const STEEL_LIGHT := Color("#20252a")
+## Wave 4: the plinth and collars read as a pale beige stump under a sodium
+## lamp; lower the concrete/steel albedo so the pole stays iron-dark.
+const CONCRETE := Color("#1c1d1c")
+const STEEL := Color("#101315")
+const STEEL_LIGHT := Color("#171b1f")
 const RUST := Color("#3a2418")
 const ARM: Array[Vector3] = [
 	Vector3(0.0, 3.95, 0.0), Vector3(0.0, 4.28, 0.0), Vector3(0.07, 4.43, 0.0), Vector3(0.22, 4.51, 0.0),
@@ -56,7 +58,7 @@ static func pole_mesh() -> ArrayMesh:
 	if _mesh == null:
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		_frustum(st, Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.62, 0.0), 0.2, 0.15, 8, CONCRETE, CONCRETE.lightened(0.08), true)
+		_frustum(st, Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.62, 0.0), 0.2, 0.15, 8, CONCRETE, CONCRETE, true)
 		_frustum(st, Vector3(0.0, 0.62, 0.0), Vector3(0.0, 0.7, 0.0), 0.12, 0.1, 10, STEEL_LIGHT, STEEL_LIGHT, true)
 		_frustum(st, Vector3(0.0, 0.7, 0.0), Vector3(0.0, 1.5, 0.0), 0.072, 0.0647, 12, RUST, STEEL, false)
 		_frustum(st, Vector3(0.0, 1.5, 0.0), Vector3(0.0, 4.0, 0.0), 0.0647, 0.042, 12, STEEL, STEEL, false)

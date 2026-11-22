@@ -1,10 +1,12 @@
-# Release notes: Last Streetlight 1.0
+# Release notes: Last Streetlight 1.0.1
 
-Player-facing notes for the first release (store version `1.0`, version code 5, built from the head the Session 29 block of `docs/RUN_STATE.md` names). The feature list repeats the claim-checked copy of `store/listing.md`; the store's per-language "What's new" text is `store/changelog.md`.
+**Current shipping truth (2026-11-22):** `Last Streetlight`, version `1.0.1`, Android `versionCode 17`, exactly two locales (`en`, `ru`), `Ads = No`, privacy policy `https://maxxxxx55555.github.io/igra/`. Dated blocks below that disagree are historical records.
+
+Player-facing notes for the current release. The feature list repeats the claim-checked copy of `store/listing.md`; the store's per-language "What's new" text is `store/changelog.md`.
 
 ## English
 
-**Last Streetlight 1.0: the first release.**
+**Last Streetlight 1.0.1: the current release.**
 
 The "Architect Project" disaster plunged the city into permanent night. You are a survivor with one flashlight and a fading battery, and you bring the power grid back, district by district.
 
@@ -12,13 +14,13 @@ The "Architect Project" disaster plunged the city into permanent night. You are 
 - 11 enemy types, each with its own senses, weaknesses and behaviour
 - 5 endings, decided by how much of the city, and of the truth, you recover
 - stealth built on noise and visibility, crafting, a skill tree and a workbench for the flashlight
-- 6 languages: English, Russian, German, Spanish, French and Brazilian Portuguese
+- 2 fully localized languages: English and Russian
 - no ads and no in-app purchases in this version; the game plays offline
 
 
 ## Русский
 
-**Последний фонарь 1.0: первый выпуск.**
+**Последний фонарь 1.0.1: текущий выпуск.**
 
 Катастрофа «Проекта Архитектор» погрузила город в вечную ночь. Вы выживший с одним фонарём и садящейся батареей, и вы возвращаете городу электричество, район за районом.
 
@@ -26,7 +28,7 @@ The "Architect Project" disaster plunged the city into permanent night. You are 
 - 11 типов врагов, у каждого свои органы чувств, слабости и поведение
 - 5 концовок: они зависят от того, сколько города и правды вы вернёте
 - стелс на шуме и видимости, крафт, дерево навыков и верстак для фонаря
-- 6 языков: английский, русский, немецкий, испанский, французский и бразильский португальский
+- 2 полностью локализованных языка: английский и русский
 - в этой версии нет рекламы и покупок внутри игры; игра работает без интернета
 
 

@@ -33,6 +33,9 @@ const _UI_GAIN_DEFAULT_DB: float = 9.0
 ## Sodium craft pack: deterministic mechanical UI clicks and district restoration.
 const _CRAFT_DIR: String = "res://assets/audio/craft/"
 
+## Wave 3: the tarnished-brass switch of the owner's menu reference.
+const _CANON_DIR: String = "res://assets/audio/menu_canon/"
+
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
 	# Text notices have no sound; dedicated action signals own their feedback.
@@ -126,6 +129,10 @@ func _in_hud(node: Node) -> bool:
 	return false
 
 func click() -> void:
+	# Wave 3: the brass switch of the owner's reference replaces the craft tick.
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_click.wav"):
+		_play_canon("sfx_ui_brass_click.wav", -3.0, randf_range(0.96, 1.04))
+		return
 	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_confirm_click.wav"):
 		play_craft("sfx_ui_confirm_click.wav", &"UI", -2.0, randf_range(0.96, 1.04))
 		return
@@ -137,8 +144,29 @@ func click() -> void:
 func hover() -> void:
 	# Pointer movement keeps visual feedback; the supplied craft hover tick is
 	# quiet enough to answer deliberate pointer focus without the old beep spam.
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_hover.wav"):
+		_play_canon("sfx_ui_brass_hover.wav", -14.0, randf_range(0.96, 1.04))
+		return
 	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_hover_tick.wav"):
 		play_craft("sfx_ui_hover_tick.wav", &"UI", -12.0, randf_range(0.96, 1.04))
+
+
+## One menu-canon one-shot on the UI bus.
+func _play_canon(file: String, volume_db: float, pitch: float) -> void:
+	var path := _CANON_DIR + file
+	if not ResourceLoader.exists(path):
+		return
+	var stream := load(path) as AudioStream
+	if stream == null:
+		return
+	var p := AudioStreamPlayer.new()
+	p.bus = &"UI"
+	p.volume_db = volume_db
+	p.pitch_scale = pitch
+	p.stream = stream
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
 
 func play_craft(file: String, bus: StringName, volume_db: float, pitch: float = 1.0) -> void:
 	if not _can_play():

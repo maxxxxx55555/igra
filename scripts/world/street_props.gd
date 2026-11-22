@@ -46,6 +46,12 @@ const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
 const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.png"
 const _TEX_BENCH       := "res://assets/textures/surfaces/bench_wood_512.png"
+## Wave 4: the traffic cone by the pole was an untextured tan primitive that
+## read as a beige plastic stump under a sodium lamp. Use the menu-canon
+## corroded iron maps with a dark tint so it belongs to the wet street.
+const _MENU_IRON_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png"
+const _MENU_IRON_NORMAL := "res://assets/textures/menu_canon_pbr/menu_iron_normal.png"
+const _MENU_IRON_ROUGHNESS := "res://assets/textures/menu_canon_pbr/menu_iron_roughness.png"
 
 ## Returns a StandardMaterial3D with albedo_texture loaded from path.
 ## Falls back to albedo_color if the texture file is missing.
@@ -345,8 +351,22 @@ func _build_prop_multimesh() -> void:
 			_bark_material(), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
-		var cone_mat := _prop_material("", Color(0.42, 0.24, 0.16), 0.6, 0.0)
-		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, cone_mat, "ConesBatched")
+		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, _iron_material(), "ConesBatched")
+
+## Corroded cast iron from the main-menu canon: its normal/roughness maps break
+## the flat cone silhouette and the dark tint keeps it from glowing beige.
+static func _iron_material() -> StandardMaterial3D:
+	var mat := _prop_material(_MENU_IRON_ALBEDO, Color(0.13, 0.12, 0.11), 0.92, 0.28)
+	if ResourceLoader.exists(_MENU_IRON_NORMAL):
+		mat.normal_enabled = true
+		mat.normal_texture = load(_MENU_IRON_NORMAL)
+		mat.normal_scale = 0.45
+	if ResourceLoader.exists(_MENU_IRON_ROUGHNESS):
+		mat.roughness_texture = load(_MENU_IRON_ROUGHNESS)
+		mat.roughness = 1.0
+	mat.uv1_triplanar = true
+	mat.uv1_scale = Vector3.ONE * 2.0
+	return mat
 
 ## Dead bark, not a smooth brown pipe: a mottled grain over a dark trunk colour, triplanar so the cylinder carries it round, rough enough to catch no sheen.
 func _bark_material() -> StandardMaterial3D:

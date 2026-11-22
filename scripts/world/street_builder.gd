@@ -44,6 +44,23 @@ const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _PUDDLES := preload("res://shaders/wet_asphalt_puddle.gdshader")
+## Visual overhaul v2: the craft puddle shader uses a real puddle mask and a
+## dry-roughness floor so standing water reads as a dark sodium mirror instead
+## of plastic. The v1 craft set stays as the Low-tier fallback below.
+const _PUDDLES_V2 := preload("res://shaders/wet_asphalt_puddle_craft.gdshader")
+## Wave 3: the menu-canon wet asphalt is the owner's photographic reference -
+## cracked night asphalt with a dark mirror puddle that carries the cold
+## #142126 mist bounce and the sodium sheen. The v2 craft shader stays as the
+## Low-tier fallback so no shipped asset is orphaned.
+const _PUDDLES_CANON := preload("res://shaders/menu_canon_wet_asphalt.gdshader")
+const _CANON_ASPHALT_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_asphalt_albedo.png"
+const _CANON_ASPHALT_ROUGH := "res://assets/textures/menu_canon_pbr/menu_asphalt_roughness.png"
+const _CANON_ASPHALT_NORMAL := "res://assets/textures/menu_canon_pbr/menu_asphalt_normal.png"
+const _CANON_PUDDLE_MASK := "res://assets/textures/menu_canon_pbr/menu_asphalt_puddle_mask.png"
+const _V2_ASPHALT_ALBEDO := "res://assets/textures/visual_v2/asphalt_wet_albedo_v2.png"
+const _V2_ASPHALT_ROUGH := "res://assets/textures/visual_v2/asphalt_wet_roughness_v2.png"
+const _V2_ASPHALT_NORMAL := "res://assets/textures/visual_v2/asphalt_wet_normal_v2.png"
+const _V2_PUDDLE_MASK := "res://assets/textures/visual_v2/asphalt_puddle_mask_v2.png"
 const _CRAFT_ASPHALT_ALBEDO := "res://assets/textures/world_craft/asphalt_wet_albedo.png"
 const _CRAFT_ASPHALT_ROUGH := "res://assets/textures/world_craft/asphalt_wet_roughness.png"
 const _CRAFT_ASPHALT_NORMAL := "res://assets/textures/world_craft/asphalt_wet_normal.png"
@@ -80,7 +97,9 @@ func _make_sidewalk_mesh() -> BoxMesh:
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
-	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0, 0.0)
+	# A pale beige dash read as a plastic block in the wet street; weathered
+	# grey road paint keeps the marking legible without catching the lamp.
+	m.material = _surface("", Vector3(0.10, 0.105, 0.105), 1.0, 1.0, 0.0)
 	return m
 
 func _make_curb_mesh() -> BoxMesh:
@@ -99,16 +118,43 @@ func _make_damage_mesh() -> BoxMesh:
 func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	if surface > 1.5:
-		# the owner's plan, module 1.1: the asphalt wears the supplied puddle shader.
-		mat.shader = _PUDDLES
-		# That shader has no albedo texture: asphalt_tint carries the mean sRGB
-		# value of the old asphalt texture, so the street keeps its darkness.
-		mat.set_shader_parameter("asphalt_tint", Color(0.19, 0.20, 0.22))
-		mat.set_shader_parameter("wet_darkening", 0.45)
-		mat.set_shader_parameter("albedo_tex", load(_CRAFT_ASPHALT_ALBEDO))
-		mat.set_shader_parameter("roughness_tex", load(_CRAFT_ASPHALT_ROUGH))
-		mat.set_shader_parameter("normal_tex", load(_CRAFT_ASPHALT_NORMAL))
-		mat.set_shader_parameter("tex_scale", 0.35)
+		# Wave 3: the menu-canon asphalt shader carries a real crack field, a
+		# dark mirror puddle and the cold #142126 mist bounce, so the street
+		# reads as wet photographic grit under the sodium lamps. The Low tier
+		# keeps the v2 craft shader (fewer textures, no puddle normals).
+		if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
+			mat.shader = _PUDDLES_V2
+			mat.set_shader_parameter("albedo_tex", load(_V2_ASPHALT_ALBEDO))
+			mat.set_shader_parameter("roughness_tex", load(_V2_ASPHALT_ROUGH))
+			mat.set_shader_parameter("normal_tex", load(_V2_ASPHALT_NORMAL))
+			mat.set_shader_parameter("puddle_mask_tex", load(_V2_PUDDLE_MASK))
+			mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
+			mat.set_shader_parameter("puddle_uv_scale", Vector2(0.75, 0.75))
+			mat.set_shader_parameter("wetness", 0.58)
+			mat.set_shader_parameter("puddle_roughness", 0.16)
+			mat.set_shader_parameter("dry_roughness_floor", 0.84)
+			mat.set_shader_parameter("normal_strength", 0.78)
+			mat.set_shader_parameter("ripple_strength", 0.012)
+			mat.set_shader_parameter("tint_color", Color(1.28, 1.34, 1.42))
+			return mat
+		mat.shader = _PUDDLES_CANON
+		mat.set_shader_parameter("albedo_tex", load(_CANON_ASPHALT_ALBEDO))
+		mat.set_shader_parameter("roughness_tex", load(_CANON_ASPHALT_ROUGH))
+		mat.set_shader_parameter("normal_tex", load(_CANON_ASPHALT_NORMAL))
+		mat.set_shader_parameter("puddle_mask_tex", load(_CANON_PUDDLE_MASK))
+		# V4: puddles live in world space (~22 m sheets), not in repeated
+		# tile UVs, so the road reads as broad rain rather than leopard spots,
+		# and the ripple/two-extra-texture ALU of the old version is gone.
+		mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
+		mat.set_shader_parameter("world_puddle_scale", 0.045)
+		mat.set_shader_parameter("wetness", 0.62)
+		mat.set_shader_parameter("puddle_roughness", 0.10)
+		mat.set_shader_parameter("dry_roughness_floor", 0.84)
+		mat.set_shader_parameter("normal_strength", 0.82)
+		mat.set_shader_parameter("tint_color", Color(0.68, 0.71, 0.72))
+		mat.set_shader_parameter("mist_sky_tint", Color(0.078, 0.129, 0.149))
+		mat.set_shader_parameter("sodium_bounce", Color(0.788, 0.635, 0.290))
+		mat.set_shader_parameter("sodium_bounce_energy", 0.06)
 		return mat
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):

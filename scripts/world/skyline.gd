@@ -35,7 +35,7 @@ const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const SHELL_DEPTH := 0.30
 const OPEN_X := 1.16
 const OPEN_Y := 1.52
-const FACADE_TEX := {
+const FACADE_TEX_LOW := {
 	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.png",
 	&"residential": "res://assets/textures/pbr/painted_brick_albedo.png",
 	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.png",
@@ -44,10 +44,36 @@ const FACADE_TEX := {
 	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.png",
 	&"police": "res://assets/textures/pbr/panel_facade_albedo.png",
 	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"industrial": "res://assets/textures/world_craft/facade_concrete_albedo.png",
-	&"substation": "res://assets/textures/world_craft/facade_concrete_albedo.png",
-	&"power_station": "res://assets/textures/world_craft/facade_concrete_albedo.png",
+	&"industrial": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
+	&"substation": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
+	&"power_station": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
 }
+## Wave 3: the menu-canon peeling plaster for the city districts and the
+## corroded cast iron for the industrial ones - the reference's raw, damp
+## surfaces. The old pbr/v2 maps stay as the Low-tier fallback, so no shipped
+## texture is orphaned.
+const FACADE_TEX_CANON := {
+	&"suburbs": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"residential": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"park": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"school": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"hospital": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"gas_station": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"police": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
+	&"warehouses": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
+	&"industrial": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
+	&"substation": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
+	&"power_station": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
+}
+const MENU_FACADE_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_facade_normal.png")
+const MENU_FACADE_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_facade_roughness.png")
+const MENU_IRON_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_iron_normal.png")
+const MENU_IRON_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_iron_roughness.png")
+## Visual overhaul v2: weathered concrete with baked roughness in 0.72–0.98.
+## The world_craft pair stays as the Low-tier fallback so the craft set is not orphaned.
+const V2_FACADE_ALBEDO := "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png"
+const V2_FACADE_NORMAL := preload("res://assets/textures/visual_v2/facade_concrete_normal_v2.png")
+const V2_FACADE_ROUGHNESS := preload("res://assets/textures/visual_v2/facade_concrete_roughness_v2.png")
 const CONCRETE_NORMAL := preload("res://assets/textures/world_craft/facade_concrete_normal.png")
 const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_concrete_roughness.png")
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
@@ -352,20 +378,46 @@ func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D]
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
 
+## The facade map of this district: the menu-canon plaster (city) or the
+## corroded cast iron (industrial) from the owner's reference, and the old
+## pbr/v2 maps on the Low tier.
+func _facade_tex_path() -> String:
+	if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
+		return String(FACADE_TEX_LOW.get(_district_id, FACADE_TEX_LOW[&"suburbs"]))
+	var canon: String = String(FACADE_TEX_CANON.get(_district_id, FACADE_TEX_CANON[&"suburbs"]))
+	if ResourceLoader.exists(canon):
+		return canon
+	return String(FACADE_TEX_LOW.get(_district_id, V2_FACADE_ALBEDO))
+
+
 ## Sills and trim use the same poured concrete and retain their existing instance batches.
 func _concrete_material() -> StandardMaterial3D:
 	if _concrete_detail == null:
 		_concrete_detail = _detail_material("panel_facade", Color(0.60, 0.59, 0.56))
 		_concrete_detail.normal_enabled = true
-		_concrete_detail.normal_texture = CONCRETE_NORMAL
+		# Low tier keeps the world_craft maps; the menu-canon plaster (city) or
+		# the corroded cast iron (industrial) otherwise.
+		var low_tier: bool = int(SettingsManager.get_setting("graphics_tier", 2)) <= 0
+		var industrial: bool = FACADE_TEX_CANON.get(_district_id, "") == "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png"
+		if low_tier:
+			_concrete_detail.normal_texture = CONCRETE_NORMAL
+			_concrete_detail.roughness_texture = CONCRETE_ROUGHNESS
+		elif industrial:
+			_concrete_detail.normal_texture = MENU_IRON_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_normal.png") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_IRON_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_roughness.png") else V2_FACADE_ROUGHNESS
+		else:
+			_concrete_detail.normal_texture = MENU_FACADE_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_normal.png") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_FACADE_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_roughness.png") else V2_FACADE_ROUGHNESS
 		_concrete_detail.normal_scale = 0.5
-		_concrete_detail.roughness_texture = CONCRETE_ROUGHNESS
+		# The maps are baked inside [0.72, 0.98]; multiply by 1.0 to keep them exact.
 		_concrete_detail.roughness = 1.0
 		_concrete_detail.metallic = 0.0
 	return _concrete_detail
 
 func _exit_tree() -> void:
 	_concrete_detail = null
+	_facade_mat = null
+	_window_mat = null
 
 func _detail_material(set_name: String, tint: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
@@ -404,7 +456,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		_facade_mat.set_shader_parameter("facade_roughness", CONCRETE_ROUGHNESS)
 		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
-		var facade_tex_path: String = FACADE_TEX.get(_district_id, FACADE_TEX[&"suburbs"])
+		var facade_tex_path: String = _facade_tex_path()
 		if ResourceLoader.exists(facade_tex_path):
 			_facade_mat.set_shader_parameter("facade_tex", load(facade_tex_path))
 		var facade_nrm_path: String = facade_tex_path.replace("_albedo", "_normal")

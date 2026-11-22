@@ -30,7 +30,7 @@ const STEEL_TEXT: Color = Color(0.541176, 0.541176, 0.521569)
 const BONE_TEXT: Color = Color(0.847059, 0.835294, 0.8)
 const EMPER: Color = Color(0.752941, 0.223529, 0.168627)
 const STAMINA_GREEN: Color = Color(0.373, 0.541, 0.306)
-const PANEL_COLOR: Color = Color(0.0588235, 0.0745098, 0.0784314, 0.94)
+const PANEL_COLOR: Color = Color(0.0588235, 0.0745098, 0.0784314, 0.74)
 const PANEL_EDGE: Color = Color(0.352941, 0.290196, 0.164706)
 const INSET_FILL: Color = ThemeProvider.COLOR_BG_PANEL2
 const OUTLINE_COLOR: Color = Color(0.0235294, 0.0588235, 0.0745098, 1.0)
@@ -124,7 +124,7 @@ func _build_screen(name: String) -> void:
 	border.add_child(inner)
 	_apply_card_bg_v2(inner, name, card_w, card_h)
 	var header_line := ColorRect.new()
-	header_line.color = BRASS
+	header_line.color = ThemeProvider.COLOR_SODIUM if name == "Shop" else BRASS
 	header_line.size = Vector2(card_w - 4, 2)
 	header_line.position = Vector2(2, 46)
 	card.add_child(header_line)
@@ -167,7 +167,7 @@ const _SCREEN_ART: Dictionary = {
 	"Victory": "res://assets/textures/screens_v2/loading_street.png",
 	"Shop": "res://assets/textures/screens_v2/character_dim.png",
 }
-const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.45)
+const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.30)
 
 const _CARD_BG_V2: Dictionary = {
 	"Loading": "res://assets/textures/screens_v2/loading_street.png",
@@ -953,7 +953,7 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 ## The shop's rows start below the coin header and end above the Close button; a row is 80 px, or as tall as its Buy button needs.
 const SHOP_TOP := 36.0
 const SHOP_CLOSE_ZONE := 44.0
-const SHOP_ROW := 180.0
+const SHOP_ROW := 196.0
 ## Upgrades and the kit borrow the pack icons; the skins keep the generic square.
 const SHOP_ICON: Dictionary = {
 	&"upgrade_flashlight_brightness": &"flashlight", &"upgrade_flashlight_battery": &"battery",
@@ -998,8 +998,8 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2 if content.size.x >= 600.0 else 1
-	grid_container.add_theme_constant_override("h_separation", 12)
-	grid_container.add_theme_constant_override("v_separation", 12)
+	grid_container.add_theme_constant_override("h_separation", 14)
+	grid_container.add_theme_constant_override("v_separation", 14)
 	grid_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")

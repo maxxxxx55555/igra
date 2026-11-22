@@ -333,3 +333,26 @@ has something that lane does not: T9 (one notice queue), T8 (density-aware touch
 phone's quick-slot reset, and both new gates with reproducible mutation proofs. **The owner picks
 one**; the other is deleted in a single owner-authorized pass. Landing both without reading the diff
 would leave two implementations of T3 in the tree.
+
+## 11. Post-Wave-4 owner rulings and current dispositions (2026-11-22)
+
+This section is added, not substituted for §1-§10. All older rows keep their history. The
+owner message of 2026-11-22 supplies `VISUAL_APPROVAL = APPROVED`,
+`KEY_DECISION = NEW_D358`, and `P2_DISPOSITION = RECORD_FOR_POST_RELEASE`. The single current
+truth is: `Last Streetlight`, `1.0.1`, `versionCode 17`, exactly 2 locales (`en`, `ru`),
+`Ads = No`, privacy policy `https://maxxxxx55555.github.io/igra/`, package
+`com.maxsimkasky.laststreetlight`.
+
+| id | source | disposition | current status (2026-11-22) |
+|---|---|---|---|
+| W4-KEY | owner `KEY_DECISION` | decision | **resolved-by-owner**: external key `C:\Users\Maxsim\keys\laststreetlight-release.keystore`, fingerprint `D3:58:65:84...`, is authoritative; old `4F:6B:E6:41...` row in `RELEASE_ARTIFACTS.md` is superseded and will be replaced by the final AAB record. No secret in git. |
+| W4-EXPORT | `release_export_check.py --aab` found 46 non-game files | agent | **resolved-by-code**: `export_presets.cfg` now has `build/*,build/**` in the Android, Web and Windows `exclude_filter`; the rebuilt AAB must report 0 non-game files. |
+| W4-DOCS | stale version/title/locale/ads claims | agent | **resolved-by-code**: `RELEASE_NOTES.md`, `store/changelog.md`, `OWNER_RELEASE_PACKET.md`, `STORE_KIT.md`, `PROJECT_STATE.md` and this file carry dated 2026-11-22 truth blocks; historical 13-locale and old-title text is explicitly dated, not deleted. |
+| W4-MEDIA | store gallery + HC-3 credits proof | agent | **in-progress in Step 3**: recapture 8 EN + 3 touch screenshots on the final visual tree, update `store/PRESS_KIT.md`, capture `build/credits_hc3_verification.png`. |
+| W4-COMMIT | owner visual approval | owner/agent | **in-progress in Step 4**: clean tree to be committed on `visual-overhaul-v2`; `main` untouched until post-phone-test approval. |
+| W4-GATES | final-tree evidence | agent | **in-progress in Step 5**: rerun `check.sh --all`, windowed perf/audio, and 5 seeds on the committed tree. |
+| W4-AAB | clean signed AAB + universal phone APK | agent | **in-progress in Step 6**: rebuild with the D358 key, pass both bundle checks, build `build/tls-phone-test.apk`, update `docs/RELEASE_ARTIFACTS.md` and `FINAL_AAB_RECEIPT.md`. |
+| W4-MUSIC | 8 flagged music stems / AI labelling | post-release | **owner-accepted**: keep current masters and bus-side dynamics; AI label "partly AI, Google Lyria" and Scott Buckley CC BY 4.0 attribution stay; remaster only in a post-release branch. |
+| W4-ICONS | 42 legacy item-icon flags | post-release | **owner-accepted**: no change before release; no Wave 3/4 asset implicated. |
+| W4-PERF | D11 p95 22.44 ms | post-release | **owner-accepted**: formal `p95 <= 33 ms` gate is green; stricter `<= 20 ms` is a post-release target only. |
+| W4-PHONE | real-device proof | owner | **open**: install `build/tls-phone-test.apk`, run device/runtime/thermal/touch/audio checks; required before any `main` merge, push or tag. |

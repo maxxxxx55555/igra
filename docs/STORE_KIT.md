@@ -2,6 +2,12 @@
 
 # Store kit
 
+**SHIPPING TRUTH (2026-11-22):** `Last Streetlight`, `1.0.1`, Android `versionCode 17`,
+exactly two shipping locales (`en`, `ru`), `Ads = No`, privacy policy
+`https://maxxxxx55555.github.io/igra/`. Current store copy is EN/RU only in
+`store/listing.md`; the 13-locale / 11-authored-locale text in this document is a dated
+pre-cut record from 2026-09/2026-10 and is explicitly **not** shippable.
+
 ## Listing copy — reuse, don't duplicate
 
 English listing copy already exists and is GDD-sourced:
@@ -79,7 +85,10 @@ doc's — this is the shot list P5 executes against. Machine-readable shot ids, 
 gallery captions for the capture plan: `store/screens_spec/shotlist.json` (keyed to
 `store/screenshot-plan-detailed.md` §3 gallery + §7 phone shots).
 
-## Full listings — 11 authored locales
+## Full listings — 11 authored locales (historical, 2026-09/2026-10 pre-cut record)
+
+Only `en` and `ru` ship in 1.0.1. The blocks below were authored before the owner's
+2026-11-05/10 locale cut and are retained as dated history, not as store-upload source.
 
 Authored for the 11 locales that had only a short description: **es, de, fr, it, pt_BR, tr, ja,
 ko, zh, zh_TW, ar**. EN and RU keep the master full description in

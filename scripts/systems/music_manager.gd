@@ -106,11 +106,32 @@ const WOW_CUE_BY_KIND: Dictionary = {
 	"ending": "res://assets/audio/music/cue_victory.ogg",
 	"death": "res://assets/audio/craft/sfx_death_cue.wav",
 }
+## MUS6 (rc16 closeout) requires the meaningful stems to sit above -13 dB
+## at the calm/tense/combat levels; the overall target is met at the Music
+## bus fader (default_bus_layout.tres), not by burying the individual stems.
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
 const FADE_TIME: float = 2.0          ## Длительность кроссфейда, с (GDD.md:359-362, A02)
-const FULL_DB: float = -8.0           ## Рабочая громкость трека
+## Wave 3: the Music bus sat at -9.5 dB in the windowed gate; the owner's
+## reference wants the bed under the mix, so the working level drops 5 dB and
+## the new nocturnal lantern loop rides under it.
+const FULL_DB: float = -13.0          ## Рабочая громкость трека
+## Wave 4: the district bed is mastered much quieter than the hunt/battle
+## cues, so a single bus fader could not keep both in the owner's -18..-14 dB
+## corridor. Per-mood trim at the player, before the bus compressor; stems
+## keep their own LAYER_DB, so MUS6 is untouched.
+const MOOD_DB_TRIM: Dictionary = {
+	Mood.MENU: 6.0,
+	Mood.AMBIENT: 6.0,
+	Mood.TENSION: -3.0,
+	Mood.BATTLE: -3.0,
+	Mood.BOSS: -2.0,
+	Mood.VICTORY: 0.0,
+}
 const MUTE_DB: float = -60.0
+## The felt-piano night bed of the owner's reference, under everything else.
+const NOCTURNAL_PATH: String = "res://assets/audio/menu_canon/mus_nocturnal_lantern_loop.wav"
+const NOCTURNAL_DB: float = -22.0
 ## How hunted the player is, 0 to 1: it rises 0 to 1 in under a second when a monster closes in or notices the player and falls back in four, and the stems of the three states (calm, tense, combat) follow it.
 const THREAT_RISE: float = 1.2
 const THREAT_FALL: float = 0.25
@@ -144,6 +165,7 @@ var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
 var _layer_target: Dictionary = {}    ## имя слоя -> целевая громкость 0..1
 var _sting: AudioStreamPlayer = null
 var _wow_cue: AudioStreamPlayer = null
+var _nocturnal: AudioStreamPlayer = null
 var _first_light_cue_done: bool = false
 ## BUGS_FOR_CLAUDE #5: the mastered weather beds under LAYERS["rain"/"wind"]
 ## had no hook anywhere — audio_manager.gd's rain/wind players are a separate,
@@ -170,6 +192,7 @@ func _ready() -> void:
 	_b = _make_player("MusicB")
 	_active = _a
 	_build_layers()
+	_build_nocturnal()
 	_bed_timer = Timer.new()
 	_bed_timer.one_shot = true
 	_bed_timer.timeout.connect(_turn_over_bed)
@@ -206,6 +229,8 @@ func _unlock_audio() -> void:
 	_audio_unlocked = true
 	set_process_input(false)
 	audio_unlocked.emit()
+	if _nocturnal != null and not _nocturnal.playing:
+		_nocturnal.play(randf_range(0.0, 4.0))
 	for key in _layers:
 		var pl: AudioStreamPlayer = _layers[key]
 		if not pl.playing:
@@ -219,7 +244,7 @@ func _unlock_audio() -> void:
 	_active.stream = stream
 	_active.volume_db = MUTE_DB
 	_active.play()
-	create_tween().tween_property(_active, "volume_db", FULL_DB, FADE_TIME)
+	create_tween().tween_property(_active, "volume_db", _track_db(mood), FADE_TIME)
 
 func _on_game_started() -> void:
 	_combat_hold = 0.0
@@ -250,6 +275,9 @@ func _on_game_over() -> void:
 
 func is_in_combat() -> bool:
 	return _combat_hold > 0.0
+
+func _track_db(m: Mood) -> float:
+	return FULL_DB + float(MOOD_DB_TRIM.get(m, 0.0))
 
 func _process(delta: float) -> void:
 	_collect_preloads()
@@ -282,7 +310,7 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 		return
 	var next: AudioStreamPlayer = _b if _active == _a else _a
 	next.stream = stream
-	next.volume_db = MUTE_DB if not instant else FULL_DB
+	next.volume_db = MUTE_DB if not instant else _track_db(new_mood)
 	# FINAL PERFECTION P1.3: старые Mood-треки не beat-matched друг к другу,
 	# так что кроссфейд на чужой downbeat звучит как ритмический стык —
 	# случайный сдвиг старта размывает совпадение.
@@ -295,7 +323,7 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 	else:
 		var prev := _active
 		_fade = create_tween().set_parallel(true)
-		_fade.tween_property(next, "volume_db", FULL_DB, FADE_TIME)
+		_fade.tween_property(next, "volume_db", _track_db(new_mood), FADE_TIME)
 		_fade.tween_property(prev, "volume_db", MUTE_DB, FADE_TIME)
 		_fade.chain().tween_callback(prev.stop)
 		_active = next
@@ -506,6 +534,23 @@ func _on_boss_phase_changed(phase: int) -> void:
 
 ## ── Слои GDD §25.2 ──────────────────────────────────────────────────────────
 
+## Wave 3: the nocturnal lantern bed rides under the music of every mood.
+func _build_nocturnal() -> void:
+	if not ResourceLoader.exists(NOCTURNAL_PATH):
+		return
+	var s := load(NOCTURNAL_PATH) as AudioStream
+	if s == null:
+		return
+	_force_loop(s)
+	var pl := AudioStreamPlayer.new()
+	pl.name = "MusicNocturnal"
+	pl.bus = &"Music"
+	pl.stream = s
+	pl.volume_db = NOCTURNAL_DB
+	add_child(pl)
+	_nocturnal = pl
+
+
 func _build_layers() -> void:
 	for key in LAYERS:
 		var path: String = LAYERS[key]
@@ -526,7 +571,9 @@ func _build_layers() -> void:
 		_sting.name = "ActionSting"
 		_sting.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
 		_sting.stream = load(STING_PATH) as AudioStream
-		_sting.volume_db = LAYER_DB
+		# A detection accent lands on the same bus as the stems; keep it under
+		# them so a hunt cannot pop the Music bus above the owner's corridor.
+		_sting.volume_db = LAYER_DB - 4.0
 		add_child(_sting)
 	_wow_cue = AudioStreamPlayer.new()
 	_wow_cue.name = "WowCue"

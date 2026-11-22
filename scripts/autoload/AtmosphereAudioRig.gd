@@ -3,11 +3,20 @@ extends Node
 
 const RATE: int = 11025
 const CUES: Array[StringName] = [&"asphalt", &"metal", &"gravel", &"spark", &"surge"]
+## Wave 3: the wet night boot steps of the owner's reference.
+const CANON_DIR: String = "res://assets/audio/menu_canon/"
+const STEP_FILES: Array[String] = [
+	"sfx_step_wet_asphalt_01.wav",
+	"sfx_step_wet_asphalt_02.wav",
+	"sfx_step_wet_asphalt_03.wav",
+]
 
 @export_range(3, 24) var effect_voices: int = 10
 @export var ogg_paths: Dictionary[StringName, String] = {}
 
 var _sounds: Dictionary[StringName, AudioStream] = {}
+var _steps: Array[AudioStream] = []
+var _last_step: int = -1
 var _effects: Array[AudioStreamPlayer3D] = []
 var _priorities: PackedInt32Array = PackedInt32Array()
 var _ages: PackedInt64Array = PackedInt64Array()
@@ -25,6 +34,12 @@ func _ready() -> void:
 	_rng.seed = 916371
 	for cue: StringName in CUES:
 		_sounds[cue] = _load_sound(cue)
+	for file: String in STEP_FILES:
+		var path: String = CANON_DIR + file
+		if ResourceLoader.exists(path):
+			var stream := load(path) as AudioStream
+			if stream != null:
+				_steps.append(stream)
 	_rng.randomize()
 	for i: int in range(effect_voices):
 		_effects.append(_new_emitter())
@@ -38,6 +53,7 @@ func _exit_tree() -> void:
 		player.stop()
 		player.stream = null
 	_sounds.clear()
+	_steps.clear()
 
 func _on_node_added(node: Node) -> void:
 	if node.has_signal(&"survival_changed") and node.has_signal(&"boss_telegraph"):
@@ -87,6 +103,16 @@ func _new_emitter() -> AudioStreamPlayer3D:
 	return emitter
 
 func play_footstep(at: Vector3, surface: StringName = &"asphalt") -> void:
+	# Wave 3: on asphalt the boot steps are the three wet-night files of the
+	# owner's reference. The next step is never the same file twice in a row
+	# and the pitch wanders inside 0.95..1.05, so a walk never machine-guns.
+	if surface == &"asphalt" and _steps.size() >= 2:
+		var pick: int = _rng.randi_range(0, _steps.size() - 1)
+		if pick == _last_step:
+			pick = (pick + 1 + _rng.randi_range(0, _steps.size() - 2)) % _steps.size()
+		_last_step = pick
+		_play_at(&"asphalt", at, -8.0, _rng.randf_range(0.95, 1.05), 1, _steps[pick])
+		return
 	var cue: StringName = surface if surface in [&"gravel", &"metal"] else &"asphalt"
 	_play_at(cue, at, -8.0, _rng.randf_range(0.88, 1.12), 1)
 
@@ -96,7 +122,7 @@ func play_repair_spark(at: Vector3) -> void:
 func play_boss_telegraph(at: Vector3) -> void:
 	_play_at(&"surge", at, -3.0, 1.0, 3)
 
-func _play_at(cue: StringName, at: Vector3, gain_db: float, pitch: float, priority: int) -> void:
+func _play_at(cue: StringName, at: Vector3, gain_db: float, pitch: float, priority: int, stream_override: AudioStream = null) -> void:
 	if not at.is_finite():
 		return
 	var slot: int = -1
@@ -111,7 +137,7 @@ func _play_at(cue: StringName, at: Vector3, gain_db: float, pitch: float, priori
 	if slot >= 0:
 		var emitter: AudioStreamPlayer3D = _effects[slot]
 		emitter.stop()
-		emitter.stream = _sounds[cue]
+		emitter.stream = stream_override if stream_override != null else _sounds[cue]
 		emitter.global_position = at
 		emitter.volume_db = gain_db
 		emitter.pitch_scale = pitch

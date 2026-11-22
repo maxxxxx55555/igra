@@ -61,7 +61,7 @@
       "district": "residential",
       "zone": "z_courtyard_play",
       "artifact": "store/screenshots/shot03_stealth_horror_1920x1080_en.png",
-      "status": "capture_needed",
+      "status": "delivered",
       "caption": "The light shows you the way... and shows you to it.",
       "alt": "Player crouched at the edge of a flashlight pool on the playground chalk-lamp; a tall shadow waits just outside the light.",
       "variants": []
@@ -74,7 +74,7 @@
       "district": "park",
       "zone": "z_keeper_shed",
       "artifact": "store/screenshots/shot04_keeper_lore_1920x1080_en.png",
-      "status": "capture_needed",
+      "status": "delivered",
       "caption": "A voice on the shortwave... someone still keeps the night honest.",
       "alt": "Close on the keeper's shed bench: one brass work lamp, a shortwave radio, scattered papers.",
       "variants": []
@@ -100,7 +100,7 @@
       "district": "industrial",
       "zone": "z_workshop_b",
       "artifact": "store/screenshots/shot06_mystery_inside_1920x1080_en.png",
-      "status": "capture_needed",
+      "status": "delivered",
       "caption": "The bench is warm. Whoever worked here... did not come back.",
       "alt": "One warm lamp burning over an empty work bench in the dark industrial plant, no operator.",
       "variants": []

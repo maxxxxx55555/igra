@@ -58,7 +58,18 @@ static func build_theme(base_font: Font = null) -> Theme:
 		theme.default_font = base_font
 	theme.default_font_size = 16
 
-	theme.set_stylebox("panel", "PanelContainer", _make_box("panel_dark_9slice.png", Color(COL_SHADOW_MID, 0.92), COL_IRON_EDGE, Color(0, 0, 0, 0), 16, 16))
+	# Visual overhaul v2: the chamfered dark-iron panel (10 px 9-slice, 8 px
+	# corner cut) replaces the plain panel chrome while the canonical fonts and
+	# type scale are kept by CraftThemeBridge/ThemeProvider above it.
+	# Wave 3: the menu-canon panel is the photographic iron plate of the owner's
+	# main menu (chamfered corners, a bronze rim, a patina surface). The v2
+	# chamfer plate stays as the fallback, so no shipped texture is orphaned.
+	var panel_box: StyleBox = _make_box("menu_ui_panel_9slice.png", Color(COL_SHADOW_MID, 0.92), COL_IRON_EDGE, Color(0, 0, 0, 0), 16, 16)
+	if panel_box is StyleBoxFlat:
+		# The canon plate is missing: the v2 chamfer plate is the fallback.
+		panel_box = _make_box("ui_panel_chamfer_9slice_v2.png", Color(COL_SHADOW_MID, 0.92), COL_IRON_EDGE, Color(0, 0, 0, 0), 16, 16)
+	theme.set_stylebox("panel", "PanelContainer", panel_box)
+	theme.set_stylebox("panel", "Panel", panel_box)
 	theme.set_stylebox("normal", "Button", _make_box("btn_normal_9slice.png", Color(COL_IRON_DARK, 0.88), COL_IRON_EDGE, COL_SODIUM_DIM, 20, 12))
 	theme.set_stylebox("hover", "Button", _make_box("btn_hover_9slice.png", Color("#1e292e"), COL_SODIUM_KEY, COL_SODIUM_HOT, 20, 12))
 	theme.set_stylebox("focus", "Button", _make_box("btn_hover_9slice.png", Color("#1e292e"), COL_SODIUM_HOT, COL_SODIUM_HOT, 20, 12))
