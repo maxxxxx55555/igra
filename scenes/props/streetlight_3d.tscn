@@ -1,5 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
+[sub_resource type="BoxShape3D" id="tls_inert_box"]
+size = Vector3(0.4, 0.4, 0.4)
 [ext_resource type="Script" path="res://scripts/world/streetlight_3d.gd" id="1"]
 [ext_resource type="ArrayMesh" path="res://assets/mesh/mesh_streetlight_pole.res" id="2_pole"]
 
@@ -62,4 +64,11 @@ position = Vector3(1.16, 4.2, 0)
 groups = ["light_zone"]
 position = Vector3(1.16, 2.25, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LightArea"]
+shape = SubResource("area_shape")
+
+[node name="TLSVisualBody" type="StaticBody3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="TLSVisualBodyShape" type="CollisionShape3D" parent="TLSVisualBody"]
 shape = SubResource("area_shape")

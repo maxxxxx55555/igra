@@ -505,6 +505,7 @@ func _add_building_colliders(transform_list: Array[Transform3D]) -> void:
 	host.collision_layer = 1
 	host.collision_mask = 0
 	add_child(host)
+	var created_colliders: int = 0
 	for xf: Transform3D in transform_list:
 		var scale3: Vector3 = xf.basis.get_scale()
 		var box := BoxShape3D.new()
@@ -513,7 +514,9 @@ func _add_building_colliders(transform_list: Array[Transform3D]) -> void:
 		cs.shape = box
 		cs.transform = Transform3D(xf.basis.orthonormalized(), xf.origin)
 		host.add_child(cs)
-	building_collider_count = transform_list.size()
+		created_colliders += 1
+	building_collider_count = created_colliders
+	print("TLS_BUILDING_COLLIDERS=%d" % created_colliders)
 
 func _add_solid_ground(edge: float) -> void:
 	var body := StaticBody3D.new()

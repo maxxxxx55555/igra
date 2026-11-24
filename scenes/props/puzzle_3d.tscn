@@ -1,5 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
+[sub_resource type="BoxShape3D" id="tls_inert_box"]
+size = Vector3(0.4, 0.4, 0.4)
 [ext_resource type="Script" path="res://scripts/world/puzzle_3d.gd" id="1"]
 
 [sub_resource type="BoxMesh" id="panel_mesh"]
@@ -22,3 +24,9 @@ position = Vector3(0, 0.8, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TriggerArea"]
 shape = SubResource("trigger_shape")
 
+[node name="TLSVisualBody" type="StaticBody3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="TLSVisualBodyShape" type="CollisionShape3D" parent="TLSVisualBody"]
+shape = SubResource("trigger_shape")
