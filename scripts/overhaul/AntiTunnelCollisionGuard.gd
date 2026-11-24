@@ -4,9 +4,9 @@ extends Node
 ## Hard anti-walk-through & anti-tunneling guard for multi-story buildings & player movement.
 
 @export var max_delta_sec: float = 0.05
-@export var max_substep_distance_m: float = 0.18
+@export var max_substep_distance_m: float = 0.15
 @export var max_substeps: int = 8
-@export var min_safe_margin_m: float = 0.04
+@export var min_safe_margin_m: float = 0.045
 @export var world_collision_layer: int = 1
 @export var auto_harden_world_on_ready: bool = true
 @export var auto_create_missing_static_colliders: bool = true
@@ -50,6 +50,18 @@ func move_guarded(body: CharacterBody3D, desired_velocity: Vector3, delta: float
 		_has_safe_transform = true
 
 	var travel_dist: float = safe_vel.length() * clamped_delta
+	var horizontal := Vector3(safe_vel.x, 0.0, safe_vel.z)
+	if horizontal.length() > 0.001 and travel_dist > max_substep_distance_m:
+		var space := body.get_world_3d().direct_space_state
+		var from := body.global_transform.origin + Vector3.UP * 0.8
+		var to := from + horizontal.normalized() * max_substep_distance_m
+		var query := PhysicsRayQueryParameters3D.create(from, to, world_collision_layer, [body])
+		query.hit_from_inside = true
+		query.hit_back_faces = true
+		if not space.intersect_ray(query).is_empty():
+			safe_vel.x = 0.0
+			safe_vel.z = 0.0
+			travel_dist = absf(safe_vel.y) * clamped_delta
 	var steps: int = clampi(ceili(travel_dist / maxf(0.05, max_substep_distance_m)), 1, max_substeps)
 	var step_scale: float = clamped_delta / (phys_delta * float(steps))
 

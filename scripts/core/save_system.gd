@@ -37,6 +37,8 @@ static func _sign(body: String) -> String:
 ## {"hmac": _sign(body), "data_json": body}. write_signed() returns false
 ## when the file cannot be opened.
 static func write_signed(path: String, data: Variant) -> bool:
+	if path.contains("..") or path.contains("\\"):
+		return false
 	var body := JSON.stringify(data)
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
@@ -48,6 +50,8 @@ static func write_signed(path: String, data: Variant) -> bool:
 ## The data of a signed side file, or null when it is missing, not an
 ## envelope, tampered with, or its body does not parse.
 static func read_signed(path: String) -> Variant:
+	if path.contains("..") or path.contains("\\"):
+		return null
 	if not FileAccess.file_exists(path):
 		return null
 	var parser := JSON.new()
@@ -446,7 +450,6 @@ func _save() -> void:
 	if not _recover_bonus():
 		EventBus.toast_requested.emit(LocalizationManager.t("SAVE_FAILED_STORAGE"), "danger")
 		return
-	WiFiBonusService.checkpoint_clock()
 	# Guarded mirror: the vault carries the same five core values the owner
 	# asked to protect (coins/skill points are written by their own autoloads).
 	# The JSON remains the canonical Continue payload.
@@ -523,7 +526,6 @@ func mark_onboard_done() -> void:
 func reset_all(new_run: bool = true) -> void:
 	if new_run:
 		_run_id = _new_run_id()
-		WiFiBonusService.begin_run(_run_id)
 	GameManager.reset_run()
 	PowerGrid.reset()
 	Cartography.reset()

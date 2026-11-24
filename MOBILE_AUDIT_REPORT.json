@@ -1,0 +1,2877 @@
+{
+  "style_lock": "Samsung Galaxy A32 (4GB RAM, Mali-G52 MC2, 1080x2400 20:9)",
+  "gate_pass": false,
+  "project_godot": {
+    "status": "NEEDS_PATCH",
+    "orientation": "landscape",
+    "changes_count": 13,
+    "changes": [
+      "[display] window/stretch/scale_mode: <missing> -> \"fractional\"",
+      "[display] window/size/viewport_width: 1920 -> 1280",
+      "[display] window/size/viewport_height: 1080 -> 720",
+      "[display] window/handheld/orientation: <missing> -> 4",
+      "[physics] common/physics_ticks_per_second: <missing> -> 60",
+      "[physics] common/max_physics_steps_per_frame: <missing> -> 4",
+      "[rendering] anti_aliasing/quality/msaa_3d: 1 -> 0",
+      "[rendering] anti_aliasing/quality/screen_space_aa: <missing> -> 0",
+      "[rendering] lights_and_shadows/directional_shadow/size: 2048 -> 1024",
+      "[rendering] lights_and_shadows/directional_shadow/size.mobile: <missing> -> 1024",
+      "[rendering] lights_and_shadows/positional_shadow/atlas_size: <missing> -> 1024",
+      "[rendering] lights_and_shadows/positional_shadow/atlas_size.mobile: <missing> -> 1024",
+      "[rendering] environment/glow/upscale_mode: <missing> -> 0"
+    ],
+    "sha256": "4a3a43f4146bf50f1903df10b1bf4d388a424298526c9d063939a9b44871a175"
+  },
+  "export_presets": {
+    "status": "NEEDS_PATCH",
+    "changes_count": 1,
+    "changes": [
+      "[preset.0.options] screen/edge_to_edge: <missing> -> true"
+    ],
+    "sha256": "320f2bb022cc8f05545974471efc38910be3e7936b056d85e2a05196c661e370"
+  },
+  "wifi_bonus_audit": {
+    "wifi_hits_count": 0,
+    "wifi_hits": []
+  },
+  "scenes": {
+    "collision_findings_count": 32,
+    "collision_findings": [
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/boss_architect_3d.tscn:12",
+        "detail": "CharacterBody3D 'BossArchitect' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/brute_3d.tscn:9",
+        "detail": "CharacterBody3D 'Brute' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/burner_3d.tscn:9",
+        "detail": "CharacterBody3D 'Burner' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/crawler_3d.tscn:9",
+        "detail": "CharacterBody3D 'Crawler' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/destroyer_3d.tscn:14",
+        "detail": "CharacterBody3D 'Destroyer' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/hound_3d.tscn:9",
+        "detail": "CharacterBody3D 'Hound' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/hunter_3d.tscn:11",
+        "detail": "CharacterBody3D 'Hunter' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/rotter_3d.tscn:9",
+        "detail": "CharacterBody3D 'Rotter' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/shadow_3d.tscn:9",
+        "detail": "CharacterBody3D 'Shadow' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/sharpshooter_3d.tscn:9",
+        "detail": "CharacterBody3D 'Sharpshooter' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/tvar_3d.tscn:9",
+        "detail": "CharacterBody3D 'Tvar' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/enemies/watcher_3d.tscn:11",
+        "detail": "CharacterBody3D 'Watcher' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/gameplay/document_pickup.tscn:20",
+        "detail": "MeshInstance3D 'PickupMesh' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/pickups/document_pickup.tscn:11",
+        "detail": "MeshInstance3D 'MeshInstance3D' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LOW_SAFE_MARGIN",
+        "location": "scenes/player/player_3d.tscn:118",
+        "detail": "CharacterBody3D 'Player' safe_margin=0.001 (< 0.04)"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:128",
+        "detail": "MeshInstance3D 'BodyMesh' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:131",
+        "detail": "MeshInstance3D 'Backpack' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:139",
+        "detail": "MeshInstance3D 'Torso' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:143",
+        "detail": "MeshInstance3D 'Head' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:147",
+        "detail": "MeshInstance3D 'Hood' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:153",
+        "detail": "MeshInstance3D 'LeftArm' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:157",
+        "detail": "MeshInstance3D 'RightArm' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:161",
+        "detail": "MeshInstance3D 'LeftLeg' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/player/player_3d.tscn:165",
+        "detail": "MeshInstance3D 'RightLeg' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/props/puzzle_3d.tscn:16",
+        "detail": "MeshInstance3D 'PanelMesh' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/props/secret.tscn:8",
+        "detail": "MeshInstance3D 'MeshInstance3D' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/props/streetlight_3d.tscn:25",
+        "detail": "MeshInstance3D 'Pole' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/props/streetlight_3d.tscn:53",
+        "detail": "MeshInstance3D 'Lamp' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/world/test_zone.tscn:205",
+        "detail": "MeshInstance3D 'Bldg1' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/world/test_zone.tscn:210",
+        "detail": "MeshInstance3D 'Bldg2' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/world/test_zone.tscn:215",
+        "detail": "MeshInstance3D 'Bldg3' lacks StaticBody3D/CollisionShape3D"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "MESH_WITHOUT_COLLIDER",
+        "location": "scenes/world/test_zone.tscn:220",
+        "detail": "MeshInstance3D 'Bldg4' lacks StaticBody3D/CollisionShape3D"
+      }
+    ],
+    "ui_findings_count": 1,
+    "ui_findings": [
+      {
+        "severity": "HIGH",
+        "rule": "UI_ROOT_NOT_FULL_RECT",
+        "location": "scenes/ui/district_banner.tscn:3",
+        "detail": "Root Control 'DistrictBanner' not Full Rect (anchors_preset=15)"
+      }
+    ]
+  },
+  "assets": {
+    "repo_asset_total_mb": 758.77,
+    "issues_count": 438,
+    "issues": [
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_all_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_baseline.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_env_fog_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_flashlight_shadow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_glow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_HUD_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_lit_flat_materials.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_moon_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_moon_shadow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_msaa_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_omni_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_particles_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_post-process_layers_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_spot_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_power_station_unshaded_materials.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_all_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_baseline.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_env_fog_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_flashlight_shadow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_glow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_HUD_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_lit_flat_materials.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_moon_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_moon_shadow_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_msaa_off.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_omni_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_particles_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_post-process_layers_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_spot_lights_hidden.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/ablate_suburbs_unshaded_materials.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src00_boot_title.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src01_main_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src01_menu_en_s2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src01_menu_ru_s1.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src01_menu_ru_s2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src02_district_day_full.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src03_district_night_dark.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src04_combat.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src05_boss.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src06_victory_ngplus.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src07_skill_tree.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src08_shop.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src08_shop_de.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src10_hud_hurt.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src11_hud_prompt.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src12_hud_touch.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/00_boot_title.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/01_main_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/01_menu_en_s2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/01_menu_ru_s1.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/01_menu_ru_s2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/02_district_day_full.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/03_district_night_dark.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/04_combat.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/05_boss.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/06_victory_ngplus.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/07_skill_tree.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/08_shop.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/08_shop_de.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/10_hud_hurt.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/11_hud_prompt.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/final_store_src_clean/12_hud_touch.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/frames_v2/12_hud_touch.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/frames_v2_final/12_hud_touch.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/frames_v2_tuned/12_hud_touch.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": ".qa_logs/store_gallery_contact_sheet.png",
+        "dimensions": "2000x930"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "UNOPTIMIZED_AUDIO_FORMAT",
+        "file": "assets/audio/craft/amb_sodium_hum_loop.wav",
+        "size_kb": 1875.0
+      },
+      {
+        "severity": "HIGH",
+        "rule": "UNOPTIMIZED_AUDIO_FORMAT",
+        "file": "assets/audio/craft/sfx_death_cue.wav",
+        "size_kb": 750.0
+      },
+      {
+        "severity": "HIGH",
+        "rule": "UNOPTIMIZED_AUDIO_FORMAT",
+        "file": "assets/audio/craft/sfx_district_restored_sting.wav",
+        "size_kb": 1125.0
+      },
+      {
+        "severity": "HIGH",
+        "rule": "UNOPTIMIZED_AUDIO_FORMAT",
+        "file": "assets/audio/menu_canon/amb_wet_night_rain_loop.wav",
+        "size_kb": 3000.0
+      },
+      {
+        "severity": "HIGH",
+        "rule": "UNOPTIMIZED_AUDIO_FORMAT",
+        "file": "assets/audio/menu_canon/mus_nocturnal_lantern_loop.wav",
+        "size_kb": 4500.0
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/background_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/endings/ending_dark.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/endings/ending_hope.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/endings/ending_light.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/endings/ending_survivor.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/endings/ending_truth.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/library_hero_1920x620.png",
+        "dimensions": "1920x620"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/loading_screen_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/main_menu_keyart_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/play_final/tv_banner_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/play_final/video_poster_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/press/banner_discord_1280x640.png",
+        "dimensions": "1280x640"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/press/banner_twitter_1500x500.png",
+        "dimensions": "1500x500"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/press/press_cover_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/screenshot_01.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/screenshot_02.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/screenshot_03.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/screenshot_04.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/screenshot_05.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_01.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_02.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_03.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_04.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_05.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_06.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_07.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_08.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_09.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/storyboard/frame_10.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/tv_banner_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/background_1920x1080_v2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/coming_soon/dlc_teaser_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/coming_soon/wishlist_hero_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/phone/phone_combat.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/phone/phone_map.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/phone/phone_menu.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/phone/phone_street.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/steam_desktop/steam_desktop_combat.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/steam_desktop/steam_desktop_hero.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/steam_desktop/steam_desktop_map.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/steam_tv/steam_tv_hero_4k.png",
+        "dimensions": "3840x2160"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/tablet_10/tablet_10_menu.png",
+        "dimensions": "2560x1800"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/tablet_10/tablet_10_street.png",
+        "dimensions": "2560x1800"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/tablet_7/tablet_7_encounter.png",
+        "dimensions": "1800x2560"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/devices/tablet_7/tablet_7_map.png",
+        "dimensions": "1800x2560"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/endings/ending_dark.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/endings/ending_hope.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/endings/ending_light.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/endings/ending_survivor.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/endings/ending_truth.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/itch/itch_screenshot_wide_1_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/itch/itch_screenshot_wide_2_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/itch/itch_screenshot_wide_3_1280x720.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/library_hero_1920x620_v2.png",
+        "dimensions": "1920x620"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/shots/shot_combat.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/shots/shot_encyclopedia.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/shots/shot_map.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/shots/shot_restored.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/shots/shot_street.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/social/discord_1280x640.png",
+        "dimensions": "1280x640"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/social/poster_vertical_1080x1350.png",
+        "dimensions": "1080x1350"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/social/press_cover_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/social/twitter_1500x500.png",
+        "dimensions": "1500x500"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_01.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_02.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_03.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_04.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_05.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_06.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_07.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_08.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_09.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/storyboard/frame_10.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/vertical/vertical_cta.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/vertical/vertical_hook.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/vertical/vertical_reveal.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/yandex/yandex_banner_1920x600.png",
+        "dimensions": "1920x600"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/yandex/yandex_cover_1080x1080.png",
+        "dimensions": "1080x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/store/v2/youtube/banner_2560x1440.png",
+        "dimensions": "2560x1440"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/gas_station_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/hospital_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/industrial_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/park_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/police_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/power_station_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/residential_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/school_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/substation_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/suburbs_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/loading/warehouses_loading.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/maps_v2/city_iso_2048.png",
+        "dimensions": "2048x2048"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/overlays_v2/lightning_flash_1080.png",
+        "dimensions": "1080x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/overlays_v2/rain_streaks_1080.png",
+        "dimensions": "1080x1080"
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/ceramic_tile_albedo.png",
+        "size_kb": 2189.0
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/ceramic_tile_normal.png",
+        "size_kb": 1281.3
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/cracked_concrete_albedo.png",
+        "size_kb": 1299.3
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/cracked_concrete_normal.png",
+        "size_kb": 1545.7
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/dead_grass_albedo.png",
+        "size_kb": 1776.5
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/dead_grass_normal.png",
+        "size_kb": 2516.2
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/painted_brick_albedo.png",
+        "size_kb": 1912.1
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/painted_brick_normal.png",
+        "size_kb": 1995.4
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/panel_facade_albedo.png",
+        "size_kb": 1420.7
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/panel_facade_normal.png",
+        "size_kb": 1247.2
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/plywood_albedo.png",
+        "size_kb": 1709.8
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/plywood_normal.png",
+        "size_kb": 1124.4
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/rusted_metal_albedo.png",
+        "size_kb": 1649.4
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/rusted_metal_normal.png",
+        "size_kb": 1699.9
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/wet_asphalt_albedo.png",
+        "size_kb": 1854.6
+      },
+      {
+        "severity": "MEDIUM",
+        "rule": "LARGE_IMAGE_FILE",
+        "file": "assets/textures/pbr/wet_asphalt_normal.png",
+        "size_kb": 2405.6
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/character_dim.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/death_loom.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/journal_paper.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/journal_photo.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/loading_street.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/screens_v2/menu_hero.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/textures/sky/night_sky_panorama_4096x2048.png",
+        "dimensions": "4096x2048"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "assets/ui/menu_city.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/art-final/cards_contact_sheet.png",
+        "dimensions": "1024x1536"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/art-final/press_contact_sheet.png",
+        "dimensions": "1536x512"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/integration-20261113/b9/turntable.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/integration-20261113/windows_export_frame.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/audio/credits_en_tier0.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/audio/credits_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/audio/credits_ru_tier0.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/audio/credits_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/current-main/web-browser-startup.png",
+        "dimensions": "1262x568"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/before-en-mixed-captions.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/before-ru-missing-glyphs.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_high_0.8_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_high_0.8_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_high_1.5_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_high_1.5_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_low_0.8_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_low_0.8_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_low_1.5_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/en_low_1.5_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_high_0.8_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_high_0.8_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_high_1.5_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_high_1.5_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_low_0.8_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_low_0.8_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_low_1.5_normal.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/hud/ru_low_1.5_onehand.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/map/01_unlit_blank.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/map/02_flashlight_only_blank.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/map/03_restored_observed.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/map/04_remote_unobserved_blank.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/a/journal_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/a/journal_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/b/journal_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/b/journal_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/c/journal_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/candidates/c/journal_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/ending_en_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/ending_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/ending_ru_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/ending_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/inventory_en_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/inventory_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/inventory_ru_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/inventory_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/journal_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/journal_longest_note_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/journal_longest_note_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/journal_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/menu_en_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/menu_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/menu_ru_tier0.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/menu_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/settings_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/settings_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/shop_en_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/frames/shop_ru_tier2.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/release-20261110/ui/history/rejected_button_b_journal_a.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/artifacts/ui-audio/contact_sheet.png",
+        "dimensions": "1200x800"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/MENU_SCREENSHOT.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/reference/hud_reference.png",
+        "dimensions": "1821x864"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/release/references/FPP_REPAIR_CONCEPT.png",
+        "dimensions": "1672x941"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/after_lit.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/after_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/after_street.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/before_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/burst_hud_i18n.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/burst_menu_palette.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_01s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_02s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_03s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_04s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_05s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_06s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_07s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/diag_09s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/menu_logo_grunge.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/regress_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_after_enter.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_after_play_click.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_after_postmessage.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_boot.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_burst_0.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_after_p0_fix.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v2.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v3.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v4.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v5.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v6.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v7.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v8.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_gameplay_v9.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_menu_v2.png",
+        "dimensions": "1550x882"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_p2_sky.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_p2_sky2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_p2_sky2_zoom.png",
+        "dimensions": "1200x600"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_street_verify.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/rescue_street_verify2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/ship_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/t_03s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/t_07s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/t_12s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/t_20s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/t_30s.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/toast_pipeline.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/truth_menu.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/truth_street.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/truth_street2.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/unify_menu_chrome.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/shots/x.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/01_main_menu_after_d0e5f447_20261031T010852Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/02_district_day_full_after_d0e5f447_20261031T010907Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/03_district_night_dark_after_d0e5f447_20261031T010903Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/04_combat_after_d0e5f447_20261031T010912Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/05_boss_after_d0e5f447_20261031T010915Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/07_skill_tree_after_d0e5f447_20261031T010909Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261031-v16/08_shop_after_d0e5f447_20261031T010910Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/01_main_menu_after_e2b5497_20261104T235006Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/02_district_day_full_after_e2b5497_20261104T235025Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/03_district_night_dark_after_e2b5497_20261104T235019Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/04_combat_after_e2b5497_20261104T235031Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/05_boss_after_e2b5497_20261104T235035Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261104-e2b5497/07_skill_tree_after_e2b5497_20261104T235027Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/01_main_menu_after_31a82da_20261105T090451Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/02_district_day_full_after_31a82da_20261105T090509Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/03_district_night_dark_after_31a82da_20261105T090504Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/04_combat_after_31a82da_20261105T090515Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/05_boss_after_31a82da_20261105T090519Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/06_victory_ngplus_after_31a82da_20261105T090523Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/07_skill_tree_after_31a82da_20261105T090511Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-31a82da/08_shop_after_31a82da_20261105T090512Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/01_main_menu_after_3bee95a_20261105T005532Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/02_district_day_full_after_3bee95a_20261105T005547Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/03_district_night_dark_after_3bee95a_20261105T005542Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/04_combat_after_3bee95a_20261105T005552Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/05_boss_after_3bee95a_20261105T005555Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/06_victory_ngplus_after_3bee95a_20261105T005559Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/07_skill_tree_after_3bee95a_20261105T005549Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-3bee95a/08_shop_after_3bee95a_20261105T005549Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/01_main_menu_after_bcc45cf_20261105T073140Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/02_district_day_full_after_bcc45cf_20261105T073154Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/03_district_night_dark_after_bcc45cf_20261105T073150Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/04_combat_after_bcc45cf_20261105T073159Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/05_boss_after_bcc45cf_20261105T073202Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/06_victory_ngplus_after_bcc45cf_20261105T073205Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/07_skill_tree_after_bcc45cf_20261105T073156Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/20261105-bcc45cf/08_shop_after_bcc45cf_20261105T073156Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/01_main_menu_after_7e996993_20261026T090315Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/02_district_day_full_after_7e996993_20261026T090422Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/03_district_night_dark_after_7e996993_20261026T090349Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/04_combat_after_7e996993_20261026T090442Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/05_boss_after_7e996993_20261026T090458Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/06_victory_ngplus_after_7e996993_20261026T090507Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/07_skill_tree_after_7e996993_20261026T090426Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_rc16_20261028/08_shop_after_7e996993_20261026T090429Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/01_main_menu_after_650aea4_20261106T173741Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/02_district_day_full_after_650aea4_20261106T173756Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/03_district_night_dark_after_650aea4_20261106T173751Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/04_combat_after_650aea4_20261106T173801Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/05_boss_after_650aea4_20261106T173804Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/07_skill_tree_after_650aea4_20261106T173757Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s40_20261107/08_shop_after_650aea4_20261106T173758Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s41_20261108/01_main_menu_after_b61f669c_20261107T203756Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s41_20261108/02_district_day_full_after_b61f669c_20261107T203821Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s41_20261108/03_district_night_dark_after_b61f669c_20261107T203813Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s41_20261108/04_combat_after_b61f669c_20261107T203830Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s41_20261108/05_boss_after_b61f669c_20261107T203836Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s42_20261108/01_main_menu_after_e945d71d_20261108T075343Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s42_20261108/02_district_day_full_after_e945d71d_20261108T075403Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s42_20261108/03_district_night_dark_after_e945d71d_20261108T075357Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s42_20261108/04_combat_after_e945d71d_20261108T075410Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s42_20261108/05_boss_after_e945d71d_20261108T075416Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/01_main_menu_after_81fe34db_20261108T083814Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/02_district_day_full_after_81fe34db_20261108T083833Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/03_district_night_dark_after_81fe34db_20261108T083828Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/04_combat_after_81fe34db_20261108T083841Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/05_boss_after_81fe34db_20261108T083846Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/06_victory_ngplus_after_81fe34db_20261108T083850Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/07_skill_tree_after_81fe34db_20261108T083836Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/pre_s43_20261109/08_shop_after_81fe34db_20261108T083837Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/01_main_menu_after_a2672e77_20261109T230718Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/02_district_day_full_after_a2672e77_20261109T230802Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/03_district_night_dark_after_a2672e77_20261109T230748Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/04_combat_after_a2672e77_20261109T230810Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/05_boss_after_a2672e77_20261109T230816Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/06_victory_ngplus_after_a2672e77_20261109T230820Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/07_skill_tree_after_a2672e77_20261109T230803Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_a2672e77/08_shop_after_a2672e77_20261109T230804Z.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_c804350c/01_main_menu_after_c804350c_20261113T123101Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_c804350c/02_district_day_full_after_c804350c_20261113T123118Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_c804350c/03_district_night_dark_after_c804350c_20261113T123113Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_c804350c/04_combat_after_c804350c_20261113T123124Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/archive/store_c804350c/05_boss_after_c804350c_20261113T123128Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/magenta_corruption_suburbs.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r0_after_forward_plus_magenta0.11pct.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r0_after_gl_compatibility_magenta0.09pct.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r0_after_mobile_magenta0.12pct.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r0_before_forward_plus_magenta13.82pct.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r0_before_gl_compatibility_magenta2.46pct.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/evidence/r1_scale08_fx_off_fplus_magenta4.64pct.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/rc16_f1/A06_shop_after_74f710b_20261008T091547Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/rc16_f1/A06_shop_ar_after_74f710b_20261008T091603Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/rc16_f1/A09_skill_tree_after_74f710b_20261008T091545Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/rc16_gui/00_menu_after_26eef24_20261008T002508Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/shipping/hud/after1/12_hud_touch_after_51e2265_20261012T055344Z.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/shipping/hud/after2/12_hud_touch_after_ccf61ee_20261012T060413Z.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/shipping/hud/before/12_hud_touch_before_8874bb9_20261012T053412Z.png",
+        "dimensions": "1600x740"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/01_main_menu_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214559Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/02_district_day_full_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214618Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/03_district_night_dark_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214611Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/04_combat_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214624Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/05_boss_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214628Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/06_victory_ngplus_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214631Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/07_skill_tree_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214619Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/store/08_shop_after_6a7201d56ca1bb6e9d2a5d6e90c9f0808073fb1a_20261122T214620Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/terminal/ending_dark_after_7e996993_20261026T090113Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/terminal/ending_hope_after_7e996993_20261026T090112Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/terminal/ending_light_after_7e996993_20261026T090112Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/terminal/ending_survivor_after_7e996993_20261026T090113Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "docs/stills/terminal/ending_truth_after_7e996993_20261026T090114Z.png",
+        "dimensions": "1280x720"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/icon-adaptive/background_1080x1080.png",
+        "dimensions": "1080x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/icon-adaptive/foreground_1080x1080.png",
+        "dimensions": "1080x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot01_light_vs_dark_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot02_district_boundary_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot03_stealth_horror_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot04_keeper_lore_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot05_restored_forecourt_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot06_mystery_inside_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot07_last_streetlight_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot08_city_map_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot_p1_touch_first_light_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot_p2_touch_crouch_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/screenshots/shot_p3_touch_interact_1920x1080_en.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/hero_first_restore_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/hero_grid_cascade_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/hero_reactor_room_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/hero_shorts_cut_1080x1920.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/presskit_1600x900.png",
+        "dimensions": "1600x900"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/shorts_silhouette_1080x1920.png",
+        "dimensions": "1080x1920"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/still_first_ending_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/still_first_light_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "store/trailer/still_grid_cascade_1920x1080.png",
+        "dimensions": "1920x1080"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/01_main_menu_after_f37072d7_20261113T150418Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/02_district_day_full_after_f37072d7_20261113T150433Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/03_district_night_dark_after_f37072d7_20261113T150429Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/04_combat_after_f37072d7_20261113T150439Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/05_boss_after_f37072d7_20261113T150442Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/06_victory_ngplus_after_f37072d7_20261113T150445Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/07_skill_tree_after_f37072d7_20261113T150435Z.png",
+        "dimensions": "1920x1055"
+      },
+      {
+        "severity": "HIGH",
+        "rule": "OVERSIZED_TEXTURE",
+        "file": "web/store/assets/images/08_shop_after_f37072d7_20261113T150436Z.png",
+        "dimensions": "1920x1055"
+      }
+    ]
+  }
+}

@@ -34,8 +34,6 @@ ROWS = [
     ("enet", "scripts/net/lan_network.gd", "INACTIVE", "the LAN prototype's peer; no file but the lobby reaches it (docs/A10_multiplayer_decision.md)"),
     ("upnp", "scripts/multiplayer/network_manager.gd", "INACTIVE", "enable_upnp is false by default and the code that would use it is the unreachable lobby's"),
     ("socket", "scripts/multiplayer/lan_discovery.gd", "INACTIVE", "UDP on the local network to list games, started by the unreachable lobby only"),
-    ("local connection", "scripts/monetization/wifi_bonus_service.gd", "ACTIVE", "optional bonus checks the local Android transport, desktop interfaces or browser online status without sending a request"),
-    ("platform", "scripts/monetization/wifi_bonus_service.gd", "ACTIVE", "JavaClassWrapper checks for exceptions after querying Android connectivity on the device"),
     ("integrity", "project.godot", "STUB", "the PlayIntegrityService autoload; no Play Integrity API call exists without a provider"),
     ("platform", "scripts/systems/integrity_guard.gd", "ACTIVE", "JavaClassWrapper reads android.os.Debug.isDebuggerConnected() on the device: a local check, nothing leaves the device"),
     ("url", "android/build/build.gradle", "BUILD-TIME", "the repositories the Gradle build downloads its libraries from; not part of the running game"),

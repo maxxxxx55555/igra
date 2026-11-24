@@ -206,7 +206,7 @@ func _check_save_roundtrip() -> String:
 func _check_bonus_flow() -> String:
 	var was_paused := get_tree().paused
 	get_tree().paused = true
-	var runs_paused := WiFiBonusService.can_process()
+	var runs_paused := false
 	get_tree().paused = was_paused
 	if not runs_paused:
 		return "Bonus service cannot process a paused death screen"

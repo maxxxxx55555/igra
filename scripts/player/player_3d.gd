@@ -28,6 +28,7 @@ var stamina: float = 100.0
 var _winded: bool = false
 const RUN_RESUME_FRACTION: float = 0.25
 var battery: float = 100.0
+var _collision_guard: AntiTunnelCollisionGuard = null
 var look_dir: Vector3 = Vector3.FORWARD
 var flashlight_enabled: bool = true
 var gameplay_active: bool = false
@@ -129,6 +130,10 @@ const VISIBILITY_RUN: float = 1.2
 ## с одной-двумя подзарядками (раньше 5 минут не дотягивали до босса:
 ## фонарь гас посреди фазы, где свет — условие урона).
 const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
+## A32 offline safe-zone: a restored streetlight recharges the light and the
+## traveller's warmth. No network call, no bonus service, no item required.
+const OFFLINE_RECHARGE_PER_SEC: float = 100.0 / 180.0
+const OFFLINE_WARMTH_PER_SEC: float = 3.0
 ## Health comes back slowly once nothing has hurt the player for a while: out of a fight, never in one. It was 18 HP/s
 ## at every moment (added so the bot could beat the Architect), more than the hit rule can deal (12 per 0.8 s = 15 HP/s),
 ## so no number of monsters could kill the player. The GDD gives no base regeneration; the health_regen skill adds its own.
@@ -288,6 +293,13 @@ func _ready() -> void:
 	stamina = stats.stamina_max
 	_winded = false
 	battery = float(battery_max)
+	if _collision_guard == null:
+		_collision_guard = AntiTunnelCollisionGuard.new()
+		_collision_guard.name = "AntiTunnelCollisionGuard"
+		_collision_guard.max_delta_sec = 0.05
+		_collision_guard.max_substep_distance_m = 0.15
+		_collision_guard.min_safe_margin_m = 0.045
+		add_child(_collision_guard)
 
 	if OS.has_feature("mobile"):
 		enable_shadows = false
@@ -606,7 +618,7 @@ func _physics_process(delta: float) -> void:
 	_tick_uv(delta)
 	if not can_move:
 		velocity = Vector3.ZERO
-		move_and_slide()
+		_safe_move(delta)
 		return
 	# a dead player (or one behind the victory screen) is not at the controls
 	var dir_2d: Vector2 = InputService.get_move_dir() if gameplay_active else Vector2.ZERO
@@ -708,7 +720,7 @@ func _physics_process(delta: float) -> void:
 		_coyote_timer = 0.0
 		_jump_buffer_timer = 0.0
 	velocity += get_gravity() * delta
-	move_and_slide()
+	_safe_move(delta)
 	if is_on_floor():
 		ProgressTracker.distance += Vector2(velocity.x, velocity.z).length() * delta
 	_check_fall_recovery()
@@ -924,6 +936,15 @@ func _update_battery(delta: float) -> void:
 	if not flashlight_enabled or not gameplay_active or get_tree().paused or not GameManager.is_playing():
 		return
 	var prev := battery
+	if LightGrid.is_lit(global_position, 0.3):
+		battery = clampf(battery + OFFLINE_RECHARGE_PER_SEC * delta, 0.0, battery_max)
+		if GameplayDirector != null:
+			GameplayDirector.warmth = clampf(GameplayDirector.warmth + OFFLINE_WARMTH_PER_SEC * delta, 0.0, 100.0)
+		if absf(battery - prev) > 0.01:
+			EventBus.player_battery_changed.emit(battery / battery_max)
+		if _light_died and battery > 0.0:
+			toggle_flashlight()
+		return
 	# Модификатор NG+ "long_night": battery 0.8 = на 20% меньше света с
 	# элемента, то есть ручка делит запас, а значит умножает расход.
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
@@ -1023,6 +1044,15 @@ func heal(amount: float) -> void:
 		return # puppet не лечим: владелец лечится на своей машине, hp придёт синком
 	hp = clampf(hp + amount, 0.0, stats.max_hp)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
+
+func _safe_move(delta: float) -> void:
+	safe_margin = maxf(safe_margin, 0.045)
+	if (collision_mask & 1) == 0:
+		collision_mask |= 1
+	if _collision_guard != null and is_instance_valid(_collision_guard):
+		_collision_guard.move_guarded(self, velocity, delta)
+	else:
+		velocity = move_and_slide()
 
 func get_battery() -> float:
 	return battery

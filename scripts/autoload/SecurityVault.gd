@@ -363,9 +363,12 @@ func set_guarded_int(key: StringName, val: int) -> void:
 		return
 	if not CORE_INT_KEYS.has(key):
 		_dynamic_int_keys[key] = true
+	var safe_val: int = clampi(val, 0, 999999)
+	if key == &"coins" or key == &"skill_points":
+		safe_val = clampi(val, 0, 999)
 	var bits := PackedByteArray()
 	bits.resize(8)
-	bits.encode_s64(0, val)
+	bits.encode_s64(0, safe_val)
 	_store_guard(key, bits)
 
 
@@ -385,9 +388,12 @@ func set_guarded_float(key: StringName, val: float) -> void:
 		return
 	if not CORE_FLOAT_KEYS.has(key):
 		_dynamic_float_keys[key] = true
+	var safe_val: float = val
+	if key == &"battery" or key == &"warmth" or key == &"health":
+		safe_val = clampf(val, 0.0, 100.0)
 	var bits := PackedByteArray()
 	bits.resize(8)
-	bits.encode_double(0, val)
+	bits.encode_double(0, safe_val)
 	_store_guard(key, bits)
 
 

@@ -34,8 +34,6 @@ var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
 var _safe_area_inset: Vector4 = Vector4.ZERO
-const _BONUS_OFFER := preload("res://scripts/ui/bonus_offer.gd")
-var _battery_offer: _BONUS_OFFER
 var _vignette_default_color: Color
 ## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
 var _vignette_tween: Tween
@@ -130,7 +128,6 @@ func _ready() -> void:
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
-	_add_battery_offer()
 	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
@@ -1717,8 +1714,6 @@ func _on_bat(ratio: float) -> void:
 	_tween_fill(bat_fill, _pip_fill(ratio))
 	bat_val.text = str(int(ratio * 100))
 	bat_val.visible = ratio <= _BAT_LOW
-	if _battery_offer != null:
-		_battery_offer.visible = ratio < _BAT_LOW
 
 ## FINAL HARDENING PASS (BLOCKER 3): one-time touch calibration on first
 ## touch-device launch - drag the joystick, tap interact, feel the haptic
@@ -1730,14 +1725,6 @@ func _maybe_show_touch_calibration() -> void:
 		return
 	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
 	get_tree().root.add_child(overlay)
-
-func _add_battery_offer() -> void:
-	_battery_offer = _BONUS_OFFER.new(&"extra_battery", "BONUS_BATTERY")
-	_battery_offer.name = "BatteryBonus"
-	_battery_offer.preferred_width_px = 200.0
-	_battery_offer.position = Vector2(BAR_W + 52.0, -12.0)
-	_battery_offer.visible = _bat < _BAT_LOW
-	$TopLeft/Bat.add_child(_battery_offer)
 
 ## S04 (GDD §7): inside a hiding spot visibility is 0, and the view dims to say so.
 var _hide_overlay: ColorRect = null

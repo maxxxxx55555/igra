@@ -984,10 +984,6 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "ShopScroll"
 	content.add_child(scroll)
-	var offer := preload("res://scripts/ui/bonus_offer.gd").new(&"bonus_coins", "BONUS_COINS")
-	offer.position = Vector2(0.0, SHOP_TOP)
-	offer.size.x = content.size.x
-	content.add_child(offer)
 	var fit_rows := func() -> void:
 		var top := offer.position.y + offer.size.y + 8.0
 		scroll.position = Vector2(0, top)

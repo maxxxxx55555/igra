@@ -208,6 +208,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	# B10: reusable recessed masonry bays at walking distance, LOD-switched.
 	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
+	_add_building_colliders(blocks)
 	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _concrete_material())
 	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _concrete_material())
 	var pipe_mesh := CylinderMesh.new()
@@ -493,9 +494,32 @@ func _add_ground() -> void:
 
 ## The dark ground is a floor, not a picture: the blocks between the streets can be walked, and four walls along the
 ## building fronts keep the player inside the district (the buildings themselves stay visual).
+var building_collider_count: int = 0
+
+## Every visual building instance becomes a real static collider. The source
+## transform already carries rotation and mesh scale; the BoxShape3D size comes
+## from that matrix and is clamped to the 0.40 m minimum thickness.
+func _add_building_colliders(transform_list: Array[Transform3D]) -> void:
+	var host := StaticBody3D.new()
+	host.name = "BuildingColliders"
+	host.collision_layer = 1
+	host.collision_mask = 0
+	add_child(host)
+	for xf: Transform3D in transform_list:
+		var scale3: Vector3 = xf.basis.get_scale()
+		var box := BoxShape3D.new()
+		box.size = Vector3(maxf(0.4, scale3.x), maxf(0.4, scale3.y), maxf(0.4, scale3.z))
+		var cs := CollisionShape3D.new()
+		cs.shape = box
+		cs.transform = Transform3D(xf.basis.orthonormalized(), xf.origin)
+		host.add_child(cs)
+	building_collider_count = transform_list.size()
+
 func _add_solid_ground(edge: float) -> void:
 	var body := StaticBody3D.new()
 	body.name = "GroundBody"
+	body.collision_layer = 1
+	body.collision_mask = 0
 	add_child(body)
 	var reach := edge + 12.0
 	_add_box(body, Vector3(reach * 2.0, GROUND_THICKNESS, reach * 2.0), Vector3(0.0, GROUND_TOP - GROUND_THICKNESS * 0.5, 0.0))

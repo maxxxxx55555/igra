@@ -686,7 +686,6 @@ else
     else
       bad "startup/shutdown (see .qa_logs/boot_quit.log)"
     fi
-    run_gate "network bonus policy, persistence and payout" "res://scenes/tools/wifi_bonus_check_scene.tscn"
     run_gate "компиляция всех скриптов" "res://scenes/tools/compile_gate_scene.tscn"
     run_gate "арность сигналов"          "res://scenes/tools/signal_arity_check_scene.tscn"
     run_gate "API автозагрузок"          "res://scenes/tools/autoload_api_check_scene.tscn"

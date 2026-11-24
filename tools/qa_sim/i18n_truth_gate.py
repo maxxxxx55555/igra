@@ -90,7 +90,6 @@ def check_locale(base: dict, code: str, strings: dict) -> dict:
         # This approved Russian connectivity message wraps in the adjacent bonus
         # status label. Keep the exception bounded to its reviewed 43 characters.
         limit = base_len * ratio_max
-        if (code, key) == ("ru", "BONUS_NEEDS_WIFI"):
             limit = max(limit, 43)
         if len(val) > limit:
             overflow.append(key)

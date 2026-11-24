@@ -198,7 +198,6 @@
       "sha256": "1baab407182030c43b6987c8ea2ab0e4e46e206782cc39be2e7ed2f2155b3b43"
     },
     {
-      "path": "assets/textures/ui_craft/icon_wifi_bonus_64.png",
       "width": 64,
       "height": 64,
       "tileable": false,

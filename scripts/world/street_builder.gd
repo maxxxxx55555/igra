@@ -389,11 +389,13 @@ func _create_collision(first: Vector3, road: Dictionary, steps: int, surface: St
 	if _collision == null:
 		_collision = StaticBody3D.new()
 		_collision.name = "StreetCollision"
+		_collision.collision_layer = 1
+		_collision.collision_mask = 0
 		add_child(_collision)
 	var horizontal: bool = road.dir == "h"
 	var length: float = float(steps) * tile_size
 	var box := BoxShape3D.new()
-	box.size = Vector3(length, TILE_THICKNESS, tile_size) if horizontal else Vector3(tile_size, TILE_THICKNESS, length)
+	box.size = Vector3(maxf(0.4, length), maxf(0.4, TILE_THICKNESS), maxf(0.4, tile_size)) if horizontal else Vector3(maxf(0.4, tile_size), maxf(0.4, TILE_THICKNESS), maxf(0.4, length))
 	var shape := CollisionShape3D.new()
 	shape.shape = box
 	shape.set_meta(&"surface", surface)  # what the footsteps sound like (footstep_system.gd)

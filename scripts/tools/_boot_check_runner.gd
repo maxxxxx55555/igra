@@ -135,7 +135,7 @@ func _run() -> void:
 	_finish()
 
 func _autoloads_ok() -> bool:
-	for n in ["Routes", "GameManager", "SaveSystem", "EventBus", "InputService", "WiFiBonusService"]:
+	for n in ["Routes", "GameManager", "SaveSystem", "EventBus", "InputService"]:
 		if get_node_or_null("/root/" + n) == null:
 			_fail("нет автозагрузки " + n)
 	return _fails.is_empty()

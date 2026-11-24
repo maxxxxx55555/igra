@@ -47,7 +47,6 @@ func _ready() -> void:
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_rejected()
-	_check_unknown_bonus_rejected()
 	_check_leaderboard_signed_and_validated()
 	_S28.run(self)
 	_cleanup()
@@ -548,19 +547,6 @@ func _check_reset_progress_clears_ng_plus() -> void:
 		wf2.store_string(ngp_backup)
 		wf2.close()
 	NewGamePlus._load_save()
-
-## An unrecognised bonus id cannot select an arbitrary reward.
-func _check_unknown_bonus_rejected() -> void:
-	var failures: Array[StringName] = []
-	var grants: Array[StringName] = []
-	var failed := func(_id: StringName, reason: StringName) -> void: failures.append(reason)
-	var granted := func(id: StringName) -> void: grants.append(id)
-	WiFiBonusService.claim_failed.connect(failed)
-	WiFiBonusService.claimed.connect(granted)
-	WiFiBonusService.request_claim(&"unknown")
-	WiFiBonusService.claim_failed.disconnect(failed)
-	WiFiBonusService.claimed.disconnect(granted)
-	_ok(failures == [&"BONUS_INAPPLICABLE"] and grants.is_empty(), "unknown bonus id rejected without a grant")
 
 ## SECURITY_SWEEP_V2 #5: tampered signed leaderboard rejected; a legacy plain
 ## file keeps only well-formed entries and is re-saved signed.
