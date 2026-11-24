@@ -79,6 +79,9 @@ const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_co
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
+## Wave 2 seamless PBR set (Albedo / Normal / ORM) for panel facades.
+const W2_FACADE_ALBEDO := "res://assets/textures/wave2/panel_facade_albedo.png"
+const W2_FACADE_ORM := "res://assets/textures/wave2/panel_facade_orm.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
@@ -358,6 +361,10 @@ func _dress_window(rng: RandomNumberGenerator, trim: Array[Transform3D], sills: 
 
 ## Base course, cornice, parapet and a rain pipe with brackets give the block a hand-built silhouette.
 func _dress_front(trim: Array[Transform3D], pipes: Array[Transform3D], frame: Transform3D, size: Vector3) -> void:
+	# Wave 2 silhouette: two-step plinth and an intermediate cornice band.
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.50, 0.30, 0.42)), Vector3(0.0, 0.15, 0.20)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.18, 0.58, 0.30)), Vector3(0.0, 0.31, 0.14)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.10, 0.16, 0.30)), Vector3(0.0, size.y * 0.52, 0.13)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x, 0.82, 0.18)), Vector3(0.0, 0.41, 0.09)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.24, 0.26, 0.34)), Vector3(0.0, size.y - 0.14, 0.12)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x - 0.18, 0.34, 0.42)), Vector3(0.0, size.y + 0.10, -size.z * 0.34)))
@@ -386,6 +393,8 @@ func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D]
 ## corroded cast iron (industrial) from the owner's reference, and the old
 ## pbr/v2 maps on the Low tier.
 func _facade_tex_path() -> String:
+	if int(SettingsManager.get_setting("graphics_tier", 2)) > 0 and ResourceLoader.exists(W2_FACADE_ALBEDO):
+		return W2_FACADE_ALBEDO
 	if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
 		return String(FACADE_TEX_LOW.get(_district_id, FACADE_TEX_LOW[&"suburbs"]))
 	var canon: String = String(FACADE_TEX_CANON.get(_district_id, FACADE_TEX_CANON[&"suburbs"]))
@@ -457,7 +466,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
-		_facade_mat.set_shader_parameter("facade_roughness", CONCRETE_ROUGHNESS)
+		_facade_mat.set_shader_parameter("facade_roughness", load(W2_FACADE_ORM))
 		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
 		var facade_tex_path: String = _facade_tex_path()

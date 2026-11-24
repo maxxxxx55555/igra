@@ -42,6 +42,13 @@ const GENERATOR_FUEL: StringName = &"gas_canister"
 
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+## Wave 2 seamless PBR: asphalt and paving (Albedo / Normal / ORM).
+const W2_ASPHALT_ALBEDO := "res://assets/textures/wave2/wet_asphalt_albedo.png"
+const W2_ASPHALT_NORMAL := "res://assets/textures/wave2/wet_asphalt_normal.png"
+const W2_ASPHALT_ORM := "res://assets/textures/wave2/wet_asphalt_orm.png"
+const W2_SIDEWALK_ALBEDO := "res://assets/textures/wave2/concrete_sidewalk_albedo.png"
+const W2_SIDEWALK_NORMAL := "res://assets/textures/wave2/concrete_sidewalk_normal.png"
+const W2_SIDEWALK_ORM := "res://assets/textures/wave2/concrete_sidewalk_orm.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _PUDDLES := preload("res://shaders/wet_asphalt_puddle.gdshader")
 ## Visual overhaul v2: the craft puddle shader uses a real puddle mask and a
@@ -124,9 +131,9 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		# keeps the v2 craft shader (fewer textures, no puddle normals).
 		if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
 			mat.shader = _PUDDLES_V2
-			mat.set_shader_parameter("albedo_tex", load(_V2_ASPHALT_ALBEDO))
-			mat.set_shader_parameter("roughness_tex", load(_V2_ASPHALT_ROUGH))
-			mat.set_shader_parameter("normal_tex", load(_V2_ASPHALT_NORMAL))
+			mat.set_shader_parameter("albedo_tex", load(W2_ASPHALT_ALBEDO))
+			mat.set_shader_parameter("roughness_tex", load(W2_ASPHALT_ORM))
+			mat.set_shader_parameter("normal_tex", load(W2_ASPHALT_NORMAL))
 			mat.set_shader_parameter("puddle_mask_tex", load(_V2_PUDDLE_MASK))
 			mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
 			mat.set_shader_parameter("puddle_uv_scale", Vector2(0.75, 0.75))
@@ -138,9 +145,9 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 			mat.set_shader_parameter("tint_color", Color(1.28, 1.34, 1.42))
 			return mat
 		mat.shader = _PUDDLES_CANON
-		mat.set_shader_parameter("albedo_tex", load(_CANON_ASPHALT_ALBEDO))
-		mat.set_shader_parameter("roughness_tex", load(_CANON_ASPHALT_ROUGH))
-		mat.set_shader_parameter("normal_tex", load(_CANON_ASPHALT_NORMAL))
+		mat.set_shader_parameter("albedo_tex", load(W2_ASPHALT_ALBEDO))
+		mat.set_shader_parameter("roughness_tex", load(W2_ASPHALT_ORM))
+		mat.set_shader_parameter("normal_tex", load(W2_ASPHALT_NORMAL))
 		mat.set_shader_parameter("puddle_mask_tex", load(_CANON_PUDDLE_MASK))
 		# V4: puddles live in world space (~22 m sheets), not in repeated
 		# tile UVs, so the road reads as broad rain rather than leopard spots,
@@ -157,7 +164,15 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		mat.set_shader_parameter("sodium_bounce_energy", 0.06)
 		return mat
 	mat.shader = _ROAD
-	if texture_path != "" and ResourceLoader.exists(texture_path):
+	var w2_albedo: String = W2_SIDEWALK_ALBEDO if surface < 1.5 else W2_ASPHALT_ALBEDO
+	var w2_normal: String = W2_SIDEWALK_NORMAL if surface < 1.5 else W2_ASPHALT_NORMAL
+	var w2_orm: String = W2_SIDEWALK_ORM if surface < 1.5 else W2_ASPHALT_ORM
+	if paint < 0.5 and ResourceLoader.exists(w2_albedo):
+		mat.set_shader_parameter("tex", load(w2_albedo))
+		mat.set_shader_parameter("wave2_nrm", load(w2_normal))
+		mat.set_shader_parameter("wave2_orm", load(w2_orm))
+		mat.set_shader_parameter("use_wave2_pbr", 1.0)
+	elif texture_path != "" and ResourceLoader.exists(texture_path):
 		mat.set_shader_parameter("tex", load(texture_path))
 	mat.set_shader_parameter("tint", tint)
 	mat.set_shader_parameter("mean_lum", mean_lum)

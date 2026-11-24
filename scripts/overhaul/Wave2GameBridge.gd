@@ -27,6 +27,8 @@ const GATE_CLEAR_WIDTH_M: float = 6.0
 const COL_BRASS := Color(0.7882, 0.6353, 0.2902, 1.0)
 const COL_AMBER := Color(0.8314, 0.6627, 0.3059, 1.0)
 const COL_LOCKED := Color(0.55, 0.12, 0.09, 1.0)
+const W2_IRON_ALBEDO := "res://assets/textures/wave2/iron_brass_hardware_albedo.png"
+const W2_IRON_ORM := "res://assets/textures/wave2/iron_brass_hardware_orm.png"
 
 var _index: int = 0
 var _district_id: StringName = &""
@@ -136,6 +138,9 @@ func _metal_material(tint: Color, glow: float) -> StandardMaterial3D:
 	mat.albedo_color = tint
 	mat.metallic = 0.55
 	mat.roughness = 0.6
+	if ResourceLoader.exists(W2_IRON_ALBEDO):
+		mat.albedo_texture = load(W2_IRON_ALBEDO)
+		mat.roughness_texture = load(W2_IRON_ORM)
 	mat.emission_enabled = glow > 0.0
 	mat.emission = tint
 	mat.emission_energy_multiplier = glow

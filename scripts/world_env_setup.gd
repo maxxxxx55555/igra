@@ -7,7 +7,7 @@ extends Node
 # силуэта монстра, играть было невозможно. Держим низкую, но ненулевую засветку,
 # а разницу между стадиями восстановления города показываем контрастом.
 
-@export var ambient_energy_default: float = 0.03  # = AMBIENT_DARK until the stage applies
+@export var ambient_energy_default: float = 0.16  # = AMBIENT_DARK until the stage applies
 @export var moon_energy_default: float = 0.12  # = MOON_DARK
 @export var moon_rotation_deg: Vector3 = Vector3(-55.0, -35.0, 0.0)
 @export var fog_density: float = 0.012
@@ -18,12 +18,12 @@ extends Node
 # FULL 0.16/0.40); PARTIAL в GDD чисел не имеет и берёт DARK.
 ## The samples of the 3D by tier (Low, Medium, High, Ultra): off, 2x, 2x, 4x. The 4x cost 5.5 to 9 ms of the 19 ms GPU frame of the High tier on the dev iGPU (docs/PERF_PASS.md, Session 23).
 const MSAA_BY_TIER: Array[Viewport.MSAA] = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]
-const AMBIENT_DARK: float = 0.03
-const AMBIENT_LIT: float = 0.11
-const AMBIENT_FULL: float = 0.16
-const AMBIENT_COLOR_DARK: Color = Color(0.075, 0.094, 0.137)
-const AMBIENT_COLOR_LIT: Color = Color(0.098, 0.125, 0.184)
-const AMBIENT_COLOR_FULL: Color = Color(0.125, 0.153, 0.212)
+const AMBIENT_DARK: float = 0.16
+const AMBIENT_LIT: float = 0.19
+const AMBIENT_FULL: float = 0.22
+const AMBIENT_COLOR_DARK: Color = Color(0.078, 0.125, 0.157)  # #142028
+const AMBIENT_COLOR_LIT: Color = Color(0.084, 0.137, 0.169)  # #142028 lift
+const AMBIENT_COLOR_FULL: Color = Color(0.098, 0.153, 0.184)  # #19282f
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
@@ -75,6 +75,8 @@ func _ready() -> void:
 	_env.ambient_light_color = AMBIENT_COLOR_DARK
 	_env.ambient_light_energy = ambient_energy_default
 	_env.fog_enabled = true
+	_env.tonemap_mode = Environment.TONE_MAPPER_ACES
+	_env.tonemap_exposure = 1.0
 
 	var moon: DirectionalLight3D = _find_moon(root)
 	if moon == null:
@@ -347,7 +349,7 @@ func _apply_postfx(district_id: StringName) -> void:
 		return
 	var vignette: Dictionary = preset.get("vignette", {})
 	if overlay.has_method("set_vignette_strength"):
-		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.32)), 0.0, 0.4))
+		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.08)), 0.0, 0.10))
 	var chroma: Dictionary = preset.get("chroma", {})
 	if overlay.has_method("set_chroma_amount"):
 		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))

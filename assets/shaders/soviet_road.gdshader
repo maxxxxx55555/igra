@@ -24,6 +24,9 @@ uniform float surface : hint_range(0.0, 2.0) = 0.0;
 uniform float damp : hint_range(0.0, 1.0) = 0.5;
 uniform vec3 tint_b = vec3(0.0);
 uniform float mix_b : hint_range(0.0, 1.0) = 0.0;
+uniform sampler2D wave2_nrm : hint_normal, filter_linear_mipmap, repeat_enable;
+uniform sampler2D wave2_orm : filter_linear_mipmap, repeat_enable;
+uniform float use_wave2_pbr : hint_range(0.0, 1.0) = 0.0;
 
 varying vec2 v_xz;
 
@@ -118,4 +121,10 @@ void fragment() {
 	ALBEDO = c * (1.0 - 0.3 * wet) * (1.0 - 0.55 * puddle);
 	ROUGHNESS = mix(mix(0.8, 0.48, wet), 0.06, puddle);
 	SPECULAR = 0.35 + 0.2 * wet + 0.4 * puddle;
+	if (use_wave2_pbr > 0.5) {
+		vec2 pbr_uv = UV * 3.0;
+		vec3 n2 = texture(wave2_nrm, pbr_uv).rgb * 2.0 - 1.0;
+		NORMAL = normalize(NORMAL + (VIEW_MATRIX * vec4(n2.xy * 0.22, 0.0)).xyz);
+		ROUGHNESS = mix(ROUGHNESS, texture(wave2_orm, pbr_uv).g, 0.55);
+	}
 }
