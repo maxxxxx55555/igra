@@ -58,7 +58,12 @@ var _active: int = 0
 func spawn_for_district(parent: Node3D) -> Array[Node3D]:
 	var district_id: StringName = _district_of(parent)
 	var roster: Array = _roster_for(district_id)
-	var points: Array[Vector3] = _district_spawn_points(parent, _target_count(district_id))
+	var wanted: int = _target_count(district_id)
+	var raw_points: Array[Vector3] = _district_spawn_points(parent, wanted)
+	var player_start: Vector3 = parent.global_position + Vector3(-8.0, 0.0, -8.0)
+	var points: Array[Vector3] = Wave2DistrictFlow.filter_safe_mob_spawns(raw_points, player_start, maxi(3, mini(wanted, 5)))
+	if points.is_empty():
+		points = raw_points
 	var spawned: Array[Node3D] = []
 	for i in points.size():
 		var scene: PackedScene = roster[i % roster.size()] if not roster.is_empty() else enemy_scene

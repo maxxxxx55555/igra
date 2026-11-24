@@ -252,6 +252,9 @@ func occupies_local(point: Vector2) -> bool:
 func has_footprints() -> bool:
 	return not _footprints.is_empty()
 
+func get_footprints() -> Array[Rect2]:
+	return _footprints.duplicate()
+
 ## The front plate of the block: a sill band below the windows, a lintel band above them, an upright pier between every pair
 ## of windows and a jamb at each end, all SHELL_DEPTH deep. The body of the block stands behind it, so every opening is a
 ## real recess with jamb, lintel and sill faces that catch the lamp, which is what a panel block actually is.

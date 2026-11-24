@@ -83,6 +83,9 @@ func _sync_translation_server(lang: String) -> void:
 func set_language(lang: String) -> void:
 	if lang in SUPPORTED:
 		_load_language(lang)
+		var sync := get_node_or_null("/root/I18nSync")
+		if sync != null and sync.has_method("set_language"):
+			sync.call("set_language", lang, false)
 
 ## Перевод ключа. Порядок: текущий язык -> английский -> сам ключ.
 ## Раньше отсутствующий ключ показывался игроку как сырой "HUD_BATTERY";
