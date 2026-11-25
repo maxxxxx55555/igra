@@ -42,7 +42,7 @@ func _detect_system_lang() -> String:
 	if short in SUPPORTED: return short
 	return "en"
 
-func _load_language(lang: String) -> void:
+func _load_language(lang: String, persist: bool = true) -> void:
 	if _fallback.is_empty():
 		_fallback = _read_json(LANG_DIR + "en.json")
 	var path = LANG_DIR + lang + ".json"
@@ -57,7 +57,8 @@ func _load_language(lang: String) -> void:
 	_strings = parsed if parsed is Dictionary else {}
 	current_lang = lang
 	_sync_translation_server(lang)
-	_save_pref(lang)
+	if persist:
+		_save_pref(lang)
 	language_changed.emit(lang)
 
 func _read_json(path: String) -> Dictionary:
@@ -80,12 +81,9 @@ func _sync_translation_server(lang: String) -> void:
 	TranslationServer.add_translation(_last_trans)
 	TranslationServer.set_locale(lang)
 
-func set_language(lang: String) -> void:
-	if lang in SUPPORTED:
-		_load_language(lang)
-		var sync := get_node_or_null("/root/I18nSync")
-		if sync != null and sync.has_method("set_language"):
-			sync.call("set_language", lang, false)
+func set_language(lang: String, persist: bool = true) -> void:
+	if lang in SUPPORTED and lang != current_lang:
+		_load_language(lang, persist)
 
 ## Перевод ключа. Порядок: текущий язык -> английский -> сам ключ.
 ## Раньше отсутствующий ключ показывался игроку как сырой "HUD_BATTERY";
@@ -139,6 +137,10 @@ func _save_pref(lang: String) -> void:
 	if f: f.store_string(lang)
 
 func _load_pref() -> String:
-	if not FileAccess.file_exists(_pref_path()): return ""
+	if not FileAccess.file_exists(_pref_path()):
+		var legacy := ConfigFile.new()
+		if FileAccess.file_exists("user://tls_locale.cfg") and legacy.load("user://tls_locale.cfg") == OK:
+			return str(legacy.get_value("i18n", "locale", ""))
+		return ""
 	var f = FileAccess.open(_pref_path(), FileAccess.READ)
 	return f.get_as_text().strip_edges()

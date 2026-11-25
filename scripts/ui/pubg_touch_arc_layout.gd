@@ -40,7 +40,7 @@ static func clear_cache() -> void:
 
 
 static func _scale_btn(v: float, scale_f: float) -> float:
-	return maxf(48.0, roundf(v * scale_f))
+	return maxf(56.0, roundf(v * scale_f))
 
 
 static func _scale_dim(v: float, scale_f: float) -> float:
@@ -183,6 +183,8 @@ static func _place_named(
 		return
 	_style_touch_button(ctrl, node_name, tier)
 	var r: Rect2 = _place_rect(ctrl, pos, sz, viewport_size, hud_root)
+	ctrl.global_position += Vector2(report["origin"])
+	r = ctrl.get_global_rect()
 	for prev: Rect2 in placed_rects:
 		if r.intersects(prev):
 			report["overlaps"] = int(report["overlaps"]) + 1
@@ -191,8 +193,9 @@ static func _place_named(
 	report["placed"] = int(report["placed"]) + 1
 
 
-static func apply_layout(hud_root: Control, viewport_size: Vector2) -> Dictionary:
+static func apply_layout(hud_root: Control, viewport_size: Vector2, origin := Vector2.ZERO) -> Dictionary:
 	var report: Dictionary = {
+		"origin": origin,
 		"placed": 0,
 		"overlaps": 0,
 		"rects": {} as Dictionary,
@@ -233,7 +236,7 @@ static func apply_layout(hud_root: Control, viewport_size: Vector2) -> Dictionar
 
 	var r_inner: float = _scale_dim(112.0, sf)
 	var arc_specs: Array[Dictionary] = [
-		{"name": "BtnInteract", "deg": -114.0, "r": r_inner + _scale_dim(5.0, sf), "w": 66.0, "h": 66.0, "tier": "interact"},
+		{"name": "BtnInteract", "deg": -114.0, "r": r_inner + _scale_dim(5.0, sf), "w": 76.0, "h": 76.0, "tier": "interact"},
 		{"name": "BtnMelee",    "deg": -165.0, "r": r_inner + _scale_dim(2.0, sf), "w": 58.0, "h": 58.0, "tier": "arc"},
 		{"name": "BtnDodge",    "deg":  152.0, "r": r_inner + _scale_dim(2.0, sf), "w": 58.0, "h": 58.0, "tier": "arc"},
 		{"name": "BtnJump",     "deg":  -46.0, "r": r_inner + _scale_dim(3.0, sf), "w": 62.0, "h": 62.0, "tier": "arc"},
@@ -258,7 +261,7 @@ static func apply_layout(hud_root: Control, viewport_size: Vector2) -> Dictionar
 		_place_named(hud_root, viewport_size, placed_rects, report, dock_names[i], Vector2(bx, dock_y), dock_sz, "dock")
 
 	# ZONE 4 (Top-Left Utility Strip)
-	var util_y: float = SAFE_MARGIN_Y + _scale_dim(122.0, sf)
+	var util_y: float = SAFE_MARGIN_Y + _scale_dim(260.0, sf)
 	var util_x: float = SAFE_MARGIN_X + _scale_dim(148.0, sf)
 	var util_sz := Vector2(_scale_btn(54.0, sf), _scale_btn(50.0, sf))
 	var util_gap: float = maxf(MIN_GAP_PX, _scale_dim(8.0, sf))

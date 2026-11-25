@@ -60,6 +60,7 @@ var _pitch: float = 0.0
 var _running: bool = false
 var _step_t: float = 0.0
 var _lean: float = 0.0
+var _low_charge := 0.0
 var _breath_t: float = 0.0
 var _zoom: float = 1.0
 var _zoom_target: float = 1.0
@@ -82,6 +83,8 @@ func _ready() -> void:
 	_current_distance = distance
 	_current_fov = fov_deg
 	_target = _resolve_target()
+	EventBus.player_battery_changed.connect(func(charge: float) -> void:
+		_low_charge = 1.0 - smoothstep(0.0,0.20,charge))
 
 
 func set_pitch(v: float) -> void:
@@ -126,7 +129,7 @@ func _tick_fps(delta: float) -> void:
 	if not reduce_motion:
 		_step_t += delta * ground_speed * STEP_BOB_RAD_PER_M
 		_breath_t += delta * BREATH_RAD_PER_SEC
-		eye_y += sin(_step_t) * STEP_BOB_M * minf(ground_speed / STEP_BOB_FULL_SPEED, 1.0) + sin(_breath_t) * BREATH_M - LAND_DIP_M * _land_kick - SPRINT_LEAN_M * _lean
+		eye_y += sin(_step_t) * STEP_BOB_M * minf(ground_speed / STEP_BOB_FULL_SPEED, 1.0) + sin(_breath_t) * (BREATH_M + _low_charge * 0.006) - LAND_DIP_M * _land_kick - SPRINT_LEAN_M * _lean
 	var desired: Vector3 = tp + Vector3(0.0, eye_y, 0.0) + Basis(Vector3.UP, yaw) * Vector3(0.0, 0.0, -SPRINT_LEAN_FWD_M * _lean)
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	_cam.rotation = Vector3(_pitch + _recoil.x, yaw + _recoil.y, 0.0)

@@ -41,20 +41,20 @@ theme_override_constants/separation = 12
 
 [node name="NGLabel" type="Label" parent="Scroll/Center/VBoxContainer"]
 layout_mode = 2
-text = "New Game+ Level: 0 / 3"
+text = ""
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 24
 theme_override_colors/font_color = Color(0.7882353, 0.6352941, 0.2901961, 1)
 
 [node name="CurrentLevel" type="Label" parent="Scroll/Center/VBoxContainer"]
 layout_mode = 2
-text = "Current Run: Base Game"
+text = ""
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 16
 
 [node name="MultiplierLabel" type="Label" parent="Scroll/Center/VBoxContainer"]
 layout_mode = 2
-text = "XP: x1.00\nEnemy HP: x1.00\nEnemy Damage: x1.00\nPlayer Damage: x1.00\nLoot Chance: x1.00"
+text = ""
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.847059, 0.835294, 0.8, 1)
@@ -62,7 +62,7 @@ theme_override_colors/font_color = Color(0.847059, 0.835294, 0.8, 1)
 [node name="ActivateButton" type="Button" parent="Scroll/Center/VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-text = "Activate New Game+"
+text = ""
 
 [node name="BackButton" type="Button" parent="Scroll/Center/VBoxContainer"]
 custom_minimum_size = Vector2(100, 40)

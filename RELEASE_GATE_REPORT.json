@@ -4,14 +4,14 @@
   "gates": {
     "audit_and_patch_mobile": {
       "exit": 0,
-      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"de3b2ebec41bb990abd89ac4d12883e22d92ddeca689a650e87ad6ec53d63bfb\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.03\n}"
+      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Documents\\\\Codex\\\\2026-11-21\\\\https-github-com-maxxxxx55555-igra-https\\\\work\\\\mobile-v2\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"75887cc8de69aeef974fd19818b0bcc0bbe3f501132bfaa835099ebe5cf3cfcd\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.92\n}"
     },
     "optimize_mobile_media_verify": {
       "exit": 0,
-      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"12a0397be8173927723749d88caf6abcf20bff69260546127b2ca2bf1c40934e\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 34.93\n  }\n}"
+      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Documents\\\\Codex\\\\2026-11-21\\\\https-github-com-maxxxxx55555-igra-https\\\\work\\\\mobile-v2\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"f7ad3fe4ea7be075969240ac4e29df5fa01d306ec74338752ef34b5fae0285e3\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 36.26\n  }\n}"
     },
     "repo_size_budget": {
-      "total_mb": 43.81,
+      "total_mb": 44.92,
       "max_mb": 45.0,
       "pass": true
     },

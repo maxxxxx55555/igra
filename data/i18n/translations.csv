@@ -373,6 +373,7 @@ ENC_STAT_STATUS,Status,Статус
 ENC_STAT_WEAKNESS,Weakness,Уязвимость
 ENDING_DARK_DESC,"The grid was never restored. The city sinks into endless night, and you become part of it.",Сеть не восстановлена. Город погружается в вечную ночь — и вы становитесь её частью.
 ENDING_DARK_TITLE,Darkness,Тьма
+ENDING_DISMISS,[ESC] / [TAP],[ESC] / [КОСНИТЕСЬ ЭКРАНА]
 ENDING_HOPE_DESC,"The city shines again, but the truth about the disaster stayed in the dark.","Город снова горит, но правда о катастрофе так и осталась в темноте."
 ENDING_HOPE_TITLE,Hope,Надежда
 ENDING_LIGHT_DESC,"All 11 districts restored, every document found. The generators are running and the city lights up. The radio says: “Thank you.”","Все 11 районов восстановлены, все документы собраны. Генераторы запущены, город озаряется. По радио доносится: «Спасибо»."
@@ -610,6 +611,13 @@ LEVEL_UP_NOTICE,Level up! Now level %d,Новый уровень! Теперь �
 LIGHT UP DISTRICTS,Light Up Districts,Осветить районы
 LOADING_ENTERING_CITY,ENTERING CITY...,ВХОД В ГОРОД...
 LOAD_FAILED,Failed to load,Не удалось загрузить
+LOBBY_CREATE,Create server,Создать сервер
+LOBBY_JOIN,Join selected,Подключиться
+LOBBY_NAME,Your name,Ваше имя
+LOBBY_PLAYER,Player,Игрок
+LOBBY_REFRESH,Refresh,Обновить
+LOBBY_START,Start game,Начать игру
+LOBBY_TITLE,Multiplayer lobby,Сетевое лобби
 LOCKED,Locked,Закрыто
 LORE_GAS_STATION_01_TEXT,"The page after the famous one, same pencil, same block capitals. ""RULES FOR THIS STATION. Siphon from the underground tanks, never the cars — cars are somebody's plan. Roll the drums, don't drag them. If a pump reads a number, walk away from that pump. Sleep in the wash bay, it has one door and a drain. And if you find my first list, leave it, it is the only thing here anyone reads twice.""","Страница после той знаменитой, тот же карандаш, те же печатные буквы. «ПРАВИЛА ДЛЯ ЭТОЙ СТАНЦИИ. Качай из подземных баков, никогда из машин — машины чей-то план. Катите бочки, не тащите их. Если насос показывает число, уходи от этого насоса. Спи в мойке, там одна дверь и слив. А если найдёшь мой первый список — оставь его, это единственное здесь, что кто-то перечитывает дважды»."
 LORE_GAS_STATION_01_TITLE,The Scavenger's List — Second Page,Список мародёра — вторая страница
@@ -1369,6 +1377,7 @@ SKILL_TREE_TITLE,Skills,Навыки
 SKILL_XP_BOOST_DESC,+15% XP gain,+15% к опыту
 SKILL_XP_BOOST_NAME,Fast Learner,Быстрое обучение
 SLEPT,You sleep and wake rested.,Вы поспали. Силы вернулись.
+SLOTS_TITLE,Save slots,Ячейки сохранений
 SND_BATTERY_DEAD,[The flashlight dies],[Фонарик гаснет]
 SND_FLICKER,[The light stutters],[Свет мерцает]
 SND_GRID_ON,[The grid comes back to life],[Сеть возвращается к жизни]

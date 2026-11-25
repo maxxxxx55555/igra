@@ -37,7 +37,7 @@ func _ready() -> void:
 func _on_host_pressed() -> void:
 	var player_name = name_input.text.strip_edges()
 	if player_name.is_empty():
-		player_name = "Player"
+		player_name = tr("LOBBY_PLAYER")
 	NetworkManager.create_server()
 	LANDiscovery.start_host(player_name)
 	host_button.disabled = true

@@ -1,5 +1,6 @@
 extends Node3D
 
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 ## Wave 3: the soft dusty sodium cone of the owner's main-menu reference.
 const _CONE := preload("res://shaders/streetlight_cone_craft.gdshader")
@@ -51,7 +52,9 @@ func _ready() -> void:
 		(pole as MeshInstance3D).mesh = _HARDWARE.pole_mesh()
 		(pole as MeshInstance3D).material_override = _HARDWARE.material()
 	if pole: pole.visible = mesh_visible
-	if lamp: lamp.visible = mesh_visible
+	if lamp is MeshInstance3D:
+		lamp.mesh = DETAIL.module(&"lens")
+		lamp.visible = mesh_visible
 	if lamp is MeshInstance3D and mesh_visible: lamp.material_override = preload("res://scripts/world/lamp_head.gd").shared()  # W4: a head that stands alone flickers like the batched ones
 	if ResourceLoader.exists("res://assets/config/visual_quality.tres"):
 		var vq := load("res://assets/config/visual_quality.tres")
@@ -61,7 +64,9 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var dm := get_node_or_null("/root/DistrictManager")
 	var st: int = dm.get_stage(district_id) if dm else -1
-	_build_cone()
+	# DistrictDressing already renders all the street cones as one MultiMesh.
+	if mesh_visible:
+		_build_cone()
 	_apply_stage(st)
 
 ## Wave 3: one soft sodium cone under the lamp head. It is additive and

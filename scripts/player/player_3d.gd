@@ -19,7 +19,11 @@ enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 @export var fps_eye_height: float = 1.7
 
 var current_state: State = State.IDLE
-var hp: float = 100.0
+var hp: float:
+	get: return SecurityVault.get_guarded_float(&"runtime_player_hp_%d" % get_instance_id(), 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float(&"runtime_player_hp_%d" % get_instance_id(), clampf(value, 0.0, stats.max_hp if stats != null and stats.max_hp > 0.0 else 100.0))
 ## 3.12/6.5: BLEED/BURN/POISON/SLOW/STUN на игроке — тот же движок, что и на монстрах
 ## (см. base_monster.gd), _inflict_statuses() раньше был no-op без этого метода.
 var status_fx: Node = null
@@ -27,7 +31,11 @@ var stamina: float = 100.0
 ## v10 N032: at 0 the sprint is over until a quarter of the bar is back (it refilled in the same frame and the player ran on at 96 % of full speed for as long as Shift was held).
 var _winded: bool = false
 const RUN_RESUME_FRACTION: float = 0.25
-var battery: float = 100.0
+var battery: float:
+	get: return SecurityVault.get_guarded_float(&"runtime_player_battery_%d" % get_instance_id(), 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float(&"runtime_player_battery_%d" % get_instance_id(), clampf(value, 0.0, maxf(0.001, battery_max)))
 var _collision_guard: AntiTunnelCollisionGuard = null
 var look_dir: Vector3 = Vector3.FORWARD
 var flashlight_enabled: bool = true
@@ -301,7 +309,7 @@ func _ready() -> void:
 		_collision_guard.min_safe_margin_m = 0.045
 		add_child(_collision_guard)
 
-	if OS.has_feature("mobile"):
+	if OS.has_feature("mobile") or RenderingServer.get_current_rendering_method() == "gl_compatibility":
 		enable_shadows = false
 	flashlight.shadow_enabled = enable_shadows
 	dust.emitting = enable_dust
@@ -587,6 +595,7 @@ func _apply_look(yaw_delta: float, pitch_delta: float) -> void:
 	_pitch = clampf(_pitch + pitch_delta, -1.5, 1.5)
 
 func _physics_process(delta: float) -> void:
+	delta = clampf(delta, 0.0, 0.05) if is_finite(delta) else 0.0
 	if get_tree().paused:
 		return
 	if _net_active:
@@ -1577,3 +1586,8 @@ func apply_dot(amount: float, _type: EnemyRosterData.DamageType = EnemyRosterDat
 		gameplay_active = false
 		_clear_touch_state()
 		EventBus.game_over.emit()
+
+
+func _exit_tree() -> void:
+	for key in ["hp", "battery"]:
+		SecurityVault.forget_runtime_guard(StringName("runtime_player_%s_%d" % [key, get_instance_id()]))

@@ -7,3 +7,4 @@ shader = ExtResource("1_shader")
 shader_parameter/lit = 1.0
 shader_parameter/hum_level = 1.0
 shader_parameter/energy_mult = 1.6
+shader_parameter/lit_color = Color(0.831373, 0.662745, 0.305882, 1)

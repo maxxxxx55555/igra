@@ -16,6 +16,7 @@ var _tween: Tween
 
 func _ready() -> void:
 	layer = 100
+	LocalizationManager.language_changed.connect(func(_lang: String) -> void: _apply_kind())
 	# RESCUE WAVE: nothing calls show_ending() (this node's only trigger) —
 	# building unconditionally here painted a full-screen "win" overlay
 	# over every single main_3d.tscn load, including a fresh New Game.
@@ -60,7 +61,7 @@ func _build() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.add_theme_font_size_override("font_size", 16)
 	_hint.add_theme_color_override("font_color", Color(0.7, 0.7, 0.75))
-	_hint.text = "[ESC]  /  [TAP]"
+	_hint.text = "ENDING_DISMISS"
 	box.add_child(_hint)
 
 	_apply_kind()
@@ -93,3 +94,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") or (event is InputEventScreenTouch and event.pressed):
 		Endings.mark_ended()
 		Routes.to_menu()
+func _exit_tree() -> void:
+	if _tween != null:
+		_tween.kill()

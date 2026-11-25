@@ -88,7 +88,7 @@ func _ready() -> void:
 	_moon.light_energy = moon_energy_default
 	_moon.light_color = Color(0.439, 0.502, 0.753)  # #7080C0
 	_moon.rotation_degrees = moon_rotation_deg
-	_moon.shadow_enabled = moon_energy_default >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
+	_moon.shadow_enabled = _moon_shadows_enabled(moon_energy_default)
 
 	# Flashlight defaults (set on player scene)
 	# - spot_range = 8.0, spot_angle = 45, light_energy = 1.0, color = #c9a24a
@@ -155,7 +155,7 @@ func apply_for_stage(stage: int) -> void:
 	_apply_menu_canon_fog(stage)
 	if _moon:
 		_moon.light_energy = moon_energy
-		_moon.shadow_enabled = moon_energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
+		_moon.shadow_enabled = _moon_shadows_enabled(moon_energy)
 	if _player_glow:
 		_player_glow.light_energy = glow_energy
 
@@ -394,3 +394,10 @@ func _apply_moon_bias(district_id: StringName) -> void:
 	var mult: float = float(lights.get(String(district_id), {}).get("moon_bias_mult", 1.0))
 	_moon.shadow_bias = MOON_BIAS * mult
 	_moon.shadow_normal_bias = MOON_NORMAL_BIAS * mult
+
+
+func _moon_shadows_enabled(energy: float) -> bool:
+	# On the mobile GL path a town-wide shadow map redraws the facades and
+	# street props a second time. Their contact shadows are already batched.
+	return energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0 \
+		and not OS.has_feature("mobile") and RenderingServer.get_current_rendering_method() != "gl_compatibility"

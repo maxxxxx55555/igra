@@ -41,31 +41,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 120)
 theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.7882353, 0.6352941, 0.2901961, 1)
-text = "Last Streetlight"
+text = "boot_title"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Play" type="Button" parent="VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
-text = "ИГРАТЬ"
+text = "menu_play"
 
 [node name="Settings" type="Button" parent="VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
-text = "НАСТРОЙКИ"
+text = "settings"
 
 [node name="Difficulty" type="Button" parent="VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
-text = "СЛОЖНОСТЬ"
+text = "difficulty"
 
 [node name="Credits" type="Button" parent="VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
-text = "ТИТРЫ"
+text = "credits"
 
 [node name="Quit" type="Button" parent="VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
-text = "ВЫХОД"
+text = "quit"

@@ -33,8 +33,6 @@ var _lit_lamps: Array[Vector2] = []
 var _exit_gate_pos: Vector2 = Vector2.ZERO
 var _exit_gate_exists: bool = false
 var _exit_gate_unlocked: bool = false
-var _player_pos: Vector2 = Vector2.ZERO
-var _player_yaw: float = 0.0
 
 var _current_district_idx: int = 0
 var _completed_districts: Dictionary = {}
@@ -117,18 +115,17 @@ func set_progression_state(district_index: int, completed_indices: Array, step_i
 	_redraw_all()
 
 
-func update_player_illumination(player_world_pos: Vector3, player_yaw_rad: float, flashlight_on: bool, flashlight_range_m: float = 12.0, ambient_reveal_m: float = 3.2) -> void:
-	_player_pos = Vector2(player_world_pos.x, player_world_pos.z)
-	_player_yaw = player_yaw_rad
-	reveal_circle(_player_pos, ambient_reveal_m)
-	if flashlight_on and flashlight_range_m > 0.5:
-		var fwd: Vector2 = Vector2(-sin(player_yaw_rad), -cos(player_yaw_rad)).normalized()
-		var samples: int = 5
-		for s in range(1, samples + 1):
-			var frac: float = float(s) / float(samples)
-			var sample_pt: Vector2 = _player_pos + fwd * (flashlight_range_m * frac)
-			var cone_r: float = lerpf(1.8, 4.4, frac)
-			reveal_circle(sample_pt, cone_r)
+func update_player_illumination(player_world_pos: Vector3, player_yaw_rad: float, flashlight_on: bool, flashlight_range_m: float = 12.0, half_angle_degrees: float = 26.0) -> void:
+	if not flashlight_on or flashlight_range_m <= 0.0:
+		return
+	var origin := Vector2(player_world_pos.x, player_world_pos.z)
+	var forward := Vector2(-sin(player_yaw_rad), -cos(player_yaw_rad))
+	reveal_circle(origin, flashlight_range_m, forward, cos(deg_to_rad(half_angle_degrees)))
+	_redraw_all()
+
+
+func clear_lit_streetlights() -> void:
+	_lit_lamps.clear()
 	_redraw_all()
 
 
@@ -142,7 +139,7 @@ func register_lit_streetlight(lamp_world_pos: Vector3, light_radius_m: float = 9
 	_redraw_all()
 
 
-func reveal_circle(center_xz: Vector2, radius_m: float) -> void:
+func reveal_circle(center_xz: Vector2, radius_m: float, forward := Vector2.ZERO, min_dot := -1.0) -> void:
 	var span: Vector2 = _world_max - _world_min
 	if span.x <= 0.1 or span.y <= 0.1:
 		return
@@ -152,6 +149,15 @@ func reveal_circle(center_xz: Vector2, radius_m: float) -> void:
 	var gz_min: int = clampi(int(floorf(((center_xz.y - radius_m - _world_min.y) / span.y) * float(FOG_GRID_RES))), 0, FOG_GRID_RES - 1)
 	var gz_max: int = clampi(int(ceilf(((center_xz.y + radius_m - _world_min.y) / span.y) * float(FOG_GRID_RES))), 0, FOG_GRID_RES - 1)
 
+	# Compare light rays with the same static footprints used to draw the outlines.
+	var blockers: Array[AABB] = []
+	var bounds := Rect2(center_xz - Vector2.ONE * radius_m, Vector2.ONE * 2.0 * radius_m)
+	for footprint: Rect2 in _buildings:
+		if footprint.intersects(bounds):
+			blockers.append(AABB(Vector3(footprint.position.x, -1.0, footprint.position.y), Vector3(footprint.size.x, 2.0, footprint.size.y)))
+	var origin := Vector3(center_xz.x, 0, center_xz.y)
+	var half_cell := span.length() / (2.0 * FOG_GRID_RES)
+
 	for gz in range(gz_min, gz_max + 1):
 		var wz: float = _world_min.y + ((float(gz) + 0.5) / float(FOG_GRID_RES)) * span.y
 		var row_off: int = gz * FOG_GRID_RES
@@ -159,7 +165,17 @@ func reveal_circle(center_xz: Vector2, radius_m: float) -> void:
 			var wx: float = _world_min.x + ((float(gx) + 0.5) / float(FOG_GRID_RES)) * span.x
 			var dx: float = wx - center_xz.x
 			var dz: float = wz - center_xz.y
-			if (dx * dx + dz * dz) <= r2:
+			if _fog_cells[row_off + gx] != 0 or dx * dx + dz * dz > r2:
+				continue
+			if forward != Vector2.ZERO and Vector2(dx, dz).normalized().dot(forward) < min_dot:
+				continue
+			var endpoint := Vector3(wx, 0, wz).move_toward(origin, half_cell)
+			var blocked := false
+			for box: AABB in blockers:
+				if box.intersects_segment(origin, endpoint) != null:
+					blocked = true
+					break
+			if not blocked:
 				_fog_cells[row_off + gx] = 1
 
 
@@ -193,22 +209,22 @@ func is_full_map_open() -> bool:
 
 func refresh_localization() -> void:
 	if _mini_title != null:
-		_mini_title.text = _tr_fmt("MAP_MINI_HEADER", {"cur": _current_district_idx + 1, "total": TOTAL_DISTRICTS}, "РАЙОН {cur}/{total}", "DISTRICT {cur}/{total}")
+		_mini_title.text = I18nSync.t("MAP_MINI_HEADER", {"cur": _current_district_idx + 1, "total": TOTAL_DISTRICTS})
 	if _mini_hint != null:
-		_mini_hint.text = _tr_fmt("MAP_MINI_TAP_HINT", {}, "КАРТА", "MAP")
+		_mini_hint.text = I18nSync.t("MAP_MINI_TAP_HINT", {})
 	if _title_lbl != null:
-		_title_lbl.text = _tr_fmt("MAP_TITLE_FULL", {}, "КАРТА ГОРОДА И ПРОДВИЖЕНИЯ", "CITY & PROGRESSION MAP")
+		_title_lbl.text = I18nSync.t("MAP_TITLE_FULL", {})
 	if _tab_district_btn != null:
-		_tab_district_btn.text = _tr_fmt("MAP_TAB_DISTRICT", {}, "ТЕКУЩИЙ РАЙОН", "CURRENT DISTRICT")
+		_tab_district_btn.text = I18nSync.t("MAP_TAB_DISTRICT", {})
 	if _tab_city_btn != null:
-		_tab_city_btn.text = _tr_fmt("MAP_TAB_CITY", {}, "ОБЩАЯ КАРТА (11)", "FULL CITY MAP (11)")
+		_tab_city_btn.text = I18nSync.t("MAP_TAB_CITY", {})
 	if _close_btn != null:
-		_close_btn.text = _tr_fmt("UI_CLOSE", {}, "ЗАКРЫТЬ", "CLOSE")
+		_close_btn.text = I18nSync.t("UI_CLOSE", {})
 	if _legend_lbl != null:
 		if _active_tab == 0:
-			_legend_lbl.text = _tr_fmt("MAP_LEGEND_DISTRICT", {}, "Открываются только освещённые зоны и здания. Враги и предметы скрыты.", "Only illuminated zones and buildings are charted. Enemies and items stay hidden.")
+			_legend_lbl.text = I18nSync.t("MAP_LEGEND_DISTRICT", {})
 		else:
-			_legend_lbl.text = _tr_fmt("MAP_LEGEND_CITY", {}, "Янтарный — пройден  |  Кольцо — вы здесь  |  Тёмный — закрыт", "Amber — restored  |  Ring — you are here  |  Dark — locked")
+			_legend_lbl.text = I18nSync.t("MAP_LEGEND_CITY", {})
 	_refresh_selected_district_info()
 
 
@@ -287,15 +303,15 @@ func _build_ui() -> void:
 	_title_lbl.add_theme_color_override("font_color", COL_BRASS)
 	header.add_child(_title_lbl)
 
-	_tab_city_btn = _make_action_btn("FULL CITY", 180.0, 52.0)
+	_tab_city_btn = _make_action_btn(180.0, 56.0)
 	_tab_city_btn.pressed.connect(func() -> void: _set_tab(1))
 	header.add_child(_tab_city_btn)
 
-	_tab_district_btn = _make_action_btn("DISTRICT", 180.0, 52.0)
+	_tab_district_btn = _make_action_btn(180.0, 56.0)
 	_tab_district_btn.pressed.connect(func() -> void: _set_tab(0))
 	header.add_child(_tab_district_btn)
 
-	_close_btn = _make_action_btn("CLOSE", 128.0, 52.0)
+	_close_btn = _make_action_btn(128.0, 56.0)
 	_close_btn.pressed.connect(close_full_map)
 	header.add_child(_close_btn)
 
@@ -314,7 +330,7 @@ func _build_ui() -> void:
 		var db: Button = Button.new()
 		db.name = "CityNodeBtn_%d" % i
 		db.flat = true
-		db.custom_minimum_size = Vector2(54.0, 54.0)
+		db.custom_minimum_size = Vector2(56.0, 56.0)
 		db.focus_mode = Control.FOCUS_NONE
 		var captured_i: int = i
 		db.pressed.connect(func() -> void: _select_district(captured_i))
@@ -339,12 +355,16 @@ func _layout_safe_area() -> void:
 	if _mini_btn == null or get_viewport() == null:
 		return
 	var vp_size: Vector2 = get_viewport().get_visible_rect().size
-	var safe_r: Rect2i = DisplayServer.get_display_safe_area()
-	var right_inset: float = maxf(16.0, vp_size.x - float(safe_r.position.x + safe_r.size.x)) if safe_r.size.x > 0 else 16.0
-	var top_inset: float = maxf(14.0, float(safe_r.position.y)) if safe_r.size.y > 0 else 14.0
-	# Place progression minimap cleanly left of the Pause button at Top-Right
-	_mini_btn.position = Vector2(vp_size.x - right_inset - 232.0, top_inset)
+	layout_in_safe_area(vp_size, UiScale.insets(vp_size))
+
+func layout_in_safe_area(vp_size: Vector2, inset: Vector4) -> void:
+	_mini_btn.position = Vector2(vp_size.x - inset.z - 252.0, inset.y + 14.0)
 	_mini_btn.size = Vector2(154.0, 96.0)
+	var frame := _overlay_root.get_node("MapModalFrame") as Control
+	frame.offset_left = 44.0 + inset.x
+	frame.offset_top = 28.0 + inset.y
+	frame.offset_right = -44.0 - inset.z
+	frame.offset_bottom = -28.0 - inset.w
 	_position_city_buttons()
 
 
@@ -387,16 +407,16 @@ func _refresh_selected_district_info() -> void:
 	if _info_lbl == null:
 		return
 	var d_num: int = _selected_district_idx + 1
-	var d_name: String = _tr_fmt("DISTRICT_NAME_%02d" % d_num, {}, "Район %d" % d_num, "District %d" % d_num)
+	var d_name: String = I18nSync.t("DISTRICT_NAME_%02d" % d_num, {})
 	var status_str: String = ""
 	if _completed_districts.has(_selected_district_idx):
-		status_str = _tr_fmt("MAP_STATUS_RESTORED", {}, "Освещён и пройден", "Restored & cleared")
+		status_str = I18nSync.t("MAP_STATUS_RESTORED", {})
 	elif _selected_district_idx == _current_district_idx:
-		status_str = _tr_fmt("MAP_STATUS_CURRENT", {"step": _current_step}, "Текущий район (этап {step}/3)", "Current district (step {step}/3)")
+		status_str = I18nSync.t("MAP_STATUS_CURRENT", {"step": _current_step})
 	elif _selected_district_idx == _current_district_idx + 1 and _exit_gate_unlocked:
-		status_str = _tr_fmt("MAP_STATUS_UNLOCKED", {}, "Ворота открыты — можно перейти", "Gate open — ready to enter")
+		status_str = I18nSync.t("MAP_STATUS_UNLOCKED", {})
 	else:
-		status_str = _tr_fmt("MAP_STATUS_LOCKED", {}, "Во тьме (не открыт)", "In darkness (locked)")
+		status_str = I18nSync.t("MAP_STATUS_LOCKED", {})
 	_info_lbl.text = "%02d. %s  —  %s" % [d_num, d_name, status_str]
 
 
@@ -410,7 +430,7 @@ func _redraw_all() -> void:
 func _draw_minimap() -> void:
 	if _mini_canvas == null:
 		return
-	_draw_district_fog_view(_mini_canvas, _mini_canvas.get_rect(), true)
+	_draw_district_fog_view(_mini_canvas, Rect2(Vector2.ZERO, _mini_canvas.size), true)
 
 
 func _draw_full_map() -> void:
@@ -437,43 +457,33 @@ func _draw_district_fog_view(canvas: Control, rect: Rect2, is_mini: bool) -> voi
 			if _fog_cells[row_off + gx] != 0:
 				canvas.draw_rect(Rect2(rect.position.x + float(gx) * cw, rect.position.y + float(gz) * ch, cw + 0.6, ch + 0.6), COL_LIT_GROUND, true)
 
-	# Draw revealed building footprints ONLY where light touched them (zero enemies, zero loot!)
-	for b in _buildings:
-		if not _is_world_point_revealed(b.get_center()):
-			continue
-		var p0: Vector2 = _world_to_rect(b.position, rect)
-		var p1: Vector2 = _world_to_rect(b.end, rect)
-		var br: Rect2 = Rect2(p0, p1 - p0).abs()
-		canvas.draw_rect(br, COL_BLDG_REVEALED, true)
-		if not is_mini:
-			canvas.draw_rect(br, COL_BRASS * Color(1.0, 1.0, 1.0, 0.45), false, 1.2)
-
-	# Draw lit streetlights (safe zones)
-	for lamp in _lit_lamps:
-		var lp: Vector2 = _world_to_rect(lamp, rect)
-		canvas.draw_circle(lp, 4.0 if is_mini else 8.0, Color(COL_AMBER.r, COL_AMBER.g, COL_AMBER.b, 0.28))
-		canvas.draw_circle(lp, 2.0 if is_mini else 4.0, COL_AMBER)
-
-	# Draw district exit gate (shown once illuminated or unlocked)
-	if _exit_gate_exists and (_exit_gate_unlocked or _is_world_point_revealed(_exit_gate_pos)):
-		var gp: Vector2 = _world_to_rect(_exit_gate_pos, rect)
-		var g_col: Color = COL_AMBER if _exit_gate_unlocked else Color(0.65, 0.25, 0.20, 0.9)
-		var r_sz: float = 4.0 if is_mini else 8.0
-		canvas.draw_rect(Rect2(gp - Vector2(r_sz, r_sz * 0.6), Vector2(r_sz * 2.0, r_sz * 1.2)), g_col, true)
-
-	# Draw player directional chevron
-	var pp: Vector2 = _world_to_rect(_player_pos, rect)
-	var fwd: Vector2 = Vector2(-sin(_player_yaw), -cos(_player_yaw)).normalized()
-	var side: Vector2 = Vector2(-fwd.y, fwd.x)
-	var tip_len: float = 5.5 if is_mini else 11.0
-	var wing: float = 3.5 if is_mini else 6.5
-	var tri: PackedVector2Array = PackedVector2Array([
-		pp + fwd * tip_len,
-		pp - fwd * (tip_len * 0.55) + side * wing,
-		pp - fwd * (tip_len * 0.55) - side * wing,
-	])
-	canvas.draw_colored_polygon(tri, COL_TEXT_MAIN)
+	# Clip every footprint edge to the individual fog cells that have received light.
+	for building: Rect2 in _buildings:
+		var west := Vector2(building.position.x, building.end.y)
+		var east := Vector2(building.end.x, building.position.y)
+		_draw_revealed_edge(canvas, rect, building.position, east)
+		_draw_revealed_edge(canvas, rect, west, building.end)
+		_draw_revealed_edge(canvas, rect, building.position, west)
+		_draw_revealed_edge(canvas, rect, east, building.end)
+	if _exit_gate_exists and _is_world_point_revealed(_exit_gate_pos):
+		var gp := _world_to_rect(_exit_gate_pos, rect)
+		var half_width := 3.0 if is_mini else 6.0
+		canvas.draw_line(gp - Vector2(half_width, 0), gp + Vector2(half_width, 0), COL_BRASS)
 	canvas.draw_rect(rect, COL_BRASS * Color(1.0, 1.0, 1.0, 0.55), false, 1.0)
+
+
+func _draw_revealed_edge(canvas: Control, rect: Rect2, start: Vector2, end: Vector2) -> void:
+	var axis := 0 if end.x != start.x else 1
+	var step_size := (_world_max[axis] - _world_min[axis]) / float(FOG_GRID_RES)
+	var first := clampi(floori((start[axis] - _world_min[axis]) / step_size), 0, FOG_GRID_RES - 1)
+	var last := clampi(floori((end[axis] - _world_min[axis]) / step_size), 0, FOG_GRID_RES - 1)
+	for cell in range(first, last + 1):
+		var a := start
+		var b := end
+		a[axis] = maxf(start[axis], _world_min[axis] + cell * step_size)
+		b[axis] = minf(end[axis], _world_min[axis] + (cell + 1) * step_size)
+		if b[axis] > a[axis] and _is_world_point_revealed((a + b) * 0.5):
+			canvas.draw_line(_world_to_rect(a, rect), _world_to_rect(b, rect), COL_BRASS)
 
 
 func _draw_city_progression_view(canvas: Control, rect: Rect2) -> void:
@@ -519,7 +529,7 @@ func _draw_city_progression_view(canvas: Control, rect: Rect2) -> void:
 
 func _is_world_point_revealed(pt: Vector2) -> bool:
 	var span: Vector2 = _world_max - _world_min
-	if span.x <= 0.1 or span.y <= 0.1:
+	if not Rect2(_world_min, span).has_point(pt):
 		return false
 	var gx: int = clampi(int(floorf(((pt.x - _world_min.x) / span.x) * float(FOG_GRID_RES))), 0, FOG_GRID_RES - 1)
 	var gz: int = clampi(int(floorf(((pt.y - _world_min.y) / span.y) * float(FOG_GRID_RES))), 0, FOG_GRID_RES - 1)
@@ -533,9 +543,8 @@ func _world_to_rect(pt: Vector2, rect: Rect2) -> Vector2:
 	return Vector2(rect.position.x + u * rect.size.x, rect.position.y + v * rect.size.y)
 
 
-func _make_action_btn(label_text: String, min_w: float, min_h: float) -> Button:
+func _make_action_btn(min_w: float, min_h: float) -> Button:
 	var b: Button = Button.new()
-	b.text = label_text
 	b.custom_minimum_size = Vector2(min_w, min_h)
 	b.focus_mode = Control.FOCUS_NONE
 	b.add_theme_font_size_override("font_size", 15)
@@ -563,12 +572,3 @@ func _make_panel_box(bg: Color, border: Color, border_w: int, radius: int) -> St
 	sb.content_margin_top = 8.0
 	sb.content_margin_bottom = 8.0
 	return sb
-
-
-func _tr_fmt(key: String, args: Dictionary, fb_ru: String, fb_en: String) -> String:
-	var raw: String = TranslationServer.translate(key)
-	if raw.is_empty() or raw == key:
-		raw = fb_ru if TranslationServer.get_locale().to_lower().begins_with("ru") else fb_en
-	for k in args.keys():
-		raw = raw.replace("{" + String(k) + "}", str(args[k]))
-	return raw

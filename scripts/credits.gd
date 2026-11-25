@@ -5,12 +5,6 @@ const MUSIC_CREDITS := ["CREDITS_COMBAT_TRACKS", "CREDITS_HYMN", "CREDITS_MOONLI
 func _ready() -> void:
 	add_to_group("ui_root")
 	theme = ThemeProvider.build_theme()
-	$VBox/Back.text = LocalizationManager.t("back_menu")
-	$VBox/Title.text = LocalizationManager.t("credits")
-	$VBox/L2.text = LocalizationManager.t("CREDITS_DESIGN")
-	$VBox/L3.text = LocalizationManager.t("CREDITS_MUSIC")
-	$VBox/L4.text = LocalizationManager.t("CREDITS_ART")
-	$VBox/L5.text = LocalizationManager.t("CREDITS_THANKS")
 	var scroll := ScrollContainer.new()
 	scroll.name = "MusicLicences"
 	scroll.custom_minimum_size.y = 220.0
@@ -23,7 +17,7 @@ func _ready() -> void:
 	scroll.add_child(column)
 	for credit: String in MUSIC_CREDITS:
 		var label := Label.new()
-		label.text = LocalizationManager.t(credit)
+		label.text = credit
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_font_size_override("font_size", 20)
 		column.add_child(label)

@@ -5,6 +5,7 @@ class_name CitySkyline
 ## for the blocks and the windows). Windows light up with the district's power
 ## stage, so the city reads as a city that is waking up (GDD 4.2, STYLE_GUIDE 1).
 
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const RING_GAP := 8.0
 ## The ground slab is flush with the street tiles (their top is 0.05 m); the facade walls stop the player at the ring.
 const GROUND_TOP := 0.05
@@ -212,8 +213,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
 	_add_building_colliders(blocks)
-	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _concrete_material())
-	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _concrete_material())
+	_add_detail_batch("FacadeTrim", DETAIL.module(&"slab"), trim, _concrete_material())
+	_add_detail_batch("WindowSills", DETAIL.module(&"slab"), sills, _concrete_material())
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055
 	pipe_mesh.bottom_radius = 0.055
@@ -365,6 +366,7 @@ func _dress_front(trim: Array[Transform3D], pipes: Array[Transform3D], frame: Tr
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.50, 0.30, 0.42)), Vector3(0.0, 0.15, 0.20)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.18, 0.58, 0.30)), Vector3(0.0, 0.31, 0.14)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.10, 0.16, 0.30)), Vector3(0.0, size.y * 0.52, 0.13)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.22, 0.22, 0.36)), Vector3(0.0, 0.12, 0.13)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x, 0.82, 0.18)), Vector3(0.0, 0.41, 0.09)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.24, 0.26, 0.34)), Vector3(0.0, size.y - 0.14, 0.12)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x - 0.18, 0.34, 0.42)), Vector3(0.0, size.y + 0.10, -size.z * 0.34)))

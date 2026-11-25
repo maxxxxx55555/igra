@@ -201,7 +201,7 @@ offset_left = 0.0
 offset_top = 64.0
 offset_right = 180.0
 offset_bottom = 80.0
-text = "ШУМ"
+text = "HUD_NOISE"
 mouse_filter = 2
 
 [node name="NoiseT" type="ColorRect" parent="TopLeft"]
@@ -225,7 +225,7 @@ offset_left = 0.0
 offset_top = 84.0
 offset_right = 180.0
 offset_bottom = 100.0
-text = "ЗАМЕТ."
+text = "HUD_VISIBILITY"
 mouse_filter = 2
 
 [node name="VisibilityT" type="ColorRect" parent="TopLeft"]
@@ -262,7 +262,7 @@ mouse_filter = 2
 offset_right = 172.0
 offset_bottom = 18.0
 mouse_filter = 2
-text = "AMMO"
+text = "HUD_AMMO"
 horizontal_alignment = 2
 
 [node name="AmmoVal" type="Label" parent="AmmoCounter"]
@@ -289,19 +289,13 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="BtnPause" type="Button" parent="."]
-custom_minimum_size = Vector2(48, 48)
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 48.0
-offset_bottom = 48.0
+custom_minimum_size = Vector2(56, 56)
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
-offset_left = -64.0
+offset_left = -72.0
 offset_top = 12.0
 offset_right = -16.0
-offset_bottom = 60.0
+offset_bottom = 68.0
 grow_horizontal = 0
 icon = ExtResource("6_pause")
 expand_icon = true
@@ -394,7 +388,7 @@ offset_left = -224.0
 offset_top = -112.0
 offset_right = -152.0
 offset_bottom = -48.0
-text = "БЕГ"
+text = "KEY_RUN"
 
 [node name="BtnStealth" type="Button" parent="BottomRight"]
 custom_minimum_size = Vector2(72, 64)
@@ -402,7 +396,7 @@ offset_left = -308.0
 offset_top = -112.0
 offset_right = -236.0
 offset_bottom = -48.0
-text = "СТЕЛС"
+text = "HUD_STEALTH"
 
 [node name="BtnInteract" type="Button" parent="BottomRight"]
 custom_minimum_size = Vector2(64, 64)

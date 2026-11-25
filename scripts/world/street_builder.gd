@@ -10,6 +10,7 @@ signal streets_ready
 @export var lane_mark_spacing: float = 2.0
 ## The markings are whole tiles lying on the road tiles: at the same height they z-fought, which drew stacked dark stripes and
 ## wedges wherever the lamp or the flashlight lit the road (the first screen of a game).
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const MARKING_LIFT: float = 0.02
 ## Height of every street tile, mesh and collision box alike.
 const TILE_THICKNESS: float = 0.1
@@ -81,9 +82,13 @@ func _ready() -> void:
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))
 	_init_mm(_road_mm,     _make_road_mesh())
-	_init_mm(_sidewalk_mm, _make_sidewalk_mesh())
+	_init_mm(_sidewalk_mm, DETAIL.module(&"pavement"))
+	_sidewalk_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
+	_sidewalk_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_marking_mm,  _make_marking_mesh())
-	_init_mm(_curb_mm,     _make_curb_mesh())
+	_init_mm(_curb_mm, DETAIL.module(&"slab"))
+	_curb_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
+	_curb_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_damage_mm,   _make_damage_mesh())
 	_set_detail()
 	EventBus.settings_changed.connect(_set_detail)
@@ -95,11 +100,6 @@ func _make_road_mesh() -> BoxMesh:
 	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.0316, 0.0, 2.0)
 	return m
 
-func _make_sidewalk_mesh() -> BoxMesh:
-	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
-	return m
 
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
@@ -109,11 +109,6 @@ func _make_marking_mesh() -> BoxMesh:
 	m.material = _surface("", Vector3(0.10, 0.105, 0.105), 1.0, 1.0, 0.0)
 	return m
 
-func _make_curb_mesh() -> BoxMesh:
-	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, 0.17, 0.22)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
-	return m
 
 func _make_damage_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
@@ -292,6 +287,7 @@ func _fill_sidewalks() -> void:
 				for wi in range(w):
 					var off: float = (road_width * 0.5 + sidewalk_width * 0.5 - float(wi) * tile_size) * float(side)
 					var t := Transform3D()
+					t.basis = Basis.from_scale(Vector3(tile_size,TILE_THICKNESS,sidewalk_width))
 					t.origin = pos + (Vector3(0, 0, off) if r.dir == "h" else Vector3(off, 0, 0))
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
@@ -341,6 +337,7 @@ func _fill_curbs() -> void:
 			for side in [-1.0, 1.0]:
 				var off: float = (road_width * 0.5 + 0.11) * side
 				var t := Transform3D()
+				t.basis = Basis.from_scale(Vector3(tile_size,0.17,0.22))
 				t.origin = pos + (Vector3(0.0, 0.115, off) if r.dir == "h" else Vector3(off, 0.115, 0.0))
 				if r.dir == "v":
 					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)

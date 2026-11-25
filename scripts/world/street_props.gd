@@ -7,12 +7,12 @@ class_name CityStreetProps
 @export var random_seed: int = 0
 
 var _rng := RandomNumberGenerator.new()
-var _pole: CylinderMesh
-var _lamp: SphereMesh
-var _bench: BoxMesh
+var _pole: Mesh
+var _lamp: Mesh
+var _bench: Mesh
 var _trunk: CylinderMesh
 var _leaf: Mesh
-var _cone: CylinderMesh
+var _cone: Mesh
 
 ## P2 (THEME UNIFICATION wave): same batching for the other static,
 ## never-reactive props street_props.gd spawns - benches/trees/cones never
@@ -33,6 +33,7 @@ var _lamp_local_positions: Array[Vector3] = []
 ## FULL): a district's lamps must read dead in the dark, that is the game's
 ## namesake beat. Before rc15 the heads glowed at 1.6 in every stage and, from a
 ## distance, read as a starfield.
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 var _lamp_mat: ShaderMaterial
@@ -83,19 +84,9 @@ const BULB_RINGS := 4
 const POST_SEGMENTS := 8
 
 func _init_meshes() -> void:
-	_pole = CylinderMesh.new()
-	_pole.top_radius = 0.06
-	_pole.bottom_radius = 0.08
-	_pole.height = 4.0
-	_pole.radial_segments = POST_SEGMENTS
-	_pole.rings = 1
-	_lamp = SphereMesh.new()
-	_lamp.radius = 0.18
-	_lamp.height = 0.36
-	_lamp.radial_segments = BULB_SEGMENTS
-	_lamp.rings = BULB_RINGS
-	_bench = BoxMesh.new()
-	_bench.size = Vector3(1.6, 0.4, 0.5)
+	_pole = _HARDWARE.pole_mesh()
+	_lamp = DETAIL.module(&"lens")
+	_bench = DETAIL.module(&"bench_bin")
 	_trunk = CylinderMesh.new()
 	_trunk.top_radius = 0.12
 	_trunk.bottom_radius = 0.18
@@ -103,12 +94,7 @@ func _init_meshes() -> void:
 	_trunk.radial_segments = POST_SEGMENTS
 	_trunk.rings = 1
 	_leaf = _TreeMeshes.build()
-	_cone = CylinderMesh.new()
-	_cone.top_radius = 0.0
-	_cone.bottom_radius = 0.35
-	_cone.height = 0.7
-	_cone.radial_segments = POST_SEGMENTS
-	_cone.rings = 1
+	_cone = DETAIL.module(&"bollard")
 
 ## P2 (EMISSIVE FIX + PERF wave): D1 draw calls measured 234 with full
 ## density on every tier - benches/trees/cones are the only remaining
@@ -215,11 +201,7 @@ func _build_streetlight_multimesh() -> void:
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
 	pole_mm.mesh = _HARDWARE.pole_mesh()
 	pole_mm.instance_count = _lamp_local_positions.size()
-	var lamp_mesh := SphereMesh.new()
-	lamp_mesh.radius = 0.08
-	lamp_mesh.height = 0.12
-	lamp_mesh.radial_segments = BULB_SEGMENTS
-	lamp_mesh.rings = BULB_RINGS
+	var lamp_mesh := DETAIL.module(&"lens")
 	# W4 (docs/VISUAL_PASS.md section 8): the head is mat_lamp_flicker.tres, one copy per district because `lit` is
 	# the power stage of that district; the flicker of the mesh follows the one of the lights (streetlight_3d.gd)
 	# and Reduce Flash stills it.
@@ -233,7 +215,7 @@ func _build_streetlight_multimesh() -> void:
 	for i in _lamp_local_positions.size():
 		var pos: Vector3 = _lamp_local_positions[i]
 		pole_mm.set_instance_transform(i, Transform3D(Basis(), pos))
-		lamp_mm.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3(1.9, 0.7, 1.9)), pos + _LAMP_HEAD_OFFSET))  # the lens: a flat disc under the hood
+		lamp_mm.set_instance_transform(i, Transform3D(Basis.IDENTITY, pos + _LAMP_HEAD_OFFSET))  # the lens: a flat disc under the hood
 	var pole_mmi := MultiMeshInstance3D.new()
 	pole_mmi.name = "StreetlightPolesBatched"
 	pole_mmi.set_meta("spots", _lamp_local_positions)
@@ -301,10 +283,10 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 		var lm := StandardMaterial3D.new()
 		lm.albedo_color = Color(1.0, 0.92, 0.75)
 		lm.emission_enabled = true
-		lm.emission = Color(1.0, 0.85, 0.55)
+		lm.emission = Color("#d4a94e")
 		lm.emission_energy_multiplier = 2.0
 		l.material_override = lm
-		l.position = p.position + Vector3(0.0, 2.2, 0.0)
+		l.position = p.position + _LAMP_HEAD_OFFSET
 		add_child(l)
 
 ## Benches and trees stand on the sidewalk (3.0-4.5 m from the road axis), not in the
@@ -344,14 +326,13 @@ func _on_setting_changed(key: String, _value: Variant) -> void:
 		_apply_sway()
 
 func _build_prop_multimesh() -> void:
-	_build_one_multimesh(_raised(_bench_positions, 0.2), _bench,
-		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
+	_build_one_multimesh(_bench_positions, _bench, DETAIL.hardware(), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
 			_bark_material(), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
-		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, _iron_material(), "ConesBatched")
+		_build_one_multimesh(_cone_positions, _cone, DETAIL.hardware(), "ConesBatched")
 
 ## Corroded cast iron from the main-menu canon: its normal/roughness maps break
 ## the flat cone silhouette and the dark tint keeps it from glowing beige.
@@ -406,7 +387,7 @@ func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Mater
 	mmi.set_meta("spots", positions)
 	mmi.multimesh = mm
 	mmi.material_override = material
-	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if node_name == "TreeLeavesBatched" else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if node_name in ["BenchesBatched", "ConesBatched", "TreeLeavesBatched"] else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(mmi)
 
 ## Convenience: build a wall MeshInstance3D with brick or rusty_metal texture.

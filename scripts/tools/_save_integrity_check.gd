@@ -128,15 +128,7 @@ func _check_progress_signature() -> void:
 	CoinWallet.from_dict({})
 	PowerGrid.from_dict({})
 	SaveSystem.save_slot(_SLOT)
-	var f := FileAccess.open(_path(), FileAccess.READ)
-	var txt := f.get_as_text()
-	f.close()
-	var outer := JSON.new()
-	outer.parse(txt)
-	var envelope: Dictionary = outer.data
-	var inner := JSON.new()
-	inner.parse(String(envelope["data_json"]))
-	var data: Dictionary = inner.data
+	var data := SaveSystem._read_envelope(_path())
 	# Forge "all districts full" directly in the parsed body, bypassing the
 	# real PowerGrid entirely - exactly the attack _sign_progress() exists
 	# to catch, since data["progress_hmac"] here is still the ORIGINAL
@@ -153,9 +145,10 @@ func _check_progress_signature() -> void:
 	# re-testing "checksum mismatch -> reject" - the point is the outer
 	# envelope can be perfectly valid and the forgery still gets caught.
 	var forged: Dictionary = {"hmac": SaveSystem.call("_sign", forged_body), "data_json": forged_body}
-	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	var wf := FileAccess.open(_SCRATCH_EXPORT, FileAccess.WRITE)
 	wf.store_string(JSON.stringify(forged))
 	wf.close()
+	_ok(SaveSystem.import_save_from_file(_path(), _SCRATCH_EXPORT), "authenticated portable import handles progress independently")
 	SaveSystem.load_slot(_SLOT)
 	var restored: Dictionary = (PowerGrid.to_dict().get("stages", {}) as Dictionary)
 	_ok(int(restored.get("suburbs", 0)) != 3,
@@ -171,12 +164,7 @@ func _check_legacy_checksum_rejected() -> void:
 	CoinWallet.from_dict({})
 	CoinWallet.add(50)
 	SaveSystem.save_slot(_SLOT)
-	var f := FileAccess.open(_path(), FileAccess.READ)
-	var txt := f.get_as_text()
-	f.close()
-	var outer := JSON.new()
-	outer.parse(txt)
-	var body: String = String((outer.data as Dictionary)["data_json"])
+	var body := JSON.stringify(SaveSystem._read_envelope(_path()))
 	# A real forger's move: drop "hmac", compute the correct plain checksum
 	# of a body they edited freely (here just reusing the real body is
 	# enough to prove the point - even a byte-perfect legitimate body with
@@ -185,10 +173,10 @@ func _check_legacy_checksum_rejected() -> void:
 	# signed .bak otherwise, which would pass for the wrong reason.
 	_remove_all_backups()
 	var legacy: Dictionary = {"checksum": body.sha256_text(), "data_json": body}
-	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	var wf := FileAccess.open(_SCRATCH_EXPORT, FileAccess.WRITE)
 	wf.store_string(JSON.stringify(legacy))
 	wf.close()
-	var ok: bool = SaveSystem.load_slot(_SLOT)
+	var ok: bool = SaveSystem.import_save_from_file(_path(), _SCRATCH_EXPORT)
 	_ok(not ok, "legacy checksum-only envelope (correct checksum, no hmac) is rejected, not trusted-once")
 	_remove_all_backups()
 
@@ -200,22 +188,15 @@ func _check_missing_progress_hmac_rejected() -> void:
 	CoinWallet.from_dict({})
 	PowerGrid.from_dict({})
 	SaveSystem.save_slot(_SLOT)
-	var f := FileAccess.open(_path(), FileAccess.READ)
-	var txt := f.get_as_text()
-	f.close()
-	var outer := JSON.new()
-	outer.parse(txt)
-	var envelope: Dictionary = outer.data
-	var inner := JSON.new()
-	inner.parse(String(envelope["data_json"]))
-	var data: Dictionary = inner.data
+	var data := SaveSystem._read_envelope(_path())
 	data["power"] = {"stages": {"suburbs": 3}}
 	data.erase("progress_hmac")
 	var forged_body := JSON.stringify(data)
 	var forged: Dictionary = {"hmac": SaveSystem.call("_sign", forged_body), "data_json": forged_body}
-	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	var wf := FileAccess.open(_SCRATCH_EXPORT, FileAccess.WRITE)
 	wf.store_string(JSON.stringify(forged))
 	wf.close()
+	_ok(SaveSystem.import_save_from_file(_path(), _SCRATCH_EXPORT), "authenticated portable import handles progress independently")
 	SaveSystem.load_slot(_SLOT)
 	var restored: Dictionary = (PowerGrid.to_dict().get("stages", {}) as Dictionary)
 	_ok(int(restored.get("suburbs", 0)) != 3,
@@ -295,15 +276,15 @@ func _check_export_import() -> void:
 	CoinWallet.from_dict({})
 	CoinWallet.add(333)
 	SaveSystem.save_slot(_SLOT)
-	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)
+	SaveSystem._write_atomic(_SCRATCH_SAVE, SaveSystem._read_validated(_path()))
 	_ok(SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "export writes the chosen scratch destination")
 
 	CoinWallet.from_dict({})
 	CoinWallet.add(999)
 	SaveSystem.save_slot(_SLOT)
-	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)  # scratch now holds 999, export still holds 333
+	SaveSystem._write_atomic(_SCRATCH_SAVE, SaveSystem._read_validated(_path()))  # scratch now holds 999, export still holds 333
 	_ok(SaveSystem.import_save_from_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "import reads the chosen scratch destination")
-	DirAccess.copy_absolute(_SCRATCH_SAVE, _path())
+	SaveSystem._write_atomic(_path(), SaveSystem._read_validated(_SCRATCH_SAVE))
 	CoinWallet.from_dict({})
 	SaveSystem.load_slot(_SLOT)
 	_ok(CoinWallet.get_coins() == 333, "импорт вернул исходные (333) данные, не последние (999) — было %d" % CoinWallet.get_coins())

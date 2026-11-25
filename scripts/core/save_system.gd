@@ -33,24 +33,24 @@ static func _key() -> PackedByteArray:
 static func _sign(body: String) -> String:
 	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _key(), body.to_utf8_buffer()).hex_encode()
 
-## Signed side files (NG+, flashlight upgrades, achievements, daily):
-## {"hmac": _sign(body), "data_json": body}. write_signed() returns false
-## when the file cannot be opened.
+## Side saves use the same installation-bound counter and authenticated backups as Continue.
 static func write_signed(path: String, data: Variant) -> bool:
-	if path.contains("..") or path.contains("\\"):
-		return false
-	var body := JSON.stringify(data)
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	if f == null:
-		return false
-	f.store_string(JSON.stringify({"hmac": _sign(body), "data_json": body}))
-	f.close()
-	return true
+	return SecurityVault.write_checkpoint(path, JSON.stringify(data).to_utf8_buffer())
 
 ## The data of a signed side file, or null when it is missing, not an
 ## envelope, tampered with, or its body does not parse.
 static func read_signed(path: String) -> Variant:
 	if path.contains("..") or path.contains("\\"):
+		return null
+	if SecurityVault.has_checkpoint(path):
+		if not FileAccess.file_exists(path) and not FileAccess.file_exists(path + ".tmp"):
+			return null
+		for rank in BACKUP_DEPTH + 1:
+			var raw := SecurityVault._checkpoint_bytes(path, rank)
+			if not raw.is_empty():
+				if rank > 0:
+					push_warning("[SaveSystem] recovered side save from authenticated backup")
+				return JSON.parse_string(raw.get_string_from_utf8())
 		return null
 	if not FileAccess.file_exists(path):
 		return null
@@ -92,10 +92,23 @@ func _export_path(filename: String = EXPORT_FILENAME) -> String:
 	return OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(filename)
 
 func export_save_to_file(src_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:
-	if not FileAccess.file_exists(src_path):
+	if not _path_allowed(src_path) or not _path_allowed(filename):
 		return false
-	var err := DirAccess.copy_absolute(src_path, _export_path(filename))
-	return err == OK
+	var payload := _read_validated(src_path)
+	if payload.is_empty():
+		return false
+	# Explicit portable exports are signed with the transfer key, never the install key.
+	var body := JSON.stringify(payload)
+	var dst := _export_path(filename)
+	var file := FileAccess.open(dst + ".tmp", FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify({"hmac":_sign(body), "data_json":body}))
+	file.close()
+	return DirAccess.rename_absolute(dst + ".tmp", dst) == OK
+
+static func _path_allowed(path: String) -> bool:
+	return not path.is_empty() and not path.contains("..")
 
 ## Validates the exported file is a genuine, signature-passing save
 ## envelope before touching anything - a garbage/foreign file in Downloads
@@ -103,12 +116,10 @@ func export_save_to_file(src_path: String = SAVE_PATH, filename: String = EXPORT
 ## .bak first (the same convention _write_atomic() already uses), so an
 ## accidental import is recoverable the same way a corrupt autosave is.
 func import_save_from_file(dest_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:
-	var path := _export_path(filename)
-	if not FileAccess.file_exists(path) or _read_envelope(path).is_empty():
+	if not _path_allowed(filename) or not SecurityVault._checkpoint_path_ok(dest_path):
 		return false
-	if FileAccess.file_exists(dest_path):
-		DirAccess.copy_absolute(dest_path, dest_path + ".bak")
-	if DirAccess.copy_absolute(path, dest_path) != OK:
+	var exported := _read_envelope(_export_path(filename))
+	if exported.is_empty() or not _write_atomic(dest_path, exported):
 		return false
 	# BREAK_REPORT B13: this used to only overwrite the file on disk. The
 	# live session's in-memory state never changed, so the next
@@ -185,7 +196,7 @@ func _process(delta: float) -> void:
 ## and the next save wrote the zeros over the file. A file that does not read is left alone here; Continue still goes through _read_validated.
 func _adopt_profile() -> void:
 	_recover_bonus()
-	var data := _read_envelope(SAVE_PATH)
+	var data := _read_validated(SAVE_PATH)
 	if data.is_empty():
 		return
 	_daily_streak = int(data.get("daily_streak", 0))
@@ -194,7 +205,7 @@ func _adopt_profile() -> void:
 
 func has_save() -> bool:
 	_recover_bonus()
-	return FileAccess.file_exists(SAVE_PATH)
+	return not _read_validated(SAVE_PATH).is_empty()
 
 ## T16: сейв-целостность. Раньше JSON писался напрямую в целевой файл —
 ## обрыв игры/питания посреди записи оставлял битый .save без возможности
@@ -223,29 +234,34 @@ func _sign_progress(power: Dictionary, progress: Dictionary) -> String:
 	var canon: Variant = JSON.parse_string(JSON.stringify({"power": power, "progress": progress}))
 	return _sign(JSON.stringify(canon))
 
+func _valid_checkpoint(data: Dictionary) -> bool:
+	var version: Variant = data.get("version", 0)
+	if data.is_empty() or not (version is int or version is float) or not is_finite(float(version)) or int(version) != version or version < 0 or version > SAVE_VERSION:
+		return false
+	var wave: Variant = data.get("wave2", {})
+	if not wave is Dictionary:
+		return false
+	for key: String in ["district", "parts"]:
+		var val: Variant = wave.get(key, 0)
+		if not (val is float or val is int) or not is_finite(float(val)) or int(val) != float(val) or val < 0 or val > (10 if key == "district" else 6):
+			return false
+	var vitals: Variant = data.get("vitals", {})
+	if not vitals is Dictionary or vitals.is_empty():
+		return vitals is Dictionary
+	if _parse_vitals(vitals).is_empty():
+		return false
+	for key in ["hp", "battery"]:
+		if float(vitals[key]) < 0.0 or float(vitals[key]) > 100.0:
+			return false
+	return true
+
 func _write_atomic(path: String, payload: Dictionary) -> bool:
+	if not _valid_checkpoint(payload):
+		return false
 	if payload.has("power") or payload.has("progress"):
 		payload = payload.duplicate()
 		payload["progress_hmac"] = _sign_progress(payload.get("power", {}), payload.get("progress", {}))
-	# checksum считаем от ТОЙ ЖЕ строки, что попадёт на диск как data_json —
-	# JSON.parse превращает int в float, так что пересчёт чек-суммы после
-	# парсинга payload заново в stringify() никогда бы не совпал с исходной.
-	var body := JSON.stringify(payload)
-	var envelope := {"hmac": _sign(body), "data_json": body}
-	var tmp_path := path + ".tmp"
-	var f := FileAccess.open(tmp_path, FileAccess.WRITE)
-	if f == null:
-		return false
-	f.store_string(JSON.stringify(envelope))
-	f.close()
-	# a write that came out short (a full disk) must not rotate into the backups: three of them would push out every good one
-	if _read_envelope(tmp_path).is_empty():
-		DirAccess.remove_absolute(tmp_path)
-		return false
-	if FileAccess.file_exists(path):
-		_rotate_backups(path)
-	var err := DirAccess.rename_absolute(tmp_path, path)
-	return err == OK
+	return SecurityVault.write_checkpoint(path, JSON.stringify(payload).to_utf8_buffer())
 
 ## STEP 4 anti-tamper: keep the last 3 autosaves, not just 1 - a single
 ## .bak doesn't help if corruption strikes twice in a row (two autosaves
@@ -265,14 +281,35 @@ func _rotate_backups(path: String) -> void:
 ## reason выводится через print() у вызывающей стороны — сама функция
 ## только классифицирует, чтобы не дублировать текст на каждый return.
 func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
+	if not _path_allowed(path):
+		return {}
+	var base := path
+	var rank := 0
+	for n in range(1, BACKUP_DEPTH + 1):
+		var suffix := ".bak" if n == 1 else ".bak%d" % n
+		if base.ends_with(suffix):
+			base = base.trim_suffix(suffix)
+			rank = n
+			break
+	if SecurityVault.has_checkpoint(base):
+		var raw := SecurityVault._checkpoint_bytes(base, rank)
+		if not raw.is_empty():
+			var value: Variant = JSON.parse_string(raw.get_string_from_utf8())
+			if value is Dictionary and _valid_checkpoint(value):
+				return _migrate(value)
+		if not out_reason.is_empty() and FileAccess.file_exists(path):
+			out_reason[0] = "invalid checkpoint"
+		return {}
 	if not FileAccess.file_exists(path):
 		return {}
-	var f := FileAccess.open(path, FileAccess.READ)
-	if f == null:
-		if not out_reason.is_empty(): out_reason[0] = "не открылся"
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null or file.get_length() > SecurityVault.LIMIT:
 		return {}
-	var txt := f.get_as_text()
-	f.close()
+	if file.get_buffer(4).get_string_from_ascii() == SecurityVault.CHECKPOINT_MAGIC:
+		return {}
+	file.seek(0)
+	var txt := file.get_as_text()
+	file.close()
 	var outer := JSON.new()
 	if outer.parse(txt) != OK or not (outer.data is Dictionary):
 		if not out_reason.is_empty(): out_reason[0] = "битый JSON"
@@ -303,7 +340,7 @@ func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 		if not out_reason.is_empty(): out_reason[0] = "версия сейва новее билда"
 		return {}
 	data = _verify_progress(data)
-	return _migrate(data)
+	return _migrate(data) if _valid_checkpoint(data) else {}
 
 ## STEP 4 anti-tamper: recomputes _sign_progress() over the loaded power/
 ## progress fields and compares to the stored progress_hmac.
@@ -389,6 +426,7 @@ func _live_payload() -> Dictionary:
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
+		"wave2": Wave2Flow.to_dict(),
 		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
@@ -413,9 +451,10 @@ func _recover_bonus() -> bool:
 	var staged := _read_envelope(BONUS_STAGE)
 	var receipt: String = SecurityVault.bonus_ledger().get("last_claim_id", "")
 	if not receipt.is_empty() and staged.get("bonus_receipt", "") == receipt:
-		if FileAccess.file_exists(SAVE_PATH):
-			_rotate_backups(SAVE_PATH)
-		return DirAccess.rename_absolute(BONUS_STAGE, SAVE_PATH) == OK
+		if not _write_atomic(SAVE_PATH, staged):
+			return false
+		_remove_with_backups(BONUS_STAGE)
+		return true
 	if SecurityVault.save_rejected:
 		return false
 	return DirAccess.remove_absolute(BONUS_STAGE) == OK
@@ -431,7 +470,13 @@ func commit_bonus(ledger: Dictionary, target: Dictionary, connection: Callable) 
 		vault_data.coins = target.coins
 	for key: String in ["hp", "battery", "stamina"]:
 		if target.has(key):
-			payload.vitals[key] = target[key]
+			var cap: float = 100.0
+			var actor := get_tree().get_first_node_in_group("player")
+			if is_instance_valid(actor) and key == "battery":
+				cap = float(actor.get("battery_max"))
+			elif is_instance_valid(actor) and key == "hp" and actor.get("stats") != null:
+				cap = float(actor.get("stats").max_hp)
+			payload.vitals[key] = clampf(float(target[key]) * 100.0 / maxf(cap, 0.001), 0.0, 100.0) if key != "stamina" and payload.vitals.get("unit") == "percent" else target[key]
 	for key: String in ["hp", "battery"]:
 		if payload.vitals.has(key):
 			guarded_vitals["health" if key == "hp" else "battery"] = payload.vitals[key]
@@ -452,16 +497,12 @@ func _save() -> void:
 		return
 	# Guarded mirror: the vault carries the same five core values the owner
 	# asked to protect (coins/skill points are written by their own autoloads).
-	# The JSON remains the canonical Continue payload.
+	# Continue retains the full checkpoint; the vault also serves its own consumers.
 	var vitals: Dictionary = _read_player_vitals()
 	if not vitals.is_empty():
 		SecurityVault.set_guarded_float(&"health", float(vitals.get("hp", 0.0)))
 		SecurityVault.set_guarded_float(&"battery", float(vitals.get("battery", 0.0)))
-	var player := get_tree().get_first_node_in_group("player")
-	if is_instance_valid(player):
-		var warmth_value: Variant = player.get("warmth")
-		if warmth_value is float or warmth_value is int:
-			SecurityVault.set_guarded_float(&"warmth", float(warmth_value))
+	SecurityVault.set_guarded_float(&"warmth", GameplayDirector.warmth)
 	SecurityVault.save_game()
 	# A full disk fails the write without a word: the player must know the run is not saved.
 	if not _write_atomic(SAVE_PATH, payload):
@@ -485,6 +526,7 @@ func load_all() -> bool:
 	Cartography.from_dict(data.get("cartography", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
 	GameManager.restore_run(data.get("run", {}))
+	Wave2Flow.restore(data.get("wave2", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
@@ -527,6 +569,7 @@ func reset_all(new_run: bool = true) -> void:
 	if new_run:
 		_run_id = _new_run_id()
 	GameManager.reset_run()
+	Wave2Flow.restore({})
 	PowerGrid.reset()
 	Cartography.reset()
 	UpgradeSystem.reset()
@@ -602,7 +645,11 @@ func _read_player_vitals() -> Dictionary:
 	var p := get_tree().get_first_node_in_group("player")
 	if not is_instance_valid(p) or float(p.get("hp")) <= 0.0:
 		return {}
-	return {"hp": float(p.get("hp")), "stamina": float(p.get("stamina")), "battery": float(p.get("battery"))}
+	var stats: Variant = p.get("stats")
+	var max_hp: float = float(stats.max_hp) if stats != null else 100.0
+	return {"unit": "percent", "hp": clampf(100.0 * float(p.get("hp")) / maxf(0.001, max_hp), 0.0, 100.0),
+		"stamina": float(p.get("stamina")), "battery": clampf(100.0 * float(p.get("battery")) / maxf(0.001, float(p.get("battery_max"))), 0.0, 100.0),
+		"warmth": GameplayDirector.warmth}
 
 func _parse_vitals(v: Variant) -> Dictionary:
 	if not (v is Dictionary):
@@ -612,7 +659,16 @@ func _parse_vitals(v: Variant) -> Dictionary:
 		var n: Variant = v.get(key, null)
 		if not (n is float or n is int) or not is_finite(float(n)):
 			return {}
+		if v.get("unit") == "percent" and key != "stamina" and (float(n) < 0.0 or float(n) > 100.0):
+			return {}
 		out[key] = clampf(float(n), 0.0, MAX_VITAL)
+	if v.get("unit") == "percent":
+		out["unit"] = "percent"
+	if v.has("warmth"):
+		var warmth: Variant = v.warmth
+		if typeof(warmth) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(warmth)) or warmth < 0 or warmth > 100:
+			return {}
+		out["warmth"] = warmth
 	return out
 
 ## Called when the loaded game places its player (WorldRuntime), before a respawn's half health is applied over it.
@@ -626,13 +682,18 @@ func apply_pending_vitals(player: Node) -> void:
 		var vault_hp: float = SecurityVault.get_guarded_float(&"health", -1.0)
 		if vault_hp <= 0.0:
 			return
-		_pending_vitals = {"hp": vault_hp, "battery": maxf(0.0, SecurityVault.get_guarded_float(&"battery", 0.0))}
+		_pending_vitals = {"unit": "percent", "hp": vault_hp, "battery": maxf(0.0, SecurityVault.get_guarded_float(&"battery", 0.0))}
 	if player == null:
 		return
 	var stats: Variant = player.get("stats")
 	var max_hp: float = float(stats.max_hp) if stats != null else 100.0
 	var max_stamina: float = float(stats.stamina_max) if stats != null else 100.0
 	var max_battery: float = float(player.get("battery_max"))
+	if _pending_vitals.get("unit") == "percent":
+		_pending_vitals.hp = _pending_vitals.hp * 0.01 * max_hp
+		_pending_vitals.battery = _pending_vitals.battery * 0.01 * max_battery
+	if _pending_vitals.has("warmth"):
+		GameplayDirector.warmth = float(_pending_vitals.warmth)
 	player.set("hp", clampf(float(_pending_vitals["hp"]), 1.0, max_hp))
 	player.set("stamina", clampf(float(_pending_vitals.get("stamina", float(player.get("stamina")))), 0.0, max_stamina))
 	player.set("battery", clampf(float(_pending_vitals["battery"]), 0.0, max_battery))
@@ -733,6 +794,7 @@ func save_slot(slot: int) -> bool:
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
+		"wave2": Wave2Flow.to_dict(),
 		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
@@ -773,6 +835,7 @@ func load_slot(slot: int) -> bool:
 	Cartography.from_dict(data.get("cartography", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
 	GameManager.restore_run(data.get("run", {}))
+	Wave2Flow.restore(data.get("wave2", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
@@ -813,7 +876,7 @@ func delete_slot(slot: int) -> bool:
 ## G17: load step 4 falls back through .bak/.bak2/.bak3, so a delete that
 ## leaves any of them lets the "wiped" save come back.
 func _remove_with_backups(path: String) -> bool:
-	for suffix in [".bak", ".bak2", ".bak3"]:
+	for suffix in [".tmp", ".bak", ".bak2", ".bak3"]:
 		if FileAccess.file_exists(path + suffix):
 			DirAccess.remove_absolute(path + suffix)
 	return FileAccess.file_exists(path) and DirAccess.remove_absolute(path) == OK

@@ -549,7 +549,7 @@ func set_fps_cap(idx: int) -> void:
 ## a fullscreen Android device; this renders at a fraction of the real
 ## viewport and upscales, the standard mobile perf knob.
 func set_render_scale(v: float) -> void:
-	_settings["render_scale"] = clampf(v, 0.5, 1.0)
+	_settings["render_scale"] = clampf(v, 0.78 if OS.has_feature("android") else 0.5, 1.0)
 	var vp := get_viewport()
 	if vp != null:
 		vp.scaling_3d_scale = _settings["render_scale"]

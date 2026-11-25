@@ -12,15 +12,15 @@ extends Node3D
 var _spent: bool = false
 
 func can_interact() -> bool:
-	if _spent:
+	if _spent or is_queued_for_deletion():
 		return false
 	var flow := get_node_or_null("/root/Wave2Flow")
-	if flow == null:
+	if flow == null or flow.get_district_index() != district_index:
 		return false
 	var state: StringName = StringName(flow.call("get_state"))
 	match kind:
 		&"relay":
-			return state == StringName("SCAVENGE_PARTS")
+			return state == StringName("SCAVENGE_PARTS") and not flow.has_relay_part(part_id)
 		&"fusebox":
 			return state == StringName("REPAIR_FUSEBOX")
 		&"gate":
@@ -28,10 +28,10 @@ func can_interact() -> bool:
 	return false
 
 func interact(_player: Node = null) -> void:
-	if _spent:
+	if _spent or is_queued_for_deletion():
 		return
 	var flow := get_node_or_null("/root/Wave2Flow")
-	if flow == null:
+	if flow == null or flow.get_district_index() != district_index:
 		return
 	var ok: bool = false
 	match kind:
@@ -49,22 +49,24 @@ func interact(_player: Node = null) -> void:
 
 func interact_prompt() -> String:
 	var i18n := get_node_or_null("/root/I18nSync")
+	if i18n == null:
+		return ""
 	var state: StringName = StringName()
 	var flow := get_node_or_null("/root/Wave2Flow")
 	if flow != null:
 		state = StringName(flow.call("get_state"))
 	match kind:
 		&"relay":
-			return i18n.call("t", "PROMPT_PICKUP_RELAY") if i18n != null else "Take relay part"
+			return i18n.call("t", "PROMPT_PICKUP_RELAY")
 		&"fusebox":
 			if state == StringName("REPAIR_FUSEBOX"):
-				return i18n.call("t", "PROMPT_REPAIR_FUSEBOX") if i18n != null else "Repair fusebox"
+				return i18n.call("t", "PROMPT_REPAIR_FUSEBOX")
 			var args := {"have": _parts_count(flow), "need": 6}
-			return i18n.call("t", "PROMPT_FUSEBOX_NEED_PARTS", args) if i18n != null else "Need relay parts"
+			return i18n.call("t", "PROMPT_FUSEBOX_NEED_PARTS", args)
 		&"gate", _:
 			if flow != null and bool(flow.call("is_gate_unlocked")):
-				return i18n.call("t", "PROMPT_GATE_OPEN", {"name": str(district_index + 2)}) if i18n != null else "Enter next district"
-			return i18n.call("t", "PROMPT_GATE_LOCKED") if i18n != null else "Gate locked"
+				return i18n.call("t", "PROMPT_GATE_OPEN", {"name": str(district_index + 2)})
+			return i18n.call("t", "PROMPT_GATE_LOCKED")
 	return ""
 
 func _parts_count(flow: Node) -> int:

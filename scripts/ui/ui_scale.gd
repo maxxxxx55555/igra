@@ -36,11 +36,15 @@ static func log_map_row(viewport: Vector2) -> Vector2:
 static func insets(viewport: Vector2) -> Vector4:
 	if not OS.has_feature("mobile"):
 		return Vector4.ZERO
-	var screen: Vector2 = Vector2(DisplayServer.screen_get_size())
-	var safe: Rect2 = Rect2(DisplayServer.get_display_safe_area())
-	if screen.x <= 1.0 or screen.y <= 1.0 or safe.size.x <= 1.0:
+	var display := Rect2(DisplayServer.window_get_position(), DisplayServer.window_get_size())
+	return safe_insets(viewport, display, Rect2(DisplayServer.get_display_safe_area()))
+
+## Convert physical display pixels to the expanded 2D canvas, including split-screen windows.
+static func safe_insets(viewport: Vector2, window: Rect2, safe: Rect2) -> Vector4:
+	var usable := window.intersection(safe)
+	if not window.has_area() or not usable.has_area():
 		return Vector4.ZERO
-	var sx: float = viewport.x / screen.x
-	var sy: float = viewport.y / screen.y
-	return Vector4(safe.position.x * sx, safe.position.y * sy,
-		(screen.x - safe.end.x) * sx, (screen.y - safe.end.y) * sy)
+	var scale_factor := viewport / window.size
+	var near := (usable.position - window.position) * scale_factor
+	var far := (window.end - usable.end) * scale_factor
+	return Vector4(near.x, near.y, far.x, far.y)

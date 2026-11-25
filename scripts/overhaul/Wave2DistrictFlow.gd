@@ -29,26 +29,67 @@ const MIN_MOB_SPAWN_DIST_M: float = 18.0
 const INTERACT_DEBOUNCE_MSEC: int = 200
 
 var _state: StringName = STATE_SCAVENGE
-var _district_index: int = 0
-var _collected_parts: int = 0
+var _district_index: int:
+	get: return SecurityVault.get_guarded_int(StringName("runtime_flow_%d_district_index" % get_instance_id()), 0)
+	set(value): SecurityVault.set_guarded_int(StringName("runtime_flow_%d_district_index" % get_instance_id()), clampi(value, 0, TOTAL_DISTRICTS - 1))
+var _collected_parts: int:
+	get: return SecurityVault.get_guarded_int(StringName("runtime_flow_%d_collected_parts" % get_instance_id()), 0)
+	set(value): SecurityVault.set_guarded_int(StringName("runtime_flow_%d_collected_parts" % get_instance_id()), clampi(value, 0, REQUIRED_PARTS_PER_DISTRICT))
 var _consumed_tokens: Dictionary = {}
 var _completed_districts: Dictionary = {}
 var _in_safe_zone: bool = false
 var _transition_lock: bool = false
-var _last_interact_msec: int = 0
+var _last_interact_msec: int = -INTERACT_DEBOUNCE_MSEC
 
 
 func start_district(district_index: int, completed_list: Array = []) -> void:
 	_transition_lock = false
 	_district_index = clampi(district_index, 0, TOTAL_DISTRICTS - 1)
-	_collected_parts = 0
-	_state = STATE_SCAVENGE
+	_collected_parts = _part_count(_district_index)
+	_state = STATE_FUSEBOX if _collected_parts == REQUIRED_PARTS_PER_DISTRICT else STATE_SCAVENGE
 	_completed_districts.clear()
 	for idx in completed_list:
-		_completed_districts[int(idx)] = true
+		if typeof(idx) in [TYPE_INT, TYPE_FLOAT] and float(idx) == int(idx) and int(idx) >= 0 and int(idx) < TOTAL_DISTRICTS:
+			_completed_districts[int(idx)] = true
+	if _completed_districts.has(_district_index):
+		_state = STATE_GATE
 	state_changed.emit(_state, _district_index)
 	relay_parts_changed.emit(_collected_parts, REQUIRED_PARTS_PER_DISTRICT)
 
+
+func _exit_tree() -> void:
+	for key in ["district_index", "collected_parts"]:
+		SecurityVault.forget_runtime_guard(StringName("runtime_flow_%d_%s" % [get_instance_id(), key]))
+
+func has_relay_part(part_id: String) -> bool:
+	return _consumed_tokens.has("d%d_%s" % [_district_index, part_id.strip_edges()])
+
+func _part_count(idx: int) -> int:
+	var prefix := "d%d_" % idx
+	var count := 0
+	for token: String in _consumed_tokens:
+		if token.begins_with(prefix):
+			count += 1
+	return count
+
+func to_dict() -> Dictionary:
+	return {"district":_district_index, "parts":_collected_parts,
+		"tokens":_consumed_tokens.keys(), "completed":get_completed_districts()}
+
+func restore(data: Dictionary) -> void:
+	_consumed_tokens.clear()
+	var tokens: Variant = data.get("tokens", [])
+	if tokens is Array and tokens.size() <= TOTAL_DISTRICTS * REQUIRED_PARTS_PER_DISTRICT:
+		for token: Variant in tokens:
+			if not token is String or token.length() > 84:
+				continue
+			var prefix := String(token).get_slice("_", 0)
+			var idx := prefix.substr(1).to_int()
+			if prefix == "d%d" % idx and idx >= 0 and idx < TOTAL_DISTRICTS and _part_count(idx) < REQUIRED_PARTS_PER_DISTRICT:
+				_consumed_tokens[token] = true
+	var completed: Variant = data.get("completed", [])
+	_last_interact_msec = -INTERACT_DEBOUNCE_MSEC
+	start_district(int(data.get("district", 0)), completed if completed is Array else [])
 
 func get_state() -> StringName:
 	return _state
@@ -84,7 +125,7 @@ func try_collect_relay_part(unique_part_id: String) -> bool:
 	if not _allow_interact():
 		return false
 	var clean_id: String = unique_part_id.strip_edges()
-	if clean_id.is_empty():
+	if clean_id.is_empty() or clean_id.length() > 80:
 		return false
 	var token_key: String = "d%d_%s" % [_district_index, clean_id]
 	if _consumed_tokens.has(token_key):

@@ -18,7 +18,7 @@ const WIRE_TOP := Vector3(0.0, 4.3, 0.0)
 const WIRE_REACH := 26.0
 const WIRE_STEPS := 10
 static var _mesh: ArrayMesh = null
-static var _material: StandardMaterial3D = null
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 static var _wire_material: StandardMaterial3D = null
 
 ## The overhead wires of the owner's reference: every pole strung to its two nearest neighbours within reach, sagging at the middle,
@@ -58,7 +58,10 @@ static func pole_mesh() -> ArrayMesh:
 	if _mesh == null:
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		_frustum(st, Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.62, 0.0), 0.2, 0.15, 8, CONCRETE, CONCRETE, true)
+		_frustum(st, Vector3.ZERO,Vector3.UP*0.09,0.235,0.235,12,CONCRETE,STEEL_LIGHT,true)
+		_frustum(st,Vector3.UP*0.09,Vector3.UP*0.16,0.235,0.19,12,STEEL_LIGHT,STEEL,false)
+		_frustum(st,Vector3.UP*0.16,Vector3.UP*0.56,0.19,0.15,12,STEEL,STEEL_LIGHT,false)
+		_frustum(st,Vector3.UP*0.56,Vector3.UP*0.62,0.17,0.15,12,STEEL_LIGHT,STEEL,true)
 		_frustum(st, Vector3(0.0, 0.62, 0.0), Vector3(0.0, 0.7, 0.0), 0.12, 0.1, 10, STEEL_LIGHT, STEEL_LIGHT, true)
 		_frustum(st, Vector3(0.0, 0.7, 0.0), Vector3(0.0, 1.5, 0.0), 0.072, 0.0647, 12, RUST, STEEL, false)
 		_frustum(st, Vector3(0.0, 1.5, 0.0), Vector3(0.0, 4.0, 0.0), 0.0647, 0.042, 12, STEEL, STEEL, false)
@@ -77,27 +80,13 @@ static func pole_mesh() -> ArrayMesh:
 		_frustum(st, Vector3(HEAD.x, 4.44, 0.0), Vector3(HEAD.x, 4.36, 0.0), 0.03, 0.03, 8, STEEL, STEEL, true)
 		_frustum(st, Vector3(HEAD.x, 4.22, 0.0), Vector3(HEAD.x, 4.38, 0.0), 0.28, 0.09, 8, STEEL_LIGHT, STEEL, true)
 		_frustum(st, Vector3(HEAD.x, 4.18, 0.0), Vector3(HEAD.x, 4.22, 0.0), 0.27, 0.28, 8, Color("#0c0d0e"), STEEL, true)
+		st.index()
+		st.generate_tangents()
 		_mesh = st.commit()
 	return _mesh
 
-static func material() -> StandardMaterial3D:
-	if _material == null:
-		_material = StandardMaterial3D.new()
-		_material.vertex_color_use_as_albedo = true
-		_material.vertex_color_is_srgb = true
-		_material.metallic = 0.4
-		_material.roughness = 0.65
-		var dir := "res://assets/textures/pbr/rusted_metal_"
-		if ResourceLoader.exists(dir + "normal.png"):
-			_material.normal_enabled = true
-			_material.normal_texture = load(dir + "normal.png")
-			_material.normal_scale = 0.5
-		if ResourceLoader.exists(dir + "rough.png"):
-			_material.roughness = 1.0
-			_material.roughness_texture = load(dir + "rough.png")
-		_material.uv1_triplanar = true
-		_material.uv1_scale = Vector3.ONE * 1.5
-	return _material
+static func material() -> ORMMaterial3D:
+	return DETAIL.hardware()
 
 ## A frustum from `a` (radius `ra`, colour `ca`) to `b` (`rb`, `cb`) with `sides` sides, smooth side normals and flat end caps when `caps`; the front face winds clockwise.
 static func _frustum(st: SurfaceTool, a: Vector3, b: Vector3, ra: float, rb: float, sides: int, ca: Color, cb: Color, caps: bool) -> void:
@@ -117,9 +106,13 @@ static func _frustum(st: SurfaceTool, a: Vector3, b: Vector3, ra: float, rb: flo
 		norms.append((dir * length - axis * (rb - ra)).normalized())
 	for i in sides:
 		var j := (i + 1) % sides
-		for corner: Array in [[rim_a[i], norms[i], ca], [rim_b[j], norms[j], cb], [rim_b[i], norms[i], cb], [rim_a[i], norms[i], ca], [rim_a[j], norms[j], ca], [rim_b[j], norms[j], cb]]:
+		var t0 := float(i)/sides
+		var t1 := float(i+1)/sides
+		for corner: Array in [[rim_a[i], norms[i], ca, Vector2(t0,0)], [rim_b[j], norms[j], cb, Vector2(t1,length)], [rim_b[i], norms[i], cb, Vector2(t0,length)],
+				[rim_a[i], norms[i], ca, Vector2(t0,0)], [rim_a[j], norms[j], ca, Vector2(t1,0)], [rim_b[j], norms[j], cb, Vector2(t1,length)]]:
 			st.set_normal(corner[1])
 			st.set_color(corner[2])
+			st.set_uv(corner[3])
 			st.add_vertex(corner[0])
 	if not caps:
 		return
@@ -133,4 +126,6 @@ static func _frustum(st: SurfaceTool, a: Vector3, b: Vector3, ra: float, rb: flo
 			for point: Vector3 in ([centre, rim[i], rim[j]] if end == 1 else [centre, rim[j], rim[i]]):
 				st.set_normal(normal)
 				st.set_color(colour)
+				var off := point-centre
+				st.set_uv(Vector2(0.5,0.5)+Vector2(off.dot(u),off.dot(v)) / (2.0 * (rb if end == 1 else ra)))
 				st.add_vertex(point)

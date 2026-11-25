@@ -1,6 +1,6 @@
 extends Node
 ## Register as the first Autoload singleton named `SecurityVault`.
-## Provides AES-CBC + HMAC-SHA256 encrypted saves, dynamic XOR runtime memory
+## Provides authenticated AES checkpoints (including legacy CBC reads), dynamic XOR runtime memory
 ## guards, and SHA-256 asset integrity verification for Windows and Android.
 
 signal tamper_detected(key: StringName)
@@ -135,14 +135,14 @@ func _is_allowed_int_key(key: StringName) -> bool:
 	if CORE_INT_KEYS.has(key):
 		return true
 	var s := String(key)
-	return s.begins_with("district_") or s.begins_with("fog_")
+	return s.begins_with("runtime_") or s.begins_with("district_") or s.begins_with("fog_")
 
 
 func _is_allowed_float_key(key: StringName) -> bool:
 	if CORE_FLOAT_KEYS.has(key):
 		return true
 	var s := String(key)
-	return s.begins_with("district_")
+	return s.begins_with("runtime_") or s.begins_with("district_")
 
 
 func _plain_value(value: Variant, depth: int) -> bool:
@@ -181,6 +181,12 @@ func _valid_save(data: Dictionary) -> bool:
 		return false
 	if data.has("vault_floats") and typeof(data["vault_floats"]) != TYPE_DICTIONARY:
 		return false
+	for key: Variant in data.get("vault_floats", {}):
+		var value: Variant = data.vault_floats[key]
+		if not (value is float or value is int) or not is_finite(float(value)):
+			return false
+		if CORE_FLOAT_KEYS.has(StringName(key)) and (value < 0.0 or value > 100.0):
+			return false
 	if data.has("bonus_ledger") and not _valid_bonus_ledger(data.bonus_ledger):
 		return false
 	return _plain_value(data, 0)
@@ -251,30 +257,8 @@ func save_game(data: Dictionary = {}, vitals: Dictionary = {}) -> Error:
 	var plain := var_to_bytes(payload)
 	if plain.is_empty() or plain.size() > LIMIT:
 		return ERR_INVALID_DATA
-	var padding := 16 - plain.size() % 16
-	for index: int in range(padding):
-		plain.append(padding)
-	var master := _master(true)
-	var salt := _crypto.generate_random_bytes(16)
-	var iv := _crypto.generate_random_bytes(16)
-	if master.size() != 32 or salt.size() != 16 or iv.size() != 16:
-		return ERR_CANT_CREATE
-	var ciphertext := _aes(plain, _subkey(master, salt, "LSV1/encrypt"), iv, AESContext.MODE_CBC_ENCRYPT)
-	if ciphertext.size() != plain.size():
-		return FAILED
-	var body := "LSV1".to_ascii_buffer() + salt + iv + ciphertext
-	var signature := _mac(_subkey(master, salt, "LSV1/sign"), body)
-	if signature.size() != TAG:
-		return FAILED
-	var staging := _temporary(SAVE)
-	if staging.is_empty():
-		return ERR_CANT_CREATE
-	var error := _write(staging, body + signature)
+	var error := OK if write_checkpoint(SAVE, plain) else ERR_FILE_CANT_WRITE
 	if error == OK:
-		error = DirAccess.rename_absolute(_abs(staging), _abs(SAVE))
-	if error != OK:
-		DirAccess.remove_absolute(_abs(staging))
-	else:
 		_cached_save = payload.duplicate(true)
 		for k: StringName in CORE_INT_KEYS:
 			if data.has(k):
@@ -294,6 +278,17 @@ func _reject_save() -> Dictionary:
 
 func _read_save() -> Dictionary:
 	last_load_error = OK
+	if has_checkpoint(SAVE):
+		for rank in CHECKPOINT_DEPTH + 1:
+			var recovered := _checkpoint_bytes(SAVE, rank)
+			if recovered.is_empty():
+				continue
+			var value: Variant = bytes_to_var(recovered)
+			if value is Dictionary and _valid_save(value):
+				if rank > 0:
+					_warn(&"save_backup_recovered")
+				return value
+		return _reject_save()
 	if not FileAccess.file_exists(SAVE):
 		last_load_error = ERR_FILE_NOT_FOUND
 		return default_save()
@@ -361,7 +356,7 @@ func set_guarded_int(key: StringName, val: int) -> void:
 	if not _is_allowed_int_key(key):
 		push_error("Invalid guarded integer key: %s" % key)
 		return
-	if not CORE_INT_KEYS.has(key):
+	if not CORE_INT_KEYS.has(key) and not String(key).begins_with("runtime_"):
 		_dynamic_int_keys[key] = true
 	var safe_val: int = clampi(val, 0, 999999)
 	if key == &"coins" or key == &"skill_points":
@@ -386,7 +381,7 @@ func set_guarded_float(key: StringName, val: float) -> void:
 	if not _is_allowed_float_key(key) or not is_finite(val):
 		push_error("Invalid guarded float: %s" % key)
 		return
-	if not CORE_FLOAT_KEYS.has(key):
+	if not CORE_FLOAT_KEYS.has(key) and not String(key).begins_with("runtime_"):
 		_dynamic_float_keys[key] = true
 	var safe_val: float = val
 	if key == &"battery" or key == &"warmth" or key == &"health":
@@ -435,6 +430,12 @@ func _open_guard(slot: PackedByteArray, record: PackedByteArray) -> PackedByteAr
 func _store_guard(key: StringName, bits: PackedByteArray) -> void:
 	if _session.size() != 32:
 		return
+	if _primary.has(key) or _shadow.has(key):
+		if _load_guard(key) == bits:
+			return
+	_write_guard(key, bits)
+
+func _write_guard(key: StringName, bits: PackedByteArray) -> void:
 	var primary := _seal((String(key) + "/primary").to_ascii_buffer(), bits)
 	var shadow := _seal((String(key) + "/shadow").to_ascii_buffer(), bits)
 	if primary.size() != 56 or shadow.size() != 56:
@@ -460,7 +461,7 @@ func _load_guard(key: StringName) -> PackedByteArray:
 	var recovered := shadow if shadow.size() == 8 else primary
 	if recovered.is_empty():
 		recovered.resize(8)
-	_store_guard(key, recovered)
+	_write_guard(key, recovered)
 	_warn(key)
 	return recovered
 
@@ -503,3 +504,138 @@ func verify_integrity() -> bool:
 			return false
 	integrity_ok = true
 	return true
+
+# The installation keeps an authenticated high-water mark outside each rotating save.
+# Only its current digest may occupy the live slot. Older digests belong to backups.
+const CHECKPOINT_MAGIC := "TLS2"
+const CHECKPOINT_DEPTH := 3
+
+func _checkpoint_path_ok(path: String) -> bool:
+	var name := path.trim_prefix("user://")
+	return name != path and not name.is_empty() and not name.begins_with("/") and not name.contains(":") and not name.contains("..") and not name.contains("\\")
+
+func _anchor_path(path: String) -> String:
+	return KEY_DIR + "/" + path.sha256_text()
+
+func has_checkpoint(path: String) -> bool:
+	return _checkpoint_path_ok(path) and FileAccess.file_exists(_anchor_path(path))
+
+func _anchor(path: String, master: PackedByteArray) -> Dictionary:
+	var raw := _read(_anchor_path(path), 4096)
+	if raw.size() <= TAG:
+		return {}
+	var data := raw.slice(TAG)
+	if not _crypto.constant_time_compare(raw.slice(0, TAG), _mac(_subkey(master, path.to_utf8_buffer(), "counter"), data)):
+		return {}
+	var state: Variant = bytes_to_var(data)
+	if not state is Dictionary or not state.get("count") is int or not state.get("heads") is Array:
+		return {}
+	return state
+
+func _sha(data: PackedByteArray) -> String:
+	var ctx := HashingContext.new()
+	ctx.start(HashingContext.HASH_SHA256)
+	ctx.update(data)
+	return ctx.finish().hex_encode()
+
+# AES in counter mode. A fresh random nonce and installation-derived key protect
+# each checkpoint. The HMAC covers the format, monotonic counter, nonce and bytes.
+func _crypt_checkpoint(data: PackedByteArray, master: PackedByteArray, nonce: PackedByteArray) -> PackedByteArray:
+	var blocks := PackedByteArray()
+	blocks.resize(ceili(data.size() / 16.0) * 16)
+	for offset in range(0, blocks.size(), 16):
+		blocks.encode_u64(offset + 8, offset / 16)
+	var stream := _aes(blocks, _subkey(master, nonce, "checkpoint/encrypt"), PackedByteArray(), AESContext.MODE_ECB_ENCRYPT)
+	if stream.size() != blocks.size():
+		return PackedByteArray()
+	var result := data.duplicate()
+	for i in result.size():
+		result[i] ^= stream[i]
+	return result
+
+func _checkpoint_bytes(path: String, rank: int) -> PackedByteArray:
+	if not _checkpoint_path_ok(path) or rank < 0 or rank > CHECKPOINT_DEPTH:
+		return PackedByteArray()
+	var master := _master(false)
+	if master.size() != 32:
+		return PackedByteArray()
+	var state := _anchor(path, master)
+	if state.is_empty() or state.heads.is_empty():
+		return PackedByteArray()
+	var heads: Array = state.heads
+	var suffix := "" if rank == 0 else (".bak" if rank == 1 else ".bak%d" % rank)
+	var raw := _read(path + suffix, LIMIT + 60)
+	if rank == 0 and FileAccess.file_exists(path + ".tmp"):
+		var staged := _read(path + ".tmp", LIMIT + 60)
+		if not staged.is_empty() and _sha(staged) == heads[0]:
+			raw = staged
+	if raw.size() <= 28 + TAG or raw.slice(0, 4).get_string_from_ascii() != CHECKPOINT_MAGIC:
+		return PackedByteArray()
+	var digest := _sha(raw)
+	var index := heads.find(digest)
+	if index < 0 or (rank == 0 and index != 0) or (rank > 0 and index == 0):
+		return PackedByteArray()
+	var counter := raw.decode_s64(4)
+	if counter != int(state.count) - index:
+		return PackedByteArray()
+	var body := raw.slice(0, raw.size() - TAG)
+	var expected := _mac(_subkey(master, path.to_utf8_buffer(), "checkpoint/sign"), body)
+	if not _crypto.constant_time_compare(expected, raw.slice(body.size())):
+		return PackedByteArray()
+	return _crypt_checkpoint(body.slice(28), master, body.slice(12, 28))
+
+func write_checkpoint(path: String, data: PackedByteArray) -> bool:
+	if not _checkpoint_path_ok(path) or data.is_empty() or data.size() > LIMIT:
+		return false
+	var master := _master(true)
+	if master.size() != 32:
+		return false
+	var state := _anchor(path, master)
+	if state.is_empty():
+		if has_checkpoint(path):
+			return false
+		state = {"count": 0, "heads": []}
+	var nonce := _crypto.generate_random_bytes(16)
+	if nonce.size() != 16:
+		return false
+	var cipher := _crypt_checkpoint(data, master, nonce)
+	if cipher.size() != data.size():
+		return false
+	var count := int(state.count) + 1
+	var body := CHECKPOINT_MAGIC.to_ascii_buffer()
+	body.resize(12)
+	body.encode_s64(4, count)
+	body.append_array(nonce)
+	body.append_array(cipher)
+	body.append_array(_mac(_subkey(master, path.to_utf8_buffer(), "checkpoint/sign"), body))
+	# Finish any previously committed rename before reusing the staging file.
+	if FileAccess.file_exists(path + ".tmp") and not state.heads.is_empty():
+		if _sha(_read(path + ".tmp", LIMIT + 60)) == state.heads[0] and DirAccess.rename_absolute(_abs(path + ".tmp"), _abs(path)) != OK:
+			return false
+	if _write(path + ".tmp", body) != OK:
+		return false
+	var heads: Array = state.heads.duplicate()
+	if not heads.is_empty() and FileAccess.file_exists(path) and _sha(_read(path, LIMIT + 60)) == heads[0]:
+		for i in range(CHECKPOINT_DEPTH, 0, -1):
+			var source := path if i == 1 else (path + ".bak" if i == 2 else path + ".bak%d" % (i - 1))
+			var destination := path + (".bak" if i == 1 else ".bak%d" % i)
+			if FileAccess.file_exists(source) and DirAccess.copy_absolute(_abs(source), _abs(destination)) != OK:
+				return false
+	heads.push_front(_sha(body))
+	heads.resize(mini(heads.size(), CHECKPOINT_DEPTH + 1))
+	var record := var_to_bytes({"count":count, "heads":heads})
+	var anchor_file := _anchor_path(path)
+	if _write(anchor_file + ".tmp", _mac(_subkey(master, path.to_utf8_buffer(), "counter"), record) + record) != OK:
+		return false
+	if DirAccess.rename_absolute(_abs(anchor_file + ".tmp"), _abs(anchor_file)) != OK:
+		return false
+	# At this point the pending file is committed and also readable after a crash.
+	DirAccess.rename_absolute(_abs(path + ".tmp"), _abs(path))
+	return true
+
+
+
+func forget_runtime_guard(key: StringName) -> void:
+	if String(key).begins_with("runtime_"):
+		_primary.erase(key)
+		_shadow.erase(key)

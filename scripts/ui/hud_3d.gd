@@ -746,6 +746,7 @@ func _layout_touch_buttons(factor: float = 1.0) -> void:
 ## A phone rotation (or the windowed touch audit) must rebuild absolute arcs,
 ## not just scale the old corner cluster.
 func _on_viewport_resized() -> void:
+	_apply_safe_area()
 	if has_touch_ui():
 		_apply_touch_arc_layout()
 	if _TOUCH_LAYOUT.is_mobile():
@@ -762,7 +763,7 @@ func _apply_mobile_metrics() -> void:
 		var baseline: int = control.get_meta(&"hud_font_base", control.get_theme_font_size("font_size"))
 		control.set_meta(&"hud_font_base", baseline)
 		control.add_theme_font_size_override("font_size", maxi(baseline, ceili(12.0 / (ratio * factor))))
-	var target := Vector2.ONE * ceilf(48.0 / ratio)
+	var target := Vector2.ONE * maxf(56.0, ceilf(56.0 / ratio))
 	var pause_button := $BtnPause as Button
 	pause_button.custom_minimum_size = target
 	pause_button.offset_right = -16.0 - _safe_area_inset.z
@@ -815,7 +816,7 @@ func _apply_touch_arc_layout() -> void:
 	var touch_cluster := get_node_or_null("BottomRight") as Control
 	if touch_cluster == null:
 		return
-	_pubg_layout_report = _PUBG_TOUCH.apply_layout(touch_cluster, vp)
+	_pubg_layout_report = _PUBG_TOUCH.apply_layout(touch_cluster, vp - Vector2(_safe_area_inset.x + _safe_area_inset.z, _safe_area_inset.y + _safe_area_inset.w), Vector2(_safe_area_inset.x, _safe_area_inset.y))
 	# The module styles every control it places. Mark them so the older Wave 2
 	# skin does not overwrite the new tactical boxes on the next rest pass.
 	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash",
@@ -849,13 +850,13 @@ func _place_map_button_in_arc() -> void:
 	var btn := get_node_or_null("MapButton") as Button
 	if btn == null:
 		return
-	var sz := Vector2(72.0, 48.0)
+	var sz := Vector2(72.0, 56.0)
 	btn.custom_minimum_size = sz
 	btn.size = sz
 	btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	var p: Vector2 = Vector2(
 		_PUBG_TOUCH.SAFE_MARGIN_X + _safe_area_inset.x,
-		_PUBG_TOUCH.SAFE_MARGIN_Y + 124.0 + _safe_area_inset.y)
+		_PUBG_TOUCH.SAFE_MARGIN_Y + roundf(260.0 * clampf((get_viewport().get_visible_rect().size.y - _safe_area_inset.y - _safe_area_inset.w) / 720.0, 0.78, 1.25)) + _safe_area_inset.y)
 	btn.position = p
 	_style_aaa_touch_button(btn, "MapButton", "dock")
 
@@ -872,7 +873,7 @@ func _place_ammo_above_arc(vp: Vector2) -> void:
 	var h: float = ammo.offset_bottom - ammo.offset_top
 	var w: float = ammo.offset_right - ammo.offset_left
 	var bottom_y: float = maxf(160.0, top - 14.0)
-	ammo.offset_bottom = bottom_y - vp.y - _safe_area_inset.w
+	ammo.offset_bottom = bottom_y - vp.y
 	ammo.offset_top = ammo.offset_bottom - h
 	ammo.offset_right = -24.0 - _safe_area_inset.z
 	ammo.offset_left = ammo.offset_right - w
@@ -954,7 +955,7 @@ func _add_status_backing() -> void:
 	move_child(backing, top_left.get_index())
 
 func _apply_safe_area() -> void:
-	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size))
+	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size) - _safe_area_inset)
 
 ## Slides each edge of the corner controls by the inset of the side its anchor is on (an offset counts from its anchor): a fixed control keeps its size, a stretched one gives up the margin.
 func _inset_controls(inset: Vector4) -> void:
