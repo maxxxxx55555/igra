@@ -278,8 +278,8 @@ func _enter_next_district(next_index: int) -> void:
 	EventBus.district_entered.emit(next_id)
 
 func _on_victory() -> void:
-	EventBus.game_won.emit()
 	SaveSystem.autosave()
+	GameManager.trigger_win()
 
 func _on_light_stage(id: StringName, _stage: int) -> void:
 	if id == _district_id:

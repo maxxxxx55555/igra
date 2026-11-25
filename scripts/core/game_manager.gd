@@ -262,6 +262,8 @@ func trigger_death() -> void:
 	# сигнал по кругу через _on_player_game_over.
 
 func trigger_win() -> void:
+	if is_win():
+		return
 	Endings.mark_ended()
 	var winner := get_tree().get_first_node_in_group("player")
 	if winner != null:
