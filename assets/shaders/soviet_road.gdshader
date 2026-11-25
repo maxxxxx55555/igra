@@ -124,7 +124,7 @@ void fragment() {
 	if (use_wave2_pbr > 0.5) {
 		vec2 pbr_uv = UV * 3.0;
 		vec3 n2 = texture(wave2_nrm, pbr_uv).rgb * 2.0 - 1.0;
-		NORMAL = normalize(NORMAL + (VIEW_MATRIX * vec4(n2.xy * 0.22, 0.0)).xyz);
+		NORMAL = normalize(NORMAL + (VIEW_MATRIX * vec4(n2.xy * 0.22, 0.0, 0.0)).xyz);
 		ROUGHNESS = mix(ROUGHNESS, texture(wave2_orm, pbr_uv).g, 0.55);
 	}
 }

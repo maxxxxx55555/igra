@@ -20,9 +20,9 @@ func can_interact() -> bool:
 	var state: StringName = StringName(flow.call("get_state"))
 	match kind:
 		&"relay":
-			return state == Wave2DistrictFlow.STATE_SCAVENGE
+			return state == StringName("SCAVENGE_PARTS")
 		&"fusebox":
-			return state == Wave2DistrictFlow.STATE_FUSEBOX
+			return state == StringName("REPAIR_FUSEBOX")
 		&"gate":
 			return bool(flow.call("is_gate_unlocked"))
 	return false
@@ -57,9 +57,9 @@ func interact_prompt() -> String:
 		&"relay":
 			return i18n.call("t", "PROMPT_PICKUP_RELAY") if i18n != null else "Take relay part"
 		&"fusebox":
-			if state == Wave2DistrictFlow.STATE_FUSEBOX:
+			if state == StringName("REPAIR_FUSEBOX"):
 				return i18n.call("t", "PROMPT_REPAIR_FUSEBOX") if i18n != null else "Repair fusebox"
-			var args := {"have": _parts_count(flow), "need": Wave2DistrictFlow.REQUIRED_PARTS_PER_DISTRICT}
+			var args := {"have": _parts_count(flow), "need": 6}
 			return i18n.call("t", "PROMPT_FUSEBOX_NEED_PARTS", args) if i18n != null else "Need relay parts"
 		&"gate", _:
 			if flow != null and bool(flow.call("is_gate_unlocked")):
@@ -72,4 +72,4 @@ func _parts_count(flow: Node) -> int:
 		return 0
 	var info: Dictionary = flow.call("get_objective_key_and_args")
 	var a: Dictionary = info.get("args", {})
-	return clampi(int(a.get("have", 0)), 0, Wave2DistrictFlow.REQUIRED_PARTS_PER_DISTRICT)
+	return clampi(int(a.get("have", 0)), 0, 6)

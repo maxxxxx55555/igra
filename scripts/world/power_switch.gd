@@ -33,11 +33,11 @@ const STAGE_MSG_KEYS: Array[String] = [
 ]
 
 const _Props := preload("res://scripts/art/prop_meshes.gd")
-const _CLUNK_SFX := preload("res://assets/audio/sfx/interact/fuse_box_close.wav")
+const _CLUNK_SFX := preload("res://assets/audio/sfx/interact/fuse_box_close.ogg")
 ## Wave 3: the cast-iron relay of the owner's reference clunks and blooms
 ## into sodium light when the player restores a district.
-const _RELAY_SFX := preload("res://assets/audio/menu_canon/sfx_lamp_relay_ignite.wav")
-const _FUSE_SFX := preload("res://assets/audio/sfx/interact/fuse_insert.wav")
+const _RELAY_SFX := preload("res://assets/audio/menu_canon/sfx_lamp_relay_ignite.ogg")
+const _FUSE_SFX := preload("res://assets/audio/sfx/interact/fuse_insert.ogg")
 var _panel: MeshInstance3D
 var _glow: StandardMaterial3D
 var _light: OmniLight3D

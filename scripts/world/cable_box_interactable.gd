@@ -12,7 +12,7 @@ extends Node3D
 
 const PUZZLE_ID: String = "fuse_substation"
 const _Props := preload("res://scripts/art/prop_meshes.gd")
-const _SNAP_SFX := preload("res://assets/audio/sfx/interact/cable_connect.wav")
+const _SNAP_SFX := preload("res://assets/audio/sfx/interact/cable_connect.ogg")
 
 var _body: StaticBody3D
 

@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://duysw7bjnvro4"
-path="res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.ctex"
+path.s3tc="res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.s3tc.ctex"
+path.etc2="res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/visual_v2/asphalt_puddle_mask_v2.png"
-dest_files=["res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.ctex"]
+dest_files=["res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.s3tc.ctex", "res://.godot/imported/asphalt_puddle_mask_v2.png-7f5072702729ea48eb3b6a9f12122bde.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +25,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -570,5 +570,5 @@ func _tr_fmt(key: String, args: Dictionary, fb_ru: String, fb_en: String) -> Str
 	if raw.is_empty() or raw == key:
 		raw = fb_ru if TranslationServer.get_locale().to_lower().begins_with("ru") else fb_en
 	for k in args.keys():
-		raw = raw.replace("{" + String(k) + "}", String(args[k]))
+		raw = raw.replace("{" + String(k) + "}", str(args[k]))
 	return raw

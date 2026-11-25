@@ -13,8 +13,8 @@ class_name HidingSpot
 @export var exit_dir: Vector3 = Vector3(0.0, 0.0, 1.0)
 
 const _Meshes := preload("res://scripts/art/hiding_meshes.gd")
-const _OPEN_SFX := preload("res://assets/audio/sfx/interact/cabinet_open.wav")
-const _CLOSE_SFX := preload("res://assets/audio/sfx/interact/cabinet_close.wav")
+const _OPEN_SFX := preload("res://assets/audio/sfx/interact/cabinet_open.ogg")
+const _CLOSE_SFX := preload("res://assets/audio/sfx/interact/cabinet_close.ogg")
 ## The shells with a lid or a door creak; a bush or a dark corner takes the player in silently.
 const _CREAKING: Array[String] = ["locker", "dumpster", "car", "crate"]
 

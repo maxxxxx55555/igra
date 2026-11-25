@@ -9,7 +9,7 @@ const NAMES := {
 	Ev.HALLUCINATION: "EVENT_HALLUCINATION",
 }
 ## A step that is not there (GDD achievement "Who's There?"): the shadows' click, close behind the player.
-const HALLUCINATION_SOUND: AudioStream = preload("res://assets/audio/sfx/mon_shadow_teleport.wav")
+const HALLUCINATION_SOUND: AudioStream = preload("res://assets/audio/sfx/mon_shadow_teleport.ogg")
 const HALLUCINATION_DISTANCE: float = 9.0
 var _timer: float = 0.0
 @export var min_interval: float = 60.0

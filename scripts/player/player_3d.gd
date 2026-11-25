@@ -1005,7 +1005,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
 	amount = minf(amount, HIT_CAP * SettingsManager.difficulty_scale("damage_cap") * NewGamePlus.get_enemy_damage_multiplier()) / SettingsManager.difficulty_scale("player_hp")  # Easy: 50% more health, as damage taken
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
-	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
+	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.ogg"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
 	if _src_pos != Vector3.ZERO:
 		EventBus.player_damage_direction.emit(amount, _src_pos)  # 3.15 — индикатор направления урона
@@ -1052,7 +1052,7 @@ func _safe_move(delta: float) -> void:
 	if _collision_guard != null and is_instance_valid(_collision_guard):
 		_collision_guard.move_guarded(self, velocity, delta)
 	else:
-		velocity = move_and_slide()
+		move_and_slide()
 
 func get_battery() -> float:
 	return battery
@@ -1489,7 +1489,7 @@ func _update_low_battery_flicker() -> void:
 	var ratio_pct: float = battery / maxf(battery_max, 0.001) * 100.0
 	var low: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold
 	if low and not _low_battery_warned:
-		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.wav"), -8.0)
+		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.ogg"), -8.0)
 	_low_battery_warned = low
 	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
 		and not _flashlight_stability_maxed \

@@ -9,7 +9,7 @@
   },
   "files": [
     {
-      "path": "assets/audio/craft/sfx_ui_hover_tick.wav",
+      "path": "assets/audio/craft/sfx_ui_hover_tick.ogg",
       "channels": 1,
       "duration_s": 0.065,
       "dc_offset": 9e-06,
@@ -19,7 +19,7 @@
       "sha256": "e3cdfb31dcf37c2747faa07b8d1b8bbe7a0098eb77b3959dc54ef1bb0a5c8135"
     },
     {
-      "path": "assets/audio/craft/sfx_ui_confirm_click.wav",
+      "path": "assets/audio/craft/sfx_ui_confirm_click.ogg",
       "channels": 1,
       "duration_s": 0.12,
       "dc_offset": 0.000289,
@@ -29,7 +29,7 @@
       "sha256": "0ad57ba22e9541315ac01190ef4236f2422734ff03d2fc4e6190464ce3c81c96"
     },
     {
-      "path": "assets/audio/craft/sfx_district_restored_sting.wav",
+      "path": "assets/audio/craft/sfx_district_restored_sting.ogg",
       "channels": 2,
       "duration_s": 6.0,
       "dc_offset": 3.7e-05,
@@ -39,7 +39,7 @@
       "sha256": "1aeb5ecedf7979029b9148e15170f1c74571168f2171fa7edc1b7e86987fd7f5"
     },
     {
-      "path": "assets/audio/craft/sfx_death_cue.wav",
+      "path": "assets/audio/craft/sfx_death_cue.ogg",
       "channels": 2,
       "duration_s": 4.0,
       "dc_offset": 0.000154,
@@ -49,7 +49,7 @@
       "sha256": "5871002e30844c885c3bd6f2a26a3b35e9da76de4948fe5b6644968a720964de"
     },
     {
-      "path": "assets/audio/craft/amb_sodium_hum_loop.wav",
+      "path": "assets/audio/craft/amb_sodium_hum_loop.ogg",
       "runtime_status": "reserved",
       "channels": 2,
       "duration_s": 10.0,

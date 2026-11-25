@@ -27,6 +27,7 @@ const GATE_CLEAR_WIDTH_M: float = 6.0
 const COL_BRASS := Color(0.7882, 0.6353, 0.2902, 1.0)
 const COL_AMBER := Color(0.8314, 0.6627, 0.3059, 1.0)
 const COL_LOCKED := Color(0.55, 0.12, 0.09, 1.0)
+const TOTAL_DISTRICTS: int = 11
 const W2_IRON_ALBEDO := "res://assets/textures/wave2/iron_brass_hardware_albedo.png"
 const W2_IRON_ORM := "res://assets/textures/wave2/iron_brass_hardware_orm.png"
 
@@ -61,6 +62,8 @@ func _wire() -> void:
 			flow.district_transition_requested.connect(_on_transition)
 		if not flow.game_victory_reached.is_connected(_on_victory):
 			flow.game_victory_reached.connect(_on_victory)
+		if not flow.safe_zone_toggled.is_connected(_on_safe_zone):
+			flow.safe_zone_toggled.connect(_on_safe_zone)
 	if not EventBus.district_entered.is_connected(_on_district_entered):
 		EventBus.district_entered.connect(_on_district_entered)
 	if not EventBus.streetlight_activated.is_connected(_on_streetlights):
@@ -112,9 +115,9 @@ func _on_district_entered(district_id: StringName) -> void:
 				break
 	if _root == null:
 		return
-	if _built_for == String(_root.get_instance_id()):
+	if _built_for == str(_root.get_instance_id()):
 		return
-	_built_for = String(_root.get_instance_id())
+	_built_for = str(_root.get_instance_id())
 	call_deferred("_build_content")
 	_refresh_objective()
 
@@ -261,7 +264,7 @@ func _refresh_gate_sign() -> void:
 	if _gate_sign == null:
 		return
 	var i18n := get_node_or_null("/root/I18nSync")
-	var next_idx: int = mini(_index + 2, Wave2DistrictFlow.TOTAL_DISTRICTS)
+	var next_idx: int = mini(_index + 2, 11)
 	var next_name: String = ""
 	if i18n != null:
 		next_name = String(i18n.call("t", "DISTRICT_NAME_%02d" % next_idx))
@@ -350,6 +353,15 @@ func _refresh_objective() -> void:
 func _on_locale(_lang: String) -> void:
 	_refresh_objective()
 	_refresh_gate_sign()
+
+func _on_safe_zone(is_inside: bool) -> void:
+	var music := get_node_or_null("/root/MusicManager")
+	if music == null or is_inside == false:
+		return
+	if music.has_method("is_in_combat") and bool(music.call("is_in_combat")):
+		return
+	if music.has_method("set_mood"):
+		music.call("set_mood", MusicDirector.Mood.AMBIENT)
 
 func _on_map_opened() -> void:
 	var ui := get_node_or_null("/root/UIManager")

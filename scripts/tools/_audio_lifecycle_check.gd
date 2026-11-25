@@ -102,7 +102,7 @@ func _check_notice_feedback() -> void:
 	CoinWallet.coins = balance
 	var errors: int = 0
 	for player: AudioStreamPlayer in _ui_players():
-		if player.stream.resource_path.ends_with("ui_error.wav"):
+		if player.stream.resource_path.ends_with("ui_error.ogg"):
 			errors += 1
 	_ok(errors == 1 and _ui_players().size() == 1, "wallet rejection retains exactly one explicit error cue")
 	_clear_feedback()
@@ -120,7 +120,7 @@ func _check_physical_pickup() -> void:
 	pickup.call("_on_body_entered", body)
 	var clips: int = 0
 	for player: AudioStreamPlayer3D in AudioManager.get("_pool_3d"):
-		if player.playing and player.bus == &"UI" and player.stream.resource_path.ends_with("loot_pickup_generic.wav"):
+		if player.playing and player.bus == &"UI" and player.stream.resource_path.ends_with("loot_pickup_generic.ogg"):
 			clips += 1
 	_ok(pickup.get("_picked_up") and clips == 1, "physical pickup plays its existing action-specific loot clip")
 	_ok(_pool_players() == 0 and _ui_players().is_empty(), "physical pickup adds no generic two-note blip or notice beep")

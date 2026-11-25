@@ -31,7 +31,7 @@ var _detail_player: AudioStreamPlayer
 var _detail_district: StringName = &""
 ## Wave 3: the damp night air of the owner's reference (drizzle on the roofs
 ## and the gutter) rides under every district bed on the Ambient bus.
-const WET_NIGHT_PATH: String = "res://assets/audio/menu_canon/amb_wet_night_rain_loop.wav"
+const WET_NIGHT_PATH: String = "res://assets/audio/menu_canon/amb_wet_night_rain_loop.ogg"
 const WET_NIGHT_DB: float = -26.0
 var _wet_night: AudioStreamPlayer = null
 

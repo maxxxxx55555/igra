@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3]
 
-[sub_resource type="BoxShape3D" id="tls_inert_box"]
-size = Vector3(0.4, 0.4, 0.4)
 [ext_resource type="Script" path="res://scripts/world/puzzle_3d.gd" id="1"]
 
+[sub_resource type="BoxShape3D" id="tls_inert_box"]
+size = Vector3(0.4, 0.4, 0.4)
 [sub_resource type="BoxMesh" id="panel_mesh"]
 size = Vector3(0.8, 0.8, 0.1)
 

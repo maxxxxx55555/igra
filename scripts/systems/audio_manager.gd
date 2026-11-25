@@ -122,10 +122,10 @@ func _ready() -> void:
 static func _has_ui_sting(name: String) -> bool:
 	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
 
-const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
+const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.ogg")
 const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.ogg")
-const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.wav")
-const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.wav")
+const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.ogg")
+const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.ogg")
 const RAIN_SFX := preload("res://assets/audio/one_shots/rain_on_metal_loop.ogg")
 const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.ogg")
 const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.ogg")

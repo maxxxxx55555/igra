@@ -1,11 +1,11 @@
 [gd_scene load_steps=29 format=3]
 
-[sub_resource type="BoxShape3D" id="tls_inert_box"]
-size = Vector3(0.4, 0.4, 0.4)
 [ext_resource type="Script" path="res://scripts/player/player_3d.gd" id="1"]
 [ext_resource type="Resource" path="res://data/balance/player_stats.tres" id="2"]
 [ext_resource type="Resource" path="res://data/balance/flashlight_stats.tres" id="3"]
 
+[sub_resource type="BoxShape3D" id="tls_inert_box"]
+size = Vector3(0.4, 0.4, 0.4)
 [sub_resource type="CapsuleShape3D" id="capsule_shape"]
 radius = 0.3
 height = 1.6

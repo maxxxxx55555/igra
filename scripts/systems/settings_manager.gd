@@ -425,7 +425,7 @@ func set_dyslexia_font(enabled: bool) -> void:
 func _apply_dyslexia_font() -> void:
 	if not _settings.get("dyslexia_font", false):
 		return
-	var path := "res://assets/fonts/OpenDyslexic-Regular.ttf"
+	var path := "res://assets/fonts/RobotoCondensed-Regular.ttf"
 	if not ResourceLoader.exists(path):
 		return
 	var f: Font = load(path)

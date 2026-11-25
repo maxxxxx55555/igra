@@ -1,7 +1,7 @@
 class_name BaseMonster
 extends CharacterBody3D
 
-const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.wav")
+const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.ogg")
 const _ROSTER := preload("res://data/balance/enemy_stats.tres")
 const _Rig := preload("res://scripts/enemies/monster_rig.gd")
 ## A hit of this share of the hit points staggers a monster: its next attack waits STAGGER_SEC (A5).
@@ -899,7 +899,7 @@ func _set_cues(cues: Dictionary) -> void:
 
 ## The file of a cue: the OGG when the conversion shipped it, the WAV of a clip under half a second otherwise, "" when neither is there (the monster stays silent, as before).
 static func cue_path(file: String) -> String:
-	for ext: String in [".ogg", ".wav"]:
+	for ext: String in [".ogg", ".ogg"]:
 		var path: String = "res://assets/audio/sfx/%s%s" % [file, ext]
 		if ResourceLoader.exists(path):
 			return path

@@ -6,7 +6,7 @@ extends Node
 
 signal locale_changed(new_locale: String)
 
-const SUPPORTED_LOCALES: PackedStringArray = PackedStringArray(["ru", "en"])
+const SUPPORTED_LOCALES := ["ru", "en"]
 const RU_JSON_PATH: String = "res://data/i18n/ru.json"
 const EN_JSON_PATH: String = "res://data/i18n/en.json"
 const PREF_PATH: String = "user://tls_locale.cfg"
@@ -150,7 +150,7 @@ func _load_json_dict(path: String) -> Dictionary:
 func _format_placeholders(template: String, args: Dictionary) -> String:
 	var out: String = template
 	for k in args.keys():
-		out = out.replace("{" + String(k) + "}", String(args[k]))
+		out = out.replace("{" + String(k) + "}", str(args[k]))
 	return out
 
 

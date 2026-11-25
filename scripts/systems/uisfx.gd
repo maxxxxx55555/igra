@@ -47,7 +47,7 @@ func _ready() -> void:
 	EventBus.boss_spawned.connect(func() -> void: play_ui("boss_sting"))
 	EventBus.boss_defeated.connect(func() -> void: play_ui("boss_sting"))
 	# v10 M6: the sting of a restored district, a tick for XP and a soft note when a healing consumable is used (the files of the music recipe that no take supplied: tools/gen_one_shots.py)
-	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_craft("sfx_district_restored_sting.wav", &"UI", -8.0))
+	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_craft("sfx_district_restored_sting.ogg", &"UI", -8.0))
 	EventBus.xp_gained.connect(func(_amount: int) -> void: _play("ui_xp_tick", 1800.0, 0.03))
 	EventBus.item_consumed.connect(func(_id: StringName, effect: String, _value: float) -> void:
 		if effect == "HEAL":
@@ -130,11 +130,11 @@ func _in_hud(node: Node) -> bool:
 
 func click() -> void:
 	# Wave 3: the brass switch of the owner's reference replaces the craft tick.
-	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_click.wav"):
-		_play_canon("sfx_ui_brass_click.wav", -3.0, randf_range(0.96, 1.04))
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_click.ogg"):
+		_play_canon("sfx_ui_brass_click.ogg", -3.0, randf_range(0.96, 1.04))
 		return
-	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_confirm_click.wav"):
-		play_craft("sfx_ui_confirm_click.wav", &"UI", -2.0, randf_range(0.96, 1.04))
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_confirm_click.ogg"):
+		play_craft("sfx_ui_confirm_click.ogg", &"UI", -2.0, randf_range(0.96, 1.04))
 		return
 	if ResourceLoader.exists(_UI_DIR + "ui_menu_click.ogg"):
 		play_ui("menu_click")
@@ -144,11 +144,11 @@ func click() -> void:
 func hover() -> void:
 	# Pointer movement keeps visual feedback; the supplied craft hover tick is
 	# quiet enough to answer deliberate pointer focus without the old beep spam.
-	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_hover.wav"):
-		_play_canon("sfx_ui_brass_hover.wav", -14.0, randf_range(0.96, 1.04))
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_hover.ogg"):
+		_play_canon("sfx_ui_brass_hover.ogg", -14.0, randf_range(0.96, 1.04))
 		return
-	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_hover_tick.wav"):
-		play_craft("sfx_ui_hover_tick.wav", &"UI", -12.0, randf_range(0.96, 1.04))
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_hover_tick.ogg"):
+		play_craft("sfx_ui_hover_tick.ogg", &"UI", -12.0, randf_range(0.96, 1.04))
 
 
 ## One menu-canon one-shot on the UI bus.
@@ -224,7 +224,7 @@ func pickup() -> void:
 func _play(file: String, fallback_freq: float, fallback_dur: float) -> void:
 	if not _can_play():
 		return
-	var path := _DIR + file + ".wav"
+	var path := _DIR + file + ".ogg"
 	if ResourceLoader.exists(path):
 		var p := AudioStreamPlayer.new()
 		p.bus = &"UI"

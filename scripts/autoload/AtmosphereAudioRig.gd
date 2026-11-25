@@ -6,9 +6,9 @@ const CUES: Array[StringName] = [&"asphalt", &"metal", &"gravel", &"spark", &"su
 ## Wave 3: the wet night boot steps of the owner's reference.
 const CANON_DIR: String = "res://assets/audio/menu_canon/"
 const STEP_FILES: Array[String] = [
-	"sfx_step_wet_asphalt_01.wav",
-	"sfx_step_wet_asphalt_02.wav",
-	"sfx_step_wet_asphalt_03.wav",
+	"sfx_step_wet_asphalt_01.ogg",
+	"sfx_step_wet_asphalt_02.ogg",
+	"sfx_step_wet_asphalt_03.ogg",
 ]
 
 @export_range(3, 24) var effect_voices: int = 10

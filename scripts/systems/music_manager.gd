@@ -104,7 +104,7 @@ const WOW_CUE_BY_KIND: Dictionary = {
 	"first_light": "res://assets/audio/music/cue_first_light.ogg",
 	"cascade": "res://assets/audio/music/cue_grid_cascade.ogg",
 	"ending": "res://assets/audio/music/cue_victory.ogg",
-	"death": "res://assets/audio/craft/sfx_death_cue.wav",
+	"death": "res://assets/audio/craft/sfx_death_cue.ogg",
 }
 ## MUS6 (rc16 closeout) requires the meaningful stems to sit above -13 dB
 ## at the calm/tense/combat levels; the overall target is met at the Music
@@ -130,7 +130,7 @@ const MOOD_DB_TRIM: Dictionary = {
 }
 const MUTE_DB: float = -60.0
 ## The felt-piano night bed of the owner's reference, under everything else.
-const NOCTURNAL_PATH: String = "res://assets/audio/menu_canon/mus_nocturnal_lantern_loop.wav"
+const NOCTURNAL_PATH: String = "res://assets/audio/menu_canon/mus_nocturnal_lantern_loop.ogg"
 const NOCTURNAL_DB: float = -22.0
 ## How hunted the player is, 0 to 1: it rises 0 to 1 in under a second when a monster closes in or notices the player and falls back in four, and the stems of the three states (calm, tense, combat) follow it.
 const THREAT_RISE: float = 1.2

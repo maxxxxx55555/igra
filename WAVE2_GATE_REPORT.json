@@ -1,0 +1,20 @@
+{
+  "gate_pass": true,
+  "checks": {
+    "wave2_scripts_checked": 4,
+    "wave2_textures_ok": 12,
+    "i18n_keys": 1692,
+    "csv_header": [
+      "keys",
+      "en",
+      "ru"
+    ],
+    "docs_verified": true
+  },
+  "failures": [],
+  "cleanup": {
+    "cache_items_removed": 0,
+    "temp_leftovers": 0,
+    "gc_collected": true
+  }
+}

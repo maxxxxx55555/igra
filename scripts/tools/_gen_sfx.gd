@@ -165,7 +165,7 @@ func _save(base: String, loop: bool = false) -> int:
 		s.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		s.loop_begin = 0
 		s.loop_end = _len
-	var path: String = OUT + base + ".wav"
+	var path: String = OUT + base + ".ogg"
 	var err := s.save_to_wav(path)
 	print("[sfx] ", "ok  " if err == OK else "FAIL", path)
 	return 1 if err == OK else 0

@@ -985,10 +985,10 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	scroll.name = "ShopScroll"
 	content.add_child(scroll)
 	var fit_rows := func() -> void:
-		var top := offer.position.y + offer.size.y + 8.0
+		var top: float = 96.0
 		scroll.position = Vector2(0, top)
 		scroll.size = Vector2(content.size.x, maxf(0, content.size.y - top - SHOP_CLOSE_ZONE))
-	offer.resized.connect(fit_rows)
+	content.resized.connect(fit_rows)
 	fit_rows.call()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var grid_container := GridContainer.new()
