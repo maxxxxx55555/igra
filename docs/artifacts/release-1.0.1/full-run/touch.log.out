@@ -1,1 +1,0 @@
-proof_run touch: exit=0 -> .qa_logs/proofs/touch.out (44 lines)

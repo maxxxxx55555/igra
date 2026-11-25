@@ -1,5 +1,0 @@
-stage forced to 3
-district instantiated
-registered=48
-active_count=8
-after move, active_count=8

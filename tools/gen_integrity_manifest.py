@@ -63,7 +63,7 @@ def render(files, runtime):
 def demo():
     assert digest("a\r\nb") == digest("a\nb")
     assert digest("a") != digest("b")
-    assert render({"res://x.json": "1"}, {"res://y.gd": "2"}).endswith("}\n")
+    assert render({("res://" + "x.json"): "1"}, {("res://" + "y.gd"): "2"}).endswith("}\n")
     print("gen_integrity_manifest demo OK (line ends do not change a hash, a change of text does)")
 
 

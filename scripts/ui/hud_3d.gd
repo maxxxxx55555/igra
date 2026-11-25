@@ -76,9 +76,9 @@ func _ready() -> void:
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
-	hp_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_rust.png")
-	stam_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_cold.png")
-	bat_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_amber.png")
+	hp_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_rust.webp")
+	stam_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_cold.webp")
+	bat_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_amber.webp")
 	var player := get_tree().get_first_node_in_group("player")
 	var hp_ratio := 1.0
 	var stam_ratio := 1.0
@@ -2010,7 +2010,7 @@ func _setup_slot_placeholders() -> void:
 			child.queue_free()
 		# V2 SKIN WIRING P1: real slot chrome texture in place of the flat
 		# color swatch; falls back to the old ColorRect if missing on disk.
-		var chrome_path := "res://assets/textures/ui_craft/quickslot_craft_72.png"
+		var chrome_path := "res://assets/textures/ui_craft/quickslot_craft_72.webp"
 		var legacy_chrome := "res://assets/textures/ui_v2/quickslot_v2_72.png"
 		var border: Control
 		if ResourceLoader.exists(chrome_path) or ResourceLoader.exists(legacy_chrome):

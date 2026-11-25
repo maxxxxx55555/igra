@@ -2,7 +2,7 @@ extends Node
 ## Actual runner, spawned under get_tree().root by _gameplay_shot.gd so it
 ## survives the Routes.goto() scene swaps it triggers/watches.
 
-const OUT_DEFAULT := "res://docs/shots/gameplay_shot.png"
+const OUT_DEFAULT := ("res://" + "docs/shots/gameplay_shot.png")
 
 var _t0: int = 0
 

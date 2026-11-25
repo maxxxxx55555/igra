@@ -163,15 +163,15 @@ func _build_screen(name: String) -> void:
 ## fade already driven by card.modulate - no new logic).
 ## The Gemini art of the main menu's world behind the whole screen of the cards that close a run or sell to it, darkened so the card reads.
 const _SCREEN_ART: Dictionary = {
-	"Death": "res://assets/textures/screens_v2/death_loom.png",
-	"Victory": "res://assets/textures/screens_v2/loading_street.png",
-	"Shop": "res://assets/textures/screens_v2/character_dim.png",
+	"Death": "res://assets/textures/screens_v2/death_loom.webp",
+	"Victory": "res://assets/textures/screens_v2/loading_street.webp",
+	"Shop": "res://assets/textures/screens_v2/character_dim.webp",
 }
 const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.30)
 
 const _CARD_BG_V2: Dictionary = {
-	"Loading": "res://assets/textures/screens_v2/loading_street.png",
-	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.png",
+	"Loading": "res://assets/textures/screens_v2/loading_street.webp",
+	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.webp",
 }
 
 func _apply_card_bg_v2(inner: ColorRect, name: String, w: float, h: float) -> void:
@@ -523,7 +523,7 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 	var branches: Array = FlashlightUpgradeManager.get_all_data()
 	# V2 SKIN WIRING P1: item render, top-right corner, clear of the
 	# coins label and the branch rows below it.
-	var render_path := "res://assets/textures/ui_v2/flashlight_render_512.png"
+	var render_path := "res://assets/textures/ui_v2/flashlight_render_512.webp"
 	if ResourceLoader.exists(render_path):
 		var render := TextureRect.new()
 		render.texture = load(render_path)

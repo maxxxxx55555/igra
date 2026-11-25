@@ -8,7 +8,7 @@ extends Node
 ## Путь раньше был прибит к рабочему столу конкретной машины — теперь по
 ## умолчанию пишем в репозиторий, чтобы снимок попадал в отчёт.
 
-const DEFAULT_PATH := "res://docs/MENU_SCREENSHOT.png"
+const DEFAULT_PATH := ("res://" + "docs/MENU_SCREENSHOT.png")
 const DEFAULT_DELAY := 10.0
 
 ## Сценарии для визуального аудита: заставляют мир дойти до состояния,

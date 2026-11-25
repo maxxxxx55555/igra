@@ -80,7 +80,7 @@ func _build() -> void:
 	_locked.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	index.add_child(_locked)
 	var art := TextureRect.new()
-	art.texture = load("res://assets/textures/screens_v2/journal_paper.png")
+	art.texture = load("res://assets/textures/screens_v2/journal_paper.webp")
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	art.size_flags_horizontal = Control.SIZE_EXPAND_FILL

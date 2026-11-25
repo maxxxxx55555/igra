@@ -40,8 +40,8 @@ var _surfaces: Array[ShaderMaterial] = []
 ## existed anywhere naming the real fuel item at all.
 const GENERATOR_FUEL: StringName = &"gas_canister"
 
-const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
-const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.webp"
+const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.webp"
 ## Wave 2 seamless PBR: asphalt and paving (Albedo / Normal / ORM).
 const W2_ASPHALT_ALBEDO := "res://assets/textures/wave2/wet_asphalt_albedo.png"
 const W2_ASPHALT_NORMAL := "res://assets/textures/wave2/wet_asphalt_normal.png"
@@ -60,17 +60,17 @@ const _PUDDLES_V2 := preload("res://shaders/wet_asphalt_puddle_craft.gdshader")
 ## #142126 mist bounce and the sodium sheen. The v2 craft shader stays as the
 ## Low-tier fallback so no shipped asset is orphaned.
 const _PUDDLES_CANON := preload("res://shaders/menu_canon_wet_asphalt.gdshader")
-const _CANON_ASPHALT_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_asphalt_albedo.png"
-const _CANON_ASPHALT_ROUGH := "res://assets/textures/menu_canon_pbr/menu_asphalt_roughness.png"
-const _CANON_ASPHALT_NORMAL := "res://assets/textures/menu_canon_pbr/menu_asphalt_normal.png"
-const _CANON_PUDDLE_MASK := "res://assets/textures/menu_canon_pbr/menu_asphalt_puddle_mask.png"
-const _V2_ASPHALT_ALBEDO := "res://assets/textures/visual_v2/asphalt_wet_albedo_v2.png"
-const _V2_ASPHALT_ROUGH := "res://assets/textures/visual_v2/asphalt_wet_roughness_v2.png"
-const _V2_ASPHALT_NORMAL := "res://assets/textures/visual_v2/asphalt_wet_normal_v2.png"
-const _V2_PUDDLE_MASK := "res://assets/textures/visual_v2/asphalt_puddle_mask_v2.png"
-const _CRAFT_ASPHALT_ALBEDO := "res://assets/textures/world_craft/asphalt_wet_albedo.png"
-const _CRAFT_ASPHALT_ROUGH := "res://assets/textures/world_craft/asphalt_wet_roughness.png"
-const _CRAFT_ASPHALT_NORMAL := "res://assets/textures/world_craft/asphalt_wet_normal.png"
+const _CANON_ASPHALT_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_asphalt_albedo.webp"
+const _CANON_ASPHALT_ROUGH := "res://assets/textures/menu_canon_pbr/menu_asphalt_roughness.webp"
+const _CANON_ASPHALT_NORMAL := "res://assets/textures/menu_canon_pbr/menu_asphalt_normal.webp"
+const _CANON_PUDDLE_MASK := "res://assets/textures/menu_canon_pbr/menu_asphalt_puddle_mask.webp"
+const _V2_ASPHALT_ALBEDO := "res://assets/textures/visual_v2/asphalt_wet_albedo_v2.webp"
+const _V2_ASPHALT_ROUGH := "res://assets/textures/visual_v2/asphalt_wet_roughness_v2.webp"
+const _V2_ASPHALT_NORMAL := "res://assets/textures/visual_v2/asphalt_wet_normal_v2.webp"
+const _V2_PUDDLE_MASK := "res://assets/textures/visual_v2/asphalt_puddle_mask_v2.webp"
+const _CRAFT_ASPHALT_ALBEDO := "res://assets/textures/world_craft/asphalt_wet_albedo.webp"
+const _CRAFT_ASPHALT_ROUGH := "res://assets/textures/world_craft/asphalt_wet_roughness.webp"
+const _CRAFT_ASPHALT_NORMAL := "res://assets/textures/world_craft/asphalt_wet_normal.webp"
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16

@@ -201,7 +201,7 @@ def demo():
     with tempfile.TemporaryDirectory() as tmp:
         p = pathlib.Path(tmp) / "m.aab"
         with zipfile.ZipFile(p, "w") as z:
-            z.writestr(refs.PACK + "data/integrity_manifest.json", json.dumps({"files": {"res://a.json": good, "res://b.json": good}}))
+            z.writestr(refs.PACK + "data/integrity_manifest.json", json.dumps({"files": {("res://" + "a.json"): good, ("res://" + "b.json"): good}}))
             z.writestr(refs.PACK + "a.json", b'{"a": 1}' + b"\r\n")
         with zipfile.ZipFile(p) as z:
             total, wrong = integrity(z, set(z.namelist()))

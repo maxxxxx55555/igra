@@ -7,7 +7,7 @@ const _TEX_AMMO       := "res://assets/ui/ui_ammo.svg"
 const _TEX_BATTERY    := "res://assets/ui/ui_battery.svg"
 const _TEX_FLASHLIGHT := "res://assets/ui/ui_flashlight.svg"
 const _CRAFT_BATTERY := "res://assets/textures/ui_craft/icon_battery_64.png"
-const _CRAFT_LANTERN := "res://assets/textures/ui_craft/icon_lantern_64.png"
+const _CRAFT_LANTERN := "res://assets/textures/ui_craft/icon_lantern_64.webp"
 
 @onready var _hp_bar:    ProgressBar = $Bars/HPRow/Bar
 @onready var _ammo_bar:  ProgressBar = $Bars/AmmoRow/Bar

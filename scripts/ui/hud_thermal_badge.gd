@@ -14,7 +14,7 @@ func _ready() -> void:
 	add_theme_color_override("font_outline_color", ThemeProvider.COLOR_BG_DARK)
 	add_theme_constant_override("outline_size", 2)
 	var icon := TextureRect.new()
-	icon.texture = preload("res://assets/textures/ui_craft/icon_warmth_64.png")
+	icon.texture = preload("res://assets/textures/ui_craft/icon_warmth_64.webp")
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(icon)

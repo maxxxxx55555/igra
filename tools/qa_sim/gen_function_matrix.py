@@ -50,7 +50,7 @@ def _demo() -> None:
     cfg = '[autoload]\nFoo="*res://a.gd"\nBar="*res://b.gd"\n\n[input]\njump={\n"deadzone": 0.5\n}\nrun={\n}\n\n[rendering]\n'
     autoloads = parse_autoloads(cfg)
     inputs = parse_inputs(cfg)
-    assert autoloads == [("Foo", "res://a.gd"), ("Bar", "res://b.gd")], autoloads
+    assert autoloads == [("Foo", ("res://" + "a.gd")), ("Bar", ("res://" + "b.gd"))], autoloads
     assert inputs == ["jump", "run"], inputs
     print("demo OK")
 

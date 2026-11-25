@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/skill_tree_ui.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/screens_v2/journal_paper.png" id="2_art"]
+[ext_resource type="Texture2D" path="res://assets/textures/screens_v2/journal_paper.webp" id="2_art"]
 
 [node name="SkillTreeUI" type="Control"]
 layout_mode = 1

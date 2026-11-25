@@ -8,7 +8,7 @@ const THICKNESS: float = 0.04
 const ROAD_TOP: float = 0.06  # StreetBuilder.TILE_THICKNESS 0.1 around y 0.01
 const COVER_LIFT: float = 0.01
 const IRON := Color("#2a3340")
-const STEAM_TEXTURE := preload("res://assets/textures/fx/smoke_puff.png")
+const STEAM_TEXTURE := preload("res://assets/textures/fx/smoke_puff.webp")
 const STEAM_AMOUNT: int = 14
 const STEAM_COLOR := Color(0.72, 0.76, 0.80, 0.30)
 

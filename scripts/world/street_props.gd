@@ -42,16 +42,16 @@ const _BRASS := Color("#c9a24a")
 const _HALO_ALPHA: Array[float] = [0.0, 0.12, 0.30, 0.52]
 const _GLOW_TEX := preload("res://scripts/world/district_landmark.gd")
 
-const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
-const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
-const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.png"
-const _TEX_BENCH       := "res://assets/textures/surfaces/bench_wood_512.png"
+const _TEX_BRICK       := "res://assets/textures/environment/brick.webp"
+const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.webp"
+const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.webp"
+const _TEX_BENCH       := "res://assets/textures/surfaces/bench_wood_512.webp"
 ## Wave 4: the traffic cone by the pole was an untextured tan primitive that
 ## read as a beige plastic stump under a sodium lamp. Use the menu-canon
 ## corroded iron maps with a dark tint so it belongs to the wet street.
-const _MENU_IRON_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png"
-const _MENU_IRON_NORMAL := "res://assets/textures/menu_canon_pbr/menu_iron_normal.png"
-const _MENU_IRON_ROUGHNESS := "res://assets/textures/menu_canon_pbr/menu_iron_roughness.png"
+const _MENU_IRON_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp"
+const _MENU_IRON_NORMAL := "res://assets/textures/menu_canon_pbr/menu_iron_normal.webp"
+const _MENU_IRON_ROUGHNESS := "res://assets/textures/menu_canon_pbr/menu_iron_roughness.webp"
 
 ## Returns a StandardMaterial3D with albedo_texture loaded from path.
 ## Falls back to albedo_color if the texture file is missing.

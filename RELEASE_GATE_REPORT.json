@@ -1,49 +1,29 @@
 {
-  "gate_pass": false,
-  "failures": [
-    "media_budget_gate_failed",
-    "repo_size_exceeded:200.49MB>45.0MB",
-    "broken_res_references:10"
-  ],
+  "gate_pass": true,
+  "failures": [],
   "gates": {
     "audit_and_patch_mobile": {
       "exit": 0,
-      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"d3b862679db863e45e2be6fe4b75b35a5198a20d24fcc96999bbc77fc15ae93b\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 200.5\n}"
+      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"de3b2ebec41bb990abd89ac4d12883e22d92ddeca689a650e87ad6ec53d63bfb\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.03\n}"
     },
     "optimize_mobile_media_verify": {
-      "exit": 1,
-      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"37ab22841aa666204242b0865ea98d414bd0267544f447ae98c13b4192a07a65\",\n  \"gate_pass\": false,\n  \"summary\": {\n    \"audio_total\": 240,\n    \"audio_failed\": 38,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 1345,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 155.8\n  }\n}"
+      "exit": 0,
+      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"12a0397be8173927723749d88caf6abcf20bff69260546127b2ca2bf1c40934e\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 34.93\n  }\n}"
     },
     "repo_size_budget": {
-      "total_mb": 200.49,
+      "total_mb": 43.81,
       "max_mb": 45.0,
-      "pass": false
+      "pass": true
     },
     "broken_res_references": {
-      "count": 10,
-      "items": [
-        "scripts/tools/_b9_turntable.gd -> res://.qa_logs/b9_turntable.png",
-        "scripts/tools/_gameplay_shot_runner.gd -> res://docs/shots/gameplay_shot.png",
-        "scripts/tools/_playthrough_runner.gd -> res://.qa_logs/pt_state.json",
-        "scripts/tools/_shot.gd -> res://assets/art/shot_game.png",
-        "scripts/tools/_shot.gd -> res://assets/art/shot_menu.png",
-        "scripts/tools/_shot_3d.gd -> res://assets/art/shot_game_3d.png",
-        "scripts/tools/_shot_3d.gd -> res://assets/art/shot_menu_3d.png",
-        "scripts/tools/rc16/s28_attack_cases.gd -> res://data/no_such_file.json",
-        "scripts/tools/rc16/s29_attack_cases.gd -> res://data/not_a_file.json",
-        "scripts/tools/rc16/sec23_checks.gd -> res://content/not_there.json"
-      ]
+      "count": 0,
+      "items": []
     },
     "overhaul_code_hygiene": {
       "issues": []
     },
     "backup_gdignore": {
       "pass": true
-    },
-    "godot_headless_boot": {
-      "exit": 0,
-      "has_errors": false,
-      "tail": "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org"
     }
   }
 }

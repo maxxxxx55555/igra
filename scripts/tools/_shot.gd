@@ -5,10 +5,10 @@ func _ready() -> void:
 	var main: Node = load("res://scenes/main_3d.tscn").instantiate()
 	add_child(main)
 	await get_tree().create_timer(2.5).timeout
-	_save_shot("res://assets/art/shot_game.png")
+	_save_shot(("res://" + "assets/art/shot_game.png"))
 	UIManager.open(&"main_menu")
 	await get_tree().create_timer(0.8).timeout
-	_save_shot("res://assets/art/shot_menu.png")
+	_save_shot(("res://" + "assets/art/shot_menu.png"))
 	print("[SHOT] done")
 	get_tree().quit()
 

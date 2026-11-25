@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_heart.svg" id="3_heart"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui_craft/hud_bar_frame_9slice.png" id="11_bartrack"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui_craft/hud_bar_frame_9slice.webp" id="11_bartrack"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/crosshair_64.png" id="9_crosshair"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/hitmarker_64.png" id="10_hitmarker"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_interact.svg" id="4_interact"]

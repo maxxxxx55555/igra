@@ -12,7 +12,7 @@
     "status": "CLEAN",
     "changes_count": 0,
     "changes": [],
-    "sha256": "e80fc64f8196aac91922df6e2178d121d868a5a87dcc2d64f63ae674be784821"
+    "sha256": "785365406c7beb086e3910c462b2e173b5b534c115f8be64e6c81525068ff2c1"
   },
   "wifi_bonus_audit": {
     "wifi_hits_count": 0,
@@ -25,7 +25,7 @@
     "ui_findings": []
   },
   "assets": {
-    "repo_asset_total_mb": 200.5,
+    "repo_asset_total_mb": 44.03,
     "issues_count": 0,
     "issues": []
   }

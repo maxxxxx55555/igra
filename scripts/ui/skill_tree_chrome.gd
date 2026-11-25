@@ -20,7 +20,7 @@ const PATHS_NAME := "UnlockPaths"
 ## The shop uses this same dim street as its screen art; reusing it makes the
 ## skill tree read as the same game instead of a flat black wall. Project-owned
 ## Gemini art, documented in docs/ASSET_LICENSES.md.
-const BACKDROP := "res://assets/textures/screens_v2/character_dim.png"
+const BACKDROP := "res://assets/textures/screens_v2/character_dim.webp"
 
 func _ready() -> void:
 	call_deferred("_build")

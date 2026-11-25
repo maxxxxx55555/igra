@@ -10,7 +10,7 @@ const KIT := preload("res://scripts/ui/inv_kit.gd")
 const QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const QUICK_CELL := preload("res://scripts/ui/quick_slot_cell.gd")
 const ITEM_ICONS := preload("res://scripts/ui/item_icons.gd")
-const SURVIVOR := preload("res://assets/textures/screens_v2/character_dim.png")
+const SURVIVOR := preload("res://assets/textures/screens_v2/character_dim.webp")
 ## The survivor of that art, cut out of its 1920 x 1080 frame for the equipment column.
 const SURVIVOR_CROP := Rect2(640.0, 300.0, 640.0, 693.0)
 const CANVAS := Vector2(1280.0, 720.0)

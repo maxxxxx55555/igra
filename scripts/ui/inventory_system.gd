@@ -16,14 +16,14 @@ const MAX_WEIGHT: float = 40.0
 var current_weight: float = 0.0
 var is_open: bool = false
 var items_db: Dictionary = {
-	"medkit": {"name": "Aptechka", "weight": 0.5, "icon": "res://assets/textures/items/medkit.png", "type": "consumable", "effect": "heal", "value": 25},
-	"flashlight": {"name": "Fonarik", "weight": 0.8, "icon": "res://assets/textures/items/flashlight.png", "type": "tool"},
-	"can_food": {"name": "Konservy", "weight": 0.4, "icon": "res://assets/textures/items/can_food.png", "type": "consumable", "effect": "hunger", "value": 20},
-	"key": {"name": "Kljuch", "weight": 0.1, "icon": "res://assets/textures/items/key.png", "type": "key"},
-	"water": {"name": "Voda", "weight": 0.6, "icon": "res://assets/textures/items/water.png", "type": "consumable", "effect": "thirst", "value": 30},
-	"wrench": {"name": "Gaechnyj kljuch", "weight": 1.2, "icon": "res://assets/textures/items/wrench.png", "type": "tool"},
-	"backpack": {"name": "Rjuzak", "weight": 1.0, "icon": "res://assets/textures/items/backpack.png", "type": "container"},
-	"pistol": {"name": "Pistolet", "weight": 1.5, "icon": "res://assets/textures/items/pistol.png", "type": "weapon"}
+	"medkit": {"name": "Aptechka", "weight": 0.5, "icon": "res://assets/textures/items/medkit.webp", "type": "consumable", "effect": "heal", "value": 25},
+	"flashlight": {"name": "Fonarik", "weight": 0.8, "icon": "res://assets/textures/items/flashlight.webp", "type": "tool"},
+	"can_food": {"name": "Konservy", "weight": 0.4, "icon": "res://assets/textures/items/can_food.webp", "type": "consumable", "effect": "hunger", "value": 20},
+	"key": {"name": "Kljuch", "weight": 0.1, "icon": "res://assets/textures/items/key.webp", "type": "key"},
+	"water": {"name": "Voda", "weight": 0.6, "icon": "res://assets/textures/items/water.webp", "type": "consumable", "effect": "thirst", "value": 30},
+	"wrench": {"name": "Gaechnyj kljuch", "weight": 1.2, "icon": "res://assets/textures/items/wrench.webp", "type": "tool"},
+	"backpack": {"name": "Rjuzak", "weight": 1.0, "icon": "res://assets/textures/items/backpack.webp", "type": "container"},
+	"pistol": {"name": "Pistolet", "weight": 1.5, "icon": "res://assets/textures/items/pistol.webp", "type": "weapon"}
 }
 
 func _ready() -> void:

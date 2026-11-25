@@ -12,7 +12,7 @@ const BEAM_BOX := Vector3(1.3, 2.2, 1.3)  # half sizes
 ## Visual overhaul v2: a soft radial sodium mote with alpha=0 at the border,
 ## so a lamp beam no longer shows the square edge of the old dust sprite.
 ## EMITTERS * EMITTER_AMOUNT = 24 particles, far below the VFX 500 budget.
-const MOTE_TEXTURE := preload("res://assets/textures/visual_v2/fx_sodium_mote_soft_128.png")
+const MOTE_TEXTURE := preload("res://assets/textures/visual_v2/fx_sodium_mote_soft_128.webp")
 const MOTE_COLOR := Color(0.95, 0.86, 0.62, 0.3)
 
 var _emitters: Array[GPUParticles3D] = []

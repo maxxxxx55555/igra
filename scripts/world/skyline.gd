@@ -36,46 +36,46 @@ const SHELL_DEPTH := 0.30
 const OPEN_X := 1.16
 const OPEN_Y := 1.52
 const FACADE_TEX_LOW := {
-	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.png",
-	&"residential": "res://assets/textures/pbr/painted_brick_albedo.png",
-	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"school": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"hospital": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"police": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"industrial": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
-	&"substation": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
-	&"power_station": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png",
+	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.webp",
+	&"residential": "res://assets/textures/pbr/painted_brick_albedo.webp",
+	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"school": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"hospital": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"police": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"industrial": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
+	&"substation": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
+	&"power_station": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
 }
 ## Wave 3: the menu-canon peeling plaster for the city districts and the
 ## corroded cast iron for the industrial ones - the reference's raw, damp
 ## surfaces. The old pbr/v2 maps stay as the Low-tier fallback, so no shipped
 ## texture is orphaned.
 const FACADE_TEX_CANON := {
-	&"suburbs": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"residential": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"park": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"school": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"hospital": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"gas_station": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"police": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.png",
-	&"warehouses": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
-	&"industrial": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
-	&"substation": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
-	&"power_station": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png",
+	&"suburbs": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"residential": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"park": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"school": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"hospital": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"gas_station": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"police": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"warehouses": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"industrial": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"substation": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"power_station": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
 }
-const MENU_FACADE_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_facade_normal.png")
-const MENU_FACADE_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_facade_roughness.png")
-const MENU_IRON_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_iron_normal.png")
-const MENU_IRON_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_iron_roughness.png")
+const MENU_FACADE_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_facade_normal.webp")
+const MENU_FACADE_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_facade_roughness.webp")
+const MENU_IRON_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_iron_normal.webp")
+const MENU_IRON_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_iron_roughness.webp")
 ## Visual overhaul v2: weathered concrete with baked roughness in 0.72–0.98.
 ## The world_craft pair stays as the Low-tier fallback so the craft set is not orphaned.
-const V2_FACADE_ALBEDO := "res://assets/textures/visual_v2/facade_concrete_albedo_v2.png"
-const V2_FACADE_NORMAL := preload("res://assets/textures/visual_v2/facade_concrete_normal_v2.png")
-const V2_FACADE_ROUGHNESS := preload("res://assets/textures/visual_v2/facade_concrete_roughness_v2.png")
-const CONCRETE_NORMAL := preload("res://assets/textures/world_craft/facade_concrete_normal.png")
-const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_concrete_roughness.png")
+const V2_FACADE_ALBEDO := "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp"
+const V2_FACADE_NORMAL := preload("res://assets/textures/visual_v2/facade_concrete_normal_v2.webp")
+const V2_FACADE_ROUGHNESS := preload("res://assets/textures/visual_v2/facade_concrete_roughness_v2.webp")
+const CONCRETE_NORMAL := preload("res://assets/textures/world_craft/facade_concrete_normal.webp")
+const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_concrete_roughness.webp")
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
@@ -411,16 +411,16 @@ func _concrete_material() -> StandardMaterial3D:
 		# Low tier keeps the world_craft maps; the menu-canon plaster (city) or
 		# the corroded cast iron (industrial) otherwise.
 		var low_tier: bool = int(SettingsManager.get_setting("graphics_tier", 2)) <= 0
-		var industrial: bool = FACADE_TEX_CANON.get(_district_id, "") == "res://assets/textures/menu_canon_pbr/menu_iron_albedo.png"
+		var industrial: bool = FACADE_TEX_CANON.get(_district_id, "") == "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp"
 		if low_tier:
 			_concrete_detail.normal_texture = CONCRETE_NORMAL
 			_concrete_detail.roughness_texture = CONCRETE_ROUGHNESS
 		elif industrial:
-			_concrete_detail.normal_texture = MENU_IRON_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_normal.png") else V2_FACADE_NORMAL
-			_concrete_detail.roughness_texture = MENU_IRON_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_roughness.png") else V2_FACADE_ROUGHNESS
+			_concrete_detail.normal_texture = MENU_IRON_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_normal.webp") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_IRON_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_roughness.webp") else V2_FACADE_ROUGHNESS
 		else:
-			_concrete_detail.normal_texture = MENU_FACADE_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_normal.png") else V2_FACADE_NORMAL
-			_concrete_detail.roughness_texture = MENU_FACADE_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_roughness.png") else V2_FACADE_ROUGHNESS
+			_concrete_detail.normal_texture = MENU_FACADE_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_normal.webp") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_FACADE_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_roughness.webp") else V2_FACADE_ROUGHNESS
 		_concrete_detail.normal_scale = 0.5
 		# The maps are baked inside [0.72, 0.98]; multiply by 1.0 to keep them exact.
 		_concrete_detail.roughness = 1.0

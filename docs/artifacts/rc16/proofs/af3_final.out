@@ -1,7 +1,0 @@
-# proof af3_final
-# utc 20261010T203418Z
-# head cdf90cf (uncommitted paths: 4)
-# env none
-# cmd python tools/qa_sim/af3_frame_check.py
-af3 frames=50 fail=0
-# EXIT=0

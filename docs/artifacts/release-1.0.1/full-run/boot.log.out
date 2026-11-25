@@ -1,1 +1,0 @@
-proof_run boot: exit=0 -> .qa_logs/proofs/boot.out (29 lines)

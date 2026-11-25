@@ -45,10 +45,10 @@ static func build(screen: Control) -> VBoxContainer:
 ## assets/store/endings/ were flat procedural skylines and are no longer read).
 const ENDING_ART: Dictionary = {
 	"light": "res://assets/ui/menu_city.png",
-	"hope": "res://assets/textures/screens_v2/loading_street.png",
-	"survivor": "res://assets/textures/screens_v2/character_dim.png",
-	"dark": "res://assets/textures/screens_v2/death_loom.png",
-	"truth": "res://assets/textures/screens_v2/journal_paper.png",
+	"hope": "res://assets/textures/screens_v2/loading_street.webp",
+	"survivor": "res://assets/textures/screens_v2/character_dim.webp",
+	"dark": "res://assets/textures/screens_v2/death_loom.webp",
+	"truth": "res://assets/textures/screens_v2/journal_paper.webp",
 }
 
 static func set_ending(screen: Control, id: StringName) -> void:
