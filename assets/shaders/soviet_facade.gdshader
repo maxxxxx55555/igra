@@ -1,4 +1,4 @@
-// soviet_facade.gdshader — GL Compatibility / mobile-safe, single pass, one texture.
+// soviet_facade.gdshader — GL Compatibility / mobile-safe, single pass.
 // Weathered panel-block facades for the skyline ring (docs/STYLE_GUIDE.md, the Soviet canon of Session 27): the seams of
 // the concrete panels, a rain stain under every window, ragged patches where the whitewash has flaked off, and rust that
 // drips from the cornice. The front of a block is not one box: scripts/world/skyline.gd builds it as piers and bands around
@@ -18,7 +18,8 @@ uniform vec3 glow = vec3(0.5, 0.67, 1.0);
 uniform float gain : hint_range(0.0, 3.0) = 0.4;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
 uniform sampler2D facade_tex : source_color, filter_linear_mipmap, repeat_enable;
-uniform sampler2D facade_nrm : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform sampler2D facade_nrm : hint_normal, filter_linear_mipmap, repeat_enable;
+uniform sampler2D facade_roughness : hint_default_white, filter_linear_mipmap, repeat_enable;
 uniform float tex_scale = 0.34;
 uniform vec3 rust = vec3(0.30, 0.17, 0.10);  // linear: what the drip adds is a fraction of it
 
@@ -113,7 +114,10 @@ void fragment() {
 	EMISSION = glow * gain * keep * lift * lamp;
 	// the whitewash keeps a faint sheen that the flaked patches have lost: a lamp shows where the paint is peeling
 	NORMAL_MAP = texture(facade_nrm, tuv).rgb;
-	NORMAL_MAP_DEPTH = 0.7 * step(0.5, detail);
-	ROUGHNESS = 0.7 + 0.3 * flake;
+	NORMAL_MAP_DEPTH = 0.5 * step(0.5, detail);
+	ROUGHNESS = 1.0;
+	if (detail > 0.5) {
+		ROUGHNESS = mix(clamp(texture(facade_roughness, tuv).r, 0.70, 1.0), 1.0, flake);
+	}
 	SPECULAR = 0.25 * (1.0 - flake) * step(0.5, detail);
 }

@@ -105,28 +105,17 @@ genuinely has no parts, treat as P0 and re-run the suite.
 
 **EN**
 ```
-To be clear on how it works: there's no paywalled content and no season
-pass — every district, ending and upgrade is reachable for free. Ads are
-opt-in rewarded (revive / extra battery) plus one interstitial on
-district travel with a cooldown, never during combat. If you're seeing
-ads at other times, that's a bug — tell us your device and when it
-happened and we'll fix it.
+Last Streetlight has no ads or paid upgrades. Every district and ending can be played offline.
+You can claim an optional bonus when connected to Wi-Fi on Android or a network on desktop or web.
+The game checks the connection locally. Skipping a bonus costs nothing.
 ```
 **RU**
 ```
-Как это устроено: платного контента и сезонного пропуска нет — все
-районы, концовки и улучшения доступны бесплатно. Реклама — это
-добровольные вознаграждаемые ролики (возрождение / доп. батарея) и один
-межстраничный ролик при переходе между районами с задержкой, никогда во
-время боя. Если реклама показывается в другое время — это ошибка,
-напишите устройство и момент, поправим.
+В Last Streetlight нет рекламы и платных улучшений. Все районы и концовки доступны без интернета.
+При подключении к Wi-Fi на Android или к сети на компьютере и в браузере можно получить
+необязательный бонус. Игра проверяет подключение на устройстве. За отказ от бонуса нет штрафа.
 ```
-**Escalation (owner):** ad timing is enforced in `AdService` (interstitial
-180 s cooldown, gated off combat) and regression-checked by
-`boot_check_scene.tscn` phase 2b ("no ad before first input"). If a
-review credibly reports mid-combat or pre-input ads, that's a P0
-regression in `AdService`. Note the build currently ships the no-key
-debug stub (no real ads) until the owner sets a live AppLovin key.
+**Escalation (owner):** If a player reports advertising, confirm the build and distribution channel.
 
 ## Class 5 — Praise + feature request
 
@@ -200,6 +189,6 @@ only that the backup exists and we'll check it.
 | "crashes", "black screen", "won't open" | 1 | `crash` — new P0 until reproduced |
 | "lag", "stutter", "hot", "drains battery", "fps" | 2 | `perf` — `KNOWN_ISSUES` draw-calls entry (accepted state) |
 | "stuck", "can't finish", "no parts", "too hard", "lost" | 3 | `progression` — verify `DistrictLoot.populate()` |
-| "too many ads", "pay to win", "cash grab" | 4 | `ads` — `AdService` timing, usually a misunderstanding |
+| "too many ads", "pay to win", "cash grab" | 4 | `ads` — verify the installed build and distribution channel |
 | 4–5★ + "please add…" | 5 | `request` — log in `GAP_TO_IDEAL.md` |
 | "lost my save", "progress gone", "save corrupted/deleted" | 6 | `saveloss` — no known open defect; credible repro = new P0 |

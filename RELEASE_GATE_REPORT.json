@@ -1,0 +1,29 @@
+{
+  "gate_pass": true,
+  "failures": [],
+  "gates": {
+    "audit_and_patch_mobile": {
+      "exit": 0,
+      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"ac9b5322092c5ab93cb193028eaa42764168683d7f13b5c59e7a5a7d0288acdf\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.96\n}"
+    },
+    "optimize_mobile_media_verify": {
+      "exit": 0,
+      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"f7ad3fe4ea7be075969240ac4e29df5fa01d306ec74338752ef34b5fae0285e3\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 36.26\n  }\n}"
+    },
+    "repo_size_budget": {
+      "total_mb": 44.96,
+      "max_mb": 45.0,
+      "pass": true
+    },
+    "broken_res_references": {
+      "count": 0,
+      "items": []
+    },
+    "overhaul_code_hygiene": {
+      "issues": []
+    },
+    "backup_gdignore": {
+      "pass": true
+    }
+  }
+}

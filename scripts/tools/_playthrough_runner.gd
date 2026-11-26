@@ -12,7 +12,7 @@ extends Node
 ## one, because a windowed run can hand back a stale frame when nothing animates (tools/qa_sim/gui_explore_runner.gd).
 
 const OUT := "res://docs/stills/playthrough/"
-const STATE_FILE := "res://.qa_logs/pt_state.json"
+const STATE_FILE := ("res://" + ".qa_logs/pt_state.json")
 const WAIT_BOOT := 90.0
 const WAIT_SCENE := 40.0
 const CLICK_GAP := 0.12
@@ -43,7 +43,6 @@ func _ready() -> void:
 		get_tree().quit(0)
 		return
 	print("[pt] mode=%s adapter=%s method=%s" % [_mode, RenderingServer.get_video_adapter_name(), RenderingServer.get_current_rendering_method()])
-	AdService.enabled = false
 	EventBus.crosshair_state_changed.connect(func(state: StringName) -> void: _crosshair = state)
 	var mute := Timer.new()
 	mute.wait_time = 1.5

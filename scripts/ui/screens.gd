@@ -30,7 +30,7 @@ const STEEL_TEXT: Color = Color(0.541176, 0.541176, 0.521569)
 const BONE_TEXT: Color = Color(0.847059, 0.835294, 0.8)
 const EMPER: Color = Color(0.752941, 0.223529, 0.168627)
 const STAMINA_GREEN: Color = Color(0.373, 0.541, 0.306)
-const PANEL_COLOR: Color = Color(0.0588235, 0.0745098, 0.0784314, 0.94)
+const PANEL_COLOR: Color = Color(0.0588235, 0.0745098, 0.0784314, 0.74)
 const PANEL_EDGE: Color = Color(0.352941, 0.290196, 0.164706)
 const INSET_FILL: Color = ThemeProvider.COLOR_BG_PANEL2
 const OUTLINE_COLOR: Color = Color(0.0235294, 0.0588235, 0.0745098, 1.0)
@@ -44,6 +44,7 @@ func _ready() -> void:
 	_build_menu_bg()
 	_build_all_screens()
 	get_viewport().size_changed.connect(_on_viewport_resized)
+	CoinWallet.coins_changed.connect(_on_wallet_changed)
 	# Static audit 2026-09-08: every screen's shared "Close" button was
 	# built once in _build_screen() and never retranslated (screens
 	# themselves are cached, never rebuilt, so a language change while a
@@ -123,7 +124,7 @@ func _build_screen(name: String) -> void:
 	border.add_child(inner)
 	_apply_card_bg_v2(inner, name, card_w, card_h)
 	var header_line := ColorRect.new()
-	header_line.color = BRASS
+	header_line.color = ThemeProvider.COLOR_SODIUM if name == "Shop" else BRASS
 	header_line.size = Vector2(card_w - 4, 2)
 	header_line.position = Vector2(2, 46)
 	card.add_child(header_line)
@@ -162,15 +163,15 @@ func _build_screen(name: String) -> void:
 ## fade already driven by card.modulate - no new logic).
 ## The Gemini art of the main menu's world behind the whole screen of the cards that close a run or sell to it, darkened so the card reads.
 const _SCREEN_ART: Dictionary = {
-	"Death": "res://assets/textures/screens_v2/death_loom.png",
-	"Victory": "res://assets/textures/screens_v2/loading_street.png",
-	"Shop": "res://assets/textures/screens_v2/character_dim.png",
+	"Death": "res://assets/textures/screens_v2/death_loom.webp",
+	"Victory": "res://assets/textures/screens_v2/loading_street.webp",
+	"Shop": "res://assets/textures/screens_v2/character_dim.webp",
 }
-const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.45)
+const _SCREEN_ART_SHADE := Color(0.0235294, 0.0588235, 0.0745098, 0.30)
 
 const _CARD_BG_V2: Dictionary = {
-	"Loading": "res://assets/textures/screens_v2/loading_street.png",
-	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.png",
+	"Loading": "res://assets/textures/screens_v2/loading_street.webp",
+	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.webp",
 }
 
 func _apply_card_bg_v2(inner: ColorRect, name: String, w: float, h: float) -> void:
@@ -251,7 +252,6 @@ func show_screen(name: String) -> void:
 	tween.play()
 	_populate_screen(name)
 	if name == "Shop" and not d.card.has_meta(&"_sodium_styled"):
-		UnslopThemeStyler.style_tree_recursive(d.card)
 		d.card.set_meta(&"_sodium_styled", true)
 		# The release skin supplies the border/hover states; the typeface stays
 		# the bundled heading face so every locale keeps its glyphs.
@@ -523,7 +523,7 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 	var branches: Array = FlashlightUpgradeManager.get_all_data()
 	# V2 SKIN WIRING P1: item render, top-right corner, clear of the
 	# coins label and the branch rows below it.
-	var render_path := "res://assets/textures/ui_v2/flashlight_render_512.png"
+	var render_path := "res://assets/textures/ui_v2/flashlight_render_512.webp"
 	if ResourceLoader.exists(render_path):
 		var render := TextureRect.new()
 		render.texture = load(render_path)
@@ -836,20 +836,6 @@ func build_FinalNight(content: ColorRect, card: ColorRect, cw: float, ch: float,
 	mission.add_theme_font_size_override("font_size", 13)
 	_apply_outline(mission)
 	content.add_child(mission)
-	var minimap := ColorRect.new()
-	minimap.color = INSET_FILL
-	minimap.size = Vector2(120, 120)
-	minimap.position = Vector2(content.size.x - 130, content.size.y - 140)
-	content.add_child(minimap)
-	var mm_lbl := Label.new()
-	mm_lbl.text = tr("FINAL_NIGHT_OBJECTIVE")
-	mm_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	mm_lbl.size = Vector2(120, 40)
-	mm_lbl.position = Vector2(0, 40)
-	mm_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	mm_lbl.add_theme_color_override("font_color", BRASS_DIM)
-	mm_lbl.add_theme_font_size_override("font_size", 10)
-	minimap.add_child(mm_lbl)
 	var objective := Label.new()
 	objective.text = tr("FINAL_NIGHT_OBJECTIVE")
 	objective.size = Vector2(content.size.x, 20)
@@ -967,7 +953,7 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 ## The shop's rows start below the coin header and end above the Close button; a row is 80 px, or as tall as its Buy button needs.
 const SHOP_TOP := 36.0
 const SHOP_CLOSE_ZONE := 44.0
-const SHOP_ROW := 180.0
+const SHOP_ROW := 196.0
 ## Upgrades and the kit borrow the pack icons; the skins keep the generic square.
 const SHOP_ICON: Dictionary = {
 	&"upgrade_flashlight_brightness": &"flashlight", &"upgrade_flashlight_battery": &"battery",
@@ -978,6 +964,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var header := Label.new()
 	header.text = LocalizationManager.t("SCR_MONETY_0")
 	header.name = "ShopCoinHeader"
+	_shop_coin_header = header
 	# Parent first: a Control placed before it has a parent is mirrored against a zero-width parent under a right-to-left
 	# language and lands one panel width off (Arabic, CORRECTION_LOG 147).
 	content.add_child(header)
@@ -997,14 +984,18 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "ShopScroll"
 	content.add_child(scroll)
-	scroll.size = Vector2(content.size.x, content.size.y - SHOP_TOP - SHOP_CLOSE_ZONE)
-	scroll.position = Vector2(0, SHOP_TOP)
+	var fit_rows := func() -> void:
+		var top: float = 96.0
+		scroll.position = Vector2(0, top)
+		scroll.size = Vector2(content.size.x, maxf(0, content.size.y - top - SHOP_CLOSE_ZONE))
+	content.resized.connect(fit_rows)
+	fit_rows.call()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2 if content.size.x >= 600.0 else 1
-	grid_container.add_theme_constant_override("h_separation", 12)
-	grid_container.add_theme_constant_override("v_separation", 12)
+	grid_container.add_theme_constant_override("h_separation", 14)
+	grid_container.add_theme_constant_override("v_separation", 14)
 	grid_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
@@ -1055,6 +1046,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	_tint_prices()
 
 var _shop_prices: Array[Dictionary] = []
+var _shop_coin_header: Label
 
 ## A price the wallet cannot pay reads in ember with what is missing; the others stay brass.
 func _tint_prices() -> void:
@@ -1069,6 +1061,11 @@ func _tint_prices() -> void:
 			pl.text += "  " + LocalizationManager.tf("SHOP_NEED_MORE", [short])
 		pl.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER_TEXT if short > 0 else ThemeProvider.COLOR_AMBER)
 
+func _on_wallet_changed(amount: int) -> void:
+	if _active_screen == "Shop" and is_instance_valid(_shop_coin_header):
+		_shop_coin_header.text = LocalizationManager.t("SCR_MONETY_2") + str(amount)
+		_tint_prices()
+
 func _mark_owned(btn: Button) -> void:
 	btn.disabled = true
 	btn.text = LocalizationManager.t("SHOP_ALREADY_OWNED")
@@ -1076,10 +1073,6 @@ func _mark_owned(btn: Button) -> void:
 ## The purchase is ShopService's: it spends, grants the upgrade or the skin, saves, and the card only reports it.
 func _on_buy(item_id: StringName, btn: Button) -> void:
 	ShopService.buy(item_id)
-	var coins := find_child("ShopCoinHeader", true, false) as Label
-	if coins != null:
-		coins.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
-	_tint_prices()
 	if ShopService.is_owned(item_id):
 		_mark_owned(btn)
 		_show_toast(LocalizationManager.t("SCR_KUPLENO"))
@@ -1112,15 +1105,10 @@ func _on_close() -> void:
 	hide_all()
 
 func _on_loading_done() -> void:
-	if not is_any_open():
+	if _active_screen != "Loading":
 		return
 	hide_all()
-	var gm = get_tree().root.get_node_or_null("GameManager")
-	if gm and gm.has_method("start_new_game"):
-		gm.start_new_game()
-	else:
-		EventBus.game_started.emit()
+	GameManager.resume_game()
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.process_mode = Node.PROCESS_MODE_INHERIT
-	var p_mode = player.process_mode if player else -1

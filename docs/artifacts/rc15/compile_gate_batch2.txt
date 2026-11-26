@@ -1,1 +1,0 @@
-COMPILE_GATE bad=0

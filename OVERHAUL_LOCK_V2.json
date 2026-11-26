@@ -1,0 +1,92 @@
+{
+  "manifest": "OVERHAUL_LOCK_V2.json",
+  "version": "2.0.0",
+  "screenshot_diagnosis_fixes": [
+    "REMOVE_STUCK_WIFI_BONUS_WIDGET_AND_ONLINE_CHECKS",
+    "REPLACE_15_PLUS_SCATTERED_OVERLAPPING_BUTTONS_WITH_FREE_FIRE_HUD",
+    "FIX_WALK_THROUGH_MULTISTORY_BUILDINGS_AND_ADD_PERIMETER_BOUNDS",
+    "ADD_ILLUMINATION_ONLY_FOG_OF_WAR_MAP_NO_ENEMY_OR_ITEM_SPOILERS",
+    "ADD_ACTIVE_STALKER_AI_ENEMIES_REACTING_TO_LIGHT_AND_NOISE",
+    "ADD_CLEAR_DISTRICT_LOOP_AND_ILLUMINATED_TRANSITION_GATES",
+    "FIX_CRUSHED_PITCH_BLACK_FOREGROUND_WITH_NOCTURNAL_CONTRAST_LIGHTING",
+    "ENFORCE_SAMSUNG_A32_4GB_MALI_G52_20_9_AND_55MB_APK_BUDGET"
+  ],
+  "target_device": {
+    "model": "Samsung Galaxy A32",
+    "ram_total_mb": 4096,
+    "ram_app_rss_budget_mb": 420,
+    "gpu": "Mali-G52 MC2",
+    "renderer": "gl_compatibility",
+    "display_px": [
+      1080,
+      2400
+    ],
+    "aspect_ratio": "20:9",
+    "fps_target": 60,
+    "fps_floor": 30,
+    "frame_p95_ms": 28.0
+  },
+  "size_budget_nfs_mw_model": {
+    "apk_max_mb": 55,
+    "repo_assets_max_mb": 45,
+    "abi": "arm64-v8a",
+    "texture_compression": "ETC2_ASTC",
+    "max_prop_tex_px": 512,
+    "max_ui_or_trim_tex_px": 1024,
+    "music_format": "ogg_vorbis_stereo_48khz_96kbps",
+    "sfx_format": "ogg_vorbis_mono_48khz_64kbps",
+    "music_lufs_target": -16.0,
+    "audio_true_peak_dbtp_max": -1.0,
+    "max_dynamic_lights": 3,
+    "max_draw_calls": 120,
+    "max_vram_mb": 128,
+    "max_audio_voices": 24
+  },
+  "hud_free_fire_lock": {
+    "always_visible_controls": [
+      "joystick_left",
+      "btn_interact_primary",
+      "btn_flashlight",
+      "btn_crouch_stealth",
+      "btn_sprint",
+      "btn_map_quick",
+      "btn_drawer_toggle",
+      "compact_status_strip",
+      "collapsible_objective_pill",
+      "clean_3_slot_hotbar"
+    ],
+    "drawer_controls": [
+      "inventory",
+      "log",
+      "audio_mute",
+      "hud_edit",
+      "settings"
+    ],
+    "removed_controls": [
+      "wifi_bonus_panel",
+      "duplicate_sprint_chevrons",
+      "overlapping_bottom_micro_buttons"
+    ],
+    "touch_targets_mm": {
+      "primary_min": 11.8,
+      "secondary_min": 9.2,
+      "joystick_diameter": 24.5
+    }
+  },
+  "fog_of_war_map_rules": {
+    "reveals_buildings_and_streets_when_illuminated": true,
+    "reveals_discovered_district_gates": true,
+    "shows_enemies": false,
+    "shows_items_or_scrap": false,
+    "grid_resolution_m": 4.0
+  },
+  "gameplay_loop_lock": {
+    "district_stages": [
+      "1_EXPLORE_AND_SCAVENGE_SCRAP_UNDER_STALKER_THREAT",
+      "2_REPAIR_DISTRICT_RELAY_FUSEBOX_WITH_SCRAP",
+      "3_POWER_RESTORES_STREETLIGHT_SAFE_ZONE_AND_UNLOCKS_NEXT_DISTRICT_GATE",
+      "4_PASS_THROUGH_ILLUMINATED_GATE_TO_NEXT_LOCATION"
+    ],
+    "offline_battery_recharge": "Streetlight safe zones + scavenged battery cells (zero Wi-Fi/internet dependency)"
+  }
+}

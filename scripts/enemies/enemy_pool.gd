@@ -58,7 +58,12 @@ var _active: int = 0
 func spawn_for_district(parent: Node3D) -> Array[Node3D]:
 	var district_id: StringName = _district_of(parent)
 	var roster: Array = _roster_for(district_id)
-	var points: Array[Vector3] = _district_spawn_points(parent, _target_count(district_id))
+	var wanted: int = _target_count(district_id)
+	var raw_points: Array[Vector3] = _district_spawn_points(parent, wanted)
+	var player_start: Vector3 = parent.global_position + Vector3(-8.0, 0.0, -8.0)
+	var points: Array[Vector3] = Wave2DistrictFlow.filter_safe_mob_spawns(raw_points, player_start, maxi(3, mini(wanted, 6)))
+	if points.is_empty():
+		points = raw_points
 	var spawned: Array[Node3D] = []
 	for i in points.size():
 		var scene: PackedScene = roster[i % roster.size()] if not roster.is_empty() else enemy_scene
@@ -92,18 +97,21 @@ func _roster_for(district_id: StringName) -> Array:
 ## Чем темнее район, тем больше врагов: DARK/PARTIAL — плюс половина состава,
 ## полностью освещённый район заметно спокойнее.
 func _target_count(district_id: StringName) -> int:
-	var base: int = MIN_ENEMIES_PER_DISTRICT
 	var pg := get_node_or_null("/root/PowerGrid")
 	if pg == null or not pg.has_method("get_stage"):
-		return base
+		return MIN_ENEMIES_PER_DISTRICT
 	var stage: int = int(pg.get_stage(district_id))
-	if stage <= 0:
-		return base + 3
-	if stage == 1:
-		return base + 2
-	if stage == 2:
-		return base + 1
-	return base
+	## Authored per-district pressure: the dark streets are dense, a fully
+	## restored district thins out. Clamped to the pool budget so the A32
+	## draw-call / light ceilings survive the finale.
+	var authored: int = MIN_ENEMIES_PER_DISTRICT
+	if pg.has_method("get_district"):
+		var data: Variant = pg.call("get_district", district_id)
+		if data is DistrictData:
+			authored = clampi((data as DistrictData).enemy_count, MIN_ENEMIES_PER_DISTRICT, max_active)
+	var stage_factor: Array[float] = [1.0, 0.85, 0.7, 0.55]
+	var factor: float = stage_factor[clampi(stage, 0, stage_factor.size() - 1)]
+	return clampi(int(round(float(authored) * factor)), MIN_ENEMIES_PER_DISTRICT, max_active)
 
 func try_spawn(scene: PackedScene, pos: Vector3, parent: Node) -> Node3D:
 	if scene == null or parent == null or _active >= max_active:

@@ -7,3 +7,6 @@ display_name = "АЗС"
 stage = 0
 powered_by = [&"park"]
 map_position = Vector2(180, 180)
+fog_density = 0.017
+cold_mult = 0.85
+enemy_count = 3

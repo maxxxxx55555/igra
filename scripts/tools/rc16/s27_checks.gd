@@ -40,7 +40,11 @@ static func _streets(r: Node) -> void:
 	var road := ((builder.get("_road_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var walk := ((builder.get("_sidewalk_mm") as MultiMeshInstance3D).multimesh.mesh as BoxMesh).material as ShaderMaterial
 	var paint := dash.material as ShaderMaterial
-	var shaded: bool = road != null and walk != null and paint != null and road.shader.resource_path == "res://shaders/wet_asphalt_puddle.gdshader" and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
+	# The visual-overhaul v2 craft puddle shader and the Wave 3 menu-canon
+	# asphalt shader both are the owner's wet-asphalt plan, so either satisfies SOV1.
+	var asphalt_path: String = road.shader.resource_path if road != null and road.shader != null else ""
+	var wet_shader: bool = asphalt_path == "res://shaders/wet_asphalt_puddle.gdshader" or asphalt_path == "res://shaders/wet_asphalt_puddle_craft.gdshader" or asphalt_path == "res://shaders/menu_canon_wet_asphalt.gdshader"
+	var shaded: bool = road != null and walk != null and paint != null and wet_shader and walk.shader.resource_path == _ROAD and paint.shader.resource_path == _ROAD
 	r._ok(dash.size.x <= 1.5 and dash.size.z <= 0.3 and shaded, "SOV1 the lane marking is a dash of %.2f m by %.2f m and the asphalt wears the wet-asphalt shader of the owner's plan and the sidewalk and the paint the road shader (shaded %s)" % [dash.size.x, dash.size.z, shaded])
 	builder.queue_free()
 

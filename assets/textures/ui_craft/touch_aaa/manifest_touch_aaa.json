@@ -1,0 +1,260 @@
+{
+  "style_lock": {
+    "seed": 47109,
+    "size_px": 128,
+    "supersample": 2,
+    "palette": {
+      "bg_idle": [
+        15,
+        19,
+        20
+      ],
+      "bg_primary": [
+        22,
+        30,
+        34
+      ],
+      "bg_pressed": [
+        58,
+        45,
+        22
+      ],
+      "bevel_inner": [
+        34,
+        42,
+        46
+      ],
+      "bronze_dim": [
+        90,
+        74,
+        42
+      ],
+      "brass": [
+        201,
+        162,
+        74
+      ],
+      "sodium": [
+        212,
+        169,
+        78
+      ],
+      "bone": [
+        230,
+        223,
+        209
+      ]
+    },
+    "clamp_min": 19,
+    "clamp_max": 240
+  },
+  "assets": [
+    {
+      "file": "plate_primary_normal.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "9ef1ffe964359778a81a6d1d761ddca3202caeee00dce0b2882b4eff109b779f"
+    },
+    {
+      "file": "plate_primary_pressed.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "779f44cc84e41960f8b940d4ae3d617ce38d64def6176ff5b91eac5079877173"
+    },
+    {
+      "file": "plate_interact_normal.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "ee518efb1598c71951f7f7cd9b55e3037b6d6ddc0e26b0d600fa4823c3608847"
+    },
+    {
+      "file": "plate_interact_pressed.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "8cf6191c02bc36fd328282c02a0db606f5c56dd8eb856799d5b08aa4d5f5b044"
+    },
+    {
+      "file": "plate_arc_normal.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "9b3114b060f6fb040a6f2cbc58cc561d8a3315d8918be321f1d771992a3ac42c"
+    },
+    {
+      "file": "plate_arc_pressed.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "6c93d39b03c801002b318899f8e5d17f59651fac29139a8de9e2b1541d0a0765"
+    },
+    {
+      "file": "plate_dock_normal.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "3b55be84128d4c769cf9b10028587dad5d3273506ac8c9ba3a920017bc4ebf21"
+    },
+    {
+      "file": "plate_dock_pressed.png",
+      "kind": "plate",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1f72ea722634cd398efdb0c04d429019b155b0013e993acd6bd7f115e31f2d79"
+    },
+    {
+      "file": "icon_touch_attack.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e2d4198130656ca04b451d96d581744578a962e607f73ca47d17758b5079171c"
+    },
+    {
+      "file": "icon_touch_interact.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "48a779795104e6294534ac427596875ce620e1a62af1ec78f6440a533d6f1389"
+    },
+    {
+      "file": "icon_touch_melee.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "c1f510f33dc815a67b33a9a41b6b79f6a01db87e38da928506af00054c43fd6b"
+    },
+    {
+      "file": "icon_touch_jump.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "ec538793a055d24dcd966dd747dd13b0bf691f33eb47a70a00a28249f0aed3c0"
+    },
+    {
+      "file": "icon_touch_dodge.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "30e23efcbb3b9bef4e8f4d275c2f4f3241959381899a5de79255e759d064bb51"
+    },
+    {
+      "file": "icon_touch_reload.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "093b845a680daa47fb1dd67a1f95f592b8bf8c43b66fb3e441a0e3607be11aa9"
+    },
+    {
+      "file": "icon_touch_sprint.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "3b49b224779bc9062ff4e378f5dbbc4ec2d29b09ff7aa13c3ab2d534213c26d9"
+    },
+    {
+      "file": "icon_touch_stealth.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "13831d313a8b22bd4f519fa5e98d02a7d15138ca0791f6c2d6c61c02d7b5eaa7"
+    },
+    {
+      "file": "icon_touch_flash.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "86c82bd6c3c92d1520327523d53a0fe171fcd7c821c276c10a78c74bfbf48d22"
+    },
+    {
+      "file": "icon_touch_uv.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "0c754e286ed788ebc0009b59f63c7e589207cf1770df1065636a45d167491969"
+    },
+    {
+      "file": "icon_touch_strobe.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "711facc4beb04b44f1d4231ccd7f2669d70dce5d2176824e201b9895777ccded"
+    },
+    {
+      "file": "icon_touch_wheel.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "77a382e10f77a877788a1ed2effbebd9e211b2fbd83726eb405e8be45c8536bc"
+    },
+    {
+      "file": "icon_touch_inventory.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "14be7b9eed0975c87bdd7eaaaaa244065db8631555a02f7b092f7ccfec9b8fc1"
+    },
+    {
+      "file": "icon_touch_workbench.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "4fab0bfa87e6024630c271c97df7202e3c1ffc5e1970285d7f67e4afb9753bc4"
+    },
+    {
+      "file": "icon_touch_map.png",
+      "kind": "icon",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "ba49be0f12da31e598593e9a7e838df2178e04336f244d633cd813d311f9bb77"
+    }
+  ]
+}

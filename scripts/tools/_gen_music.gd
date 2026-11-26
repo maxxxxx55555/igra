@@ -178,7 +178,7 @@ func _save(name_no_ext: String) -> void:
 	s.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	s.loop_begin = 0
 	s.loop_end = _len
-	var path: String = OUT + name_no_ext + ".wav"
+	var path: String = OUT + name_no_ext + ".ogg"
 	var err := s.save_to_wav(path)
 	print("[music] ", "ok  " if err == OK else "FAIL", path, "  ", "%.1f" % (float(_len) / float(MIX)), " c")
 

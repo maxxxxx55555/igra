@@ -6,7 +6,7 @@ var current_state: GameState = GameState.BOOT
 var current_level: int = 1
 var play_time: float = 0.0
 var enemies_killed: int = 0
-
+var _quitting := false
 ## HUD, экономика и инвентарь обращаются к GameManager.player. Ссылку не храним
 ## жёстко: сцена перезагружается при новой игре и старый узел становится битым —
 ## ищем по группе "player" и кэшируем, пока экземпляр валиден.
@@ -38,7 +38,6 @@ func _ready() -> void:
 	# В итоге игрок умирал, а игра продолжалась как ни в чём не бывало.
 	# trigger_death() переводит состояние в DEAD, и UIManager открывает экран.
 	EventBus.game_over.connect(_on_player_game_over)
-	AdService.reward_granted.connect(_on_ad_reward)
 	_change_state(GameState.MENU)
 
 func _notification(what: int) -> void:
@@ -53,7 +52,7 @@ func _notification(what: int) -> void:
 			UIManager.back()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		checkpoint_run()
-		get_tree().quit()
+		quit_game()
 
 ## Back in the menus: the main menu asks to quit, the quit question answers No, the other menu screens return to the main menu; the boot and loading screens ignore it.
 func _menu_back() -> void:
@@ -98,20 +97,33 @@ func restore_run(raw: Variant) -> void:
 	run_hardcore = hardcore if hardcore is bool else false
 	_respawn_battery = -1.0
 
-## Step 5: rewarded-ad payouts land here so every consumer (death screen's
-## revive button, a future HUD battery-boost button) shares one place that
-## actually applies the reward instead of each caller reimplementing it.
-func _on_ad_reward(reward_id: StringName, _amount: int) -> void:
+## Prepare exact, synchronous reward values for the signed checkpoint.
+func bonus_target(id: StringName) -> Dictionary:
 	var p := get_tree().get_first_node_in_group("player")
-	match reward_id:
+	if id == &"revive":
+		if not is_dead() or p == null or not p.has_method("heal") or run_hardcore or SettingsManager.difficulty_scale("revive") <= 0:
+			return {}
+		var maximum: float = p.stats.max_hp if "stats" in p and p.stats != null else 100.0
+		return {"hp": clampf(float(p.hp) + maximum * RESPAWN_HP_RATIO, 0.0, maximum),
+			"battery": float(p.battery), "stamina": float(p.stamina)}
+	if not is_playing() and not is_paused():
+		return {}
+	if id == &"extra_battery" and p != null and p.has_method("add_battery") and p.battery < p.battery_max:
+		return {"battery": minf(float(p.battery) + 50.0, float(p.battery_max))}
+	if id == &"bonus_coins" and CoinWallet.get_coins() <= CoinWallet.MAX_COINS - 100:
+		return {"coins": CoinWallet.get_coins() + 100}
+	return {}
+
+func apply_saved_bonus(id: StringName, target: Dictionary) -> void:
+	match id:
 		&"revive":
 			revive_player()
 		&"extra_battery":
-			if p and p.has_method("add_battery"):
-				p.add_battery(50.0)
+			var p := get_tree().get_first_node_in_group("player")
+			p.add_battery(float(target.battery) - float(p.battery))
+		&"bonus_coins":
+			CoinWallet.apply_saved_balance(int(target.coins))
 
-## GDD §5.4's respawn HP ratio (50%), but in place rather than at a
-## checkpoint — this is the ad-revive path, not the standard death flow.
 func revive_player() -> void:
 	if current_state != GameState.DEAD:
 		return
@@ -149,7 +161,10 @@ func _change_state(new_state: GameState) -> void:
 var run_hardcore: bool = false
 
 func start_new_game() -> void:
-	SaveSystem.reset_all()
+	_start_run(true)
+
+func _start_run(new_run: bool) -> void:
+	SaveSystem.reset_all(new_run)
 	run_hardcore = bool(SettingsManager.get_setting("hardcore", false))
 	_enter_play_and_reload()
 
@@ -165,12 +180,12 @@ var _respawn_battery: float = -1.0
 
 func respawn_after_death() -> void:
 	if not SaveSystem.has_save():
-		start_new_game()
+		_start_run(false)
 		return
 	var p := get_tree().get_first_node_in_group("player")
 	var bat: float = float(p.get("battery")) if p else -1.0
 	if not SaveSystem.load_all():
-		start_new_game()
+		_start_run(false)
 		return
 	# District entry, not wherever the last periodic autosave caught the
 	# player (usually mid-fight, next to whatever killed them).
@@ -202,7 +217,7 @@ func restart_from_save() -> bool:
 	if SaveSystem.has_save():
 		continue_game()
 	else:
-		start_new_game()
+		_start_run(false)
 	if is_playing():
 		get_tree().paused = false
 	return is_playing()
@@ -247,6 +262,8 @@ func trigger_death() -> void:
 	# сигнал по кругу через _on_player_game_over.
 
 func trigger_win() -> void:
+	if is_win():
+		return
 	Endings.mark_ended()
 	var winner := get_tree().get_first_node_in_group("player")
 	if winner != null:
@@ -266,3 +283,19 @@ func return_to_menu() -> void:
 	# Поэтому при переходе MENU->MENU шлём событие вручную.
 	if was_menu:
 		EventBus.game_state_changed.emit(int(GameState.MENU))
+
+## Give the audio mixer real time to retire stopped playbacks, even under fixed FPS.
+func quit_game(code: int = 0) -> void:
+	if _quitting:
+		return
+	_quitting = true
+	var tree := get_tree()
+	for type_name in ["AudioStreamPlayer", "AudioStreamPlayer2D", "AudioStreamPlayer3D"]:
+		for voice in tree.root.find_children("*", type_name, true, false):
+			voice.stop()
+			voice.stream = null
+	tree.paused = true
+	var deadline := Time.get_ticks_msec() + 350
+	while Time.get_ticks_msec() < deadline:
+		await tree.process_frame
+	tree.quit(code)

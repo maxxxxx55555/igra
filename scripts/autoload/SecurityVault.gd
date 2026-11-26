@@ -1,6 +1,6 @@
 extends Node
 ## Register as the first Autoload singleton named `SecurityVault`.
-## Provides AES-CBC + HMAC-SHA256 encrypted saves, dynamic XOR runtime memory
+## Provides authenticated AES checkpoints (including legacy CBC reads), dynamic XOR runtime memory
 ## guards, and SHA-256 asset integrity verification for Windows and Android.
 
 signal tamper_detected(key: StringName)
@@ -18,6 +18,7 @@ const CORE_FLOAT_KEYS := [&"battery", &"warmth", &"health"]
 
 var integrity_ok: bool = false
 var last_load_error: Error = OK
+var save_rejected: bool = false
 var _crypto := Crypto.new()
 var _session: PackedByteArray
 var _primary: Dictionary[StringName, PackedByteArray] = {}
@@ -41,6 +42,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	verify_integrity()
+	load_game()
 
 
 func _abs(virtual_path: String) -> String:
@@ -133,14 +135,14 @@ func _is_allowed_int_key(key: StringName) -> bool:
 	if CORE_INT_KEYS.has(key):
 		return true
 	var s := String(key)
-	return s.begins_with("district_") or s.begins_with("fog_")
+	return s.begins_with("runtime_") or s.begins_with("district_") or s.begins_with("fog_")
 
 
 func _is_allowed_float_key(key: StringName) -> bool:
 	if CORE_FLOAT_KEYS.has(key):
 		return true
 	var s := String(key)
-	return s.begins_with("district_")
+	return s.begins_with("runtime_") or s.begins_with("district_")
 
 
 func _plain_value(value: Variant, depth: int) -> bool:
@@ -165,7 +167,7 @@ func _plain_value(value: Variant, depth: int) -> bool:
 
 
 func _valid_save(data: Dictionary) -> bool:
-	if data.size() < 6 or data.size() > 8:
+	if data.size() < 6 or data.size() > 9:
 		return false
 	for key: String in ["coins", "skill_points", "streak_days"]:
 		if typeof(data.get(key)) != TYPE_INT or data[key] < 0:
@@ -179,25 +181,73 @@ func _valid_save(data: Dictionary) -> bool:
 		return false
 	if data.has("vault_floats") and typeof(data["vault_floats"]) != TYPE_DICTIONARY:
 		return false
+	for key: Variant in data.get("vault_floats", {}):
+		var value: Variant = data.vault_floats[key]
+		if not (value is float or value is int) or not is_finite(float(value)):
+			return false
+		if CORE_FLOAT_KEYS.has(StringName(key)) and (value < 0.0 or value > 100.0):
+			return false
+	if data.has("bonus_ledger") and not _valid_bonus_ledger(data.bonus_ledger):
+		return false
 	return _plain_value(data, 0)
 
 
-func save_game(data: Dictionary = {}) -> Error:
+func _valid_bonus_ledger(value: Variant) -> bool:
+	if not (value is Dictionary) or value.size() != 9:
+		return false
+	for key in ["version", "last_claim_utc", "max_seen_utc", "utc_day", "daily_count"]:
+		if typeof(value.get(key)) != TYPE_INT or value[key] < 0:
+			return false
+	if value.version != 1 or value.max_seen_utc < value.last_claim_utc or value.daily_count > 3:
+		return false
+	if value.utc_day != value.last_claim_utc / 86400:
+		return false
+	if not (value.get("revive_used") is bool and value.get("battery_used") is bool):
+		return false
+	var run: Variant = value.get("run_id")
+	var receipt: Variant = value.get("last_claim_id")
+	if not (run is String and run.length() == 16 and run.is_valid_hex_number(false) and run == run.to_lower()):
+		return false
+	if not (receipt is String):
+		return false
+	if value.last_claim_utc == 0:
+		return receipt.is_empty() and value.daily_count == 0 and not value.revive_used and not value.battery_used
+	return value.daily_count >= 1 and receipt.length() == 32 and receipt.is_valid_hex_number(false) and receipt == receipt.to_lower()
+
+
+func bonus_ledger() -> Dictionary:
+	return (_cached_save.get("bonus_ledger", {}) as Dictionary).duplicate()
+
+
+## Reauthenticate the stored ledger without restoring an older snapshot of live guards.
+func bonus_integrity_ok() -> bool:
+	return integrity_ok and not save_rejected and _ledger_matches_disk()
+
+
+func _ledger_matches_disk() -> bool:
+	var verified := _read_save()
+	if save_rejected:
+		return false
+	if verified.get("bonus_ledger", {}) != _cached_save.get("bonus_ledger", {}):
+		_reject_save()
+		return false
+	return true
+
+
+func save_game(data: Dictionary = {}, vitals: Dictionary = {}) -> Error:
+	if save_rejected or (_cached_save.has("bonus_ledger") and not _ledger_matches_disk()):
+		return ERR_FILE_CORRUPT
 	var payload := _cached_save.duplicate(true)
-	if not data.is_empty():
-		for k: Variant in data:
-			payload[String(k)] = data[k]
-		if data.has("coins") and typeof(data["coins"]) == TYPE_INT:
-			set_guarded_int(&"coins", int(data["coins"]))
-		if data.has("skill_points") and typeof(data["skill_points"]) == TYPE_INT:
-			set_guarded_int(&"skill_points", int(data["skill_points"]))
-	else:
-		payload["coins"] = maxi(0, get_guarded_int(&"coins"))
-		payload["skill_points"] = maxi(0, get_guarded_int(&"skill_points"))
+	payload["coins"] = maxi(0, get_guarded_int(&"coins"))
+	payload["skill_points"] = maxi(0, get_guarded_int(&"skill_points"))
+	for k: Variant in data:
+		payload[String(k)] = data[k]
 	var v_ints: Dictionary = {}
 	for k: StringName in _dynamic_int_keys:
 		v_ints[String(k)] = get_guarded_int(k)
 	var v_floats: Dictionary = {}
+	for k: StringName in CORE_FLOAT_KEYS:
+		v_floats[String(k)] = vitals.get(String(k), get_guarded_float(k))
 	for k: StringName in _dynamic_float_keys:
 		v_floats[String(k)] = get_guarded_float(k)
 	payload["vault_ints"] = v_ints
@@ -207,47 +257,41 @@ func save_game(data: Dictionary = {}) -> Error:
 	var plain := var_to_bytes(payload)
 	if plain.is_empty() or plain.size() > LIMIT:
 		return ERR_INVALID_DATA
-	var padding := 16 - plain.size() % 16
-	for index: int in range(padding):
-		plain.append(padding)
-	var master := _master(true)
-	var salt := _crypto.generate_random_bytes(16)
-	var iv := _crypto.generate_random_bytes(16)
-	if master.size() != 32 or salt.size() != 16 or iv.size() != 16:
-		return ERR_CANT_CREATE
-	var ciphertext := _aes(plain, _subkey(master, salt, "LSV1/encrypt"), iv, AESContext.MODE_CBC_ENCRYPT)
-	if ciphertext.size() != plain.size():
-		return FAILED
-	var body := "LSV1".to_ascii_buffer() + salt + iv + ciphertext
-	var signature := _mac(_subkey(master, salt, "LSV1/sign"), body)
-	if signature.size() != TAG:
-		return FAILED
-	var staging := _temporary(SAVE)
-	if staging.is_empty():
-		return ERR_CANT_CREATE
-	var error := _write(staging, body + signature)
+	var error := OK if write_checkpoint(SAVE, plain) else ERR_FILE_CANT_WRITE
 	if error == OK:
-		error = DirAccess.rename_absolute(_abs(staging), _abs(SAVE))
-	if error != OK:
-		DirAccess.remove_absolute(_abs(staging))
-	else:
 		_cached_save = payload.duplicate(true)
+		for k: StringName in CORE_INT_KEYS:
+			if data.has(k):
+				set_guarded_int(k, int(payload[k]))
+		for k: StringName in CORE_FLOAT_KEYS:
+			if vitals.has(k):
+				set_guarded_float(k, float(v_floats[k]))
 	return error
 
 
 func _reject_save() -> Dictionary:
 	last_load_error = ERR_FILE_CORRUPT
+	save_rejected = true
 	_warn(&"save")
-	_cached_save = default_save()
-	return _cached_save.duplicate(true)
+	return default_save()
 
 
-func load_game() -> Dictionary:
+func _read_save() -> Dictionary:
 	last_load_error = OK
+	if has_checkpoint(SAVE):
+		for rank in CHECKPOINT_DEPTH + 1:
+			var recovered := _checkpoint_bytes(SAVE, rank)
+			if recovered.is_empty():
+				continue
+			var value: Variant = bytes_to_var(recovered)
+			if value is Dictionary and _valid_save(value):
+				if rank > 0:
+					_warn(&"save_backup_recovered")
+				return value
+		return _reject_save()
 	if not FileAccess.file_exists(SAVE):
 		last_load_error = ERR_FILE_NOT_FOUND
-		_cached_save = default_save()
-		return _cached_save.duplicate(true)
+		return default_save()
 	var raw := _read(SAVE, HEADER + LIMIT + 16 + TAG)
 	var count := raw.size() - HEADER - TAG
 	if count < 16 or count % 16 != 0 or raw.slice(0, 4) != "LSV1".to_ascii_buffer():
@@ -278,7 +322,18 @@ func load_game() -> Dictionary:
 	var decoded: Variant = bytes_to_var(plain)
 	if typeof(decoded) != TYPE_DICTIONARY or not _valid_save(decoded):
 		return _reject_save()
-	var loaded: Dictionary = decoded
+	return decoded
+
+
+func load_game() -> Dictionary:
+	var loaded := _read_save()
+	if save_rejected:
+		return default_save()
+	if last_load_error != OK:
+		if _cached_save.has("bonus_ledger"):
+			return _reject_save()
+		_cached_save = loaded.duplicate(true)
+		return loaded
 	set_guarded_int(&"coins", int(loaded.get("coins", 0)))
 	set_guarded_int(&"skill_points", int(loaded.get("skill_points", 0)))
 	var v_ints: Variant = loaded.get("vault_ints", {})
@@ -301,11 +356,14 @@ func set_guarded_int(key: StringName, val: int) -> void:
 	if not _is_allowed_int_key(key):
 		push_error("Invalid guarded integer key: %s" % key)
 		return
-	if not CORE_INT_KEYS.has(key):
+	if not CORE_INT_KEYS.has(key) and not String(key).begins_with("runtime_"):
 		_dynamic_int_keys[key] = true
+	var safe_val: int = clampi(val, 0, 999999)
+	if key == &"coins" or key == &"skill_points":
+		safe_val = clampi(val, 0, 999)
 	var bits := PackedByteArray()
 	bits.resize(8)
-	bits.encode_s64(0, val)
+	bits.encode_s64(0, safe_val)
 	_store_guard(key, bits)
 
 
@@ -323,11 +381,14 @@ func set_guarded_float(key: StringName, val: float) -> void:
 	if not _is_allowed_float_key(key) or not is_finite(val):
 		push_error("Invalid guarded float: %s" % key)
 		return
-	if not CORE_FLOAT_KEYS.has(key):
+	if not CORE_FLOAT_KEYS.has(key) and not String(key).begins_with("runtime_"):
 		_dynamic_float_keys[key] = true
+	var safe_val: float = val
+	if key == &"battery" or key == &"warmth" or key == &"health":
+		safe_val = clampf(val, 0.0, 100.0)
 	var bits := PackedByteArray()
 	bits.resize(8)
-	bits.encode_double(0, val)
+	bits.encode_double(0, safe_val)
 	_store_guard(key, bits)
 
 
@@ -369,6 +430,12 @@ func _open_guard(slot: PackedByteArray, record: PackedByteArray) -> PackedByteAr
 func _store_guard(key: StringName, bits: PackedByteArray) -> void:
 	if _session.size() != 32:
 		return
+	if _primary.has(key) or _shadow.has(key):
+		if _load_guard(key) == bits:
+			return
+	_write_guard(key, bits)
+
+func _write_guard(key: StringName, bits: PackedByteArray) -> void:
 	var primary := _seal((String(key) + "/primary").to_ascii_buffer(), bits)
 	var shadow := _seal((String(key) + "/shadow").to_ascii_buffer(), bits)
 	if primary.size() != 56 or shadow.size() != 56:
@@ -394,7 +461,7 @@ func _load_guard(key: StringName) -> PackedByteArray:
 	var recovered := shadow if shadow.size() == 8 else primary
 	if recovered.is_empty():
 		recovered.resize(8)
-	_store_guard(key, recovered)
+	_write_guard(key, recovered)
 	_warn(key)
 	return recovered
 
@@ -437,3 +504,138 @@ func verify_integrity() -> bool:
 			return false
 	integrity_ok = true
 	return true
+
+# The installation keeps an authenticated high-water mark outside each rotating save.
+# Only its current digest may occupy the live slot. Older digests belong to backups.
+const CHECKPOINT_MAGIC := "TLS2"
+const CHECKPOINT_DEPTH := 3
+
+func _checkpoint_path_ok(path: String) -> bool:
+	var name := path.trim_prefix("user://")
+	return name != path and not name.is_empty() and not name.begins_with("/") and not name.contains(":") and not name.contains("..") and not name.contains("\\")
+
+func _anchor_path(path: String) -> String:
+	return KEY_DIR + "/" + path.sha256_text()
+
+func has_checkpoint(path: String) -> bool:
+	return _checkpoint_path_ok(path) and FileAccess.file_exists(_anchor_path(path))
+
+func _anchor(path: String, master: PackedByteArray) -> Dictionary:
+	var raw := _read(_anchor_path(path), 4096)
+	if raw.size() <= TAG:
+		return {}
+	var data := raw.slice(TAG)
+	if not _crypto.constant_time_compare(raw.slice(0, TAG), _mac(_subkey(master, path.to_utf8_buffer(), "counter"), data)):
+		return {}
+	var state: Variant = bytes_to_var(data)
+	if not state is Dictionary or not state.get("count") is int or not state.get("heads") is Array:
+		return {}
+	return state
+
+func _sha(data: PackedByteArray) -> String:
+	var ctx := HashingContext.new()
+	ctx.start(HashingContext.HASH_SHA256)
+	ctx.update(data)
+	return ctx.finish().hex_encode()
+
+# AES in counter mode. A fresh random nonce and installation-derived key protect
+# each checkpoint. The HMAC covers the format, monotonic counter, nonce and bytes.
+func _crypt_checkpoint(data: PackedByteArray, master: PackedByteArray, nonce: PackedByteArray) -> PackedByteArray:
+	var blocks := PackedByteArray()
+	blocks.resize(ceili(data.size() / 16.0) * 16)
+	for offset in range(0, blocks.size(), 16):
+		blocks.encode_u64(offset + 8, offset / 16)
+	var stream := _aes(blocks, _subkey(master, nonce, "checkpoint/encrypt"), PackedByteArray(), AESContext.MODE_ECB_ENCRYPT)
+	if stream.size() != blocks.size():
+		return PackedByteArray()
+	var result := data.duplicate()
+	for i in result.size():
+		result[i] ^= stream[i]
+	return result
+
+func _checkpoint_bytes(path: String, rank: int) -> PackedByteArray:
+	if not _checkpoint_path_ok(path) or rank < 0 or rank > CHECKPOINT_DEPTH:
+		return PackedByteArray()
+	var master := _master(false)
+	if master.size() != 32:
+		return PackedByteArray()
+	var state := _anchor(path, master)
+	if state.is_empty() or state.heads.is_empty():
+		return PackedByteArray()
+	var heads: Array = state.heads
+	var suffix := "" if rank == 0 else (".bak" if rank == 1 else ".bak%d" % rank)
+	var raw := _read(path + suffix, LIMIT + 60)
+	if rank == 0 and FileAccess.file_exists(path + ".tmp"):
+		var staged := _read(path + ".tmp", LIMIT + 60)
+		if not staged.is_empty() and _sha(staged) == heads[0]:
+			raw = staged
+	if raw.size() <= 28 + TAG or raw.slice(0, 4).get_string_from_ascii() != CHECKPOINT_MAGIC:
+		return PackedByteArray()
+	var digest := _sha(raw)
+	var index := heads.find(digest)
+	if index < 0 or (rank == 0 and index != 0) or (rank > 0 and index == 0):
+		return PackedByteArray()
+	var counter := raw.decode_s64(4)
+	if counter != int(state.count) - index:
+		return PackedByteArray()
+	var body := raw.slice(0, raw.size() - TAG)
+	var expected := _mac(_subkey(master, path.to_utf8_buffer(), "checkpoint/sign"), body)
+	if not _crypto.constant_time_compare(expected, raw.slice(body.size())):
+		return PackedByteArray()
+	return _crypt_checkpoint(body.slice(28), master, body.slice(12, 28))
+
+func write_checkpoint(path: String, data: PackedByteArray) -> bool:
+	if not _checkpoint_path_ok(path) or data.is_empty() or data.size() > LIMIT:
+		return false
+	var master := _master(true)
+	if master.size() != 32:
+		return false
+	var state := _anchor(path, master)
+	if state.is_empty():
+		if has_checkpoint(path):
+			return false
+		state = {"count": 0, "heads": []}
+	var nonce := _crypto.generate_random_bytes(16)
+	if nonce.size() != 16:
+		return false
+	var cipher := _crypt_checkpoint(data, master, nonce)
+	if cipher.size() != data.size():
+		return false
+	var count := int(state.count) + 1
+	var body := CHECKPOINT_MAGIC.to_ascii_buffer()
+	body.resize(12)
+	body.encode_s64(4, count)
+	body.append_array(nonce)
+	body.append_array(cipher)
+	body.append_array(_mac(_subkey(master, path.to_utf8_buffer(), "checkpoint/sign"), body))
+	# Finish any previously committed rename before reusing the staging file.
+	if FileAccess.file_exists(path + ".tmp") and not state.heads.is_empty():
+		if _sha(_read(path + ".tmp", LIMIT + 60)) == state.heads[0] and DirAccess.rename_absolute(_abs(path + ".tmp"), _abs(path)) != OK:
+			return false
+	if _write(path + ".tmp", body) != OK:
+		return false
+	var heads: Array = state.heads.duplicate()
+	if not heads.is_empty() and FileAccess.file_exists(path) and _sha(_read(path, LIMIT + 60)) == heads[0]:
+		for i in range(CHECKPOINT_DEPTH, 0, -1):
+			var source := path if i == 1 else (path + ".bak" if i == 2 else path + ".bak%d" % (i - 1))
+			var destination := path + (".bak" if i == 1 else ".bak%d" % i)
+			if FileAccess.file_exists(source) and DirAccess.copy_absolute(_abs(source), _abs(destination)) != OK:
+				return false
+	heads.push_front(_sha(body))
+	heads.resize(mini(heads.size(), CHECKPOINT_DEPTH + 1))
+	var record := var_to_bytes({"count":count, "heads":heads})
+	var anchor_file := _anchor_path(path)
+	if _write(anchor_file + ".tmp", _mac(_subkey(master, path.to_utf8_buffer(), "counter"), record) + record) != OK:
+		return false
+	if DirAccess.rename_absolute(_abs(anchor_file + ".tmp"), _abs(anchor_file)) != OK:
+		return false
+	# At this point the pending file is committed and also readable after a crash.
+	DirAccess.rename_absolute(_abs(path + ".tmp"), _abs(path))
+	return true
+
+
+
+func forget_runtime_guard(key: StringName) -> void:
+	if String(key).begins_with("runtime_"):
+		_primary.erase(key)
+		_shadow.erase(key)

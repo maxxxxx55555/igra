@@ -52,6 +52,9 @@ EXTRA = {
     # for the shop, skill tree, HUD and Settings chrome it styles.
     "0b0d10", "14181e", "e8ecef", "d99b38", "d96b38", "464443", "8e969e",
     "232322", "30261a", "111419", "30353a",
+    # Owner-supplied sodium craft palette (AntiSlopThemeDirector + generated UI pack).
+    "060f13", "161e22", "2a363c", "4e666e", "9e7832", "d4a94e", "f0c46c",
+    "e6dfd1", "a83b2e", "2c5b66", "6ba7b5", "8fa1a8", "1e292e",
 }
 TOL = 0.006
 

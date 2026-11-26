@@ -13,8 +13,8 @@ var mesh: MeshInstance3D = $MeshInstance3D
 @onready
 var collision: CollisionShape3D = $CollisionShape3D
 
-const _OPEN_SFX := preload("res://assets/audio/sfx/interact/door_open_wood.wav")
-const _LOCKED_SFX := preload("res://assets/audio/sfx/interact/door_close_wood.wav")
+const _OPEN_SFX := preload("res://assets/audio/sfx/interact/door_open_wood.ogg")
+const _LOCKED_SFX := preload("res://assets/audio/sfx/interact/door_close_wood.ogg")
 
 func interact(player: Node3D) -> void:
 	if is_open:

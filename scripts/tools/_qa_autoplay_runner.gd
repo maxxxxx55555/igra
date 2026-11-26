@@ -5,7 +5,7 @@ extends Node
 ## real game state. No state injection, no warps: movement is fed through
 ## InputService.set_joy_move_dir (the virtual-joystick path), turning
 ## through the player's look, interaction through
-## InputService.request_interact, attacks through request_attack, dodges
+## InputService.request_interact, attacks through the melee action, dodges
 ## through request_dodge, travel through the City Map's Travel button.
 ##
 ## Proves: suburbs DARK first-light chain -> the district spine in
@@ -59,6 +59,8 @@ var _target_pos: Vector3 = Vector3.ZERO
 var _have_target := false
 var _nudge_dir := Vector2.ZERO
 var _nudge_until := 0.0
+var _avoid_side := 1.0
+var _dodge_cd := 0.0
 var _last_pos := Vector3.ZERO
 var _stuck_sec := 0.0
 var _nudge_count := 0  # R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY): a "clean" win bought
@@ -83,6 +85,7 @@ var _strobe_cd := 0.0
 const BOSS_SWING_RANGE := 3.4
 ## The second phase hurts the Architect only in the light: a stun is not worth the charge below this.
 const BOSS_STROBE_MIN_BATTERY := 30.0
+const BOSS_CONTACT_RANGE := 2.7  ## Stay inside the melee query after the swing starts.
 var _boss_deadline := 0.0
 var _win_seen := false
 var _hb := 0.0
@@ -94,7 +97,7 @@ const LOOT_DETOUR_M := 14.0
 const LOOT_GIVE_UP_SEC := 10.0
 const LOOT_BLOCK_SEC := 30.0
 const BATTERY_STOCK := 3
-const MEDKIT_STOCK := 1
+const MEDKIT_STOCK := 5  # one inventory stack for the final fight
 var _loot_since := 0.0
 var _loot_block_until := 0.0
 var _menu_recoveries := 0
@@ -367,6 +370,8 @@ func _tick_spine(_delta: float) -> void:
 		_bump_score()
 		return
 
+	if float(_player.get("hp")) < 45.0:
+		_use_item(&"medkit")
 	var spare := _spare_pickup()
 	if spare != null:
 		_target_pos = (spare as Node3D).global_position
@@ -401,8 +406,9 @@ func _tick_spine(_delta: float) -> void:
 	_have_target = true
 	# The interactor takes what the player faces (a cone of about 70 degrees), so a person looks at the switch they walk to
 	_face(_target_pos)
-	_move(_dir_to(_target_pos))
-	if _player.global_position.distance_to(_target_pos) <= REACH and _act_cd <= 0.0:
+	var in_reach := _player.global_position.distance_to(_target_pos) <= REACH
+	_move(Vector2.ZERO if in_reach else _approach_dir(_target_pos))
+	if in_reach and _act_cd <= 0.0:
 		InputService.request_interact()
 		if _t_first_interact < 0.0:
 			_t_first_interact = _now()
@@ -424,8 +430,13 @@ func _tick_boss(delta: float) -> void:
 		return
 	var bp: Vector3 = (boss as Node3D).global_position
 	var d := _player.global_position.distance_to(bp)
-	_face(bp)  # P2's light-gate needs the flashlight cone actually on the boss, not just "on"
-	if _player.get("hp") != null and float(_player.get("hp")) < 30.0:
+	_face(bp)
+	var lamp := _player.get_node("ModelPivot/FlashlightPivot/Flashlight") as SpotLight3D
+	var beam := bp + Vector3.UP - lamp.global_position
+	var pitch := atan2(beam.y, Vector2(beam.x, beam.z).length())
+	var pitch_delta := pitch - lamp.global_rotation.x
+	_player.call("_apply_look", 0.0, -pitch_delta if SettingsManager.is_look_inverted() else pitch_delta)
+	if _player.get("hp") != null and float(_player.get("hp")) < 55.0:
 		_use_item(&"medkit")
 	## The GDD (§6.2) lists the Architect's weakness as "стробоскоп" — the
 	## strobe. Measured: without it the bot's melee-only loop cleared under
@@ -436,13 +447,36 @@ func _tick_boss(delta: float) -> void:
 	if d <= 10.0 and _strobe_cd <= 0.0 and float(_player.get("battery")) >= BOSS_STROBE_MIN_BATTERY:
 		InputService.request_strobe()
 		_strobe_cd = 1.0
-	_move(_dir_to(bp))
-	if d <= BOSS_SWING_RANGE and _act_cd <= 0.0:
-		InputService.request_attack()
-		_act_cd = 0.45
+	_target_pos = bp
+	_have_target = true
+	if d > BOSS_CONTACT_RANGE:
+		_move(_approach_dir(bp))
+	else:
+		# Standing at the first point within melee reach leaves the beam behind
+		# minions or street cover throughout P2. Circle the target, checking
+		# clearance on both sides, and keep attacking from the new angle.
+		var body := _player as CharacterBody3D
+		var radial := bp - body.global_position
+		radial.y = 0.0
+		var side := radial.normalized().cross(Vector3.UP) * _avoid_side
+		var probe := body.global_transform.translated(Vector3.UP * 0.15)
+		if body.test_move(probe, side * 1.0):
+			side = -side
+			_avoid_side *= -1.0
+		_move(_dir_to(_player.global_position + side) if not body.test_move(probe, side * 1.0) else Vector2.ZERO)
+	# A minion can body-block the approach outside the Architect's reach.
+	if _act_cd <= 0.0 and _player.get("_attack_phase") == "none" and (d <= BOSS_SWING_RANGE or _monster_near(BOSS_CONTACT_RANGE)):
+		# The attack button fires an equipped gun, including an empty one.
+		# Use the dedicated melee action after the previous swing has recovered.
+		for pressed in [true, false]:
+			var event := InputEventAction.new()
+			event.action = &"melee"
+			event.pressed = pressed
+			Input.parse_input_event(event)
+		_act_cd = 0.12
 		# occasional dodge away from the boss to shed damage
-		if _rng.randf() < 0.18:
-			InputService.request_dodge(-_dir_to(bp))
+		if d <= BOSS_SWING_RANGE and _rng.randf() < 0.18:
+			InputService.request_dodge(_dir_to(bp).orthogonal())
 
 func _enter_boss_phase() -> void:
 	if _phase == "boss":
@@ -468,27 +502,33 @@ func _dir_to(world_pos: Vector3) -> Vector2:
 	var right := basis.x; right.y = 0.0; right = right.normalized()
 	return Vector2(wdir.dot(right), -wdir.dot(fwd)).limit_length(1.0)
 
-## R3 CHALLENGE-02 (docs/REDTEAM_CHALLENGE.md, root-caused in detail in
-## docs/SPINE_SOFTLOCK_AUDIT.md C1, ranked strongest of 5 candidates): at
-## walk_speed=170 (verified correct, do not touch — RUN_STATE.md Session 3),
-## 60Hz physics moves the bot 2.83m/frame. A pickup's true contact radius is
-## ~1.0m (0.7 pickup sphere + 0.3 player capsule), so approaching at full
-## speed can jump from >1.4 (PICKUP_TOUCH) to <0.8 PAST the target in a
-## single frame without ever overlapping the Area3D long enough for
-## body_entered to fire — the bot then "stops" at a distance it never
-## actually touched, oscillates, and eventually nudges itself out of the
-## nav mesh. This is Option B from the audit's own ranked fix list: slow
-## the APPROACH near the target instead of the REJECTED option (tightening
-## PICKUP_TOUCH, already tried, made 0/3 wins worse — see KNOWN_ISSUES.md).
-const APPROACH_SLOWDOWN_RADIUS := 5.0
-const APPROACH_MIN_SCALE := 0.15  ## never fully stop outside PICKUP_TOUCH — plenty slow to not overshoot
+## Walk a clear line with the player's capsule. Lift the probe just off the road so
+## floor contacts with StreetCollision do not look like a wall. Keep the chosen
+## side around an obstruction until the direct route opens again.
 func _approach_dir(target: Vector3) -> Vector2:
-	var dir := _dir_to(target)
-	var dist := _player.global_position.distance_to(target)
-	if dist < APPROACH_SLOWDOWN_RADIUS:
-		var scale := clampf(dist / APPROACH_SLOWDOWN_RADIUS, APPROACH_MIN_SCALE, 1.0)
-		dir *= scale
-	return dir
+	var body := _player as CharacterBody3D
+	var offset := target - body.global_position
+	offset.y = 0.0
+	var forward := offset.normalized()
+	var probe := body.global_transform.translated(Vector3.UP * 0.15)
+	var lookahead := minf(offset.length(), 2.0)
+	var heading := forward
+	if body.test_move(probe, forward * lookahead):
+		for angle: float in [45.0, -45.0, 80.0, -80.0, 105.0, -105.0]:
+			var side := forward.rotated(Vector3.UP, deg_to_rad(angle * _avoid_side))
+			if not body.test_move(probe, side * lookahead):
+				heading = side
+				_avoid_side *= signf(angle)
+				break
+	var move := _dir_to(body.global_position + heading)
+	_dodge_cd = maxf(0.0, _dodge_cd - get_process_delta_time())
+	if _dodge_cd <= 0.0 and offset.length() > 3.0 and _monster_near(3.5):
+		# A real dodge carries the player through the attack wind-up. Probe the
+		# full dash before committing to it so it cannot end inside a wall.
+		if not body.test_move(probe, heading * 3.0):
+			InputService.request_dodge(move)
+			_dodge_cd = 0.8
+	return move
 
 ## FINAL HARDENING PASS: the boss's P2 phase is only vulnerable while lit
 ## (base_monster.gd _is_in_flashlight: a real spot-cone/angle test against
@@ -695,6 +735,29 @@ func _compute_score() -> float:
 			s += (1.0 - float(boss.get("hp")) / maxf(1.0, float(boss.get("max_hp")))) * 400.0
 	return s
 
+## Bug B1 (Wave 3): the old fixed 0.03 m/frame (= 1.8 m/s at 60 fps)
+## mislabelled a legitimately walking, heavily loaded player as stuck. Measured
+## on seeds 13/99: the same boss-circle movement at 34.2/40 kg (walk 1.72 m/s)
+## fired 20 nudges, while 27.8/40 kg (walk 1.96 m/s) fired none. Compare the
+## frame's displacement with the speed the player can actually achieve now,
+## using the same weight multiplier as player_3d.gd:_physics_process.
+func _stuck_distance(delta: float) -> float:
+	var expected: float = 3.0  # player_stats.tres walk_speed, the bot never sprints
+	if _player != null and is_instance_valid(_player):
+		var stats_res: Variant = _player.get("stats")
+		if stats_res != null and stats_res.get("walk_speed") != null:
+			expected = float(stats_res.get("walk_speed"))
+	var im := get_node_or_null("/root/InventoryManager")
+	if im != null and im.get("stats") != null and float(im.get("current_weight")) > 0.0:
+		var im_stats: Variant = im.get("stats")
+		var cap: float = 40.0
+		if im_stats != null and im_stats.get("capacity_kg") != null:
+			cap = float(im_stats.get("capacity_kg"))
+		expected *= 1.0 - clampf(float(im.get("current_weight")) / maxf(cap, 0.001), 0.0, 1.0) * 0.5
+	# 45% of the achievable distance: a genuine block (velocity ~0) is still
+	# caught, slow-but-normal locomotion is not.
+	return maxf(0.004, expected * delta * 0.45)
+
 func _watchdog(delta: float) -> void:
 	# R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY, arena finding): 3
 	# separate headless bot re-runs won clean on the exact build where a
@@ -732,13 +795,22 @@ func _watchdog(delta: float) -> void:
 	if _player_ok():
 		var moved := _player.global_position.distance_to(_last_pos)
 		_last_pos = _player.global_position
-		if _have_target and moved < 0.03 * (delta * 60.0):
+		if _have_target and InputService.get_move_dir().length_squared() > 0.01 and moved < _stuck_distance(delta):
 			_stuck_sec += delta
 			if _stuck_sec > STUCK_NUDGE_SEC and _now() > _nudge_until:
 				var base := _dir_to(_target_pos)
 				var perp := Vector2(-base.y, base.x) * (1.0 if _rng.randf() < 0.5 else -1.0)
 				_nudge_dir = (perp + base * 0.3).limit_length(1.0)
 				_nudge_until = _now() + NUDGE_SEC
+				# Wave 3 (bug B1): every nudge prints where the bot was, where it
+				# wanted to go and which way it slipped, so a run that leans on
+				# nudges can be traced to the obstacle that caused them.
+				print("[bot s%d] NUDGE #%d stuck=%.1fs pos=%s target=%s dir=%s phase=%s" % [
+					_seed, _nudge_count + 1, _stuck_sec,
+					str(_player.global_position.round()),
+					str(_target_pos.round()),
+					str(_nudge_dir.round()),
+					_phase])
 				_stuck_sec = 0.0
 				_nudge_count += 1
 		else:
@@ -801,11 +873,6 @@ func _finish() -> void:
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
 	if OS.get_environment("QA_NO_QUIT") != "1":
-		# A player still sounding at quit keeps its playback alive in the AudioServer when the engine counts the objects left (46 of the 81 of a run with deaths, v10 R6).
-		for p: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
-			(p as AudioStreamPlayer).stop()
-		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
-			(p3 as AudioStreamPlayer3D).stop()
 		# Z5 R6: the bot's teardown — the pooled VFX bursts of WowDirector live on the
 		# root to be replayed; freed here so the exit counts a clean tree.
 		var wow := get_node_or_null("/root/WowDirector")
@@ -815,5 +882,4 @@ func _finish() -> void:
 				if fx is Node and is_instance_valid(fx):
 					(fx as Node).free()
 			bursts.clear()
-		await get_tree().create_timer(0.3).timeout
-		get_tree().quit(code)
+		GameManager.quit_game(code)

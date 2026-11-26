@@ -7,3 +7,6 @@ display_name = "Больница"
 stage = 0
 powered_by = [&"residential"]
 map_position = Vector2(60, 180)
+fog_density = 0.019
+cold_mult = 0.94
+enemy_count = 3

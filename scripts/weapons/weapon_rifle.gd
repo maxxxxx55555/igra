@@ -1,8 +1,8 @@
 extends WeaponBase
 class_name WeaponRifle
 
-const SHOOT := preload("res://assets/audio/sfx/sfx_shoot.wav")
-const RELOAD := preload("res://assets/audio/sfx/sfx_reload.wav")
+const SHOOT := preload("res://assets/audio/sfx/sfx_shoot.ogg")
+const RELOAD := preload("res://assets/audio/sfx/sfx_reload.ogg")
 
 func _ready() -> void:
 	weapon_name = "Rifle"

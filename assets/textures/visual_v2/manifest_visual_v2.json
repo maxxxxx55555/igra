@@ -1,0 +1,175 @@
+{
+  "style_lock": {
+    "seed": 47101,
+    "palette": {
+      "bg_deep": [
+        6,
+        15,
+        19
+      ],
+      "panel": [
+        15,
+        19,
+        20
+      ],
+      "panel_inset": [
+        28,
+        30,
+        29
+      ],
+      "panel_edge": [
+        90,
+        74,
+        42
+      ],
+      "brass_hot": [
+        212,
+        169,
+        78
+      ],
+      "asphalt_dark": [
+        24,
+        29,
+        33
+      ],
+      "asphalt_mid": [
+        42,
+        49,
+        54
+      ],
+      "concrete_dark": [
+        34,
+        41,
+        45
+      ],
+      "concrete_light": [
+        78,
+        86,
+        89
+      ],
+      "grime": [
+        22,
+        24,
+        23
+      ],
+      "sodium_dust": [
+        212,
+        169,
+        78
+      ]
+    },
+    "clamp_min": 19,
+    "clamp_max": 240,
+    "max_seam_delta": 10.0,
+    "max_mean_saturation_pct": 40.0,
+    "concrete_roughness_bounds": [
+      0.72,
+      0.98
+    ],
+    "asphalt_roughness_bounds": [
+      0.2,
+      0.94
+    ]
+  },
+  "assets": [
+    {
+      "file": "asphalt_wet_albedo_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "seam_delta": 0.421,
+      "mean_saturation_pct": 23.79,
+      "sha256": "26f02ddd08f3a1e0a16a4e0fc259e6d7fca2d7e26d055fae8d9039e1d1da2f4d"
+    },
+    {
+      "file": "asphalt_wet_normal_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "seam_delta": 5.484,
+      "mean_saturation_pct": 0.0,
+      "sha256": "8eb662d60591a6e38e65de02bb3972091d8ee1ac352ab372ce827688ca75aeed"
+    },
+    {
+      "file": "asphalt_wet_roughness_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L",
+      "seam_delta": 1.986,
+      "mean_saturation_pct": 0.0,
+      "sha256": "5d1f2429965f45716d59f4fcfb725c0839fd9583fba881f58830482ee56999f5"
+    },
+    {
+      "file": "asphalt_puddle_mask_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L",
+      "seam_delta": 2.559,
+      "mean_saturation_pct": 0.0,
+      "sha256": "4c69996ac9460db0526df5342bf6acda571dbeff2066eef72026e71acfe607db"
+    },
+    {
+      "file": "facade_concrete_albedo_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "seam_delta": 0.298,
+      "mean_saturation_pct": 15.92,
+      "sha256": "67e84accd2962c7d246adb6ba1527315c210510634ab66d7aa34123170e09aff"
+    },
+    {
+      "file": "facade_concrete_normal_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "seam_delta": 1.871,
+      "mean_saturation_pct": 0.0,
+      "sha256": "9d1e3a6abd4ee138ae1c41c93e68a2322314ae671da572a5a5421333c9c01753"
+    },
+    {
+      "file": "facade_concrete_roughness_v2.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L",
+      "seam_delta": 0.461,
+      "mean_saturation_pct": 0.0,
+      "sha256": "4e8b4b09db0e07f72ebed70026052dd1921ebcc509ea58f7b1388d42788f4fa6"
+    },
+    {
+      "file": "fx_sodium_mote_soft_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "border_alpha_max": 0,
+      "sha256": "7ccbf4940ab284719adceaaed9f9f488a1ef7a9092932c673a348bf9944a5404"
+    },
+    {
+      "file": "ui_panel_chamfer_9slice_v2.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "nine_slice_margin_px": 10,
+      "chamfer_px": 8,
+      "sha256": "047debebc8590ac5e7d3a2c2f2d926db18ce6212f42aa1b92ebc4735bcf07c07"
+    }
+  ],
+  "errors": []
+}

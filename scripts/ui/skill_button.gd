@@ -15,6 +15,13 @@ var _skill_data: Dictionary
 func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	_skill_id = skill_id
 	_skill_data = skill_data
+	# Wave 2: larger centred cards on the tactical panel, using only the
+	# canonical type scale so UI_CONSISTENCY stays green.
+	custom_minimum_size = Vector2(236.0, 128.0)
+	add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_BUTTON)
+	name_label.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_BUTTON)
+	desc_label.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_BODY)
+	req_label.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_SMALL)
 
 	# P2 (FINAL INTEGRATION wave): real skill icon, ids grep-locked against
 	# SKILL_TREES in skill_tree_manager.gd (icons/skills/<id>_96.png match

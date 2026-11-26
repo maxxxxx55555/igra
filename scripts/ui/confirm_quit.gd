@@ -17,7 +17,7 @@ func _apply_localization(_lang: Variant = null) -> void:
 	$Panel/VBox/HBox/No.text = LocalizationManager.t("no")
 
 func _on_yes() -> void:
-	get_tree().quit()
+	GameManager.quit_game()
 
 func _on_no() -> void:
 	Routes.to_menu()

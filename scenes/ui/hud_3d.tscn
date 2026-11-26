@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_heart.svg" id="3_heart"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui_v2/bar_track_256x8.png" id="11_bartrack"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui_craft/hud_bar_frame_9slice.webp" id="11_bartrack"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/crosshair_64.png" id="9_crosshair"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/hitmarker_64.png" id="10_hitmarker"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_interact.svg" id="4_interact"]
@@ -10,12 +10,12 @@
 [ext_resource type="Texture2D" path="res://assets/ui/ui_pause.svg" id="6_pause"]
 
 [sub_resource type="StyleBoxFlat" id="style_joystick"]
-bg_color = Color(0.0588235, 0.0745098, 0.0784314, 0.0)
+bg_color = Color(0.0588235, 0.0745098, 0.0784314, 0.55)
 border_width_left = 3
 border_width_right = 3
 border_width_top = 3
 border_width_bottom = 3
-border_color = Color(0.541, 0.451, 0.220, 1.0)
+border_color = Color(0.788, 0.635, 0.290, 1.0)
 corner_radius_top_left = 80
 corner_radius_top_right = 80
 corner_radius_bottom_left = 80
@@ -66,17 +66,24 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="HPT" type="TextureRect" parent="TopLeft/HP"]
+[node name="HPT" type="NinePatchRect" parent="TopLeft/HP"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="HPF" type="ColorRect" parent="TopLeft/HP"]
-color = Color(0.752941, 0.223529, 0.168627, 1.0)
+[node name="HPF" type="TextureRect" parent="TopLeft/HP"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -101,17 +108,24 @@ offset_right = 260.0
 offset_bottom = 64.0
 mouse_filter = 2
 
-[node name="StamT" type="TextureRect" parent="TopLeft/Stam"]
+[node name="StamT" type="NinePatchRect" parent="TopLeft/Stam"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="StamF" type="ColorRect" parent="TopLeft/Stam"]
-color = Color(0.373, 0.541, 0.306, 1.0)
+[node name="StamF" type="TextureRect" parent="TopLeft/Stam"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -146,17 +160,24 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="BatT" type="TextureRect" parent="TopLeft/Bat"]
+[node name="BatT" type="NinePatchRect" parent="TopLeft/Bat"]
 texture = ExtResource("11_bartrack")
-expand_mode = 1
-stretch_mode = 0
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 20.0
+scale = Vector2(1, 0.5)
 mouse_filter = 2
 
-[node name="BatF" type="ColorRect" parent="TopLeft/Bat"]
-color = Color(0.788, 0.635, 0.290, 1.0)
+[node name="BatF" type="TextureRect" parent="TopLeft/Bat"]
+expand_mode = 1
+offset_top = 2.0
+offset_bottom = -2.0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -180,7 +201,7 @@ offset_left = 0.0
 offset_top = 64.0
 offset_right = 180.0
 offset_bottom = 80.0
-text = "ШУМ"
+text = "HUD_NOISE"
 mouse_filter = 2
 
 [node name="NoiseT" type="ColorRect" parent="TopLeft"]
@@ -204,7 +225,7 @@ offset_left = 0.0
 offset_top = 84.0
 offset_right = 180.0
 offset_bottom = 100.0
-text = "ЗАМЕТ."
+text = "HUD_VISIBILITY"
 mouse_filter = 2
 
 [node name="VisibilityT" type="ColorRect" parent="TopLeft"]
@@ -241,7 +262,7 @@ mouse_filter = 2
 offset_right = 172.0
 offset_bottom = 18.0
 mouse_filter = 2
-text = "AMMO"
+text = "HUD_AMMO"
 horizontal_alignment = 2
 
 [node name="AmmoVal" type="Label" parent="AmmoCounter"]
@@ -268,19 +289,13 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="BtnPause" type="Button" parent="."]
-custom_minimum_size = Vector2(48, 48)
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 48.0
-offset_bottom = 48.0
+custom_minimum_size = Vector2(56, 56)
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
-offset_left = -64.0
+offset_left = -72.0
 offset_top = 12.0
 offset_right = -16.0
-offset_bottom = 60.0
+offset_bottom = 68.0
 grow_horizontal = 0
 icon = ExtResource("6_pause")
 expand_icon = true
@@ -373,7 +388,7 @@ offset_left = -224.0
 offset_top = -112.0
 offset_right = -152.0
 offset_bottom = -48.0
-text = "БЕГ"
+text = "KEY_RUN"
 
 [node name="BtnStealth" type="Button" parent="BottomRight"]
 custom_minimum_size = Vector2(72, 64)
@@ -381,7 +396,7 @@ offset_left = -308.0
 offset_top = -112.0
 offset_right = -236.0
 offset_bottom = -48.0
-text = "СТЕЛС"
+text = "HUD_STEALTH"
 
 [node name="BtnInteract" type="Button" parent="BottomRight"]
 custom_minimum_size = Vector2(64, 64)

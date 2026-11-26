@@ -62,7 +62,7 @@ def build():
             lines.append("| %s | `%s` | %d x %d | %d |" % (name, rel, w, h, path.stat().st_size))
         else:
             lines.append("| %s | `%s` | missing | - |" % (name, rel))
-    lines += ["", "The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.", "",
+    lines += ["", "The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The 11 files in `store/screenshots/shot*_1920x1080_en.png` are final-tree engine captures from 2026-11-22 (8 EN gallery + 3 touch) and are the current Play gallery; the two rows marked `(art)` remain marketing art. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.", "",
               "## For a reviewer", "",
               "1. A review copy is the signed bundle of `docs/RELEASE_ARTIFACTS.md`, installed from a closed test track.",
               "2. Contact: **maxzimkasky@gmail.com** (the published address; the same one as in `docs/PRIVACY_POLICY_FINAL.md` and on the live policy page https://maxxxxx55555.github.io/igra/).",

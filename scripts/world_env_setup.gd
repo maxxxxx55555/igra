@@ -7,7 +7,7 @@ extends Node
 # силуэта монстра, играть было невозможно. Держим низкую, но ненулевую засветку,
 # а разницу между стадиями восстановления города показываем контрастом.
 
-@export var ambient_energy_default: float = 0.03  # = AMBIENT_DARK until the stage applies
+@export var ambient_energy_default: float = 0.16  # = AMBIENT_DARK until the stage applies
 @export var moon_energy_default: float = 0.12  # = MOON_DARK
 @export var moon_rotation_deg: Vector3 = Vector3(-55.0, -35.0, 0.0)
 @export var fog_density: float = 0.012
@@ -18,12 +18,12 @@ extends Node
 # FULL 0.16/0.40); PARTIAL в GDD чисел не имеет и берёт DARK.
 ## The samples of the 3D by tier (Low, Medium, High, Ultra): off, 2x, 2x, 4x. The 4x cost 5.5 to 9 ms of the 19 ms GPU frame of the High tier on the dev iGPU (docs/PERF_PASS.md, Session 23).
 const MSAA_BY_TIER: Array[Viewport.MSAA] = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]
-const AMBIENT_DARK: float = 0.03
-const AMBIENT_LIT: float = 0.11
-const AMBIENT_FULL: float = 0.16
-const AMBIENT_COLOR_DARK: Color = Color(0.075, 0.094, 0.137)
-const AMBIENT_COLOR_LIT: Color = Color(0.098, 0.125, 0.184)
-const AMBIENT_COLOR_FULL: Color = Color(0.125, 0.153, 0.212)
+const AMBIENT_DARK: float = 0.16
+const AMBIENT_LIT: float = 0.19
+const AMBIENT_FULL: float = 0.22
+const AMBIENT_COLOR_DARK: Color = Color(0.078, 0.125, 0.157)  # #142028
+const AMBIENT_COLOR_LIT: Color = Color(0.084, 0.137, 0.169)  # #142028 lift
+const AMBIENT_COLOR_FULL: Color = Color(0.098, 0.153, 0.184)  # #19282f
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
@@ -75,6 +75,8 @@ func _ready() -> void:
 	_env.ambient_light_color = AMBIENT_COLOR_DARK
 	_env.ambient_light_energy = ambient_energy_default
 	_env.fog_enabled = true
+	_env.tonemap_mode = Environment.TONE_MAPPER_ACES
+	_env.tonemap_exposure = 1.0
 
 	var moon: DirectionalLight3D = _find_moon(root)
 	if moon == null:
@@ -86,7 +88,7 @@ func _ready() -> void:
 	_moon.light_energy = moon_energy_default
 	_moon.light_color = Color(0.439, 0.502, 0.753)  # #7080C0
 	_moon.rotation_degrees = moon_rotation_deg
-	_moon.shadow_enabled = moon_energy_default >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
+	_moon.shadow_enabled = _moon_shadows_enabled(moon_energy_default)
 
 	# Flashlight defaults (set on player scene)
 	# - spot_range = 8.0, spot_angle = 45, light_energy = 1.0, color = #c9a24a
@@ -150,11 +152,39 @@ func apply_for_stage(stage: int) -> void:
 	_env.ambient_light_energy = ambient_energy
 	_env.ambient_light_color = ambient_color
 	_env.fog_light_energy = FOG_LIGHT_BY_STAGE[clampi(stage, 0, FOG_LIGHT_BY_STAGE.size() - 1)]
+	_apply_menu_canon_fog(stage)
 	if _moon:
 		_moon.light_energy = moon_energy
-		_moon.shadow_enabled = moon_energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
+		_moon.shadow_enabled = _moon_shadows_enabled(moon_energy)
 	if _player_glow:
 		_player_glow.light_energy = glow_energy
+
+
+## Wave 3: the cold slate-teal mist of the owner's main-menu reference
+## (#142126) and its per-stage density. The stage table above still owns the
+## ambient energy and the fog light, so the lighting gates keep their numbers.
+func _apply_menu_canon_fog(stage: int) -> void:
+	_apply_menu_canon_fog_color()
+	if _env == null:
+		return
+	var stage_name: String = ["DARK", "PARTIAL", "STREETS", "FULL"][clampi(stage, 0, 3)]
+	_env.fog_density = maxf(_env.fog_density, float(MenuCanonAtmosphereDirector.STAGE_FOG_DENSITY.get(stage_name, 0.016)))
+
+
+## The mist's colour and sky contribution are safe to reapply at any time;
+## the density floor is not. A graphics-tier switch must keep the table's
+## own density (0.012 Low, 0.015 Ultra): settings-persist and LOOK1 prove
+## that the dropdown really reaches the live Environment. The stage floor
+## is applied at boot and on stage/district changes instead, so the menu
+## canon still owns the look whenever the world actually changes.
+func _apply_menu_canon_fog_color() -> void:
+	if _env == null:
+		return
+	_env.fog_light_color = MenuCanonAtmosphereDirector.FOG_MIST_DEFAULT
+	# The Low tier keeps its own thin sky (the preset's 0.1); above it the mist
+	# carries the whole sky, which is what makes the reference read as night air.
+	if int(SettingsManager.get_setting("graphics_tier", 2)) > 0:
+		_env.fog_sky_affect = 0.85
 
 
 
@@ -225,6 +255,11 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.glow_hdr_threshold = float(p.get("glow_hdr_threshold", _env.glow_hdr_threshold))
 	_env.fog_density = float(p.get("fog_density", _env.fog_density))
 	_env.fog_sky_affect = float(p.get("fog_sky_affect", _env.fog_sky_affect))
+	# The tier table owns fog_density on a switch (settings-persist / LOOK1
+	# read the exact numbers); the menu-canon stage floor is applied by
+	# apply_for_stage() at boot and on world changes. Only the mist's colour
+	# is refreshed here so it survives a settings change.
+	_apply_menu_canon_fog_color()
 	_env.ssao_enabled = bool(p.get("ssao_enabled", false)) and RenderingServer.get_current_rendering_method() == "forward_plus"
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = float(p.get("contrast", 1.0))
@@ -237,6 +272,11 @@ func _on_settings_changed(key: String, value: Variant) -> void:
 			apply_for_stage(dm.get_stage(dm.current_district))
 	if key != "graphics_tier":
 		return
+	# The first five frames re-apply the stage's lighting so late signals
+	# cannot leave a district dark. A deliberate tier change is not such a
+	# signal: let the tier's own density stand, or the settings gate (and
+	# the player's dropdown) would see the stage floor instead.
+	_override_frames = 0
 	_apply_graphics_tier(int(value))
 	var district_manager: Node = get_node_or_null("/root/DistrictManager")
 	if district_manager != null:
@@ -309,7 +349,7 @@ func _apply_postfx(district_id: StringName) -> void:
 		return
 	var vignette: Dictionary = preset.get("vignette", {})
 	if overlay.has_method("set_vignette_strength"):
-		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.32)), 0.0, 0.4))
+		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.08)), 0.0, 0.10))
 	var chroma: Dictionary = preset.get("chroma", {})
 	if overlay.has_method("set_chroma_amount"):
 		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))
@@ -354,3 +394,10 @@ func _apply_moon_bias(district_id: StringName) -> void:
 	var mult: float = float(lights.get(String(district_id), {}).get("moon_bias_mult", 1.0))
 	_moon.shadow_bias = MOON_BIAS * mult
 	_moon.shadow_normal_bias = MOON_NORMAL_BIAS * mult
+
+
+func _moon_shadows_enabled(energy: float) -> bool:
+	# On the mobile GL path a town-wide shadow map redraws the facades and
+	# street props a second time. Their contact shadows are already batched.
+	return energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0 \
+		and not OS.has_feature("mobile") and RenderingServer.get_current_rendering_method() != "gl_compatibility"

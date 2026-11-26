@@ -7,3 +7,6 @@ display_name = "Полицейский участок"
 stage = 0
 powered_by = [&"park"]
 map_position = Vector2(300, 180)
+fog_density = 0.029
+cold_mult = 1.06
+enemy_count = 4

@@ -1,8 +1,0 @@
-# proof lint_final
-# utc 20261010T203407Z
-# head cdf90cf (uncommitted paths: 3)
-# env none
-# cmd python tools/lint_changed.py
-
-lint_changed: 49 gd, 18 py, 13 sh, 1 workflow, skipped tools for: none, 0 finding(s)
-# EXIT=0

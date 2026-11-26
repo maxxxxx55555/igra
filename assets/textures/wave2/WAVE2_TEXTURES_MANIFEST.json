@@ -1,0 +1,136 @@
+{
+  "style_lock": {
+    "project": "The Last Streetlight",
+    "wave": "wave2_pbr_textures",
+    "seed": 47102,
+    "palette_hex": {
+      "shadow_slate": "#0f1314",
+      "deep_teal": "#060f13",
+      "concrete_mid": "#3f4a52",
+      "concrete_dark": "#252e34",
+      "concrete_damp": "#1a2228",
+      "asphalt_dry": "#283036",
+      "asphalt_wet": "#161d23",
+      "sidewalk_slab": "#39434a",
+      "cast_iron": "#1e2429",
+      "brass": "#c9a24a",
+      "sodium_amber": "#d4a94e",
+      "rust_subtle": "#5c3022"
+    },
+    "resolutions": {
+      "panel_facade": 1024,
+      "wet_asphalt": 512,
+      "concrete_sidewalk": 512,
+      "iron_brass_hardware": 512
+    },
+    "min_mean_luma": 18.0,
+    "max_mean_luma": 175.0,
+    "max_pack_mb": 8.0
+  },
+  "gate_pass": true,
+  "total_files": 12,
+  "total_mb": 1.84,
+  "errors": [],
+  "sets": {
+    "panel_facade": {
+      "size": [
+        512,
+        512
+      ],
+      "mean_luma": 62.56,
+      "tile_seam_delta": 1.42,
+      "files": {
+        "albedo": {
+          "file": "panel_facade_albedo.png",
+          "kb": 152.8,
+          "sha256": "a849c736d4c735ac8c46157310f5c8e6fbf7970ec0b55111fe52990fb4dccde4"
+        },
+        "normal": {
+          "file": "panel_facade_normal.png",
+          "kb": 308.3,
+          "sha256": "6ea6349406a3734b33e770e22c12c201e022ba4afb83d1d0264e64d560881c21"
+        },
+        "orm": {
+          "file": "panel_facade_orm.png",
+          "kb": 3.4,
+          "sha256": "deec0a04bbc60db22301e47686e4115d54f7c79b2a6c40a5845180716e0269c1"
+        }
+      }
+    },
+    "wet_asphalt": {
+      "size": [
+        512,
+        512
+      ],
+      "mean_luma": 36.81,
+      "tile_seam_delta": 2.03,
+      "files": {
+        "albedo": {
+          "file": "wet_asphalt_albedo.png",
+          "kb": 110.8,
+          "sha256": "1f9d55cefcf54e88e7222cda2a7137fcf6ea68e12d02532a88d5e0a8ef560f74"
+        },
+        "normal": {
+          "file": "wet_asphalt_normal.png",
+          "kb": 394.8,
+          "sha256": "f10cb3c76f8dd978cc072113a6d63d9c1d5c2739e7fd8e2575047a5560de52f7"
+        },
+        "orm": {
+          "file": "wet_asphalt_orm.png",
+          "kb": 24.6,
+          "sha256": "a74e8deeeffb6b83b1953f5bd870588d90c55d6ee3223ecd94a7a835ca0727d9"
+        }
+      }
+    },
+    "concrete_sidewalk": {
+      "size": [
+        512,
+        512
+      ],
+      "mean_luma": 63.0,
+      "tile_seam_delta": 1.44,
+      "files": {
+        "albedo": {
+          "file": "concrete_sidewalk_albedo.png",
+          "kb": 97.5,
+          "sha256": "fbe1546182a4766c9fc4eb9fb069bb0e72d5c7bb695c8fb210e3c7e1bc6d8263"
+        },
+        "normal": {
+          "file": "concrete_sidewalk_normal.png",
+          "kb": 359.5,
+          "sha256": "1062dc5b83eafb8a8e3d53d6c0fb7f97634863b9e29de2473dff35fcd5eb04b9"
+        },
+        "orm": {
+          "file": "concrete_sidewalk_orm.png",
+          "kb": 0.2,
+          "sha256": "c302015affbc07cb5d89f46019f1f135ecded6421fb3292f12073dfe9c1002e7"
+        }
+      }
+    },
+    "iron_brass_hardware": {
+      "size": [
+        512,
+        512
+      ],
+      "mean_luma": 100.91,
+      "tile_seam_delta": 0.91,
+      "files": {
+        "albedo": {
+          "file": "iron_brass_hardware_albedo.png",
+          "kb": 90.7,
+          "sha256": "939f717cfa3e29ef07dc10afa51699e33b5e31c0141c117fc40e188a63611830"
+        },
+        "normal": {
+          "file": "iron_brass_hardware_normal.png",
+          "kb": 337.7,
+          "sha256": "1f5126b153cf441ad67880ef17cf7064ff0591d671a26cc33c4826d6a0792113"
+        },
+        "orm": {
+          "file": "iron_brass_hardware_orm.png",
+          "kb": 0.9,
+          "sha256": "ef79427467b26eaa794c422b06e22425d57e0df943ed37b9a276b3b6e2d0782c"
+        }
+      }
+    }
+  }
+}

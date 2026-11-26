@@ -10,6 +10,7 @@ signal streets_ready
 @export var lane_mark_spacing: float = 2.0
 ## The markings are whole tiles lying on the road tiles: at the same height they z-fought, which drew stacked dark stripes and
 ## wedges wherever the lamp or the flashlight lit the road (the first screen of a game).
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const MARKING_LIFT: float = 0.02
 ## Height of every street tile, mesh and collision box alike.
 const TILE_THICKNESS: float = 0.1
@@ -40,23 +41,54 @@ var _surfaces: Array[ShaderMaterial] = []
 ## existed anywhere naming the real fuel item at all.
 const GENERATOR_FUEL: StringName = &"gas_canister"
 
-const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
-const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.webp"
+const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.webp"
+## Wave 2 seamless PBR: asphalt and paving (Albedo / Normal / ORM).
+const W2_ASPHALT_ALBEDO := "res://assets/textures/wave2/wet_asphalt_albedo.png"
+const W2_ASPHALT_NORMAL := "res://assets/textures/wave2/wet_asphalt_normal.png"
+const W2_ASPHALT_ORM := "res://assets/textures/wave2/wet_asphalt_orm.png"
+const W2_SIDEWALK_ALBEDO := "res://assets/textures/wave2/concrete_sidewalk_albedo.png"
+const W2_SIDEWALK_NORMAL := "res://assets/textures/wave2/concrete_sidewalk_normal.png"
+const W2_SIDEWALK_ORM := "res://assets/textures/wave2/concrete_sidewalk_orm.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _PUDDLES := preload("res://shaders/wet_asphalt_puddle.gdshader")
+## Visual overhaul v2: the craft puddle shader uses a real puddle mask and a
+## dry-roughness floor so standing water reads as a dark sodium mirror instead
+## of plastic. The v1 craft set stays as the Low-tier fallback below.
+const _PUDDLES_V2 := preload("res://shaders/wet_asphalt_puddle_craft.gdshader")
+## Wave 3: the menu-canon wet asphalt is the owner's photographic reference -
+## cracked night asphalt with a dark mirror puddle that carries the cold
+## #142126 mist bounce and the sodium sheen. The v2 craft shader stays as the
+## Low-tier fallback so no shipped asset is orphaned.
+const _PUDDLES_CANON := preload("res://shaders/menu_canon_wet_asphalt.gdshader")
+const _CANON_ASPHALT_ALBEDO := "res://assets/textures/menu_canon_pbr/menu_asphalt_albedo.webp"
+const _CANON_ASPHALT_ROUGH := "res://assets/textures/menu_canon_pbr/menu_asphalt_roughness.webp"
+const _CANON_ASPHALT_NORMAL := "res://assets/textures/menu_canon_pbr/menu_asphalt_normal.webp"
+const _CANON_PUDDLE_MASK := "res://assets/textures/menu_canon_pbr/menu_asphalt_puddle_mask.webp"
+const _V2_ASPHALT_ALBEDO := "res://assets/textures/visual_v2/asphalt_wet_albedo_v2.webp"
+const _V2_ASPHALT_ROUGH := "res://assets/textures/visual_v2/asphalt_wet_roughness_v2.webp"
+const _V2_ASPHALT_NORMAL := "res://assets/textures/visual_v2/asphalt_wet_normal_v2.webp"
+const _V2_PUDDLE_MASK := "res://assets/textures/visual_v2/asphalt_puddle_mask_v2.webp"
+const _CRAFT_ASPHALT_ALBEDO := "res://assets/textures/world_craft/asphalt_wet_albedo.webp"
+const _CRAFT_ASPHALT_ROUGH := "res://assets/textures/world_craft/asphalt_wet_roughness.webp"
+const _CRAFT_ASPHALT_NORMAL := "res://assets/textures/world_craft/asphalt_wet_normal.webp"
 ## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
 const MARK_LENGTH: float = 1.2
 const MARK_WIDTH: float = 0.16
 
 func _ready() -> void:
-	add_to_group(&"street_builder")  # the radar draws the streets of the district from its grid
+	add_to_group(&"street_builder")  # Cartography uses this grid as the district-local origin
 	_ensure_mm()
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))
 	_init_mm(_road_mm,     _make_road_mesh())
-	_init_mm(_sidewalk_mm, _make_sidewalk_mesh())
+	_init_mm(_sidewalk_mm, DETAIL.module(&"pavement"))
+	_sidewalk_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
+	_sidewalk_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_marking_mm,  _make_marking_mesh())
-	_init_mm(_curb_mm,     _make_curb_mesh())
+	_init_mm(_curb_mm, DETAIL.module(&"slab"))
+	_curb_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
+	_curb_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_damage_mm,   _make_damage_mesh())
 	_set_detail()
 	EventBus.settings_changed.connect(_set_detail)
@@ -68,23 +100,15 @@ func _make_road_mesh() -> BoxMesh:
 	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.0316, 0.0, 2.0)
 	return m
 
-func _make_sidewalk_mesh() -> BoxMesh:
-	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
-	return m
 
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
-	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0, 0.0)
+	# A pale beige dash read as a plastic block in the wet street; weathered
+	# grey road paint keeps the marking legible without catching the lamp.
+	m.material = _surface("", Vector3(0.10, 0.105, 0.105), 1.0, 1.0, 0.0)
 	return m
 
-func _make_curb_mesh() -> BoxMesh:
-	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, 0.17, 0.22)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
-	return m
 
 func _make_damage_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
@@ -96,15 +120,54 @@ func _make_damage_mesh() -> BoxMesh:
 func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	if surface > 1.5:
-		# the owner's plan, module 1.1: the asphalt wears the supplied puddle shader.
-		mat.shader = _PUDDLES
-		# That shader has no albedo texture: asphalt_tint carries the mean sRGB
-		# value of the old asphalt texture, so the street keeps its darkness.
-		mat.set_shader_parameter("asphalt_tint", Color(0.19, 0.20, 0.22))
-		mat.set_shader_parameter("wet_darkening", 0.45)
+		# Wave 3: the menu-canon asphalt shader carries a real crack field, a
+		# dark mirror puddle and the cold #142126 mist bounce, so the street
+		# reads as wet photographic grit under the sodium lamps. The Low tier
+		# keeps the v2 craft shader (fewer textures, no puddle normals).
+		if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
+			mat.shader = _PUDDLES_V2
+			mat.set_shader_parameter("albedo_tex", load(W2_ASPHALT_ALBEDO))
+			mat.set_shader_parameter("roughness_tex", load(W2_ASPHALT_ORM))
+			mat.set_shader_parameter("normal_tex", load(W2_ASPHALT_NORMAL))
+			mat.set_shader_parameter("puddle_mask_tex", load(_V2_PUDDLE_MASK))
+			mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
+			mat.set_shader_parameter("puddle_uv_scale", Vector2(0.75, 0.75))
+			mat.set_shader_parameter("wetness", 0.58)
+			mat.set_shader_parameter("puddle_roughness", 0.16)
+			mat.set_shader_parameter("dry_roughness_floor", 0.84)
+			mat.set_shader_parameter("normal_strength", 0.78)
+			mat.set_shader_parameter("ripple_strength", 0.012)
+			mat.set_shader_parameter("tint_color", Color(1.28, 1.34, 1.42))
+			return mat
+		mat.shader = _PUDDLES_CANON
+		mat.set_shader_parameter("albedo_tex", load(W2_ASPHALT_ALBEDO))
+		mat.set_shader_parameter("roughness_tex", load(W2_ASPHALT_ORM))
+		mat.set_shader_parameter("normal_tex", load(W2_ASPHALT_NORMAL))
+		mat.set_shader_parameter("puddle_mask_tex", load(_CANON_PUDDLE_MASK))
+		# V4: puddles live in world space (~22 m sheets), not in repeated
+		# tile UVs, so the road reads as broad rain rather than leopard spots,
+		# and the ripple/two-extra-texture ALU of the old version is gone.
+		mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
+		mat.set_shader_parameter("world_puddle_scale", 0.045)
+		mat.set_shader_parameter("wetness", 0.62)
+		mat.set_shader_parameter("puddle_roughness", 0.10)
+		mat.set_shader_parameter("dry_roughness_floor", 0.84)
+		mat.set_shader_parameter("normal_strength", 0.82)
+		mat.set_shader_parameter("tint_color", Color(0.68, 0.71, 0.72))
+		mat.set_shader_parameter("mist_sky_tint", Color(0.078, 0.129, 0.149))
+		mat.set_shader_parameter("sodium_bounce", Color(0.788, 0.635, 0.290))
+		mat.set_shader_parameter("sodium_bounce_energy", 0.06)
 		return mat
 	mat.shader = _ROAD
-	if texture_path != "" and ResourceLoader.exists(texture_path):
+	var w2_albedo: String = W2_SIDEWALK_ALBEDO if surface < 1.5 else W2_ASPHALT_ALBEDO
+	var w2_normal: String = W2_SIDEWALK_NORMAL if surface < 1.5 else W2_ASPHALT_NORMAL
+	var w2_orm: String = W2_SIDEWALK_ORM if surface < 1.5 else W2_ASPHALT_ORM
+	if paint < 0.5 and ResourceLoader.exists(w2_albedo):
+		mat.set_shader_parameter("tex", load(w2_albedo))
+		mat.set_shader_parameter("wave2_nrm", load(w2_normal))
+		mat.set_shader_parameter("wave2_orm", load(w2_orm))
+		mat.set_shader_parameter("use_wave2_pbr", 1.0)
+	elif texture_path != "" and ResourceLoader.exists(texture_path):
 		mat.set_shader_parameter("tex", load(texture_path))
 	mat.set_shader_parameter("tint", tint)
 	mat.set_shader_parameter("mean_lum", mean_lum)
@@ -168,6 +231,19 @@ func _update_center() -> void:
 		mz = maxf(mz, float(r.end.y) * grid_spacing)
 	_center = Vector2(mx, mz) * 0.5
 
+## The asphalt bounds in district-local XZ, using the same tile origins and lane count as the mesh.
+func road_footprints() -> Array[Rect2]:
+	var footprints: Array[Rect2] = []
+	var lanes := maxi(1, roundi(road_width / tile_size))
+	for road: Dictionary in roads:
+		var first := road_step_pos(road, 0)
+		var length := int(road.length / tile_size) * tile_size
+		var along := Rect2(-tile_size * 0.5, -road_width * 0.5, length, lanes * tile_size)
+		if road.dir == "v":
+			along = Rect2(along.position.y, along.position.x, along.size.y, along.size.x)
+		footprints.append(Rect2(Vector2(first.x, first.z) + along.position, along.size))
+	return footprints
+
 func _fill_roads() -> void:
 	# round, а не int: при road_width 6 м и плитке 4 м усечение давало одну
 	# полосу вместо двух, и проезжая часть выходила уже тротуара.
@@ -211,6 +287,7 @@ func _fill_sidewalks() -> void:
 				for wi in range(w):
 					var off: float = (road_width * 0.5 + sidewalk_width * 0.5 - float(wi) * tile_size) * float(side)
 					var t := Transform3D()
+					t.basis = Basis.from_scale(Vector3(tile_size,TILE_THICKNESS,sidewalk_width))
 					t.origin = pos + (Vector3(0, 0, off) if r.dir == "h" else Vector3(off, 0, 0))
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
@@ -260,6 +337,7 @@ func _fill_curbs() -> void:
 			for side in [-1.0, 1.0]:
 				var off: float = (road_width * 0.5 + 0.11) * side
 				var t := Transform3D()
+				t.basis = Basis.from_scale(Vector3(tile_size,0.17,0.22))
 				t.origin = pos + (Vector3(0.0, 0.115, off) if r.dir == "h" else Vector3(off, 0.115, 0.0))
 				if r.dir == "v":
 					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
@@ -323,11 +401,13 @@ func _create_collision(first: Vector3, road: Dictionary, steps: int, surface: St
 	if _collision == null:
 		_collision = StaticBody3D.new()
 		_collision.name = "StreetCollision"
+		_collision.collision_layer = 1
+		_collision.collision_mask = 0
 		add_child(_collision)
 	var horizontal: bool = road.dir == "h"
 	var length: float = float(steps) * tile_size
 	var box := BoxShape3D.new()
-	box.size = Vector3(length, TILE_THICKNESS, tile_size) if horizontal else Vector3(tile_size, TILE_THICKNESS, length)
+	box.size = Vector3(maxf(0.4, length), maxf(0.4, TILE_THICKNESS), maxf(0.4, tile_size)) if horizontal else Vector3(maxf(0.4, tile_size), maxf(0.4, TILE_THICKNESS), maxf(0.4, length))
 	var shape := CollisionShape3D.new()
 	shape.shape = box
 	shape.set_meta(&"surface", surface)  # what the footsteps sound like (footstep_system.gd)

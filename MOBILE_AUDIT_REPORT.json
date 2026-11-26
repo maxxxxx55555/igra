@@ -1,0 +1,32 @@
+{
+  "style_lock": "Samsung Galaxy A32 (4GB RAM, Mali-G52 MC2, 1080x2400 20:9)",
+  "gate_pass": true,
+  "project_godot": {
+    "status": "CLEAN",
+    "orientation": "landscape",
+    "changes_count": 0,
+    "changes": [],
+    "sha256": "2e87937c5e00b77b987d25783d81bc093753a1b06f8a6888b9cc1c5014e5fa8b"
+  },
+  "export_presets": {
+    "status": "CLEAN",
+    "changes_count": 0,
+    "changes": [],
+    "sha256": "311b6151a24aecd786692cbc65ad8b15550d663adc3dbed8fdb911ff5fd07f37"
+  },
+  "wifi_bonus_audit": {
+    "wifi_hits_count": 0,
+    "wifi_hits": []
+  },
+  "scenes": {
+    "collision_findings_count": 0,
+    "collision_findings": [],
+    "ui_findings_count": 0,
+    "ui_findings": []
+  },
+  "assets": {
+    "repo_asset_total_mb": 44.96,
+    "issues_count": 0,
+    "issues": []
+  }
+}

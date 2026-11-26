@@ -1,7 +1,7 @@
 class_name BaseMonster
 extends CharacterBody3D
 
-const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.wav")
+const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.ogg")
 const _ROSTER := preload("res://data/balance/enemy_stats.tres")
 const _Rig := preload("res://scripts/enemies/monster_rig.gd")
 ## A hit of this share of the hit points staggers a monster: its next attack waits STAGGER_SEC (A5).
@@ -63,6 +63,12 @@ var _slow_active: bool = false
 var _vision_lost_timer: float = 0.0
 var _light_exposure_timer: float = 0.0
 var _is_in_flashlight: bool = false
+## HorrorTensionDirector district mutators / grid-surge climax. Default 1.0
+## keeps every pre-existing caller and tool scene unchanged.
+var tension_speed_mult: float = 1.0
+var tension_hearing_mult: float = 1.0
+var _tension_stuck_sec: float = 0.0
+var _tension_last_pos: Vector3 = Vector3.INF
 ## In the player's beam at any distance (the HUD may name it); _is_in_flashlight is the same inside the detect radius only.
 var _seen_in_beam: bool = false
 var _net_active: bool = false
@@ -537,7 +543,7 @@ func _detect_ambient() -> void:
 		var noise_val: float = 0.0
 		if player_ref.has_method("get_noise_level"):
 			noise_val = player_ref.get_noise_level()
-		if noise_val > noise_threshold and noise_val > 0.0:
+		if noise_val * maxf(0.1, tension_hearing_mult) > noise_threshold and noise_val > 0.0:
 			_enter_investigate_at(player_ref.global_position)
 		if _can_see_player():
 			_change_state(State.CHASE)
@@ -646,9 +652,23 @@ func _check_line_of_sight() -> bool:
 func _move_to(spd: float) -> void:
 	if not _nav_agent or not _nav_agent.is_inside_tree():
 		return
+	spd *= clampf(tension_speed_mult, 0.5, 2.0)
 	var next_pos := _nav_agent.get_next_path_position()
 	var dir := (next_pos - global_position).normalized()
 	dir.y = 0.0
+	## Corner unstick: a stalker pinned against a building wall used to keep
+	## pushing into it forever. After ~0.8 s of no displacement, slide along
+	## the wall for a moment, then resume the nav path.
+	if ai_state in [State.CHASE, State.FLEE] and dir.length_squared() > 0.001:
+		if _tension_last_pos.is_finite() and global_position.distance_to(_tension_last_pos) < 0.02:
+			_tension_stuck_sec += get_physics_process_delta_time()
+			if _tension_stuck_sec > 0.8:
+				var side := Vector3(-dir.z, 0.0, dir.x) * (1.0 if fmod(_tension_stuck_sec, 1.6) < 0.8 else -1.0)
+				dir = (dir + side * 0.75).normalized()
+				_tension_stuck_sec = 0.4
+		else:
+			_tension_stuck_sec = 0.0
+		_tension_last_pos = global_position
 	if dir.length_squared() < 0.001:
 		# Winnability: нав-путь не находится (цель вне навмеша — например,
 		# игрок прижат к стене арены в бою с Архитектором). Раньше монстр
@@ -800,6 +820,27 @@ func stun(duration: float = 2.0) -> void:
 	_change_state(State.STUN)
 
 
+## Overdrive Pulse: the amber burst both stuns and physically pushes back
+## stalkers inside the 9.5 m radius (HorrorTensionDirector signal).
+func apply_light_stagger(duration: float, origin: Vector3) -> void:
+	if ai_state == State.DEAD:
+		return
+	stun(maxf(0.05, duration))
+	var away: Vector3 = global_position - origin
+	away.y = 0.0
+	if away.length_squared() < 0.04:
+		away = Vector3(cos(randf() * TAU), 0.0, sin(randf() * TAU))
+	velocity = away.normalized() * maxf(chase_speed, speed) * 1.4
+
+
+func retreat_from_light(origin: Vector3, duration: float) -> void:
+	if ai_state == State.DEAD:
+		return
+	apply_light_stagger(maxf(0.1, duration * 0.5), origin)
+	_flee_timer = maxf(_flee_timer, duration)
+	_change_state(State.FLEE)
+
+
 func _trigger_flee() -> void:
 	if ai_state in [State.FLEE, State.DEAD, State.STUN]:
 		return
@@ -899,7 +940,7 @@ func _set_cues(cues: Dictionary) -> void:
 
 ## The file of a cue: the OGG when the conversion shipped it, the WAV of a clip under half a second otherwise, "" when neither is there (the monster stays silent, as before).
 static func cue_path(file: String) -> String:
-	for ext: String in [".ogg", ".wav"]:
+	for ext: String in [".ogg", ".ogg"]:
 		var path: String = "res://assets/audio/sfx/%s%s" % [file, ext]
 		if ResourceLoader.exists(path):
 			return path

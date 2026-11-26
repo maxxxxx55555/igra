@@ -31,34 +31,34 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="VBox"]
 layout_mode = 2
-text = "ТИТРЫ"
+text = "credits"
 horizontal_alignment = 1
 
 [node name="L1" type="Label" parent="VBox"]
 layout_mode = 2
-text = "Last Streetlight"
+text = "boot_title"
 horizontal_alignment = 1
 
 [node name="L2" type="Label" parent="VBox"]
 layout_mode = 2
-text = "Game Design and Code: TLS Team"
+text = "CREDITS_DESIGN"
 horizontal_alignment = 1
 
 [node name="L3" type="Label" parent="VBox"]
 layout_mode = 2
-text = "Music and SFX: TLS Team"
+text = "CREDITS_MUSIC"
 horizontal_alignment = 1
 
 [node name="L4" type="Label" parent="VBox"]
 layout_mode = 2
-text = "Art and UI: TLS Team"
+text = "CREDITS_ART"
 horizontal_alignment = 1
 
 [node name="L5" type="Label" parent="VBox"]
 layout_mode = 2
-text = "Special thanks to the players"
+text = "CREDITS_THANKS"
 horizontal_alignment = 1
 
 [node name="Back" type="Button" parent="VBox"]
 layout_mode = 2
-text = "НАЗАД"
+text = "UI_BACK"

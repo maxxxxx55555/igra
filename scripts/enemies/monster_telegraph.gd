@@ -7,7 +7,7 @@ const WARN_DURATION: float = 0.4
 
 ## The ember of the style guide (danger only), not a neon red.
 @export var flash_color: Color = Color("#b4452f")
-@export var warn_sfx_path: String = "res://assets/audio/sfx/sfx_enemy_warn.wav"
+@export var warn_sfx_path: String = "res://assets/audio/sfx/sfx_enemy_warn.ogg"
 ## How far the warning sound carries: a sniper's shot is announced from its own range, not from 12 m.
 @export var cue_range: float = 12.0
 ## When the last cue began (Time.get_ticks_msec), so a check can tell the cue from the hit that follows it.

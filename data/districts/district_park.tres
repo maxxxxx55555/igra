@@ -7,3 +7,6 @@ display_name = "Парк"
 stage = 0
 powered_by = [&"suburbs"]
 map_position = Vector2(300, 60)
+fog_density = 0.021
+cold_mult = 1.24
+enemy_count = 5

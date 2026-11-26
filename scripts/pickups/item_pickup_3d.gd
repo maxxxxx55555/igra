@@ -22,8 +22,8 @@ var _picked_up: bool = false
 ## Where this pickup sits in its district's loot list (DistrictLoot): taken keys are not spawned again, the rest are.
 var loot_key: String = ""
 
-const _PICKUP_GENERIC := preload("res://assets/audio/sfx/interact/loot_pickup_generic.wav")
-const _PICKUP_RARE := preload("res://assets/audio/sfx/interact/loot_pickup_rare.wav")
+const _PICKUP_GENERIC := preload("res://assets/audio/sfx/interact/loot_pickup_generic.ogg")
+const _PICKUP_RARE := preload("res://assets/audio/sfx/interact/loot_pickup_rare.ogg")
 
 func _ready() -> void:
 	# WAVE 6 P4: nothing ever added pickups to this group, so _game_test_3d.gd's own check read an always-empty group

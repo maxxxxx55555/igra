@@ -8,6 +8,8 @@ extends Control
 const BASE_COLOR := Color("#0f1314")
 const BASE_RIM := Color("#5a4a2a")
 const KNOB_COLOR := Color("#c9a24a")
+## Wave 3: a thin sodium ring under the thumb while the stick is deflected.
+const SODIUM_RING := Color("#d4a94e")
 const KNOB_RADIUS: float = 26.0
 const PRESS_SCALE: float = 1.18
 ## The ring rests see-through and is full while the thumb is on it (the HUD's other touch controls rest at the same alpha: hud_3d.gd _TOUCH_REST).
@@ -112,6 +114,11 @@ func _draw() -> void:
 	else:
 		draw_circle(center, radius, BASE_COLOR)
 		draw_arc(center, radius, 0.0, TAU, 32, BASE_RIM, 2.0, true)
+	# The sodium ring wakes with the deflection, so the thumb's own light is
+	# the only bright thing on the ring.
+	var deflection: float = _knob_offset.length() / maxf(1.0, _radius())
+	if deflection > 0.02:
+		draw_arc(center, maxf(2.0, radius - 3.0), 0.0, TAU, 32, Color(SODIUM_RING, 0.30 + 0.55 * clampf(deflection, 0.0, 1.0)), 2.0, true)
 	var knob_r: float = KNOB_RADIUS * lerpf(1.0, PRESS_SCALE, _press_anim)
 	if _knob_tex != null:
 		var krect := Rect2(center + _knob_offset - Vector2.ONE * knob_r, Vector2.ONE * knob_r * 2.0)

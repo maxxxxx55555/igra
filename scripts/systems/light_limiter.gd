@@ -1,15 +1,10 @@
 extends Node
-## LightLimiter: no more than MAX_VISIBLE omni lights are shown at once, the nearest to the camera. Autoload.
-## Every CHECK_INTERVAL seconds the lights that give light are sorted by their distance to the camera: the farther ones are hidden, and what this limiter hid itself comes back when it is among the nearest. A light of no
-## energy gives none and costs a slot of the lighting loop of every object it touches, so it is hidden as well (an owner that flashes a light from 0 shows it itself, as the exploding barrel does). A light its owner has put out
-## is never touched: the limiter used to set `visible` of EVERY omni light by its rank, so the glow of the six nearest unlit lamps came back on in a dark district, lit it and held six of the eight slots (5 ms of a frame at
-## the High tier, v10 R2).
-
-const MAX_VISIBLE: int = 8
-const CHECK_INTERVAL: float = 0.25  # секунды между проверками
-## Every OmniLight3D that enters the tree joins this group, so a check sorts the lights instead of walking the whole tree (about 1800 nodes) four times a second.
-const GROUP: StringName = &"omni_lights"
-const LIT_MIN: float = 0.001
+## Reserve a shared budget for the sun, the player flashlight and the nearest
+## local lights. Lamp glass remains emissive even outside its dynamic slot.
+const MAX_VISIBLE: int = 4
+const CHECK_INTERVAL: float = 0.12
+const GROUP := &"budgeted_world_lights"
+const LIT_MIN := 0.001
 
 var _timer: float = 0.0
 var _hidden: Dictionary = {}  # instance id -> true: the lights this limiter has hidden
@@ -18,8 +13,11 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)
 
 func _on_node_added(node: Node) -> void:
-	if node is OmniLight3D:
+	if node is Light3D:
 		node.add_to_group(GROUP)
+		if node is OmniLight3D:
+			node.add_to_group(&"omni_lights")
+		_timer = 0.0
 
 func _process(delta: float) -> void:
 	_timer -= delta
@@ -33,14 +31,20 @@ func _update_lights() -> void:
 	if cam == null:
 		return
 	var cam_pos: Vector3 = cam.global_position
-	var lit: Array = []
+	var lit: Array[Light3D] = []
+	var reserved := 0
+	var player := GameManager.player
 	var seen: Dictionary = {}
 	for node: Node in get_tree().get_nodes_in_group(GROUP):
-		var light := node as OmniLight3D
+		var light := node as Light3D
 		if light == null:
 			continue
 		var id: int = light.get_instance_id()
 		seen[id] = true
+		if light is DirectionalLight3D or (is_instance_valid(player) and player.is_ancestor_of(light)):
+			if light.is_visible_in_tree() and light.light_energy > LIT_MIN:
+				reserved += 1
+			continue
 		if not (light.is_visible_in_tree() or _hidden.has(id)):
 			continue  # put out by its owner
 		if light.light_energy > LIT_MIN:
@@ -51,8 +55,8 @@ func _update_lights() -> void:
 		return a.global_position.distance_squared_to(cam_pos) < b.global_position.distance_squared_to(cam_pos)
 	)
 	for i in lit.size():
-		var light: OmniLight3D = lit[i]
-		if i < MAX_VISIBLE:
+		var light: Light3D = lit[i]
+		if i < MAX_VISIBLE - reserved:
 			if _hidden.erase(light.get_instance_id()):
 				light.visible = true
 		else:
@@ -61,7 +65,7 @@ func _update_lights() -> void:
 		if not seen.has(id):
 			_hidden.erase(id)
 
-func _hide(light: OmniLight3D) -> void:
+func _hide(light: Light3D) -> void:
 	if light.visible:
 		light.visible = false
 		_hidden[light.get_instance_id()] = true

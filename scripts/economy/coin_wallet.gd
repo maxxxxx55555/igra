@@ -32,9 +32,11 @@ func try_spend(amount: int) -> bool:
 	_guard()
 	coins_changed.emit(coins)
 	return true
-## GDD.md:614 (E03): the ad-skip penalty clamps at 0 rather than refusing
-## like try_spend() does - declining the ad offer must always go through,
-## never blocked by "not enough coins" the way a shop purchase is.
+## The vault already committed this value with the matching bonus receipt.
+func apply_saved_balance(balance: int) -> void:
+	coins = balance
+	coins_changed.emit(coins)
+
 func spend_clamped(amount: int) -> void:
 	if amount <= 0:
 		return

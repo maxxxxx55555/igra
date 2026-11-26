@@ -3,7 +3,7 @@ extends RefCounted
 ## its collider keeps (HidingSpot.TYPE_SIZES): surface 0 is the body, in the colour of the kind, surface 1 the accent (doors, lids, glass, tyres, slats, trim). The front of a spot is +z, where the player stands.
 
 const _Parts := preload("res://scripts/art/part_mesh.gd")
-const _DUMPSTER_TEXTURE := "res://assets/textures/surfaces/dumpster_metal_512.png"
+const _DUMPSTER_TEXTURE := "res://assets/textures/surfaces/dumpster_metal_512.webp"
 ## The accent colour of each kind.
 const ACCENT: Dictionary = {
 	"locker": Color(0.28, 0.33, 0.38), "dumpster": Color(0.11, 0.18, 0.14), "car": Color(0.06, 0.07, 0.09),

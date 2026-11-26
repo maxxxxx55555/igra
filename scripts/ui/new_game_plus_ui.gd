@@ -17,7 +17,7 @@ var _activated_this_visit: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	_activated_this_visit = false
 	_refresh()
 	activate_button.pressed.connect(_on_activate)

@@ -27,7 +27,8 @@ const LOOK := {
 	"cabinet": [Color(0.19, 0.22, 0.21), "rusted_metal", 0.7],
 	"barrier": [Color("#4a3828"), "plywood", 0.75],
 	"tyres": [Color(0.055, 0.055, 0.06), "", 0.7],
-	"sacks": [Color(0.18, 0.16, 0.12), "cracked_concrete", 0.75],
+	# Was a cream-brown blob under the sodium lamps: dark, wet, dirty cloth.
+	"sacks": [Color(0.055, 0.050, 0.042), "cracked_concrete", 0.96],
 	"shrub": [Color(0.10, 0.085, 0.07), "", 0.8],
 }
 

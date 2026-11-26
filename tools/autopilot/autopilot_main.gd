@@ -28,7 +28,7 @@ func _ready() -> void:
 	_run("у каждого предмета есть иконка", _check_item_icons)
 	_run("ключевые сцены инстанцируются", _check_scenes)
 	_run("сохранение переживает круг save->load", _check_save_roundtrip)
-	await _run_async("реклама за награду доходит до выдачи", _check_ad_flow)
+	_run("bonus service handles a paused tree", _check_bonus_flow)
 	_write()
 	get_tree().quit(1 if _fail > 0 else 0)
 
@@ -95,7 +95,7 @@ func _check_music() -> String:
 
 func _check_sfx() -> String:
 	var bad: Array[String] = []
-	for f in _files_in("res://assets/audio/sfx", ".wav") + _files_in("res://assets/audio/sfx", ".ogg"):
+	for f in _files_in("res://assets/audio/sfx", ".ogg") + _files_in("res://assets/audio/sfx", ".ogg"):
 		var s := load(f) as AudioStream
 		if s == null or s.get_length() <= 0.0:
 			bad.append(f.get_file())
@@ -203,52 +203,13 @@ func _check_save_roundtrip() -> String:
 		return "монеты не восстановились: ждали %d, получили %d" % [marker, after]
 	return ""
 
-## Полный круг: запросили ролик -> заглушка досмотрела -> награда пришла.
-## Заодно проверяем, что кулдаун закрывает повторный показ.
-func _check_ad_flow() -> String:
-	var ad := get_node_or_null("/root/AdService")
-	if ad == null:
-		return "AdService не поднялся"
-	if not ad.is_rewarded_ready():
-		return "заглушка сообщает, что ролик не готов"
-
-	var got: Array = []
-	var failed: Array = []
-	ad.reward_granted.connect(func(id, amount): got.append([id, amount]))
-	ad.ad_failed.connect(func(reason): failed.append(reason))
-
-	ad.show_rewarded(&"bonus_coins")
-	await get_tree().process_frame  # окно добавляется отложенно
-	await get_tree().process_frame
-	var popup := get_tree().root.get_node_or_null("AdPopup")
-	if popup == null:
-		return "окно ролика не появилось"
-	var button := popup.find_child("ClaimButton", true, false) as Button
-	if button == null:
-		return "в окне нет кнопки ClaimButton"
-	if not button.disabled:
-		return "кнопку награды можно нажать до конца отсчёта"
-
-	# Отсчёт идёт 3 с игрового времени, даём запас.
-	await get_tree().create_timer(4.0, true, false, true).timeout
-	if button.disabled:
-		return "кнопка награды не разблокировалась за 4 с"
-	button.pressed.emit()  # то же, что нажатие игрока
-	await get_tree().process_frame
-
-	if not failed.is_empty():
-		return "осечка: " + String(failed[0])
-	if got.is_empty():
-		return "награда не пришла за 4 с"
-	var id: StringName = got[0][0]
-	var amount: int = got[0][1]
-	if id != &"bonus_coins":
-		return "пришла чужая награда: " + String(id)
-	if amount != int(ad.REWARDS[&"bonus_coins"]):
-		return "сумма награды %d вместо %d" % [amount, int(ad.REWARDS[&"bonus_coins"])]
-	if ad.is_rewarded_ready():
-		return "кулдаун не закрыл повторный показ"
-	_note("награда: %s x%d, кулдаун %d с" % [id, amount, int(ad.cooldown_left())])
+func _check_bonus_flow() -> String:
+	var was_paused := get_tree().paused
+	get_tree().paused = true
+	var runs_paused := false
+	get_tree().paused = was_paused
+	if not runs_paused:
+		return "Bonus service cannot process a paused death screen"
 	return ""
 
 ## ─────────────────────────── инфраструктура ───────────────────────────

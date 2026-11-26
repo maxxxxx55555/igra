@@ -9,14 +9,6 @@ extends Node
 ## docs/KNOWN_ISSUES.md both already say so — so there is nothing on the
 ## other end to send a token TO. A client-only "integrity check" that never
 ## reaches a server proves nothing; this stub does not pretend otherwise.
-##
-## Same shape as AdService before a real SDK key (scripts/monetization/
-## ad_service.gd): the wiring point exists so a future backend only needs
-## to (a) add the real Play Integrity SDK plugin the way AppLovin MAX is
-## already wired (gradle_build/plugins_enabled in export_presets.cfg),
-## (b) request a real token here instead of the stub result, (c) send it
-## to a server that calls Google's decode API. None of that is done, or
-## fakeable, from a headless session with no backend to test against.
 
 signal integrity_checked(result: Dictionary)
 

@@ -29,11 +29,21 @@ signal district_won(hope: int, streak: int)
 
 var objective: Objective = Objective.FIND_FUSES
 var architect_phase: Architect = Architect.STALK
-var battery: float = 100.0
-var warmth: float = 100.0
+var battery: float:
+	get: return SecurityVault.get_guarded_float("runtime_survival_battery", 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float("runtime_survival_battery", clampf(value, 0.0, 100.0))
+var warmth: float:
+	get: return SecurityVault.get_guarded_float("runtime_survival_warmth", 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float("runtime_survival_warmth", clampf(value, 0.0, 100.0))
 var hope: int = 0
 var streak: int = 0
 var core_hp: float = 100.0
+## Set by Wave2GameBridge from the active district mutator + authored cold_mult.
+var tension_cold_mult: float = 1.0
 var repair_progress: float = 0.0
 var fuse_mask: int = 0
 
@@ -96,6 +106,7 @@ func _flashlight() -> SpotLight3D:
 
 
 func _physics_process(delta: float) -> void:
+	delta = clampf(delta, 0.0, 0.05) if is_finite(delta) else 0.0
 	if not _loaded:
 		return
 	var actor: Node3D = _player()
@@ -350,7 +361,7 @@ func _tick_survival(actor: Node3D, delta: float) -> void:
 			break
 	var difficulty: float = difficulty_multiplier()
 	battery = clampf(battery + delta * (-0.42 * difficulty if lit else 1.25), 0.0, 100.0)
-	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty), 0.0, 100.0)
+	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty * clampf(tension_cold_mult, 0.5, 2.0)), 0.0, 100.0)
 	if lit and battery <= 0.0:
 		flash.visible = false
 		_spent_lamp = flash

@@ -1,1 +1,0 @@
-proof_run signals: exit=0 -> .qa_logs/proofs/signals.out (12 lines)

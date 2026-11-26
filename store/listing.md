@@ -92,6 +92,9 @@ All 11 districts ship complete — story, lore and endings included. No
 paywalled content, no season pass. Fully offline: this blackout is a
 survival game, and the story is yours to drive.
 
+Play without ads. For an optional free bonus, connect to Wi-Fi on Android
+or to a network on desktop or web. You can skip any offer without penalty.
+
 Made with AI help: part of the music (Google Lyria), the painted menu, screen backdrops, city map and district cards, some of the in-game textures and the key art of this store page are AI-generated.
 ```
 
@@ -149,6 +152,10 @@ Made with AI help: part of the music (Google Lyria), the painted menu, screen ba
 платного контента и сезонных пропусков. Полностью офлайн: этот
 блэкаут — игра на выживание, где историю ведёшь ты.
 
+Играй без рекламы. Чтобы получить необязательный бесплатный бонус,
+подключись к Wi-Fi на Android или к сети на компьютере и в веб-версии.
+Любое предложение можно пропустить без штрафа.
+
 Сделано с помощью ИИ: часть музыки (Google Lyria), нарисованные меню, фоны экранов, карта города и карточки районов, часть игровых текстур и ключевая графика этой страницы созданы ИИ.
 ```
 
@@ -201,27 +208,12 @@ story-driven, survival game, offline horror game, flashlight game.
 - Expected age rating: **PEGI 16** (horror tension, stylized violence, a
   narrative about a deliberately caused disaster) — see `docs/store/play_store.md`.
 
-## Data-safety notes (confirmed against the shipped RC FINAL v2 build, 2026-09-13)
-- Offline-first, no account system, no analytics SDK in the current build.
-- No personal data collected or shared by the game.
-- No multiplayer ships in the launch build: the LAN prototype
-  (`scripts/multiplayer/`, archived per `docs/A10_multiplayer_decision.md`)
-  is unreachable from any UI, and the game itself opens no network
-  connections. (Play Console Data-Safety answers must say "no data
-  collected, no users" — an earlier draft line about LAN multiplayer was
-  removed here as unbacked.)
-- Ads: the optional AppLovin MAX plugin ships with **no SDK key configured**,
-  so no real ad ever loads and nothing is collected; until a key is set the
-  ad slots show an offline debug placeholder popup only. If a real key is
-  enabled before submission, the Data-Safety form and privacy policy §5 must
-  be updated first — see `docs/store/HUMAN_CHECKLIST.md`.
-- The Android build declares `INTERNET` (reserved for the optional ad plugin)
-  and `VIBRATE` (touch haptics) only — see `export_presets.cfg`.
-- Privacy-policy URL: **https://maxxxxx55555.github.io/igra/** — live, serves the EN and RU
-  policy texts of `docs/PRIVACY_POLICY_FINAL.md` (verified HTTP 200 on 2026-11-09); the contact
-  address it publishes is maxzimkasky@gmail.com. Paste this URL into the Play Console field
-  "Privacy policy" and keep the Data-Safety answers exactly as the page states them
-  ("no data collected, no users").
+## Data safety
+
+- Data collected or shared: No. Contains ads: No.
+- The game checks connection status locally for optional bonuses. The check sends zero requests and transmits no IP address, SSID, device identifier or gameplay data.
+- Android requests `ACCESS_NETWORK_STATE` and `VIBRATE`. The release has no internet permission or ad SDK.
+- Publish the EN/RU text in `store/privacy-policy-template.md` at the existing store policy address, https://maxxxxx55555.github.io/igra/, before uploading this release.
 
 ---
 

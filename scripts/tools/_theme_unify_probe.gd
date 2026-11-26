@@ -15,8 +15,8 @@ func _run() -> void:
 	var btn: Button = menu.get_node("VBox/Play")
 	var sb := btn.get_theme_stylebox("normal", "Button")
 	print("[theme-unify] main_menu Play button stylebox = ", sb.get_class())
-	if _quiet_control(sb):
-		print("[theme-unify] main menu uses quiet action hierarchy")
+	if _action_control(sb):
+		print("[theme-unify] main menu uses the supplied craft action hierarchy")
 	else:
 		bad += 1
 	menu.queue_free()
@@ -58,7 +58,11 @@ func _quiet_control(sb: StyleBox) -> bool:
 ## main-menu hierarchy. Both shapes are valid, a missing stylebox is not.
 func _action_control(sb: StyleBox) -> bool:
 	var flat := sb as StyleBoxFlat
-	return _quiet_control(sb) or (flat != null and flat.border_width_left >= 1 and flat.corner_radius_bottom_right >= 1)
+	if _quiet_control(sb) or (flat != null and flat.border_width_left >= 1 and flat.corner_radius_bottom_right >= 1):
+		return true
+	var textured := sb as StyleBoxTexture
+	return textured != null and textured.texture != null and \
+		textured.texture.resource_path.begins_with("res://assets/textures/ui_craft/")
 
 func _font_and_states() -> int:
 	var bad: int = 0

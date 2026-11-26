@@ -10,6 +10,7 @@ func _ready() -> void:
 	# the HUD never updated for any of those and briefly showed a raw kill
 	# roll as the total instead.
 	CoinWallet.coins_changed.connect(_upd)
+	LocalizationManager.language_changed.connect(func(_lang: String) -> void: _upd(CoinWallet.get_coins()))
 	_upd(CoinWallet.get_coins())
 
 func _upd(v: int) -> void:

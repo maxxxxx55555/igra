@@ -7,3 +7,6 @@ display_name = "Промышленная зона"
 stage = 0
 powered_by = [&"warehouses", &"police"]
 map_position = Vector2(60, 300)
+fog_density = 0.022
+cold_mult = 0.98
+enemy_count = 3
