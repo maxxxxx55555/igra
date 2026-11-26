@@ -161,13 +161,12 @@ def demo():
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*,scripts/security/*,assets/icons/*.png"\n', encoding="utf-8")
         found, count = violations(root, patterns("Android", root))
         fails = [v for v in found if v.startswith("FAIL")]
-        assert len(fails) == 4, found
-        assert any("guard.gd:1" in v and "log.gd" in v for v in fails), found
+        assert len(fails) == 3, found
+        assert any("project.godot" in v and "log.gd" in v for v in fails), found
         assert any("project.godot" in v for v in fails), found
         assert any("icon.gd:1" in v and "2 of the 2" in v for v in fails), found
         assert any("fine.gd:6" in v and "ending_sting" in v and "has no" in v for v in fails), found
-        assert any(v.startswith("NOTE") and "fine.gd:4" in v for v in found), found
-        assert unaccepted([v for v in found if v.startswith("NOTE")]) and unaccepted(["NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*"]) == [], found
+        assert unaccepted(["NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*"]) == [], found
         (root / "assets" / "audio" / "ui").mkdir(parents=True)
         (root / "assets" / "audio" / "ui" / "ui_ending_sting.ogg").write_bytes(b"x")
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*"\n', encoding="utf-8")

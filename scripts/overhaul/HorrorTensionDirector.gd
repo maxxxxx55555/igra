@@ -1,7 +1,7 @@
 class_name HorrorTensionDirector
 extends Node
 
-## Playtest-Driven High-Tension Horror Mechanics Director for The Last Streetlight.
+## Playtest-Driven High-Tension Horror Mechanics Director for Last Streetlight.
 ## Zero new media assets, zero extra HUD buttons (preserves 7/7 phone layouts & <= 45 MiB budget).
 ## Implements 3 risk-reward mechanics locked to canon palette (#0f1314, #060f13, #c9a24a, #d4a94e):
 ##   1. Flashlight Overdrive Pulse (double-tap existing Flashlight button -> staggers nearby stalkers,
@@ -62,7 +62,7 @@ const MUTATOR_FALLBACK_EN: Dictionary = {
     "MUT_D08": "FREEZING RAIN",
     "MUT_D09": "SURGE CASCADE",
     "MUT_D10": "BLACKOUT GAUNTLET",
-    "MUT_D11": "THE LAST STREETLIGHT",
+    "MUT_D11": "LAST STREETLIGHT",
 }
 
 var _district_index: int = 0

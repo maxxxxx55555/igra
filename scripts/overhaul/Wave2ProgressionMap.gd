@@ -1,7 +1,7 @@
 class_name Wave2ProgressionMap
 extends CanvasLayer
 
-## Dual-layer Map & Progression System for The Last Streetlight:
+## Dual-layer Map & Progression System for Last Streetlight:
 ## 1) Always-visible clickable Progression Minimap (top-right safe area) showing current district
 ##    illumination-only fog-of-war + district progression pill.
 ## 2) Clicking/tapping the minimap (or pressing toggle_map / M) opens the Full Game Overview Map
@@ -407,7 +407,8 @@ func _refresh_selected_district_info() -> void:
 	if _info_lbl == null:
 		return
 	var d_num: int = _selected_district_idx + 1
-	var d_name: String = I18nSync.t("DISTRICT_NAME_%02d" % d_num, {})
+	var d_key: String = "DISTRICT_NAME_%02d" % d_num
+	var d_name: String = I18nSync.t(d_key, {})
 	var status_str: String = ""
 	if _completed_districts.has(_selected_district_idx):
 		status_str = I18nSync.t("MAP_STATUS_RESTORED", {})

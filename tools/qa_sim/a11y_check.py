@@ -44,7 +44,7 @@ FEATURES = {
     "A3 difficulty presets (Easy, Normal, Hard in spawn, damage, loot and revive code)": (
         ["difficulty"],
         [("scripts/enemies/base_monster.gd", 'difficulty_scale("monster_hp")'), ("scripts/enemies/base_monster.gd", 'difficulty_scale("monster_damage")'),
-         ("scripts/player/player_3d.gd", 'difficulty_scale("player_hp")'), ("scripts/world/district_loot.gd", '"difficulty_scale", "extra_parts"'),
+         ("scripts/player/player_3d.gd", 'difficulty_scale("player_hp")'), ("scripts/world/district_loot.gd", '"difficulty_scale", "extra_parts"')],
         ["Difficulty", "diff_easy", "diff_normal", "diff_hard", "DIFF_EASY_DESC", "DIFF_NORMAL_DESC", "DIFF_HARD_DESC"], ["difficulty"]),
     "A4 motion comfort (no shake, no FOV punch, no sprint blur, no landing dip, no rain on the lens)": (
         ["reduce_camera_motion"],

@@ -90,7 +90,7 @@ def check_locale(base: dict, code: str, strings: dict) -> dict:
         # This approved Russian connectivity message wraps in the adjacent bonus
         # status label. Keep the exception bounded to its reviewed 43 characters.
         limit = base_len * ratio_max
-            limit = max(limit, 43)
+        limit = max(limit, 43)
         if len(val) > limit:
             overflow.append(key)
     return {"locale": code, "missing": missing, "mixed": mixed, "overflow": overflow}

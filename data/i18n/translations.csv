@@ -259,7 +259,7 @@ DISTRICT_NAME_07,Closed Market Square,Площадь закрытого рынк
 DISTRICT_NAME_08,Factory Quarters,Заводские кварталы
 DISTRICT_NAME_09,Substation Approach,Подход к подстанции
 DISTRICT_NAME_10,Central Avenue,Центральный проспект
-DISTRICT_NAME_11,The Last Streetlight Square,Площадь Последнего Фонаря
+DISTRICT_NAME_11,Last Streetlight Square,Площадь Последнего Фонаря
 DISTRICT_NAME_GAS_STATION,Gas station,АЗС
 DISTRICT_NAME_HOSPITAL,Hospital,Больница
 DISTRICT_NAME_INDUSTRIAL,Industrial zone,Промышленная зона
@@ -434,7 +434,7 @@ FTUE_STREET_LIT,The street is lit again,Улица снова светится
 FULLSCREEN,Fullscreen,На весь экран
 Found server: %s,Found server: %s,Найден сервер: %s
 GAME_OVER_STATS,Time: %ds | Killed: %d,Время: %d с | Убито: %d
-GAME_TITLE,THE LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
+GAME_TITLE,LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
 GENERATOR_OUT_OF_FUEL,Generator out of fuel,В генераторе закончилось топливо
 Game saved to slot %d,Game saved to slot %d,Игра сохранена в слот %d
 Graphics Tier,Graphics Tier,Уровень графики
@@ -1722,6 +1722,6 @@ MUT_D07,BROWNOUT WAVES,ВОЛНЫ ОТКЛЮЧЕНИЙ
 MUT_D08,FREEZING RAIN,ЛЕДЯНОЙ ДОЖДЬ
 MUT_D09,SURGE CASCADE,КАСКАДНЫЙ СБОЙ
 MUT_D10,BLACKOUT GAUNTLET,ПОЛНЫЙ БЛЭКАУТ
-MUT_D11,THE LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
+MUT_D11,LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
 HUD_OVERDRIVE_READY,OVERDRIVE PULSE: FLASH!,ИМПУЛЬС ПЕРЕГРУЗКИ: ВСПЫШКА!
 HUD_GRID_SURGE,GRID SURGE - RUN TO THE GATE,СКАЧОК НАПРЯЖЕНИЯ — БЕГИ К ВОРОТАМ

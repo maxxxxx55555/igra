@@ -253,7 +253,7 @@
   "DISTRICT_NAME_08": "Factory Quarters",
   "DISTRICT_NAME_09": "Substation Approach",
   "DISTRICT_NAME_10": "Central Avenue",
-  "DISTRICT_NAME_11": "The Last Streetlight Square",
+  "DISTRICT_NAME_11": "Last Streetlight Square",
   "DISTRICT_NAME_GAS_STATION": "Gas station",
   "DISTRICT_NAME_HOSPITAL": "Hospital",
   "DISTRICT_NAME_INDUSTRIAL": "Industrial zone",
@@ -428,7 +428,7 @@
   "FULLSCREEN": "Fullscreen",
   "Found server: %s": "Found server: %s",
   "GAME_OVER_STATS": "Time: %ds | Killed: %d",
-  "GAME_TITLE": "THE LAST STREETLIGHT",
+  "GAME_TITLE": "LAST STREETLIGHT",
   "GENERATOR_OUT_OF_FUEL": "Generator out of fuel",
   "Game saved to slot %d": "Game saved to slot %d",
   "Graphics Tier": "Graphics Tier",
@@ -1710,7 +1710,7 @@
   "MUT_D08": "FREEZING RAIN",
   "MUT_D09": "SURGE CASCADE",
   "MUT_D10": "BLACKOUT GAUNTLET",
-  "MUT_D11": "THE LAST STREETLIGHT",
+  "MUT_D11": "LAST STREETLIGHT",
   "HUD_OVERDRIVE_READY": "OVERDRIVE PULSE: FLASH!",
   "HUD_GRID_SURGE": "GRID SURGE - RUN TO THE GATE"
 }

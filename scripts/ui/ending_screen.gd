@@ -61,7 +61,7 @@ func _build() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.add_theme_font_size_override("font_size", 16)
 	_hint.add_theme_color_override("font_color", Color(0.7, 0.7, 0.75))
-	_hint.text = "ENDING_DISMISS"
+	_hint.text = LocalizationManager.t("ENDING_DISMISS")
 	box.add_child(_hint)
 
 	_apply_kind()
@@ -76,6 +76,8 @@ func _apply_kind() -> void:
 	# Единый источник переводов — LocalizationManager (data/i18n/*.json).
 	_title.text = LocalizationManager.t(String(key_title))
 	_sub.text = LocalizationManager.t(String(key_msg))
+	if _hint != null:
+		_hint.text = LocalizationManager.t("ENDING_DISMISS")
 	if _bg != null:
 		_bg.color = COLOR_WIN_BG if kind == "win" else COLOR_LOSE_BG
 

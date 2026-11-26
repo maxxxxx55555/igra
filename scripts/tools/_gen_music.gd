@@ -102,7 +102,7 @@ func _noise(t0: float, dur: float, amp: float, cut_hz: float, env_attack: float 
 		lp += a * (_rng.randf_range(-1.0, 1.0) - lp)
 		var env: float = minf(t / maxf(env_attack, 0.001), 1.0) * minf((dur - t) / maxf(env_attack, 0.001), 1.0)
 		_add(start + i, lp * amp * clampf(env, 0.0, 1.0))
-	
+
 ## Дальний металлический удар: резонансный шумовой всплеск.
 func _clang(t0: float, amp: float, res_hz: float, decay: float) -> void:
 	var start: int = int(t0 * MIX)

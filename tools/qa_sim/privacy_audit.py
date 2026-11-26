@@ -89,25 +89,29 @@ def findings(found, lobby=None):
 
 
 def android_options():
+    """Every Android preset must obey the same privacy rules (the release APK
+    preset sits beside the original AAB preset)."""
     config = configparser.ConfigParser(interpolation=None)
     config.read(ROOT / "export_presets.cfg", encoding="utf-8")
     android = [s for s in config.sections() if config[s].get("platform") == '"Android"']
-    if len(android) != 1:
-        raise ValueError("Expected one Android export preset")
-    return config[android[0] + ".options"]
+    if not android:
+        raise ValueError("No Android export preset")
+    return [(s, config[s + ".options"]) for s in android]
 
 
 def permissions():
-    return sorted(key.removeprefix("permissions/") for key, value in android_options().items()
-                  if key.startswith("permissions/") and value == "true")
+    return sorted({key.removeprefix("permissions/") for _, options in android_options()
+                   for key, value in options.items()
+                   if key.startswith("permissions/") and value == "true"})
 
 
 def export_findings():
-    options = android_options()
     expected = {"permissions/access_network_state": "true", "permissions/internet": "false",
                 "gradle_build/plugins_enabled": "PackedStringArray()"}
-    problems = ["Android export requires %s=%s" % (key, value)
-                for key, value in expected.items() if options.get(key) != value]
+    problems = []
+    for name, options in android_options():
+        problems += ["%s: requires %s=%s" % (name, key, value)
+                     for key, value in expected.items() if options.get(key) != value]
     if permissions() != ["access_network_state", "vibrate"]:
         problems.append("Unexpected Android permissions: %s" % permissions())
     for directory in ("android/plugins", "addons"):

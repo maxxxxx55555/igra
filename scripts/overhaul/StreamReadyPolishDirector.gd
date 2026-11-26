@@ -41,7 +41,8 @@ func _ready() -> void:
 func transition(index: int, enter: Callable) -> void:
 	if _tween and _tween.is_valid():
 		_tween.kill()
-	var district_name: String = LocalizationManager.t("DISTRICT_NAME_%02d" % (index + 1))
+	var district_key: String = "DISTRICT_NAME_%02d" % (index + 1)
+	var district_name: String = LocalizationManager.t(district_key)
 	var mutator_name: String = ""
 	var tension := get_node_or_null("/root/HorrorTension")
 	if tension != null:

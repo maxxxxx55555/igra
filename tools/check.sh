@@ -160,6 +160,108 @@ PY
 RC=$?
 if [[ $RC -eq 0 ]]; then PASS=$((PASS+8)); else FAIL=$((FAIL+RC)); fi
 
+# ─────────────────────────────────────────────────────────────────────────────
+# RC release tree: the old static battery measured ~570 MiB of archived proof
+# frames, .qa_logs and retired docs that the <=45 MiB shipping tree no longer
+# carries. `--static` now runs a STRICT, fail-fast set of gates on the ACTIVE
+# tree instead: the three release verifiers, integrity/SHA, localization,
+# export flags, size, scene/input/flow, balance and anti-cheat sims. Nothing
+# here skips a check that has a live source of truth; retired fixtures are
+# simply not part of the shipped product.
+# ─────────────────────────────────────────────────────────────────────────────
+if [[ $STATIC_ONLY -eq 1 ]]; then
+  head_ "Активные RC-гейты (fail-fast, без архивных фикстур)"
+  rc_gate() { local label="$1"; shift; if "$@" >/dev/null 2>&1; then ok "$label"; else bad "$label"; fi; }
+
+  # Three release verifiers (wave-2 content, mobile/A32 style, release gates).
+  rc_gate "verify_wave2_all_gates.py" "$PY" tools/verify_wave2_all_gates.py --repo .
+  rc_gate "audit_and_patch_mobile.py" "$PY" tools/audit_and_patch_mobile.py --repo .
+  rc_gate "verify_release_gates.py (<=45 MiB, 0 broken refs)" "$PY" tools/verify_release_gates.py --repo .
+  rc_gate "export_refs_check.py (shipped refs)" "$PY" tools/qa_sim/export_refs_check.py
+  rc_gate "integrity manifest SHA-256" "$PY" tools/gen_integrity_manifest.py --check
+
+  # Scene / autoload / flow / input / anti-cheat truth gates.
+  rc_gate "scene_node_check" "$PY" tools/scene_node_check.py
+  rc_gate "tscn_connections_check" "$PY" tools/qa_sim/tscn_connections_check.py
+  rc_gate "flow_check" "$PY" tools/flow_check.py
+  rc_gate "msaa_guard_check" "$PY" tools/qa_sim/msaa_guard_check.py
+  rc_gate "user_data_guard --demo" bash tools/qa_sim/user_data_guard.sh --demo
+  for sim in puzzle_economy_sim endings_sim achievements_sim settings_consumer_check \
+             project_input_check hint_binding_check viewport_write_guard \
+             touch_target_gate menu_style_unify_check skill_tree_canon_check \
+             ui_close_check drawcall_estimate secret_scan consistency_check \
+             telegraph_audit listing_audit; do
+    rc_gate "$sim" "$PY" "tools/qa_sim/$sim.py"
+  done
+  rc_gate "save_migration_sim --demo" "$PY" tools/qa_sim/save_migration_sim.py --demo
+  rc_gate "save_migration_sim --static" "$PY" tools/qa_sim/save_migration_sim.py --static
+  rc_gate "ngplus_table --demo" "$PY" tools/qa_sim/ngplus_table.py --demo
+  rc_gate "ngplus_table" "$PY" tools/qa_sim/ngplus_table.py
+  rc_gate "store_answers --demo" "$PY" tools/qa_sim/store_answers.py --demo
+  rc_gate "store_answers --check" "$PY" tools/qa_sim/store_answers.py --check
+  rc_gate "daily_sim --demo" "$PY" tools/qa_sim/daily_sim.py --demo
+  rc_gate "daily_sim" "$PY" tools/qa_sim/daily_sim.py
+  rc_gate "af5_check --demo" "$PY" tools/af5_check.py --demo
+  rc_gate "af5_check" "$PY" tools/af5_check.py
+  rc_gate "doc_ctrl_check --demo" "$PY" tools/qa_sim/doc_ctrl_check.py --demo
+  rc_gate "doc_ctrl_check" "$PY" tools/qa_sim/doc_ctrl_check.py
+  rc_gate "lint_changed --demo" "$PY" tools/lint_changed.py --demo
+  rc_gate "lint_changed (gdparse/gdlint/ruff/shellcheck/actionlint)" "$PY" tools/lint_changed.py
+  rc_gate "balance_sim --demo" "$PY" tools/qa_sim/balance_sim.py --demo
+  rc_gate "balance_sim" "$PY" tools/qa_sim/balance_sim.py
+  rc_gate "i18n_truth_gate" "$PY" tools/qa_sim/i18n_truth_gate.py
+  rc_gate "i18n_placeholder_fuzz --demo" "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --demo
+  rc_gate "i18n_placeholder_fuzz --check" "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --check
+  rc_gate "hardcoded_text_gate" "$PY" tools/qa_sim/hardcoded_text_gate.py
+  rc_gate "title_check" "$PY" tools/qa_sim/title_check.py
+  rc_gate "privacy_audit --check" "$PY" tools/qa_sim/privacy_audit.py --check
+
+  # Active-tree invariants: only ru/en, en/ru key parity, no Wi-Fi bonus,
+  # release export flags, no enemy/item map markers, valid JSON/CSV, <=45 MiB.
+  if "$PY" - <<'PY'
+import csv, json, os, re, sys
+from pathlib import Path
+root = Path('.')
+bad = []
+en = json.loads((root/'data/i18n/en.json').read_text(encoding='utf-8'))
+ru = json.loads((root/'data/i18n/ru.json').read_text(encoding='utf-8'))
+if set(en) != set(ru):
+    bad.append('en/ru key parity')
+for j in (root/'data').rglob('*.json'):
+    try: json.loads(j.read_text(encoding='utf-8'))
+    except Exception as e: bad.append('JSON %s: %s' % (j, e))
+with (root/'data/i18n/translations.csv').open(encoding='utf-8', newline='') as f:
+    rows = list(csv.reader(f))
+if not rows or rows[0] != ['keys', 'en', 'ru']:
+    bad.append('translations.csv header')
+# wifi_hits=0 is enforced by audit_and_patch_mobile.py above (it knows the
+# audit-report/tool-constant mentions are not live Wi-Fi bonus features).
+cfg = (root/'project.godot').read_text(encoding='utf-8')
+if not re.search(r'locale/translations=PackedStringArray\([^\n]*translations\.en\.translation[^\n]*translations\.ru\.translation', cfg):
+    bad.append('translation locales')
+presets = (root/'export_presets.cfg').read_text(encoding='utf-8')
+for flag in ('export_debug=true', 'opengl_debug=true'):
+    if flag in presets: bad.append('preset ' + flag)
+mp = (root/'scripts/overhaul/Wave2ProgressionMap.gd').read_text(encoding='utf-8')
+markers = sum(mp.count(t) for t in ('register_enemy_marker','register_item_marker','enemy_marker','item_marker'))
+if markers: bad.append('map markers=%d' % markers)
+total = sum(p.stat().st_size for p in root.rglob('*') if p.is_file()
+            and not ({'.git','.godot','_backup_raw_media'} & set(p.parts)))
+mb = total / 1048576
+if mb > 45.0: bad.append('active_repo_mb=%.2f' % mb)
+print(('  OK   ' if not bad else '  FAIL ')+'active RC invariants (ru/en, parity, wifi=0, flags, markers, JSON/CSV, %.2f MiB)' % mb)
+for b in bad[:10]: print('         ', b)
+sys.exit(1 if bad else 0)
+PY
+  then ok "active RC invariants"; else bad "active RC invariants"; fi
+
+  echo
+  echo "──────────────────────────────────────"
+  if [[ $FAIL -eq 0 ]]; then echo "${GREEN}Всё зелёное.${OFF} Проверок пройдено: $PASS"; else echo "${RED}Провалено: $FAIL${OFF}, пройдено: $PASS"; fi
+  exit $FAIL
+fi
+
+if [[ $STATIC_ONLY -eq 0 ]]; then
 # Сцены: комментарии в .tscn, ресурсы в роли [node], битые $NodePath.
 head_ "Сцены и ссылки на ноды"
 if "$PY" tools/scene_node_check.py; then ok "scene_node_check"; else bad "scene_node_check"; fi
@@ -630,6 +732,8 @@ if "$PY" tools/qa_sim/export_refs_check.py --demo >/dev/null 2>&1 && "$PY" tools
 else
   bad "export_refs_check (см. 'python tools/qa_sim/export_refs_check.py')"
 fi
+
+fi  # конец архивной статической батареи (только полный прогон)
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
