@@ -1712,3 +1712,16 @@ victory,LEVEL COMPLETE,УРОВЕНЬ ПРОЙДЕН
 weight,Weight,Вес
 yes,Yes,Да
 you_died,YOU DIED,ВЫ ПОГИБЛИ
+MUT_D01,OUTSKIRTS DUSK,СУМЕРКИ ОКРАИНЫ
+MUT_D02,WET ECHOES,СЫРОЕ ЭХО
+MUT_D03,FLICKER GRID,МЕРЦАЮЩАЯ СЕТЬ
+MUT_D04,COLD SNAP,РЕЗКИЙ МОРОЗ
+MUT_D05,BLIND FOG,СЛЕПОЙ ТУМАН
+MUT_D06,STALKER PACK,ОХОТНИЧЬЯ СТАЯ
+MUT_D07,BROWNOUT WAVES,ВОЛНЫ ОТКЛЮЧЕНИЙ
+MUT_D08,FREEZING RAIN,ЛЕДЯНОЙ ДОЖДЬ
+MUT_D09,SURGE CASCADE,КАСКАДНЫЙ СБОЙ
+MUT_D10,BLACKOUT GAUNTLET,ПОЛНЫЙ БЛЭКАУТ
+MUT_D11,THE LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
+HUD_OVERDRIVE_READY,OVERDRIVE PULSE: FLASH!,ИМПУЛЬС ПЕРЕГРУЗКИ: ВСПЫШКА!
+HUD_GRID_SURGE,GRID SURGE - RUN TO THE GATE,СКАЧОК НАПРЯЖЕНИЯ — БЕГИ К ВОРОТАМ

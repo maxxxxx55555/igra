@@ -977,6 +977,14 @@ func toggle_flashlight() -> void:
 	_light_died = false
 	flashlight_enabled = not flashlight_enabled
 	EventBus.flashlight_state_changed.emit(flashlight_enabled)
+	## Same physical button, double tap: Overdrive Pulse. No new HUD control,
+	## real 18% battery cost + 4 s dim, so the risk/reward dilemma is live.
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension != null:
+		var result: Dictionary = tension.call("register_flashlight_tap", global_position, battery)
+		if bool(result.get("triggered", false)):
+			consume_battery(float(result.get("battery_cost", 0.0)))
+			EventBus.inventory_notice.emit(LocalizationManager.t("HUD_OVERDRIVE_READY"))
 
 func get_noise_level() -> float:
 	var weather_mod := 0.0
@@ -1500,6 +1508,8 @@ func _update_low_battery_flicker() -> void:
 	if low and not _low_battery_warned:
 		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.ogg"), -8.0)
 	_low_battery_warned = low
+	var tension := get_node_or_null("/root/HorrorTension")
+	var beam: float = 1.0 if tension == null else clampf(float(tension.call("get_flashlight_beam_multiplier")), 0.3, 2.5)
 	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
 		and not _flashlight_stability_maxed \
 		and not bool(SettingsManager.get_setting("reduce_flash", false))
@@ -1508,10 +1518,12 @@ func _update_low_battery_flicker() -> void:
 		var now: int = Time.get_ticks_msec()
 		if now >= _flicker_next_msec:
 			_flicker_next_msec = now + FLICKER_HOLD_MSEC
-			flashlight.light_energy = _base_flashlight_energy * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
+			flashlight.light_energy = _base_flashlight_energy * beam * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
 	elif _flickering:
 		_flickering = false
-		flashlight.light_energy = _base_flashlight_energy
+		flashlight.light_energy = _base_flashlight_energy * beam
+	elif not is_equal_approx(beam, 1.0):
+		flashlight.light_energy = _base_flashlight_energy * beam
 
 func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if not levels:

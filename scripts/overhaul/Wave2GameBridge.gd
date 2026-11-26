@@ -45,6 +45,11 @@ var _lamp_poll := 0.0
 var _mapped_lamps := PackedInt64Array()
 var _needs_map := false
 var _built_for: String = ""
+## HorrorTension integration caches: one baseline per streetlight / environment,
+## so per-frame multipliers never accumulate across districts or transitions.
+var _lamp_base_energy: Dictionary = {}
+var _env_base_fog: float = -1.0
+var _tension_poll: float = 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -111,6 +116,11 @@ func _setup_objective_label() -> void:
 func _on_district_entered(district_id: StringName) -> void:
 	_district_id = district_id
 	_index = maxi(0, DISTRICTS.find(district_id))
+	_apply_district_profile(district_id)
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension != null:
+		tension.call("apply_district_mutator", _index)
+	_lamp_base_energy.clear()
 	_root = null
 	var wr := get_parent().get_node_or_null("WorldRuntime")
 	if wr != null:
@@ -249,6 +259,10 @@ func _on_parts_changed(_have: int, _need: int) -> void:
 	_refresh_objective()
 
 func _on_fusebox_repaired(_idx: int) -> void:
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension != null:
+		tension.call("trigger_grid_surge_climax", _idx)
+		EventBus.inventory_notice.emit(LocalizationManager.t("HUD_GRID_SURGE"))
 	var pg := get_node_or_null("/root/PowerGrid")
 	if pg != null and pg.has_method("advance_district") and int(pg.call("get_stage", _district_id)) < 3:
 		pg.call("advance_district", _district_id, 3)
@@ -370,6 +384,10 @@ func _process(delta: float) -> void:
 	if player == null:
 		return
 	_tick_safe_zone(delta, player)
+	_tension_poll -= delta
+	if _tension_poll <= 0.0:
+		_tension_poll = 0.15
+		_apply_tension_to_world()
 	if _map == null:
 		return
 	_lamp_poll -= delta
@@ -386,6 +404,56 @@ func _process(delta: float) -> void:
 	var on: bool = bool(player.get("flashlight_enabled")) and flash != null and flash.visible
 	if on:
 		_map.call("update_player_illumination",flash.global_position,flash.global_rotation.y,true,flash.spot_range,flash.spot_angle)
+
+## Reads the DistrictData resource once per district so the 11 authored
+## fog/cold/mob profiles are real gameplay values, not just simulator input.
+func _apply_district_profile(district_id: StringName) -> void:
+	var district_fog: float = 0.02
+	var district_cold: float = 1.0
+	var pg := get_node_or_null("/root/PowerGrid")
+	if pg != null and pg.has_method("get_district"):
+		var data: Variant = pg.call("get_district", district_id)
+		if data is DistrictData:
+			var district: DistrictData = data as DistrictData
+			district_fog = maxf(0.001, district.fog_density)
+			district_cold = maxf(0.1, district.cold_mult)
+	var tension := get_node_or_null("/root/HorrorTension")
+	var active: Dictionary = {} if tension == null else tension.call("get_active_mutator")
+	var we := get_tree().root.get_node_or_null("Main3D/WorldEnvironment") as WorldEnvironment
+	if we != null and we.environment != null:
+		if _env_base_fog < 0.0:
+			_env_base_fog = we.environment.fog_density
+		var fog_mult: float = float(active.get("fog_mult", 1.0))
+		we.environment.fog_density = clampf(_env_base_fog * (district_fog / 0.02) * fog_mult, 0.004, 0.08)
+	var gd := get_node_or_null("/root/GameplayDirector")
+	if gd != null:
+		var cold_mult: float = float(active.get("cold_mult", 1.0))
+		gd.set("tension_cold_mult", clampf(cold_mult * district_cold, 0.5, 2.0))
+
+
+## Connects all three mechanics to live nodes without extra HUD buttons:
+## streetlamp flicker, stalker speed/hearing and the flashlight beam multiplier.
+func _apply_tension_to_world() -> void:
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension == null:
+		return
+	var flicker: float = float(tension.call("get_streetlamp_flicker_multiplier"))
+	for lamp in get_tree().get_nodes_in_group("streetlights"):
+		var spot := lamp.get_node_or_null("SpotLight") as SpotLight3D
+		if not is_instance_valid(spot):
+			continue
+		var key: int = spot.get_instance_id()
+		if not _lamp_base_energy.has(key):
+			_lamp_base_energy[key] = spot.light_energy
+		spot.light_energy = float(_lamp_base_energy[key]) * flicker
+	var spd: float = float(tension.call("get_enemy_speed_multiplier"))
+	var hearing: float = float(tension.call("get_enemy_hearing_multiplier"))
+	for group_name in ["enemies", "mobs", "stalkers"]:
+		for node in get_tree().get_nodes_in_group(group_name):
+			if is_instance_valid(node) and node is BaseMonster:
+				node.set("tension_speed_mult", spd)
+				node.set("tension_hearing_mult", hearing)
+
 
 func _tick_safe_zone(delta: float, player: Node3D) -> void:
 	var flow := get_node_or_null("/root/Wave2Flow")

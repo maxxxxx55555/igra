@@ -42,6 +42,8 @@ var warmth: float:
 var hope: int = 0
 var streak: int = 0
 var core_hp: float = 100.0
+## Set by Wave2GameBridge from the active district mutator + authored cold_mult.
+var tension_cold_mult: float = 1.0
 var repair_progress: float = 0.0
 var fuse_mask: int = 0
 
@@ -359,7 +361,7 @@ func _tick_survival(actor: Node3D, delta: float) -> void:
 			break
 	var difficulty: float = difficulty_multiplier()
 	battery = clampf(battery + delta * (-0.42 * difficulty if lit else 1.25), 0.0, 100.0)
-	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty), 0.0, 100.0)
+	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty * clampf(tension_cold_mult, 0.5, 2.0)), 0.0, 100.0)
 	if lit and battery <= 0.0:
 		flash.visible = false
 		_spent_lamp = flash

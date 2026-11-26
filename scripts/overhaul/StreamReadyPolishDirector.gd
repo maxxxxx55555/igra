@@ -41,7 +41,12 @@ func _ready() -> void:
 func transition(index: int, enter: Callable) -> void:
 	if _tween and _tween.is_valid():
 		_tween.kill()
-	_card.text = "DISTRICT_NAME_%02d" % (index + 1)
+	var district_name: String = LocalizationManager.t("DISTRICT_NAME_%02d" % (index + 1))
+	var mutator_name: String = ""
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension != null:
+		mutator_name = String(tension.call("get_mutator_display_name_for", index))
+	_card.text = district_name if mutator_name.is_empty() else "%s  ·  %s" % [district_name, mutator_name]
 	_curtain.show()
 	_curtain.modulate.a = 0.0
 	var fade_time := 0.0 if SettingsManager.get_setting("reduce_ui_motion", false) else 0.18

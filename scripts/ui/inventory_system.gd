@@ -30,6 +30,18 @@ func _ready() -> void:
 	inventory_panel.visible = false
 	close_button.pressed.connect(_on_close_pressed)
 	_init_slots()
+	# P2: an OPEN inventory must retranslate INV_WEIGHT immediately on RU <-> EN.
+	var i18n := get_node_or_null("/root/I18nSync")
+	if i18n != null and not i18n.is_connected("locale_changed", Callable(self, "_on_locale_changed")):
+		i18n.connect("locale_changed", Callable(self, "_on_locale_changed"))
+
+func _notification(what: int) -> void:
+	if what == Control.NOTIFICATION_TRANSLATION_CHANGED and is_instance_valid(weight_label):
+		_update_ui()
+
+func _on_locale_changed(_lang: String) -> void:
+	if is_instance_valid(weight_label):
+		_update_ui()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):

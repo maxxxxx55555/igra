@@ -7,3 +7,6 @@ display_name = "Жилые кварталы"
 stage = 0
 powered_by = [&"suburbs"]
 map_position = Vector2(180, 60)
+fog_density = 0.028
+cold_mult = 1.20
+enemy_count = 5

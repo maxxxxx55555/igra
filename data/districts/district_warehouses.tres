@@ -7,3 +7,6 @@ display_name = "Складской комплекс"
 stage = 0
 powered_by = [&"hospital"]
 map_position = Vector2(420, 180)
+fog_density = 0.038
+cold_mult = 1.45
+enemy_count = 8

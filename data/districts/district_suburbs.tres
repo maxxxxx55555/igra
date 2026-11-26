@@ -7,3 +7,6 @@ display_name = "Пригород"
 stage = 0
 powered_by = []
 map_position = Vector2(60, 60)
+fog_density = 0.036
+cold_mult = 1.36
+enemy_count = 7

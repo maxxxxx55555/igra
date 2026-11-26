@@ -24,6 +24,7 @@ config/icon="res://assets/ui/icon.png"
 [autoload]
 
 UniversalMobileViewport="*res://scripts/overhaul/UniversalMobileViewport.gd"
+HorrorTension="*res://scripts/overhaul/HorrorTensionDirector.gd"
 
 QaLaunchGuard="*res://scripts/core/qa_launch_guard.gd"
 SecurityVault="*res://scripts/autoload/SecurityVault.gd"
