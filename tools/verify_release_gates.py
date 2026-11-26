@@ -40,6 +40,13 @@ def check_broken_res_references(repo: Path) -> List[str]:
         for m in RES_REF_RE.finditer(text):
             target = m.group(1)
             if not (repo / target).exists():
+                # A clean CI checkout has no Godot import cache: *.translation
+                # binaries are generated from translations.csv at import time
+                # and are gitignored. The CSV source is the real dependency.
+                if (target.startswith("data/i18n/translations.")
+                        and target.endswith(".translation")
+                        and (repo / "data/i18n/translations.csv").is_file()):
+                    continue
                 broken.append(f"{rel_src} -> res://{target}")
     return sorted(set(broken))
 
