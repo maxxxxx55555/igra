@@ -4,7 +4,7 @@
   "gates": {
     "audit_and_patch_mobile": {
       "exit": 0,
-      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"ac9b5322092c5ab93cb193028eaa42764168683d7f13b5c59e7a5a7d0288acdf\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.96\n}"
+      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"7ac9afa9cb2fea90877f1480a0885a87d79ee2f2c997940dc1414e26aed13a8f\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.96\n}"
     },
     "optimize_mobile_media_verify": {
       "exit": 0,
