@@ -299,45 +299,65 @@ def project_state(paths):
 
 
 def demo():
-    """Prove every rule fires on a fixture, then passes when corrected."""
+    """Prove every rule fires on a fixture, then passes when corrected.
+
+    The version rule reads the real ROOT sources, so the demo swaps them for
+    minimal fixtures and ALWAYS restores the originals — a demo must never
+    leave the working tree with an empty locale dictionary or preset file.
+    """
     d = ROOT / ".closure_guard_demo"
     d.mkdir(exist_ok=True)
-    (ROOT / "data" / "i18n").mkdir(parents=True, exist_ok=True)
-    for loc in ("en", "ru"):
-        (ROOT / "data" / "i18n" / (loc + ".json")).write_text("{}", encoding="utf-8")
-    (ROOT / "project.godot").write_text('config/version="1.0.1"\n', encoding="utf-8")
-    (ROOT / "export_presets.cfg").write_text('product_version="1.0.1"\n', encoding="utf-8")
+    fixtures = [
+        (ROOT / "data" / "i18n" / "en.json", "{}"),
+        (ROOT / "data" / "i18n" / "ru.json", "{}"),
+        (ROOT / "project.godot", 'config/version="1.0.1"\n'),
+        (ROOT / "export_presets.cfg", 'product_version="1.0.1"\n'),
+    ]
+    saved = [(p, p.read_bytes() if p.is_file() else None) for p, _ in fixtures]
+    for p, content in fixtures:
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(content, encoding="utf-8")
 
     bad = d / "bad.md"
     good = d / "good.md"
-    bad.write_text(
-        "We ship 13 locales and 13/13 parity certified.\n"
-        "Current main tip is deadbeef1234567890deadbeef1234567890abcd.\n"
-        "Status: CLOSED but Phase 1 in_progress.\n"
-        "Release is READY now.\n"
-        "Branch oc/visual-w10 holds the work.\n"
-        "Version 1.0.0 here.\n", encoding="utf-8")
-    good.write_text(
-        "We ship 2 locales (en, ru); the owner cut de/es/fr/pt_BR on 2026-11-05.\n"
-        "Current main tip is %s.\n"
-        "Status: BLOCKED; owner-only items remain.\n"
-        "Release is BLOCKED pending owner keystore.\n"
-        "See main for the work.\n"
-        "Version 1.0.1 here.\n" % ("0" * 40), encoding="utf-8")
+    try:
+        bad.write_text(
+            "We ship 13 locales and 13/13 parity certified.\n"
+            "Current main tip is deadbeef1234567890deadbeef1234567890abcd.\n"
+            "Status: CLOSED but Phase 1 in_progress.\n"
+            "Release is READY now.\n"
+            "Branch oc/visual-w10 holds the work.\n"
+            "Version 1.0.0 here.\n", encoding="utf-8")
+        good.write_text(
+            "We ship 2 locales (en, ru); the owner cut de/es/fr/pt_BR on 2026-11-05.\n"
+            "Current main tip is %s.\n"
+            "Status: BLOCKED; owner-only items remain.\n"
+            "Release is BLOCKED pending owner keystore.\n"
+            "See main for the work.\n"
+            "Version 1.0.1 here.\n" % ("0" * 40), encoding="utf-8")
 
-    origin_main = "0" * 40
-    rb = ["origin/main", "origin/gh-pages"]
-    f_bad = (rule_locale([bad], 2) + rule_main_sha([bad], origin_main) + rule_version([bad])
-             + rule_status_closed([bad], "CLOSED") + rule_backed_claim([bad]) + rule_branch([bad], rb))
-    f_good = (rule_locale([good], 2) + rule_main_sha([good], origin_main) + rule_version([good])
-              + rule_status_closed([good], "BLOCKED") + rule_backed_claim([good]) + rule_branch([good], rb))
-    for f in f_bad:
-        print("DEMO FAIL bad: %s:%d %s" % (f[0].name, f[1], f[2]))
-    for f in f_good:
-        print("DEMO FAIL good (should be empty): %s:%d %s" % (f[0].name, f[1], f[2]))
-    # clean
-    for f in (bad, good):
-        f.unlink()
+        origin_main = "0" * 40
+        rb = ["origin/main", "origin/gh-pages"]
+        f_bad = (rule_locale([bad], 2) + rule_main_sha([bad], origin_main) + rule_version([bad])
+                 + rule_status_closed([bad], "CLOSED") + rule_backed_claim([bad]) + rule_branch([bad], rb))
+        f_good = (rule_locale([good], 2) + rule_main_sha([good], origin_main) + rule_version([good])
+                  + rule_status_closed([good], "BLOCKED") + rule_backed_claim([good]) + rule_branch([good], rb))
+        for f in f_bad:
+            print("DEMO FAIL bad: %s:%d %s" % (f[0].name, f[1], f[2]))
+        for f in f_good:
+            print("DEMO FAIL good (should be empty): %s:%d %s" % (f[0].name, f[1], f[2]))
+    finally:
+        for p, original in saved:
+            if original is None:
+                if p.is_file():
+                    p.unlink()
+            else:
+                p.write_bytes(original)
+        for f in (bad, good):
+            if f.is_file():
+                f.unlink()
+        if d.is_dir() and not any(d.iterdir()):
+            d.rmdir()
     print("closure_guard demo: bad findings=%d (want >0), good findings=%d (want 0)" % (len(f_bad), len(f_good)))
     return 0 if (len(f_bad) > 0 and len(f_good) == 0) else 1
 
