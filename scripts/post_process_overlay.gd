@@ -16,6 +16,7 @@ const BLUR_IDLE: float = 0.005  # below this the blur cannot be seen
 const PLAYER_RUN: int = 2  # mirrors player_3d.gd: enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
 var _grain: ColorRect = null
+var _grade: ColorRect = null
 var _vignette: ColorRect = null
 var _chroma: ColorRect = null
 var _visibility_overlay: ColorRect = null
@@ -28,6 +29,7 @@ var _pulse_tween: Tween = null
 var _blur: ColorRect = null
 var _blur_copy: BackBufferCopy = null
 var _blur_strength: float = 0.0
+var _grade_copy: BackBufferCopy = null
 var _player: Node = null
 
 func _ready() -> void:
@@ -39,6 +41,7 @@ func _ready() -> void:
 	_build_blur()
 	add_child(_RAIN_LENS.new())
 	_build_chroma()
+	_build_craft_grade()
 	_build_grain()
 	_build_vignette()
 	_build_visibility_overlay()
@@ -54,7 +57,7 @@ func _ready() -> void:
 ## The first draw of a screen shader compiles it, which shows as a hitch at the first sprint, hit or shower. Each is drawn for two frames at the start, at
 ## strength 0 (an identity: the frame is copied as it is), and put back as it was.
 func _warm_shaders() -> void:
-	var layers: Array[CanvasItem] = [_blur, _chroma, get_node("RainLens") as CanvasItem]
+	var layers: Array[CanvasItem] = [_blur, _chroma, _grade, get_node("RainLens") as CanvasItem]
 	var was: Array[bool] = []
 	for layer: CanvasItem in layers:
 		was.append(layer.visible)
@@ -92,6 +95,8 @@ func _set_chroma_pulse(px: float) -> void:
 
 func _apply_tier() -> void:
 	_grain.visible = _tier >= TIER_GRAIN
+	_grade.visible = _tier >= 1
+	_grade_copy.visible = _grade.visible
 	_sync_chroma()
 	if _tier < TIER_BLUR:
 		_blur_strength = 0.0
@@ -145,15 +150,15 @@ func _build_visibility_overlay() -> void:
 	add_child(_visibility_overlay)
 	var mat := ShaderMaterial.new()
 	mat.shader = _visibility_shader()
+	mat.set_shader_parameter("intensity", 0.0)
 	_visibility_overlay.material = mat
 
-## Detection warning at the screen EDGE: 0 inside the middle 84 %, rising to
-## the border. It was inverted (1 - smoothstep), so every detection painted
-## the centre of the view ember and left the edges clear (rc14 boss frame).
+## Wave 2: the old inline shader painted a solid ember RECTANGLE at the
+## viewport border (the cheap-looking frame in the combat and boss stills).
+## The shipped radial shader has zero alpha on every straight edge and only
+## blooms at the corners, driven by the same detection pulse as before.
 func _visibility_shader() -> Shader:
-	var s := Shader.new()
-	s.code = "shader_type canvas_item; uniform vec4 edge_color : source_color = vec4(0.706, 0.271, 0.184, 1.0); uniform float pulse : hint_range(0.0, 1.0) = 0.0; void fragment(){ vec2 d = abs(UV - 0.5); float edge = smoothstep(0.42, 0.5, max(d.x, d.y)); COLOR = vec4(edge_color.rgb, edge * pulse * 0.45); }"
-	return s
+	return load("res://shaders/damage_tension_vignette.gdshader") as Shader
 
 func _on_player_detected(_monster_id: StringName) -> void:
 	_visibility_detected = true
@@ -172,7 +177,7 @@ func _process(delta: float) -> void:
 	_visibility_overlay.visible = new_pulse > VISIBILITY_IDLE
 	var mat := _visibility_overlay.material as ShaderMaterial
 	if mat != null:
-		mat.set_shader_parameter("pulse", new_pulse)
+		mat.set_shader_parameter("intensity", new_pulse)
 
 ## Радиальная хроматическая аберрация (assets/textures/postfx/README.md
 ## "Chroma" layer). amount_px_1080p=0 -> identity (R=G=B, no sampling
@@ -232,6 +237,41 @@ func _build_grain() -> void:
 	var mat := ShaderMaterial.new()
 	mat.shader = _grain_shader()
 	_grain.material = mat
+
+func _build_craft_grade() -> void:
+	# The grade samples the frame before grain/vignette and needs its own copy:
+	# without it, a screen-texture layer would read already-graded pixels and
+	# compound the tint/grain twice.
+	_grade_copy = BackBufferCopy.new()
+	_grade_copy.name = "CraftGradeCopy"
+	_grade_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	add_child(_grade_copy)
+	_grade = ColorRect.new()
+	_grade.name = "CraftSodiumGradeOverlay"
+	_grade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_grade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_grade)
+	var mat := ShaderMaterial.new()
+	# Visual overhaul v2: split-tone grade with selective sodium-only halation.
+	# The v1 grade stays on disk as the documented baseline; v2 caps highlights
+	# at #e8d9b0 and never reaches #ffffff. The supplied shader's defaults are
+	# authored for a brighter source; applied to this night build they crushed
+	# the mid-tones and compounded the separate vignette overlay (measured
+	# -40% mean luma on the lit-street frames). These integration values keep
+	# the split tone and sodium bloom but preserve exposure.
+	var shader := load("res://shaders/sodium_cinematic_grade_v2.gdshader") as Shader
+	if shader != null:
+		mat.shader = shader
+		var mobile: bool = OS.has_feature("mobile") or OS.has_feature("android")
+		mat.set_shader_parameter("grade_strength", 0.30 if mobile else 0.38)
+		mat.set_shader_parameter("vignette_strength", 0.06 if mobile else 0.10)
+		mat.set_shader_parameter("grain_strength", 0.008 if mobile else 0.012)
+		mat.set_shader_parameter("halation_strength", 0.07 if mobile else 0.12)
+		mat.set_shader_parameter("contrast_lift", 1.0)
+		# Wave 3: the grade follows the menu-canon photographic look - a
+		# stronger sodium halation, a real vignette and a little more grain.
+		MenuCanonAtmosphereDirector.tune_grade_for_menu_canon(mat, mobile)
+	_grade.material = mat
 
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
 ## статичные строки развёртки (mod по Y) — это скан-лайны из CRT-эффекта,

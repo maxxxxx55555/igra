@@ -30,6 +30,12 @@ const _UI_GAIN_DB: Dictionary = {
 }
 const _UI_GAIN_DEFAULT_DB: float = 9.0
 
+## Sodium craft pack: deterministic mechanical UI clicks and district restoration.
+const _CRAFT_DIR: String = "res://assets/audio/craft/"
+
+## Wave 3: the tarnished-brass switch of the owner's menu reference.
+const _CANON_DIR: String = "res://assets/audio/menu_canon/"
+
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
 	# Text notices have no sound; dedicated action signals own their feedback.
@@ -41,7 +47,7 @@ func _ready() -> void:
 	EventBus.boss_spawned.connect(func() -> void: play_ui("boss_sting"))
 	EventBus.boss_defeated.connect(func() -> void: play_ui("boss_sting"))
 	# v10 M6: the sting of a restored district, a tick for XP and a soft note when a healing consumable is used (the files of the music recipe that no take supplied: tools/gen_one_shots.py)
-	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_ui("district_restored_sting"))
+	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void: play_craft("sfx_district_restored_sting.ogg", &"UI", -8.0))
 	EventBus.xp_gained.connect(func(_amount: int) -> void: _play("ui_xp_tick", 1800.0, 0.03))
 	EventBus.item_consumed.connect(func(_id: StringName, effect: String, _value: float) -> void:
 		if effect == "HEAL":
@@ -123,14 +129,62 @@ func _in_hud(node: Node) -> bool:
 	return false
 
 func click() -> void:
+	# Wave 3: the brass switch of the owner's reference replaces the craft tick.
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_click.ogg"):
+		_play_canon("sfx_ui_brass_click.ogg", -3.0, randf_range(0.96, 1.04))
+		return
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_confirm_click.ogg"):
+		play_craft("sfx_ui_confirm_click.ogg", &"UI", -2.0, randf_range(0.96, 1.04))
+		return
 	if ResourceLoader.exists(_UI_DIR + "ui_menu_click.ogg"):
 		play_ui("menu_click")
 		return
 	_play("ui_click", 800.0, 0.05)
 
 func hover() -> void:
-	# Pointer movement keeps visual feedback; activation retains the mechanical click.
-	pass
+	# Pointer movement keeps visual feedback; the supplied craft hover tick is
+	# quiet enough to answer deliberate pointer focus without the old beep spam.
+	if _can_play() and ResourceLoader.exists(_CANON_DIR + "sfx_ui_brass_hover.ogg"):
+		_play_canon("sfx_ui_brass_hover.ogg", -14.0, randf_range(0.96, 1.04))
+		return
+	if _can_play() and ResourceLoader.exists(_CRAFT_DIR + "sfx_ui_hover_tick.ogg"):
+		play_craft("sfx_ui_hover_tick.ogg", &"UI", -12.0, randf_range(0.96, 1.04))
+
+
+## One menu-canon one-shot on the UI bus.
+func _play_canon(file: String, volume_db: float, pitch: float) -> void:
+	var path := _CANON_DIR + file
+	if not ResourceLoader.exists(path):
+		return
+	var stream := load(path) as AudioStream
+	if stream == null:
+		return
+	var p := AudioStreamPlayer.new()
+	p.bus = &"UI"
+	p.volume_db = volume_db
+	p.pitch_scale = pitch
+	p.stream = stream
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
+
+func play_craft(file: String, bus: StringName, volume_db: float, pitch: float = 1.0) -> void:
+	if not _can_play():
+		return
+	var path := _CRAFT_DIR + file
+	if not ResourceLoader.exists(path):
+		return
+	var stream := load(path) as AudioStream
+	if stream == null:
+		return
+	var p := AudioStreamPlayer.new()
+	p.bus = bus
+	p.volume_db = volume_db
+	p.pitch_scale = pitch
+	p.stream = stream
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
 
 ## docs/GAMEFEEL_SPEC.md UI press micro-scale; _wire gives it to every button.
 const PRESS_SCALE: float = 0.95
@@ -170,7 +224,7 @@ func pickup() -> void:
 func _play(file: String, fallback_freq: float, fallback_dur: float) -> void:
 	if not _can_play():
 		return
-	var path := _DIR + file + ".wav"
+	var path := _DIR + file + ".ogg"
 	if ResourceLoader.exists(path):
 		var p := AudioStreamPlayer.new()
 		p.bus = &"UI"
@@ -207,3 +261,9 @@ func _beep(freq: float, dur: float) -> void:
 func _can_play() -> bool:
 	var music := get_node_or_null("/root/MusicManager")
 	return music != null and bool(music.get("_audio_unlocked"))
+
+func _exit_tree() -> void:
+	for voice in get_children():
+		if voice is AudioStreamPlayer:
+			voice.stop()
+			voice.stream = null

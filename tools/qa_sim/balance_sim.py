@@ -70,9 +70,25 @@ def hunter_pressure():
         roster[did] = re.findall(r"\w+", types)
     base = int(re.search(r"MIN_ENEMIES_PER_DISTRICT:\s*int\s*=\s*(\d+)", txt).group(1))
     tc = re.search(r"func _target_count.*?(?=\nfunc )", txt, re.S).group(0)
-    bonuses = [int(b) for b in re.findall(r"base \+ (\d+)", tc)]  # [DARK, PARTIAL, STREETS]
-    counts = {"DARK": base + bonuses[0], "PARTIAL": base + bonuses[1],
-              "STREETS": base + bonuses[2], "FULL": base}
+    # RC balance overhaul: the authored per-district enemy_count is multiplied
+    # by a stage factor instead of the old "base + N" literals. Read both from
+    # source so the sim cannot silently drift from the live spawn count.
+    fm = re.search(r"stage_factor:\s*Array\[float\]\s*=\s*\[([^\]]+)\]", tc)
+    if not fm:
+        raise ValueError("enemy_pool.gd _target_count() has no stage_factor table")
+    factors = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", fm.group(1))]
+    if len(factors) != 4:
+        raise ValueError("stage_factor must hold DARK/PARTIAL/STREETS/FULL")
+    authored_match = re.search(r"enemy_count:\s*int\s*=\s*(\d+)", read("scripts/world/district_data.gd"))
+    authored = int(authored_match.group(1)) if authored_match else base
+    max_active_match = re.search(r"max_active:\s*int\s*=\s*(\d+)", txt)
+    max_active = int(max_active_match.group(1)) if max_active_match else 8
+
+    def scaled(factor: float) -> int:
+        return max(base, min(max_active, int(round(authored * factor))))
+
+    counts = {"DARK": scaled(factors[0]), "PARTIAL": scaled(factors[1]),
+              "STREETS": scaled(factors[2]), "FULL": scaled(factors[3])}
     return roster, base, counts
 
 

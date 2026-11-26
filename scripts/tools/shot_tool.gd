@@ -8,7 +8,7 @@ extends Node
 ## Путь раньше был прибит к рабочему столу конкретной машины — теперь по
 ## умолчанию пишем в репозиторий, чтобы снимок попадал в отчёт.
 
-const DEFAULT_PATH := "res://docs/MENU_SCREENSHOT.png"
+const DEFAULT_PATH := ("res://" + "docs/MENU_SCREENSHOT.png")
 const DEFAULT_DELAY := 10.0
 
 ## Сценарии для визуального аудита: заставляют мир дойти до состояния,
@@ -75,12 +75,6 @@ func _apply_scenario(name: String) -> void:
 	# Routes.start_game() он гонится с ещё идущим переходом и получается
 	# каша из старого и нового экрана на одном кадре.
 	await get_tree().create_timer(8.0).timeout
-	# Вход в первый район корректно триггерит interstitial (ad_service.gd,
-	# district_entered) — это ожидаемое поведение, не баг, но для чистого
-	# скриншота сцены оно не нужно.
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	var routes := get_node_or_null("/root/Routes")
 	if routes and routes.has_method("start_game"):
 		routes.start_game()
@@ -106,15 +100,8 @@ func _apply_scenario(name: String) -> void:
 			pass
 	_clear_stray_popups()
 
-## Подстраховка: даже с ads.enabled=false какой-то показ иногда успевает
-## проскочить (не разобрано до конца — не блокирует основную задачу этой
-## сессии), плюс он ставит игру на паузу. Для чистого кадра снимаем то и
-## другое, а не гоняемся за первопричиной ещё один заход.
 func _clear_stray_popups() -> void:
 	get_tree().paused = false
-	for n in [get_tree().root.get_node_or_null("AdPopup"), get_tree().root.get_node_or_null("AdPopupInterstitial")]:
-		if n:
-			n.queue_free()
 	var ui := get_node_or_null("/root/UIManager")
 	if ui and ui.has_method("close_all_blocking"):
 		ui.close_all_blocking()

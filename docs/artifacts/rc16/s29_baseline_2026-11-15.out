@@ -1,6 +1,0 @@
-  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
-[closeout] FAIL ONE2 district_restored plays the sting on the UI bus ({  })
-[closeout] FAIL ONE4 xp_gained ticks and a healing consumable plays the soft note on the UI bus, a battery does not ({  }, battery quiet true)
-[closeout] DONE checks=89 fails=2
-  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
-  user-data guard: 12 file(s) restored byte-identical

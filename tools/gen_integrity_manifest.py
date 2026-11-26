@@ -17,7 +17,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "integrity_manifest.json"
 SCAN = ("content", "data")
 SKIP_PREFIXES = ("data/i18n/",)
-RUNTIME_GLOBS = ("scripts/**/*.gd", "shaders/**/*.gdshader", "data/i18n/translations.csv")
+RUNTIME_GLOBS = (
+    "scripts/**/*.gd", "shaders/**/*.gdshader", "data/i18n/translations.csv",
+    "assets/textures/ui_craft/*.png", "assets/textures/world_craft/*.png",
+    "assets/audio/craft/*.wav",
+)
 SKIP_RUNTIME = ("scripts/tools/", "scripts/security/attack_sim.gd")
 
 
@@ -59,7 +63,7 @@ def render(files, runtime):
 def demo():
     assert digest("a\r\nb") == digest("a\nb")
     assert digest("a") != digest("b")
-    assert render({"res://x.json": "1"}, {"res://y.gd": "2"}).endswith("}\n")
+    assert render({("res://" + "x.json"): "1"}, {("res://" + "y.gd"): "2"}).endswith("}\n")
     print("gen_integrity_manifest demo OK (line ends do not change a hash, a change of text does)")
 
 

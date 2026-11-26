@@ -14,6 +14,9 @@ const COLOR_TEXT      := Color("#d8d5cc")   # bone-text
 const COLOR_TEXT_DIM  := Color("#8a8a85")   # steel-text
 const COLOR_DANGER    := Color("#c0392b")   # ember (fills only)
 const COLOR_DANGER_TEXT := Color("#e8695a") # ember lifted for small danger/requirement text on dark fills: #c0392b fails 3:1 there
+const COLOR_IRON      := Color("#161e22")   # Wave 2: dark-iron action fill, never a flat amber slab
+const COLOR_SODIUM    := Color("#d4a94e")   # Wave 2: sodium key for the 3-4 px left accent and press glow
+const COLOR_TEXT_LIGHT := Color("#e6dfd1")  # Wave 2: legible parchment on iron
 
 const FONT_SIZE_BODY: int = 16
 const SCROLLBAR_MARGIN: float = 5.0
@@ -72,19 +75,25 @@ static func button_style(state: StringName = &"normal", kind: StringName = &"gho
 	box.content_margin_left = 18.0
 	box.content_margin_right = 18.0
 	if kind == &"primary":
-		box.bg_color = COLOR_AMBER
+		# Wave 2: no flat yellow bar. A chamfered square iron plate with a
+		# hairline bronze frame; the sodium accent is added as a child strip in
+		# style_control() because StyleBoxFlat has one colour for all borders.
+		box.bg_color = COLOR_IRON
+		box.set_border_width_all(1)
+		box.border_color = COLOR_AMBER
+		box.set_corner_radius_all(0)
 	elif kind == &"secondary":
 		box.bg_color = COLOR_BG_PANEL2
 	elif kind == &"row":
 		box.border_width_bottom = 1
 		box.border_color = Color(COLOR_TEXT_DIM, 0.2)
-	if active:
+	if active and kind != &"primary":
 		box.border_width_left = 2
 		box.border_color = COLOR_AMBER
 	if state == &"hover":
-		box.bg_color = COLOR_BG_PANEL2 if kind != &"primary" else COLOR_AMBER_HI
+		box.bg_color = COLOR_BG_PANEL2 if kind != &"primary" else COLOR_IRON.lightened(0.07)
 	elif state in [&"pressed", &"hover_pressed"]:
-		box.bg_color = COLOR_BG_PANEL
+		box.bg_color = COLOR_BG_PANEL if kind != &"primary" else COLOR_IRON.darkened(0.10)
 	elif state == &"focus":
 		box.draw_center = false
 		box.set_border_width_all(2)
@@ -100,8 +109,28 @@ static func button_style(state: StringName = &"normal", kind: StringName = &"gho
 static func style_control(button: Button, kind: StringName = &"ghost", active: bool = false) -> void:
 	for state: StringName in [&"normal", &"hover", &"pressed", &"hover_pressed", &"disabled", &"focus"]:
 		button.add_theme_stylebox_override(state, button_style(state, kind, active))
-	button.add_theme_color_override("font_color", COLOR_BG_DARK if kind == &"primary" else (COLOR_AMBER if active else COLOR_TEXT))
-	button.add_theme_color_override("font_hover_color", COLOR_BG_DARK if kind == &"primary" else COLOR_TEXT)
+	if kind == &"primary":
+		button.add_theme_color_override("font_color", COLOR_TEXT_LIGHT)
+		button.add_theme_color_override("font_hover_color", COLOR_TEXT_LIGHT)
+		button.add_theme_color_override("font_pressed_color", COLOR_SODIUM)
+		var accent := button.get_node_or_null("SodiumAccent") as ColorRect
+		if accent == null:
+			accent = ColorRect.new()
+			accent.name = "SodiumAccent"
+			accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			button.add_child(accent)
+		accent.color = COLOR_SODIUM
+		accent.anchor_left = 0.0
+		accent.anchor_right = 0.0
+		accent.anchor_top = 0.0
+		accent.anchor_bottom = 1.0
+		accent.offset_left = 0.0
+		accent.offset_right = 3.0
+		accent.offset_top = 0.0
+		accent.offset_bottom = 0.0
+	else:
+		button.add_theme_color_override("font_color", COLOR_AMBER if active else COLOR_TEXT)
+		button.add_theme_color_override("font_hover_color", COLOR_TEXT)
 	button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, 48.0)
 	button.focus_mode = Control.FOCUS_ALL
 

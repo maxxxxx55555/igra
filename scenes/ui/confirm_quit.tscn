@@ -52,7 +52,7 @@ alignment = 1
 
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
-text = "Выйти из игры?"
+text = "confirm_quit"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.847059, 0.835294, 0.8, 1)
 theme_override_font_sizes/font_size = 18
@@ -65,9 +65,9 @@ theme_override_constants/separation = 20
 [node name="Yes" type="Button" parent="Panel/VBox/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(100, 36)
-text = "ДА"
+text = "yes"
 
 [node name="No" type="Button" parent="Panel/VBox/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(100, 36)
-text = "НЕТ"
+text = "no"

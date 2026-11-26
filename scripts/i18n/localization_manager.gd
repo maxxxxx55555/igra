@@ -2,7 +2,7 @@
 
 extends Node
 
-## LocalizationManager - English and Russian (owner, 2026-11-05; v10 E6 had six), system font fallback, RTL
+## LocalizationManager - English and Russian (owner, 2026-11-05; v10 E6 had six)
 signal language_changed(lang: String)
 
 const LANG_DIR: String = "res://data/i18n/"
@@ -10,24 +10,11 @@ const LANG_DIR: String = "res://data/i18n/"
 const SUPPORTED: Array = ["ru","en"]
 
 ## Эндонимы: язык подписан на самом себе, как ждёт игрок в списке языков.
-## Раньше здесь была латинская транслитерация ("Nihongo", "Zhongwen(Jian)") —
-## обходной путь вокруг отсутствия глифов. Теперь fallback-шрифт настроен
-## в _setup_system_font(), и подписи можно писать родным письмом.
 const LANG_NAMES: Dictionary = {
 	"ru": "Русский", "en": "English"}
 
 ## No supported language reads right to left since Arabic left in v10 E6; is_rtl() and the layouts that ask it stay for the day one comes back.
 const RTL_LANGS: Array = []
-
-## Основной шрифт игры (латиница/кириллица). В нём нет иероглифов и арабской
-## вязи, поэтому к нему цепляется системный шрифт как fallback.
-const UI_FONT_PATH: String = "res://assets/fonts/Rajdhani-Regular.ttf"
-
-## Системные шрифты с покрытием CJK/арабского — берётся первый доступный в ОС.
-const FALLBACK_FONT_NAMES: Array = [
-	"Segoe UI", "Yu Gothic UI", "Malgun Gothic", "Microsoft YaHei",
-	"Microsoft JhengHei", "Noto Sans", "Noto Sans CJK", "Noto Sans Arabic",
-	"Arial", "Tahoma", "DejaVu Sans"]
 
 var current_lang: String = "ru"
 
@@ -39,7 +26,7 @@ var _fallback: Dictionary = {}
 var _last_trans: Translation = null
 
 func _ready() -> void:
-	_setup_system_font()
+	ThemeDB.fallback_font = get_tree().root.theme.default_font
 	var saved = _load_pref()
 	if saved == "" :
 		saved = _detect_system_lang()
@@ -49,49 +36,13 @@ func _ready() -> void:
 		current_lang = "en"
 	_load_language(current_lang)
 
-## Раньше здесь создавались SystemFont и Theme, которые тут же выбрасывались —
-## заявленный fallback для CJK/арабского не работал вообще. Теперь шрифт
-## реально прописывается в ThemeDB (движковый дефолт для любого Control)
-## и в тему проекта, если она задана.
-func _setup_system_font() -> void:
-	var sf := SystemFont.new()
-	sf.allow_system_fallback = true
-	sf.multichannel_signed_distance_field = false
-	sf.font_names = PackedStringArray(FALLBACK_FONT_NAMES)
-
-	var base: Font = sf
-	if ResourceLoader.exists(UI_FONT_PATH):
-		var game_font := ResourceLoader.load(UI_FONT_PATH) as FontFile
-		if game_font != null:
-			# Дубликат, чтобы не мутировать общий кэшированный ресурс.
-			game_font = game_font.duplicate() as FontFile
-			var fb: Array[Font] = [sf]
-			game_font.fallbacks = fb
-			base = game_font
-
-	ThemeDB.fallback_font = base
-	_apply_font_to_theme(get_tree().root.theme, base)
-
-func _apply_font_to_theme(theme: Theme, font: Font) -> void:
-	if theme == null:
-		return
-	# An explicitly bundled font must not acquire an operating-system dependency.
-	if theme.default_font is FontFile and not (theme.default_font as FontFile).allow_system_fallback:
-		return
-	if theme.default_font == null:
-		theme.default_font = font
-	elif not theme.default_font.fallbacks.has(font):
-		var fb: Array[Font] = theme.default_font.fallbacks.duplicate()
-		fb.append(font)
-		theme.default_font.fallbacks = fb
-
 func _detect_system_lang() -> String:
 	var loc = OS.get_locale()
 	var short = loc.substr(0, 2)
 	if short in SUPPORTED: return short
 	return "en"
 
-func _load_language(lang: String) -> void:
+func _load_language(lang: String, persist: bool = true) -> void:
 	if _fallback.is_empty():
 		_fallback = _read_json(LANG_DIR + "en.json")
 	var path = LANG_DIR + lang + ".json"
@@ -106,7 +57,8 @@ func _load_language(lang: String) -> void:
 	_strings = parsed if parsed is Dictionary else {}
 	current_lang = lang
 	_sync_translation_server(lang)
-	_save_pref(lang)
+	if persist:
+		_save_pref(lang)
 	language_changed.emit(lang)
 
 func _read_json(path: String) -> Dictionary:
@@ -129,9 +81,9 @@ func _sync_translation_server(lang: String) -> void:
 	TranslationServer.add_translation(_last_trans)
 	TranslationServer.set_locale(lang)
 
-func set_language(lang: String) -> void:
-	if lang in SUPPORTED:
-		_load_language(lang)
+func set_language(lang: String, persist: bool = true) -> void:
+	if lang in SUPPORTED and lang != current_lang:
+		_load_language(lang, persist)
 
 ## Перевод ключа. Порядок: текущий язык -> английский -> сам ключ.
 ## Раньше отсутствующий ключ показывался игроку как сырой "HUD_BATTERY";
@@ -185,6 +137,10 @@ func _save_pref(lang: String) -> void:
 	if f: f.store_string(lang)
 
 func _load_pref() -> String:
-	if not FileAccess.file_exists(_pref_path()): return ""
+	if not FileAccess.file_exists(_pref_path()):
+		var legacy := ConfigFile.new()
+		if FileAccess.file_exists("user://tls_locale.cfg") and legacy.load("user://tls_locale.cfg") == OK:
+			return str(legacy.get_value("i18n", "locale", ""))
+		return ""
 	var f = FileAccess.open(_pref_path(), FileAccess.READ)
 	return f.get_as_text().strip_edges()

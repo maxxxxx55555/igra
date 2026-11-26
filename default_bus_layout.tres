@@ -4,17 +4,17 @@
 ceiling_db = -1.0
 
 [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_music"]
-threshold = -12.0
-ratio = 3.0
-attack_us = 10000.0
-release_ms = 200.0
+threshold = -16.0
+ratio = 5.0
+attack_us = 1500.0
+release_ms = 180.0
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_music"]
 predelay_msec = 30.0
 wet = 0.15
 
 [sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_music"]
-ceiling_db = -2.0
+ceiling_db = -1.5
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_footsteps"]
 predelay_msec = 30.0
@@ -41,7 +41,7 @@ bus/1/name = &"Music"
 bus/1/solo = false
 bus/1/mute = false
 bus/1/bypass_fx = false
-bus/1/volume_db = 0.0
+bus/1/volume_db = 2.0
 bus/1/send = &"Master"
 bus/1/effect/0/effect = SubResource("AudioEffectCompressor_music")
 bus/1/effect/0/enabled = true
@@ -97,3 +97,9 @@ bus/8/volume_db = 0.0
 bus/8/send = &"SFX"
 bus/8/effect/0/effect = SubResource("AudioEffectReverb_environment")
 bus/8/effect/0/enabled = true
+bus/9/name = &"Ambience"
+bus/9/solo = false
+bus/9/mute = false
+bus/9/bypass_fx = false
+bus/9/volume_db = 0.0
+bus/9/send = &"Master"

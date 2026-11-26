@@ -51,7 +51,7 @@ theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
-text = "СТАТИСТИКА"
+text = "stats_title"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.7882, 0.6353, 0.2902, 1)
 theme_override_font_sizes/font_size = 20
@@ -73,4 +73,4 @@ theme_override_constants/separation = 6
 [node name="CloseBtn" type="Button" parent="Panel/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 36)
-text = "ЗАКРЫТЬ"
+text = "ui_close"

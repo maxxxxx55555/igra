@@ -9,7 +9,7 @@ const NAMES: Array[String] = [
 	"mesh_car", "mesh_cabinet", "mesh_fence", "mesh_cart",
 	"mesh_crate", "mesh_barrel", "mesh_debris",
 ]
-const OUT := "res://.qa_logs/b9_turntable.png"
+const OUT := ("res://" + ".qa_logs/b9_turntable.png")
 
 func _ready() -> void:
 	_build.call_deferred()

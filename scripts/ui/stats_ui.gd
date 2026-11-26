@@ -22,10 +22,10 @@ func _rebuild() -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	if not embedded:
 		# V2 SKIN WIRING P4: real background art over the old flat tint.
-		var bg_path := "res://assets/textures/screens_v2/character_dim.png"
+		var bg_path := "res://assets/textures/screens_v2/character_dim.webp"
 		if ResourceLoader.exists(bg_path):
 			var bg_tex := TextureRect.new()
 			bg_tex.texture = load(bg_path)
@@ -57,7 +57,7 @@ func _build() -> void:
 	# P2 (FINAL INTEGRATION wave): real player render, side panel next to
 	# the stats column - delivered mid-session (REPORT_UNBLOCK_V2.md),
 	# this was logged as blocked/missing earlier in this same session.
-	var render_path := "res://assets/textures/renders_v2/player_512x768.png"
+	var render_path := "res://assets/textures/renders_v2/player_512x768.webp"
 	if ResourceLoader.exists(render_path):
 		var render := TextureRect.new()
 		render.custom_minimum_size = Vector2(128, 192)

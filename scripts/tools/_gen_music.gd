@@ -102,7 +102,7 @@ func _noise(t0: float, dur: float, amp: float, cut_hz: float, env_attack: float 
 		lp += a * (_rng.randf_range(-1.0, 1.0) - lp)
 		var env: float = minf(t / maxf(env_attack, 0.001), 1.0) * minf((dur - t) / maxf(env_attack, 0.001), 1.0)
 		_add(start + i, lp * amp * clampf(env, 0.0, 1.0))
-	
+
 ## Дальний металлический удар: резонансный шумовой всплеск.
 func _clang(t0: float, amp: float, res_hz: float, decay: float) -> void:
 	var start: int = int(t0 * MIX)
@@ -178,7 +178,7 @@ func _save(name_no_ext: String) -> void:
 	s.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	s.loop_begin = 0
 	s.loop_end = _len
-	var path: String = OUT + name_no_ext + ".wav"
+	var path: String = OUT + name_no_ext + ".ogg"
 	var err := s.save_to_wav(path)
 	print("[music] ", "ok  " if err == OK else "FAIL", path, "  ", "%.1f" % (float(_len) / float(MIX)), " c")
 

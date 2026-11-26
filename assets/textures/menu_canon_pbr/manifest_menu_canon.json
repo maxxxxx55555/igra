@@ -1,0 +1,201 @@
+{
+  "style_lock": {
+    "seed": 47221,
+    "size": 512,
+    "clamp_min": 19,
+    "clamp_max": 240,
+    "max_seam_delta": 7.0,
+    "max_mean_sat_pct": 38.0,
+    "palette": {
+      "mist_teal": [
+        20,
+        33,
+        38
+      ],
+      "gutter_shadow": [
+        20,
+        25,
+        27
+      ],
+      "asphalt_base": [
+        34,
+        37,
+        38
+      ],
+      "asphalt_grit": [
+        62,
+        62,
+        58
+      ],
+      "plaster_dark": [
+        36,
+        39,
+        38
+      ],
+      "plaster_mid": [
+        74,
+        71,
+        63
+      ],
+      "plaster_damp": [
+        24,
+        31,
+        33
+      ],
+      "stone_under": [
+        52,
+        46,
+        41
+      ],
+      "cast_iron": [
+        38,
+        34,
+        30
+      ],
+      "rust_brown": [
+        78,
+        52,
+        36
+      ],
+      "panel_iron": [
+        15,
+        19,
+        20
+      ],
+      "panel_bevel": [
+        30,
+        35,
+        36
+      ],
+      "bronze_dim": [
+        90,
+        74,
+        42
+      ]
+    }
+  },
+  "assets": [
+    {
+      "file": "menu_asphalt_albedo.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 1.26,
+      "mean_sat_pct": 4.11,
+      "sha256": "f449c0fed719ae62e463e28f9a8fedfccec334f90fbbdc81dec82364d9c7afc7"
+    },
+    {
+      "file": "menu_asphalt_normal.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 6.31,
+      "mean_sat_pct": 0.0,
+      "sha256": "d274e91be8ab0f0083a70bd409a23356e15967db5570c1dfa85e2960e79fca2d"
+    },
+    {
+      "file": "menu_asphalt_roughness.png",
+      "mode": "L",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 1.473,
+      "mean_sat_pct": 0.0,
+      "sha256": "e003f8ed76a8a097b2a87237f6a65c54f31368fb45e0446c5a1a5e567d59e43e"
+    },
+    {
+      "file": "menu_asphalt_puddle_mask.png",
+      "mode": "L",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 2.059,
+      "mean_sat_pct": 0.0,
+      "sha256": "63073b2fc9b28fec336e8d78745c510ccfc87f185ab5ef81f552cabae6e9e89b"
+    },
+    {
+      "file": "menu_facade_albedo.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 0.411,
+      "mean_sat_pct": 8.83,
+      "sha256": "96bcd27c3d94feac178424bd416c27fbf4eac28c3a856c234b918e8554650762"
+    },
+    {
+      "file": "menu_facade_normal.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 0.513,
+      "mean_sat_pct": 0.0,
+      "sha256": "799ac0e03ff96203452e897d2cda02e3e3f9b193bba80def4a9e7a324a986eea"
+    },
+    {
+      "file": "menu_facade_roughness.png",
+      "mode": "L",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 0.35,
+      "mean_sat_pct": 0.0,
+      "sha256": "c024ebc35c50bca3debbf1d38912843c21cf1e703fb97e3dd6abc46df980a9f7"
+    },
+    {
+      "file": "menu_iron_albedo.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 0.948,
+      "mean_sat_pct": 36.6,
+      "sha256": "fab55a201a13fb43fc3034e95671ad1baba5255e79a8ffec32a15b46158c8adf"
+    },
+    {
+      "file": "menu_iron_normal.png",
+      "mode": "RGB",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 0.905,
+      "mean_sat_pct": 0.0,
+      "sha256": "2b245f6cd4f2d87dc31157bb5be1fda46024a31ec09dded35fbb9ef14b6c3a15"
+    },
+    {
+      "file": "menu_iron_roughness.png",
+      "mode": "L",
+      "size": [
+        512,
+        512
+      ],
+      "seam_delta": 1.354,
+      "mean_sat_pct": 0.0,
+      "sha256": "5d9f02ae73ec655ff7c76b7d5c2360abf3dda72dc57128e97b33694b3cc9b81a"
+    },
+    {
+      "file": "menu_ui_panel_9slice.png",
+      "mode": "RGBA",
+      "size": [
+        128,
+        128
+      ],
+      "seam_delta": 0.0,
+      "mean_sat_pct": 0.0,
+      "sha256": "fe6b2fd38f3c5c1478d95c6b5f730183dd19b3c4e1962612e6872ca3c4db6d00"
+    }
+  ],
+  "errors": []
+}

@@ -20,7 +20,7 @@ const PATHS_NAME := "UnlockPaths"
 ## The shop uses this same dim street as its screen art; reusing it makes the
 ## skill tree read as the same game instead of a flat black wall. Project-owned
 ## Gemini art, documented in docs/ASSET_LICENSES.md.
-const BACKDROP := "res://assets/textures/screens_v2/character_dim.png"
+const BACKDROP := "res://assets/textures/screens_v2/character_dim.webp"
 
 func _ready() -> void:
 	call_deferred("_build")
@@ -34,17 +34,17 @@ func _build() -> void:
 		return
 	var scrim := root.get_node_or_null("Scrim") as ColorRect
 	if scrim:
-		# The world must read through the panel as it does on the shop screen.
-		scrim.color = Color(ThemeProvider.COLOR_BG_DARK, 0.18)
+		# Wave 2: the city stays legible behind a centred panel instead of
+		# disappearing under a grey wall.
+		scrim.color = Color(ThemeProvider.COLOR_BG_DARK, 0.26)
 	var bg := root.get_node_or_null("Background") as ColorRect
 	if bg:
-		bg.color = Color(ThemeProvider.COLOR_BG_PANEL, 0.35)
+		bg.color = Color(ThemeProvider.COLOR_BG_PANEL, 0.18)
 	var art := root.get_node_or_null("Art") as TextureRect
 	if art and ResourceLoader.exists(BACKDROP):
-		# Same street art as the shop, darkened with a greyscale modulate so it
-		# reads as atmosphere and never competes with the skill cards.
+		# Same street art as the shop, dimmed further so the cards own the focus.
 		art.texture = load(BACKDROP) as Texture2D
-		art.modulate = Color(0.82, 0.82, 0.82, 1.0)
+		art.modulate = Color(0.62, 0.64, 0.66, 1.0)
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	_add_vignette(root)
 	_add_frame(root)
@@ -84,22 +84,23 @@ func _add_frame(root: Node) -> void:
 	var box := PanelContainer.new()
 	box.name = FRAME_NAME
 	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	box.offset_left = 160.0
-	box.offset_top = 96.0
-	box.offset_right = -160.0
-	box.offset_bottom = -112.0
+	box.offset_left = 360.0
+	box.offset_top = 118.0
+	box.offset_right = -360.0
+	box.offset_bottom = -142.0
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var style := _solid(Color(ThemeProvider.COLOR_BG_PANEL, 0.35))
+	var style := _solid(Color(ThemeProvider.COLOR_BG_PANEL, 0.20))
 	style.border_color = ThemeProvider.COLOR_BORDER
 	style.set_border_width_all(1)
+	style.set_corner_radius_all(0)
 	box.add_theme_stylebox_override("panel", style)
 	root.add_child(box)
 	root.move_child(box, 3)
 	var rule := ColorRect.new()
 	rule.name = RULE_NAME
 	rule.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	rule.offset_top = 92.0
-	rule.offset_bottom = 93.0
+	rule.offset_top = 114.0
+	rule.offset_bottom = 116.0
 	rule.color = ThemeProvider.COLOR_AMBER
 	rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(rule)

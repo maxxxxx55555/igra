@@ -15,8 +15,7 @@ func _on_lang_changed(_lang: String) -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
-	UnslopThemeStyler.style_tree_recursive(self)
+	theme = CraftThemeBridge.build()
 
 	var bg := ColorRect.new()
 	bg.color = Color(0.0588235, 0.0745098, 0.0784314, 0.92)
@@ -357,7 +356,7 @@ func _toggle(parent: Node, label: String, key: String) -> void:
 	cb.disabled = key == "hardcore" and not GameManager.is_menu()
 	row.add_child(cb)
 
-## Процедурное окно подтверждения (как ad_popup.gd/confirm_quit.gd) —
+## Процедурное окно подтверждения (как confirm_quit.gd) —
 ## отдельной .tscn под это заводить не стоит, этот экран целиком в коде.
 func _confirm_reset_progress() -> void:
 	var layer := CanvasLayer.new()

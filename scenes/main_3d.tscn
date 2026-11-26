@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
@@ -16,6 +16,9 @@
 [ext_resource type="Script" path="res://scripts/net/lan_menu.gd" id="20_LANMen"]
 [ext_resource type="Script" path="res://scripts/ui/toast_manager.gd" id="21_Toast"]
 [ext_resource type="Script" path="res://scripts/ui/onboarding_overlay.gd" id="22_Onboard"]
+[ext_resource type="Script" path="res://scripts/overhaul/Wave2ProgressionMap.gd" id="w2_map"]
+[ext_resource type="Script" path="res://scripts/overhaul/Wave2ComfortableHud.gd" id="w2_hud"]
+[ext_resource type="Script" path="res://scripts/overhaul/Wave2GameBridge.gd" id="w2_bridge"]
 
 [sub_resource type="ParticleProcessMaterial" id="ash_mat"]
 emission_shape = 2
@@ -68,6 +71,9 @@ distance = 5.0
 
 [node name="HUD" parent="." instance=ExtResource("2")]
 
+[node name="Wave2ComfortableHud" type="Node" parent="HUD"]
+script = ExtResource("w2_hud")
+
 [node name="Ash" type="GPUParticles3D" parent="."]
 emitting = true
 amount = 20
@@ -110,3 +116,9 @@ script = ExtResource("21_Toast")
 
 [node name="OnboardingOverlay" type="CanvasLayer" parent="."]
 script = ExtResource("22_Onboard")
+
+[node name="Wave2ProgressionMap" type="CanvasLayer" parent="."]
+script = ExtResource("w2_map")
+
+[node name="Wave2GameBridge" type="Node" parent="."]
+script = ExtResource("w2_bridge")

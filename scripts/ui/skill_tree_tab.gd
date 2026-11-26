@@ -26,15 +26,18 @@ func setup(tree_id: StringName, tree_data: Dictionary) -> void:
 		skill_grid.get_parent().move_child(header, 0)
 
 	var skills = tree_data.skills
-	skill_grid.columns = 4
-	
+	# Wave 2: three wider columns on the centred panel; four tiny cards were
+	# the "empty grey sheet with cramped tiles" of the eyes-on review.
+	skill_grid.columns = 3 if skill_grid.get_viewport().get_visible_rect().size.x >= 900.0 else 2
+	skill_grid.add_theme_constant_override("h_separation", 14)
+	skill_grid.add_theme_constant_override("v_separation", 14)
 	for skill_id in skills:
 		var skill = skills[skill_id]
 		var btn = SkillButtonScene.instantiate()
 		skill_grid.add_child(btn)
 		btn.setup(skill_id, skill)
 		_skill_buttons[skill_id] = btn
-		
+
 		# Connect unlock signal
 		btn.unlock_requested.connect(_on_unlock_requested)
 

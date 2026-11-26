@@ -13,12 +13,12 @@ var current_id: StringName = &"suburbs"
 const _FOG_CANON := Color("#1a2133")
 ## Static audit 2026-09-08: each entry used to carry a "music" key that
 ## disagreed with music_manager.gd's own AMBIENT_BY_DISTRICT for school/
-## hospital/gas_station (e.g. this dict said "residential.wav" for
+## hospital/gas_station (e.g. this dict said "residential.ogg" for
 ## school, music_manager said "abandoned_hallways_alt.mp3"). Traced both:
 ## nothing anywhere ever read THEMES[...]["music"] (get_theme()/
 ## the since-deleted apply_to_environment() only used sky/ambient/accent) - it was dead
 ## weight, and its values were suspicious copy-paste anyway (5 unrelated
-## districts all said "residential.wav"). The one actually-live per-
+## districts all said "residential.ogg"). The one actually-live per-
 ## district track selection is music_manager.gd's AMBIENCE_DARK_BY_
 ## DISTRICT/AMBIENCE_LIT_BY_DISTRICT (covers all 11, checked by district
 ## stage); AMBIENT_BY_DISTRICT there is its own documented unreachable-

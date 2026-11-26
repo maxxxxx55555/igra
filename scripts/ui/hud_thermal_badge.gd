@@ -7,12 +7,22 @@ const HOLD_SEC: float = 8.0
 var comfort_state: StringName = &""
 
 func _ready() -> void:
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_theme_font_size_override("font_size", 18)
 	add_theme_color_override("font_outline_color", ThemeProvider.COLOR_BG_DARK)
 	add_theme_constant_override("outline_size", 2)
+	var icon := TextureRect.new()
+	icon.texture = preload("res://assets/textures/ui_craft/icon_warmth_64.webp")
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(icon)
+	icon.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
+	icon.offset_left = 4.0
+	icon.offset_right = 20.0
+	icon.offset_top = -8.0
+	icon.offset_bottom = 8.0
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
@@ -51,4 +61,4 @@ func _refresh(force: bool = false) -> void:
 	tooltip_text = text
 	add_theme_color_override("font_color", ink)
 	if changed or force:
-		_FADE.show_for([self], HOLD_SEC, 0.0, false, "self_modulate:a")
+		_FADE.show_for([self], HOLD_SEC, 0.0, false, "modulate:a")

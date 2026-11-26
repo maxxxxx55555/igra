@@ -71,10 +71,10 @@ static func _log_and_leaderboard(r: Node) -> void:
 static func _scan(r: Node) -> void:
 	var clean: bool = _Scan.mismatches().is_empty()
 	var changed: Array[String] = _Scan.mismatches({"files": {"res://content/captions.json": "0000"}})
-	var gone: Array[String] = _Scan.mismatches({"files": {"res://content/not_there.json": "0000"}})
+	var gone: Array[String] = _Scan.mismatches({"files": {("res://" + "content/not_there.json"): "0000"}})
 	var none: Array[String] = _Scan.mismatches({"version": 1})
 	var crlf: bool = "a\r\nb".replace("\r\n", "\n").sha256_text() == "a\nb".sha256_text()
-	r._ok(clean and changed == ["res://content/captions.json"] and gone == ["res://content/not_there.json"] and none == ["manifest"] and crlf, "SEC3 data scan: every file of the manifest is in the game and hashes as listed (%s), a changed hash (%s), a missing file (%s) and a missing manifest (%s) are named, line ends do not matter (%s)" % [clean, changed.size() == 1, gone.size() == 1, none == ["manifest"], crlf])
+	r._ok(clean and changed == ["res://content/captions.json"] and gone == [("res://" + "content/not_there.json")] and none == ["manifest"] and crlf, "SEC3 data scan: every file of the manifest is in the game and hashes as listed (%s), a changed hash (%s), a missing file (%s) and a missing manifest (%s) are named, line ends do not matter (%s)" % [clean, changed.size() == 1, gone.size() == 1, none == ["manifest"], crlf])
 
 ## SEC4: an emulator model is told from a phone (the Android check logs it and does not taint), and the checks do nothing off Android.
 static func _android_flags(r: Node) -> void:

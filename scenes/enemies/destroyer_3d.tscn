@@ -14,6 +14,7 @@ radius = 15.0
 [node name="Destroyer" type="CharacterBody3D"]
 script = ExtResource("1")
 
+safe_margin = 0.05
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("col_shape")
 

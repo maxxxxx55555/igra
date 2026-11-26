@@ -1,6 +1,15 @@
 extends Node3D
 
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
+## Wave 3: the soft dusty sodium cone of the owner's main-menu reference.
+const _CONE := preload("res://shaders/streetlight_cone_craft.gdshader")
+const CONE_HEIGHT: float = 5.2
+const CONE_TOP_R: float = 0.26
+const CONE_BOTTOM_R: float = 3.1
+## Only the lamps near the player draw their cone, so the perf budget keeps
+## its room for the street itself.
+const CONE_RANGE: float = 34.0
 
 @export var district_id: StringName = &"test_zone"
 @export var force_on: bool = false
@@ -30,6 +39,8 @@ var _light_energy_mult: float = 1.0
 ## a per-instance scene export existed, nothing player-facing. Read once
 ## here, then kept live by the settings signal (also while paused).
 var _reduce_flash: bool = false
+var _cone: MeshInstance3D = null
+var _cone_timer: float = 0.0
 
 func _ready() -> void:
 	add_to_group("streetlights")
@@ -41,7 +52,9 @@ func _ready() -> void:
 		(pole as MeshInstance3D).mesh = _HARDWARE.pole_mesh()
 		(pole as MeshInstance3D).material_override = _HARDWARE.material()
 	if pole: pole.visible = mesh_visible
-	if lamp: lamp.visible = mesh_visible
+	if lamp is MeshInstance3D:
+		lamp.mesh = DETAIL.module(&"lens")
+		lamp.visible = mesh_visible
 	if lamp is MeshInstance3D and mesh_visible: lamp.material_override = preload("res://scripts/world/lamp_head.gd").shared()  # W4: a head that stands alone flickers like the batched ones
 	if ResourceLoader.exists("res://assets/config/visual_quality.tres"):
 		var vq := load("res://assets/config/visual_quality.tres")
@@ -51,9 +64,48 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var dm := get_node_or_null("/root/DistrictManager")
 	var st: int = dm.get_stage(district_id) if dm else -1
+	# DistrictDressing already renders all the street cones as one MultiMesh.
+	if mesh_visible:
+		_build_cone()
 	_apply_stage(st)
 
+## Wave 3: one soft sodium cone under the lamp head. It is additive and
+## unshaded, so it reads as dusty air, never as a solid object.
+func _build_cone() -> void:
+	if _cone != null or int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
+		return
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = CONE_TOP_R
+	mesh.bottom_radius = CONE_BOTTOM_R
+	mesh.height = CONE_HEIGHT
+	mesh.radial_segments = 12
+	mesh.rings = 1
+	var mat := ShaderMaterial.new()
+	mat.shader = _CONE
+	mat.set_shader_parameter("sodium_color", MenuCanonAtmosphereDirector.SODIUM_KEY_COLOR)
+	mat.set_shader_parameter("cone_opacity", 0.15)
+	mesh.material = mat
+	_cone = MeshInstance3D.new()
+	_cone.name = "LightCone"
+	_cone.mesh = mesh
+	_cone.position = Vector3(0.0, -CONE_HEIGHT * 0.5 + 0.35, 0.0)
+	_cone.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_cone.visible = false
+	add_child(_cone)
+
+
+func _player_near() -> bool:
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	if player == null:
+		return false
+	return global_position.distance_to(player.global_position) <= CONE_RANGE
+
 func _process(delta: float) -> void:
+	if _cone != null:
+		_cone_timer -= delta
+		if _cone_timer <= 0.0:
+			_cone_timer = 0.5
+			_cone.visible = _on and _player_near()
 	if not _on or not lamp_flicker:
 		return
 	if _t < 0.0:
@@ -114,6 +166,11 @@ func _update_light(stage: int = -1) -> void:
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
 		glow.light_energy = 0.0
+	# Wave 3: every lamp burns the owner's sodium #d4a94e, never a white bulb.
+	MenuCanonAtmosphereDirector.apply_streetlight_canon(spot, spot.light_energy)
+	MenuCanonAtmosphereDirector.apply_streetlight_canon(glow, glow.light_energy)
+	if _cone != null and not _on:
+		_cone.visible = false
 	# the stealth math asks the light grid whether the player stands in a lit pool (base_monster.gd _sight_ranges)
 	if _on:
 		LightGrid.register_light(glow)

@@ -12,8 +12,8 @@ const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const STAMINA := Color("#5f8a4e")
 
 const Logic := preload("res://scripts/crafting/workbench_logic.gd")
-const _CRAFT_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_success.wav")
-const _FAIL_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_fail.wav")
+const _CRAFT_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_success.ogg")
+const _FAIL_SFX := preload("res://assets/audio/sfx/interact/workbench_craft_fail.ogg")
 const RECIPES: Array[Dictionary] = Logic.RECIPES
 
 ## P2 (FINAL INTEGRATION wave): craft material icons -> ingredient chips
@@ -53,7 +53,7 @@ var _salvage_btn: Button
 var _selected_salvage: int = -1
 
 func _ready() -> void:
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	if not enable_workbench: return
 	# the screen had no backdrop: the recipe names were 11 px text straight over the street
 	var bg := ColorRect.new()

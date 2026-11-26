@@ -10,7 +10,7 @@ func _ready() -> void:
 	d.list_dir_begin()
 	var f := d.get_next()
 	while f != "":
-		if f.ends_with(".wav"):
+		if f.ends_with(".ogg"):
 			var st := load("res://assets/audio/music/" + f) as AudioStreamWAV
 			if st == null:
 				print("[m] %s -> NULL" % f)

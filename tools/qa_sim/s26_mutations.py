@@ -49,7 +49,7 @@ SETS = [
         ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.03, 0.12, 0.18, 0.22]", "const FACADE_GAIN: Array[float] = [0.03, 0.12, 0.18, 0.01]", "SOV6"),
         ("scripts/ui/main_menu.gd", "\t_install_background()\n", "\t_install_background()\n\tvar fog: ColorRect = load(\"res://scripts/ui/menu_fog.gd\").new()\n\tadd_child(fog)\n", "SOV7"),
         ("scripts/enemies/boss_3d.gd", "EventBus.boss_phase_changed.emit(3)", "pass", "MUS1"),
-        ("scripts/systems/music_manager.gd", '&"police": "res://assets/audio/music/scott_buckley_moonlight.ogg",', '&"police": "res://assets/audio/music/scott_buckley_moonlight_x.ogg",', "MUS2"),
+        ("scripts/systems/music_manager.gd", '&"police": "res://assets/audio/music/scott_buckley_moonlight.ogg",', '&"police": ("res://" + "assets/audio/music/scott_buckley_moonlight_x.ogg"),', "MUS2"),
         ("data/i18n/en.json", '"CREDITS_MUSIC": "Music (partly AI, Google Lyria) and SFX: TLS Team"', '"CREDITS_MUSIC": "Music and SFX: TLS Team"', "CRED1"),
         ("scripts/systems/music_manager.gd", "\t_leave_boss()\n\t_run_seed = randi()", "\tpass\n\t_run_seed = randi()", "MUS3"),
         ("scripts/systems/music_manager.gd", "func _on_district_entered(district_id: StringName) -> void:\n\t_leave_boss()\n", "func _on_district_entered(district_id: StringName) -> void:\n\tpass\n", "MUS4"),
@@ -117,7 +117,7 @@ SETS = [
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.4, 0.0, 1.0)\n", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.8, 0.0, 1.0)\n", "LAY1"),
         ("scripts/systems/music_manager.gd", "\t_boss_phase = clampi(phase, 1, BOSS_PHASES.size())\n", "\t_boss_phase = 1\n", "LAY3"),
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0\n", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.FOG else 0.0\n", "LAY6"),
-        ("scripts/systems/uisfx.gd", "play_ui(\"district_restored_sting\"))", "play_ui(\"district_restored_stingx\"))", "ONE2"),
+        ("scripts/systems/uisfx.gd", "play_craft(\"sfx_district_restored_sting.wav\", &\"UI\", -8.0))", "play_craft(\"sfx_district_restored_stingx.wav\", &\"UI\", -8.0))", "ONE2"),
     ],
     [  # Session 29 (v10 M4, M6), the closeout group s29 again, second half: the fall of the hunted level, the calm delay, the swap of the two players, the death cue and the tick of the XP
         ("scripts/systems/music_manager.gd", "const THREAT_FALL: float = 0.25", "const THREAT_FALL: float = 0.1", "LAY2"),

@@ -33,8 +33,7 @@ session:
    `store/review-responses.md` has paste-ready replies for the first
    reviews.
 
-Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
-no-ad debug stub without it), extra platforms (§6), version bump at upload
+Optional / not blocking: extra platforms (§6), version bump at upload
 time (§7), one `perf_check_scene.tscn --windowed` run for the real
 draw-call number, the texture-compression pilot in `docs/artifacts/
 apk_size_report.md` (738 files, 41.2 MiB, measured 2026-09-12; scoped
@@ -98,56 +97,13 @@ Do not generate a replacement signing identity. Leave tracked keystore fields
 empty and supply credentials through the GODOT_ANDROID_KEYSTORE_RELEASE_*
 environment variables. Keep two private backups. See docs/RELEASE_HANDOFF_20261027.md.
 
-## 2. AppLovin MAX — get a real SDK key
+## 2. Verify the optional Wi-Fi bonus
 
-Currently shipping with **no SDK key set** — the app runs a local debug
-stub that shows no real ads and collects nothing. This is safe to ship
-as-is, but no ad revenue happens until you do this:
-
-1. Sign in / create an account at https://dash.applovin.com.
-2. Create the app (Android, package name **`com.maxsimkasky.laststreetlight`**
-   — note: `docs/RELEASE_FINAL.md`'s email template still shows the old
-   placeholder `com.tls.game`; that was changed in `export_presets.cfg`
-   after that doc was written — use the real one above, not what's in
-   that template).
-3. Once AppLovin issues a key, set it wherever `AdService` reads its SDK
-   key from (see `docs/store/HUMAN_CHECKLIST.md` "AppLovin MAX ads" for
-   the exact file/field — it was already located and documented there).
-4. If their dashboard needs a manual integration review, send this,
-   filling the brackets:
-
-```
-Subject: Integration review request — Last Streetlight (Android)
-
-App name: Last Streetlight
-Package name: com.maxsimkasky.laststreetlight
-Platform: Android (Godot 4.7, AppLovin MAX Godot plugin)
-Ad formats integrated: Rewarded (revive / extra battery), Interstitial
-  (district-travel, 180s cooldown, never mid-combat)
-SDK integration status: Plugin enabled (gradle_build/plugins_enabled=
-  AppLovinMAX), dependency added in android/build/build.gradle.
-Current state: SDK key not yet set - ads run through a local debug stub
-  until a real key is issued.
-Store listing: [paste Play Console listing URL once created]
-Contact: [your email]
-```
+Use the Android bonus checks in `docs/store/HUMAN_CHECKLIST.md` on a release export.
 
 ## 3. Publish the privacy policy
 
-`docs/PRIVACY_POLICY.md` has the full drafted text, ready to publish —
-it just isn't hosted anywhere yet. (`store/privacy-policy-template.md`,
-added with the store kit in PR #8, is a shorter fill-in-the-brackets
-version of the same policy — use whichever you prefer; the Data Safety
-answers in step 5 match both.)
-
-1. Fill in the `[your email/support address]` placeholder in that file
-   with a real, monitored address.
-2. Publish the text at any stable URL you control (a GitHub Pages page,
-   a personal site, even a public Gist — Play Console just needs a
-   working link, not a specific host).
-3. Paste that URL into the Data Safety form in step 5 below, and into
-   `docs/store/play_store.md`'s Data Safety section (currently marked
-   TODO there).
+Publish both languages from `store/privacy-policy-template.md` at https://maxxxxx55555.github.io/igra/. Paste that URL into the privacy policy field.
 
 ## 4. Install export templates (one-time, in the Godot editor)
 
@@ -184,8 +140,7 @@ Do these in order. Play Console won't let you roll out until every
    type **Game**, **Free**, accept the declarations.
 2. **App content** (left nav → Policy → App content). Complete each card:
    a. **Privacy policy** → paste the URL from step 3.
-   b. **Ads** → **Yes, my app contains ads** (AppLovin MAX interstitial +
-      rewarded).
+   b. **Contains ads** → **No**.
    c. **App access** → **All functionality is available without special
       access** (no login, no gated areas).
    d. **Content ratings** → start the IARC questionnaire. Answers for this
@@ -198,12 +153,7 @@ Do these in order. Play Console won't let you roll out until every
    e. **Target audience and content** → age groups **13–15, 16–17, 18+**
       (not designed for children); **no** to "appeals to children".
    f. **News app** → No. **COVID-19 contact tracing** → No.
-      **Data safety** → fill per §8 of `docs/RELEASE_FINAL.md`:
-      collects/shares user data **No** (if the AppLovin key from step 2 is
-      live, switch to **Yes** and declare *Device or other IDs* +
-      *App activity*, "for advertising", not shared, per AppLovin's
-      published Data Safety guidance); encrypted in transit **N/A**;
-      deletion request **N/A**.
+      **Data safety** → **No** for data collected or shared. See `store/IARC_ANSWERS.md`.
    g. **Government apps** → No.
 3. **Store presence → Main store listing** — paste from `store/`:
    - **App name** / **Short description** / **Full description** from

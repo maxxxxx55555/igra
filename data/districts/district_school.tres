@@ -7,3 +7,6 @@ display_name = "Школа"
 stage = 0
 powered_by = [&"residential"]
 map_position = Vector2(420, 60)
+fog_density = 0.031
+cold_mult = 1.38
+enemy_count = 7

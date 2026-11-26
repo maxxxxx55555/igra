@@ -75,7 +75,7 @@ func _load_samples() -> void:
 		for state in AUDIBLE_STATES:
 			names.append(_step_sample(surface, state))
 	for n in names:
-		var path: String = SFX_DIR + String(n) + ".wav"
+		var path: String = SFX_DIR + String(n) + ".ogg"
 		if not _streams.has(n) and ResourceLoader.exists(path):
 			_streams[n] = load(path)
 
@@ -88,8 +88,8 @@ func _resolve_step_stream() -> AudioStream:
 		var generated: AudioStream = am._gen_step()
 		if generated:
 			return generated
-	if ResourceLoader.exists("res://assets/audio/sfx/sfx_step.wav"):
-		return load("res://assets/audio/sfx/sfx_step.wav")
+	if ResourceLoader.exists("res://assets/audio/sfx/sfx_step.ogg"):
+		return load("res://assets/audio/sfx/sfx_step.ogg")
 	return null
 
 func set_player(player: Node3D) -> void:

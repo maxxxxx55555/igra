@@ -1,6 +1,9 @@
 {
  "_contract": "Machine-readable. terms: the core words of the game and the dictionary key that says each in the 13 locales (read from data/i18n, not translated here). cognates: English values that a locale repeats on purpose, with the locales; a new identical value fails tools/qa_sim/i18n_placeholder_fuzz.py. latin_ok: keys whose value stays Latin in the non-Latin locales. Written by that tool.",
  "cognates": {
+  "English": [
+   "ru"
+  ],
   "Last Streetlight": [
    "ru"
   ],
@@ -9,6 +12,7 @@
   ]
  },
  "latin_ok": [
+  "SETTINGS_LANG_EN",
   "boot_title",
   "VSync",
   "INV_ITEM_WEIGHT",

@@ -20,7 +20,7 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back_pressed)
 	refresh_button.pressed.connect(_on_refresh_pressed)
 	host_list.item_selected.connect(_on_host_selected)
-	
+
 	NetworkManager.server_created.connect(_on_server_created)
 	NetworkManager.connection_failed.connect(_on_connection_failed)
 	NetworkManager.server_disconnected.connect(_on_server_disconnected)
@@ -37,7 +37,7 @@ func _ready() -> void:
 func _on_host_pressed() -> void:
 	var player_name = name_input.text.strip_edges()
 	if player_name.is_empty():
-		player_name = "Player"
+		player_name = tr("LOBBY_PLAYER")
 	NetworkManager.create_server()
 	LANDiscovery.start_host(player_name)
 	host_button.disabled = true
@@ -48,12 +48,12 @@ func _on_join_pressed() -> void:
 	if selected.size() == 0:
 		status_label.text = tr("Select a server first")
 		return
-	
+
 	var idx = selected[0]
 	var host_data = host_list.get_item_metadata(idx)
 	if not host_data:
 		return
-	
+
 	status_label.text = tr("Connecting to %s...") % host_data.name
 	NetworkManager.join_server(host_data.ip)
 

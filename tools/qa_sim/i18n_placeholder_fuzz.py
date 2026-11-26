@@ -21,7 +21,7 @@ LOCALES = ["en", "ru"]
 SCRIPT = {"ru": r"[Ѐ-ӿ]"}
 SPEC = re.compile(r"%[-+0#]*\d*(?:\.\d+)?[sdifxXc]|\{\w+\}")
 SPACE_FLAG = re.compile(r"%[ ]\w")
-LATIN_OK = ["boot_title", "VSync", "INV_ITEM_WEIGHT", "NG_PLUS_LABEL", "STATS_METERS"]
+LATIN_OK = ["SETTINGS_LANG_EN", "boot_title", "VSync", "INV_ITEM_WEIGHT", "NG_PLUS_LABEL", "STATS_METERS"]
 GLOSSARY = ROOT / "data" / "i18n_glossary.json"
 # term -> the key whose value says it, in all 13 locales
 TERMS = {

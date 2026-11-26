@@ -36,26 +36,26 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "MULTIPLAYER LOBBY"
+text = "LOBBY_TITLE"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 28
 theme_override_colors/font_color = Color(0.7882353, 0.6352941, 0.2901961, 1)
 
 [node name="NameInput" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Your Name"
-text = "Player"
+placeholder_text = "LOBBY_NAME"
+text = ""
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 [node name="HostButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Create Server"
+text = "LOBBY_CREATE"
 size_flags_horizontal = 3
 
 [node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Refresh"
+text = "LOBBY_REFRESH"
 size_flags_horizontal = 3
 
 [node name="HostList" type="ItemList" parent="VBoxContainer"]
@@ -65,12 +65,12 @@ size_flags_vertical = 3
 
 [node name="JoinButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Join Selected"
+text = "LOBBY_JOIN"
 disabled = true
 
 [node name="StartButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Start Game"
+text = "LOBBY_START"
 disabled = true
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]

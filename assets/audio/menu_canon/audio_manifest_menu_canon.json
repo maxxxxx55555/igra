@@ -1,0 +1,96 @@
+{
+  "style_lock": {
+    "seed": 47209,
+    "sample_rate": 48000,
+    "key": "D minor / D Dorian",
+    "max_true_peak_dbfs": -1.5,
+    "max_dc_offset": 0.002,
+    "max_loop_seam": 0.008,
+    "forbid_electrical_hum_bed": true,
+    "ai_hf_harshness_cutoff_hz": 9000.0,
+    "ai_hf_max_ratio": 0.18
+  },
+  "assets": [
+    {
+      "file": "mus_nocturnal_lantern_loop.ogg",
+      "channels": 2,
+      "duration_s": 24.0,
+      "peak_dbfs": -2.83,
+      "rms_dbfs": -15.27,
+      "dc_offset": 0.0,
+      "loop_seam": 0.0,
+      "sha256": "48f0eed1ebc615deba0ec7fc61c52b5e5910a83f921d48f2c2cee2eb2a0aff2f"
+    },
+    {
+      "file": "amb_wet_night_rain_loop.ogg",
+      "channels": 2,
+      "duration_s": 16.0,
+      "peak_dbfs": -6.37,
+      "rms_dbfs": -25.98,
+      "dc_offset": 0.0,
+      "loop_seam": 0.0,
+      "sha256": "1ff05060cfbfdfea67a45184fc565176a7e31d0195994e2f0461ab90da7761dc"
+    },
+    {
+      "file": "sfx_step_wet_asphalt_01.ogg",
+      "channels": 1,
+      "duration_s": 0.34,
+      "peak_dbfs": -4.01,
+      "rms_dbfs": -17.23,
+      "dc_offset": 0.0,
+      "loop_seam": 0.0,
+      "sha256": "b81a2584f2ba32debc5f38936a5b7e93d9e63067ffb6c5b279084019de1e3c42"
+    },
+    {
+      "file": "sfx_step_wet_asphalt_02.ogg",
+      "channels": 1,
+      "duration_s": 0.34,
+      "peak_dbfs": -4.0,
+      "rms_dbfs": -17.91,
+      "dc_offset": 0.0,
+      "loop_seam": 0.0,
+      "sha256": "62bedff3892330c7444556f948a244c5a98e730afa1e167fdedde68a7ad00e47"
+    },
+    {
+      "file": "sfx_step_wet_asphalt_03.ogg",
+      "channels": 1,
+      "duration_s": 0.34,
+      "peak_dbfs": -4.01,
+      "rms_dbfs": -17.76,
+      "dc_offset": 0.0,
+      "loop_seam": 0.0,
+      "sha256": "052839af50e1b93e7cf0afb65867db768e5a50ddbcf165da9d57066c487b6945"
+    },
+    {
+      "file": "sfx_lamp_relay_ignite.ogg",
+      "channels": 1,
+      "duration_s": 1.15,
+      "peak_dbfs": -3.5,
+      "rms_dbfs": -16.88,
+      "dc_offset": 0.0,
+      "loop_seam": 1e-05,
+      "sha256": "fb8449d05f80b40277b7d4bb0ec729e93626d13c3e457c4c37c1007b0772be0d"
+    },
+    {
+      "file": "sfx_ui_brass_click.ogg",
+      "channels": 1,
+      "duration_s": 0.12,
+      "peak_dbfs": -5.0,
+      "rms_dbfs": -19.89,
+      "dc_offset": 2.6e-05,
+      "loop_seam": 0.00697,
+      "sha256": "38f6bee8660140b5f3d1f06e72d27c069f1ab8959e3303ce45963c72a8d15815"
+    },
+    {
+      "file": "sfx_ui_brass_hover.ogg",
+      "channels": 1,
+      "duration_s": 0.065,
+      "peak_dbfs": -5.0,
+      "rms_dbfs": -19.66,
+      "dc_offset": 0.000146,
+      "loop_seam": 0.01234,
+      "sha256": "cce3e91f28a03607662f0d27fdb5e4fa9373c02a5b5f4fba75ae6b97bf60d410"
+    }
+  ],
+  "errors": []
+}

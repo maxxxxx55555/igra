@@ -69,6 +69,12 @@ static func glow_of(item_id: StringName) -> Color:
 static func dress(holder: Node3D, piece: MeshInstance3D, item_id: StringName, settle: bool = true) -> void:
 	var mesh := mesh_for(item_id)
 	piece.mesh = mesh
+	# Hand-sized objects outside the 16 m flashlight beam occupy only a few
+	# dark pixels on mobile. Keep the physical pickup and its state resident.
+	if OS.has_feature("mobile") or RenderingServer.get_current_rendering_method() == "gl_compatibility":
+		piece.visibility_range_end = 20.0
+		piece.visibility_range_end_margin = 1.0
+		piece.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var materials := materials_for(item_id)
 	for s in mesh.get_surface_count():
 		piece.set_surface_override_material(s, materials[s])

@@ -15,6 +15,8 @@ const SAMPLE_SEC: float = 0.5
 const CAP_SHARE: float = 0.9
 const FLIP_SEC: float = 30.0
 
+var _frame_times := PackedFloat32Array()
+
 var dropped: bool = false
 var _since_sample: float = 0.0
 var _low_for: float = 0.0
@@ -26,6 +28,9 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float) -> void:
+	if OS.has_feature("android"):
+		_step_android(delta)
+		return
 	_since_sample += delta
 	if _since_sample < SAMPLE_SEC:
 		return
@@ -73,3 +78,25 @@ func _apply(drop: bool) -> void:
 	var vp := get_viewport()
 	if vp != null:
 		vp.scaling_3d_scale = base * (DROP_SCALE if drop else 1.0)
+
+
+## Sample the slow end of actual frame times in windows, adjusting only the 3D render target.
+func _step_android(frame_seconds: float) -> void:
+	if not bool(SettingsManager.get_setting("dynamic_resolution", true)) or not GameManager.is_playing():
+		_frame_times.clear()
+		return
+	_frame_times.append(frame_seconds)
+	if _frame_times.size() < 90:
+		return
+	_frame_times.sort()
+	var p95 := _frame_times[ceili(_frame_times.size() * 0.95) - 1]
+	_frame_times.clear()
+	var target := 1.0 / maxf(30.0, float(Engine.max_fps if Engine.max_fps > 0 else 60))
+	var vp := get_viewport()
+	if vp == null:
+		return
+	var ceiling := clampf(float(SettingsManager.get_setting("render_scale", 1.0)), 0.78, 1.0)
+	if p95 > target * 1.12:
+		vp.scaling_3d_scale = clampf(vp.scaling_3d_scale - 0.035, 0.78, ceiling)
+	elif p95 < target * 1.04:
+		vp.scaling_3d_scale = clampf(vp.scaling_3d_scale + 0.015, 0.78, ceiling)

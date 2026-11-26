@@ -5,7 +5,15 @@ const EDGE: float = 48.0
 const GAP: float = 12.0
 const SIDE_BUTTONS: Array[String] = ["BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnInventory", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnWorkbench"]
 
-static func arrange(cluster: Control, row_limit: float) -> Vector2:
+static func is_mobile() -> bool:
+	return OS.has_feature("mobile") or OS.has_feature("android")
+
+static func pixel_ratio(viewport: Viewport) -> float:
+	var window := viewport.get_window()
+	return maxf(float(window.size.x) / maxf(1.0, viewport.get_visible_rect().size.x), 0.1)
+
+static func arrange(cluster: Control, row_limit: float, factor: float = 1.0) -> Vector2:
+	var target := Vector2.ONE * ceilf(56.0 / (pixel_ratio(cluster.get_viewport()) * factor)) if is_mobile() else Vector2.ZERO
 	var extent := Vector2.ZERO
 	var right: float = EDGE
 	var bottom_height: float = 0.0
@@ -13,7 +21,9 @@ static func arrange(cluster: Control, row_limit: float) -> Vector2:
 		var button := cluster.get_node_or_null(name_) as Button
 		if button == null:
 			continue
-		var size_: Vector2 = button.get_combined_minimum_size()
+		var size_: Vector2 = button.get_combined_minimum_size().max(target)
+		if name_ == "BtnAttack":
+			size_ = size_.max(target * 72.0 / 56.0)
 		_place(button, right, EDGE, size_)
 		extent.x = maxf(extent.x, right + size_.x)
 		bottom_height = maxf(bottom_height, size_.y)
@@ -21,7 +31,7 @@ static func arrange(cluster: Control, row_limit: float) -> Vector2:
 	var above: float = EDGE + bottom_height + 16.0
 	var interact := cluster.get_node_or_null("BtnInteract") as Button
 	if interact != null:
-		var size_: Vector2 = interact.get_combined_minimum_size()
+		var size_: Vector2 = interact.get_combined_minimum_size().max(target * 72.0 / 56.0)
 		_place(interact, 60.0, above, size_)
 		above += size_.y + 16.0
 	extent.y = above
@@ -32,7 +42,7 @@ static func arrange(cluster: Control, row_limit: float) -> Vector2:
 		var button := cluster.get_node_or_null(name_) as Button
 		if button == null:
 			continue
-		var size_: Vector2 = button.get_combined_minimum_size()
+		var size_: Vector2 = button.get_combined_minimum_size().max(target)
 		if right > EDGE and right + size_.x > row_limit:
 			above += row_height + GAP
 			right = EDGE

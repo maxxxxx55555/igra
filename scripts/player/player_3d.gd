@@ -19,7 +19,11 @@ enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 @export var fps_eye_height: float = 1.7
 
 var current_state: State = State.IDLE
-var hp: float = 100.0
+var hp: float:
+	get: return SecurityVault.get_guarded_float(&"runtime_player_hp_%d" % get_instance_id(), 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float(&"runtime_player_hp_%d" % get_instance_id(), clampf(value, 0.0, stats.max_hp if stats != null and stats.max_hp > 0.0 else 100.0))
 ## 3.12/6.5: BLEED/BURN/POISON/SLOW/STUN на игроке — тот же движок, что и на монстрах
 ## (см. base_monster.gd), _inflict_statuses() раньше был no-op без этого метода.
 var status_fx: Node = null
@@ -27,7 +31,12 @@ var stamina: float = 100.0
 ## v10 N032: at 0 the sprint is over until a quarter of the bar is back (it refilled in the same frame and the player ran on at 96 % of full speed for as long as Shift was held).
 var _winded: bool = false
 const RUN_RESUME_FRACTION: float = 0.25
-var battery: float = 100.0
+var battery: float:
+	get: return SecurityVault.get_guarded_float(&"runtime_player_battery_%d" % get_instance_id(), 100.0)
+	set(value):
+		if is_finite(value):
+			SecurityVault.set_guarded_float(&"runtime_player_battery_%d" % get_instance_id(), clampf(value, 0.0, maxf(0.001, battery_max)))
+var _collision_guard: AntiTunnelCollisionGuard = null
 var look_dir: Vector3 = Vector3.FORWARD
 var flashlight_enabled: bool = true
 var gameplay_active: bool = false
@@ -129,6 +138,10 @@ const VISIBILITY_RUN: float = 1.2
 ## с одной-двумя подзарядками (раньше 5 минут не дотягивали до босса:
 ## фонарь гас посреди фазы, где свет — условие урона).
 const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
+## A32 offline safe-zone: a restored streetlight recharges the light and the
+## traveller's warmth. No network call, no bonus service, no item required.
+const OFFLINE_RECHARGE_PER_SEC: float = 100.0 / 180.0
+const OFFLINE_WARMTH_PER_SEC: float = 3.0
 ## Health comes back slowly once nothing has hurt the player for a while: out of a fight, never in one. It was 18 HP/s
 ## at every moment (added so the bot could beat the Architect), more than the hit rule can deal (12 per 0.8 s = 15 HP/s),
 ## so no number of monsters could kill the player. The GDD gives no base regeneration; the health_regen skill adds its own.
@@ -288,8 +301,15 @@ func _ready() -> void:
 	stamina = stats.stamina_max
 	_winded = false
 	battery = float(battery_max)
+	if _collision_guard == null:
+		_collision_guard = AntiTunnelCollisionGuard.new()
+		_collision_guard.name = "AntiTunnelCollisionGuard"
+		_collision_guard.max_delta_sec = 0.05
+		_collision_guard.max_substep_distance_m = 0.15
+		_collision_guard.min_safe_margin_m = 0.045
+		add_child(_collision_guard)
 
-	if OS.has_feature("mobile"):
+	if OS.has_feature("mobile") or RenderingServer.get_current_rendering_method() == "gl_compatibility":
 		enable_shadows = false
 	flashlight.shadow_enabled = enable_shadows
 	dust.emitting = enable_dust
@@ -575,6 +595,7 @@ func _apply_look(yaw_delta: float, pitch_delta: float) -> void:
 	_pitch = clampf(_pitch + pitch_delta, -1.5, 1.5)
 
 func _physics_process(delta: float) -> void:
+	delta = clampf(delta, 0.0, 0.05) if is_finite(delta) else 0.0
 	if get_tree().paused:
 		return
 	if _net_active:
@@ -606,7 +627,7 @@ func _physics_process(delta: float) -> void:
 	_tick_uv(delta)
 	if not can_move:
 		velocity = Vector3.ZERO
-		move_and_slide()
+		_safe_move(delta)
 		return
 	# a dead player (or one behind the victory screen) is not at the controls
 	var dir_2d: Vector2 = InputService.get_move_dir() if gameplay_active else Vector2.ZERO
@@ -708,7 +729,7 @@ func _physics_process(delta: float) -> void:
 		_coyote_timer = 0.0
 		_jump_buffer_timer = 0.0
 	velocity += get_gravity() * delta
-	move_and_slide()
+	_safe_move(delta)
 	if is_on_floor():
 		ProgressTracker.distance += Vector2(velocity.x, velocity.z).length() * delta
 	_check_fall_recovery()
@@ -924,6 +945,15 @@ func _update_battery(delta: float) -> void:
 	if not flashlight_enabled or not gameplay_active or get_tree().paused or not GameManager.is_playing():
 		return
 	var prev := battery
+	if LightGrid.is_lit(global_position, 0.3):
+		battery = clampf(battery + OFFLINE_RECHARGE_PER_SEC * delta, 0.0, battery_max)
+		if GameplayDirector != null:
+			GameplayDirector.warmth = clampf(GameplayDirector.warmth + OFFLINE_WARMTH_PER_SEC * delta, 0.0, 100.0)
+		if absf(battery - prev) > 0.01:
+			EventBus.player_battery_changed.emit(battery / battery_max)
+		if _light_died and battery > 0.0:
+			toggle_flashlight()
+		return
 	# Модификатор NG+ "long_night": battery 0.8 = на 20% меньше света с
 	# элемента, то есть ручка делит запас, а значит умножает расход.
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
@@ -947,6 +977,14 @@ func toggle_flashlight() -> void:
 	_light_died = false
 	flashlight_enabled = not flashlight_enabled
 	EventBus.flashlight_state_changed.emit(flashlight_enabled)
+	## Same physical button, double tap: Overdrive Pulse. No new HUD control,
+	## real 18% battery cost + 4 s dim, so the risk/reward dilemma is live.
+	var tension := get_node_or_null("/root/HorrorTension")
+	if tension != null:
+		var result: Dictionary = tension.call("register_flashlight_tap", global_position, battery)
+		if bool(result.get("triggered", false)):
+			consume_battery(float(result.get("battery_cost", 0.0)))
+			EventBus.inventory_notice.emit(LocalizationManager.t("HUD_OVERDRIVE_READY"))
 
 func get_noise_level() -> float:
 	var weather_mod := 0.0
@@ -984,7 +1022,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
 	amount = minf(amount, HIT_CAP * SettingsManager.difficulty_scale("damage_cap") * NewGamePlus.get_enemy_damage_multiplier()) / SettingsManager.difficulty_scale("player_hp")  # Easy: 50% more health, as damage taken
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
-	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
+	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.ogg"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
 	if _src_pos != Vector3.ZERO:
 		EventBus.player_damage_direction.emit(amount, _src_pos)  # 3.15 — индикатор направления урона
@@ -1023,6 +1061,15 @@ func heal(amount: float) -> void:
 		return # puppet не лечим: владелец лечится на своей машине, hp придёт синком
 	hp = clampf(hp + amount, 0.0, stats.max_hp)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
+
+func _safe_move(delta: float) -> void:
+	safe_margin = maxf(safe_margin, 0.045)
+	if (collision_mask & 1) == 0:
+		collision_mask |= 1
+	if _collision_guard != null and is_instance_valid(_collision_guard):
+		_collision_guard.move_guarded(self, velocity, delta)
+	else:
+		move_and_slide()
 
 func get_battery() -> float:
 	return battery
@@ -1459,8 +1506,10 @@ func _update_low_battery_flicker() -> void:
 	var ratio_pct: float = battery / maxf(battery_max, 0.001) * 100.0
 	var low: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold
 	if low and not _low_battery_warned:
-		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.wav"), -8.0)
+		AudioManager.play_sfx(preload("res://assets/audio/sfx/ui_error.ogg"), -8.0)
 	_low_battery_warned = low
+	var tension := get_node_or_null("/root/HorrorTension")
+	var beam: float = 1.0 if tension == null else clampf(float(tension.call("get_flashlight_beam_multiplier")), 0.3, 2.5)
 	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
 		and not _flashlight_stability_maxed \
 		and not bool(SettingsManager.get_setting("reduce_flash", false))
@@ -1469,10 +1518,12 @@ func _update_low_battery_flicker() -> void:
 		var now: int = Time.get_ticks_msec()
 		if now >= _flicker_next_msec:
 			_flicker_next_msec = now + FLICKER_HOLD_MSEC
-			flashlight.light_energy = _base_flashlight_energy * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
+			flashlight.light_energy = _base_flashlight_energy * beam * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
 	elif _flickering:
 		_flickering = false
-		flashlight.light_energy = _base_flashlight_energy
+		flashlight.light_energy = _base_flashlight_energy * beam
+	elif not is_equal_approx(beam, 1.0):
+		flashlight.light_energy = _base_flashlight_energy * beam
 
 func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if not levels:
@@ -1547,3 +1598,8 @@ func apply_dot(amount: float, _type: EnemyRosterData.DamageType = EnemyRosterDat
 		gameplay_active = false
 		_clear_touch_state()
 		EventBus.game_over.emit()
+
+
+func _exit_tree() -> void:
+	for key in ["hp", "battery"]:
+		SecurityVault.forget_runtime_guard(StringName("runtime_player_%s_%d" % [key, get_instance_id()]))

@@ -31,7 +31,7 @@ func _check_sfx_bank() -> void:
 	_ok(missing.is_empty(), "S9.2 шаги по поверхностям (%d/%d)%s" % [
 		surfaces.size() - missing.size(), surfaces.size(),
 		"" if missing.is_empty() else " нет: " + ", ".join(missing)])
-	_ok(ResourceLoader.exists("res://assets/audio/sfx/step_clank.wav"), "S9.2 лязг для тяжёлого груза")
+	_ok(ResourceLoader.exists("res://assets/audio/sfx/step_clank.ogg"), "S9.2 лязг для тяжёлого груза")
 
 	# monster_id -> cue file, mirrors each monster script's _set_cues() call.
 	var cues := ["monster_shadow_click", "monster_crawler_scrape", "monster_watcher_breath",

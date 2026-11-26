@@ -33,7 +33,7 @@ offset_right = 100.0
 offset_bottom = 60.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 28
-text = "ДОСТИЖЕНИЯ"
+text = "achievements"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control"]
@@ -64,5 +64,5 @@ offset_top = -60.0
 offset_right = 120.0
 offset_bottom = -20.0
 grow_vertical = 0
-text = "НАЗАД"
+text = "UI_BACK"
 

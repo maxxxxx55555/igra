@@ -23,6 +23,13 @@ func request_around(district_id: StringName) -> void:
 func _request(path: String) -> void:
 	if _requested.has(path) or not ResourceLoader.exists(path):
 		return
+	# Compile script dependencies on the main thread. On Godot 4.7 the first
+	# background compile of a district script leaves a loader token at exit.
+	if path.ends_with(".tscn"):
+		for dependency in ResourceLoader.get_dependencies(path):
+			var script_path := dependency.get_slice("::", dependency.get_slice_count("::") - 1)
+			if script_path.ends_with(".gd") and not _cache.has(script_path):
+				_cache[script_path] = load(script_path)
 	if ResourceLoader.load_threaded_request(path, "", false) == OK:
 		_requested.append(path)
 		_pending.append(path)

@@ -56,7 +56,11 @@ func _ready() -> void:
 	_action = _make_player(&"Combat")
 	_action.name = "ActionLayer"
 	for i in POOL:
-		_pool.append(_make_player())
+		var voice := _make_player()
+		voice.finished.connect(func() -> void:
+			if not voice.playing:
+				voice.stream = null)
+		_pool.append(voice)
 	_setup_reverb()
 	var ducker := _DUCKER.new()
 	ducker.name = "Ducker"
@@ -118,10 +122,10 @@ func _ready() -> void:
 static func _has_ui_sting(name: String) -> bool:
 	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
 
-const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
+const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.ogg")
 const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.ogg")
-const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.wav")
-const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.wav")
+const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.ogg")
+const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.ogg")
 const RAIN_SFX := preload("res://assets/audio/one_shots/rain_on_metal_loop.ogg")
 const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.ogg")
 const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.ogg")
@@ -187,6 +191,9 @@ func _take_player_3d() -> AudioStreamPlayer3D:
 		fresh.attenuation_filter_cutoff_hz = ATTEN_CUTOFF_HZ
 		fresh.attenuation_filter_db = ATTEN_FILTER_DB
 		add_child(fresh)
+		fresh.finished.connect(func() -> void:
+			if not fresh.playing:
+				fresh.stream = null)
 		_pool_3d.append(fresh)
 		return fresh
 	_next_3d = (_next_3d + 1) % POOL_3D
@@ -407,3 +414,11 @@ func _gen_boom() -> AudioStreamWAV:
 		v += (float(prev) / 255.0 - 0.5) * 0.5 * env
 		b[i] = clampi(int(128.0 + v * 150.0), 0, 255)
 	return _wrap(b)
+
+func _exit_tree() -> void:
+	for voice in get_children():
+		if voice is AudioStreamPlayer or voice is AudioStreamPlayer3D:
+			voice.stop()
+			voice.stream = null
+	_pool.clear()
+	_pool_3d.clear()

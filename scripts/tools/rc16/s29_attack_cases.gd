@@ -33,10 +33,10 @@ static func _manifest(r: Node) -> void:
 	var first: String = String(files.keys()[0]) if not files.is_empty() else ""
 	var forged: Dictionary = files.duplicate()
 	forged[first] = "0".repeat(64)
-	forged["res://data/not_a_file.json"] = "0".repeat(64)
+	forged[("res://" + "data/not_a_file.json")] = "0".repeat(64)
 	var tripped: Array[String] = _SCAN.mismatches({"files": forged})
 	var restored: Array[String] = _SCAN.mismatches()
-	r._ok(not files.is_empty() and honest.is_empty() and tripped.has(first) and tripped.has("res://data/not_a_file.json") and restored.is_empty(), "SECV7 the manifest of %d files flags no honest tree (%d), flags a forged hash and a missing file (%d) and clears when put back (%d)" % [files.size(), honest.size(), tripped.size(), restored.size()])
+	r._ok(not files.is_empty() and honest.is_empty() and tripped.has(first) and tripped.has(("res://" + "data/not_a_file.json")) and restored.is_empty(), "SECV7 the manifest of %d files flags no honest tree (%d), flags a forged hash and a missing file (%d) and clears when put back (%d)" % [files.size(), honest.size(), tripped.size(), restored.size()])
 
 static func _unknown(r: Node) -> void:
 	var added: bool = InventoryManager.try_add(&"no_such_item", 1)

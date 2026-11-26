@@ -6,6 +6,10 @@ uniform float puddle_sharpness : hint_range(1.0, 64.0, 0.1) = 24.0;
 uniform float ripple_speed : hint_range(0.0, 4.0, 0.01) = 1.0;
 uniform vec4 asphalt_tint : source_color = vec4(0.078431, 0.090196, 0.101961, 1.0);
 uniform float wet_darkening : hint_range(0.0, 1.0, 0.01) = 0.45;
+uniform sampler2D albedo_tex : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D roughness_tex : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D normal_tex : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform float tex_scale : hint_range(0.05, 4.0) = 0.35;
 
 varying vec2 world_xz;
 
@@ -71,6 +75,12 @@ void fragment() {
 	float grain_visibility = 1.0 - smoothstep(0.25, 1.0, max(grain_footprint.x, grain_footprint.y));
 	vec2 grain_slope = value_noise(grain_position).yz * (0.075 * grain_visibility);
 
+	vec2 tex_uv = world_xz * tex_scale;
+	vec3 tex_albedo = texture(albedo_tex, tex_uv).rgb;
+	float tex_rough = texture(roughness_tex, tex_uv).r;
+	vec3 tex_normal = texture(normal_tex, tex_uv).rgb * 2.0 - 1.0;
+	grain_slope += tex_normal.xy * (0.06 * grain_visibility);
+
 	float t = TIME * ripple_speed;
 	const vec2 wind = vec2(0.96, 0.28);
 	const vec2 crosswind = vec2(0.60, -0.80);
@@ -82,8 +92,9 @@ void fragment() {
 	vec3 slope_view = mat3(VIEW_MATRIX) * vec3(slope.x, 0.0, slope.y);
 	NORMAL = normalize(normal_view - (slope_view - normal_view * dot(normal_view, slope_view)));
 
-	ALBEDO = asphalt_tint.rgb * (1.0 - wet_darkening * wet);
-	ROUGHNESS = mix(0.85, 0.06, wet);
+	vec3 base_albedo = mix(asphalt_tint.rgb, asphalt_tint.rgb * tex_albedo * 3.2, 0.72);
+	ALBEDO = base_albedo * (1.0 - wet_darkening * wet);
+	ROUGHNESS = mix(mix(0.85, 0.06, wet), tex_rough, 0.35 * (1.0 - wet));
 	METALLIC = 0.03 * wet;
 	SPECULAR = mix(0.35, 0.9, wet);
 }

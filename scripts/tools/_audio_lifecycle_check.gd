@@ -82,7 +82,7 @@ func _check_licensed_music() -> void:
 			text += label.text + "\n"
 			if label.text.contains("Scott Buckley"):
 				wrapped = wrapped and label.autowrap_mode != TextServer.AUTOWRAP_OFF and label.get_global_rect().end.x <= get_viewport().get_visible_rect().end.x
-		_ok(text.contains("Hymn") and text.contains("Moonlight") and text.contains("Scott Buckley") and text.contains("creativecommons.org/licenses/by/4.0/") and text.contains("scottbuckley.com.au/library/") and text.contains("Changes:") and text.contains("Lyria") and wrapped,
+		_ok(text.contains("Hymn") and text.contains("Moonlight") and text.contains("Scott Buckley") and text.contains("creativecommons.org/licenses/by/4.0/") and text.contains("scottbuckley.com.au/library/") and text.contains("Changes:" if code == "en" else "Обработка:") and text.contains("music_battle.ogg") and text.contains("music_tension.ogg") and text.contains("music_combat.ogg") and text.contains("Lyria") and wrapped,
 			"credits retain AI disclosure and wrapped artist, titles, source, licence and changes: " + code)
 		credits.free()
 	LocalizationManager.set_language(lang)
@@ -102,7 +102,7 @@ func _check_notice_feedback() -> void:
 	CoinWallet.coins = balance
 	var errors: int = 0
 	for player: AudioStreamPlayer in _ui_players():
-		if player.stream.resource_path.ends_with("ui_error.wav"):
+		if player.stream.resource_path.ends_with("ui_error.ogg"):
 			errors += 1
 	_ok(errors == 1 and _ui_players().size() == 1, "wallet rejection retains exactly one explicit error cue")
 	_clear_feedback()
@@ -120,7 +120,7 @@ func _check_physical_pickup() -> void:
 	pickup.call("_on_body_entered", body)
 	var clips: int = 0
 	for player: AudioStreamPlayer3D in AudioManager.get("_pool_3d"):
-		if player.playing and player.bus == &"UI" and player.stream.resource_path.ends_with("loot_pickup_generic.wav"):
+		if player.playing and player.bus == &"UI" and player.stream.resource_path.ends_with("loot_pickup_generic.ogg"):
 			clips += 1
 	_ok(pickup.get("_picked_up") and clips == 1, "physical pickup plays its existing action-specific loot clip")
 	_ok(_pool_players() == 0 and _ui_players().is_empty(), "physical pickup adds no generic two-note blip or notice beep")
@@ -132,14 +132,23 @@ func _check_physical_pickup() -> void:
 	_clear_feedback()
 
 func _check_pointer_feedback() -> void:
+	MusicManager._unlock_audio()
 	UISFX.hover()
-	_ok(_ui_players().is_empty(), "pointer hover remains visual without repetitive audio")
+	var hover_players: Array[AudioStreamPlayer] = _ui_players()
+	_ok(hover_players.size() == 1 and hover_players[0].bus == &"UI" and _craft_stream(hover_players[0].stream, 1280, 48000),
+		"pointer focus answers with the supplied mechanical hover tick on UI")
 	_clear_feedback()
 	UISFX.click()
 	var players: Array[AudioStreamPlayer] = _ui_players()
-	_ok(players.size() == 1 and players[0].bus == &"UI" and players[0].stream.resource_path.ends_with("ui_menu_click.ogg"),
-		"activation retains the existing mechanical UI clip")
+	_ok(players.size() == 1 and players[0].bus == &"UI" and _craft_stream(players[0].stream, 2360, 48000),
+		"activation uses the supplied mechanical click on UI")
 	_clear_feedback()
+
+func _craft_stream(stream: AudioStream, frames: float, rate: float) -> bool:
+	if stream is AudioStreamWAV:
+		var wav := stream as AudioStreamWAV
+		return wav.mix_rate == rate and wav.data.size() / (2 if wav.stereo else 1) == frames
+	return false
 
 func _ui_players() -> Array[AudioStreamPlayer]:
 	var players: Array[AudioStreamPlayer] = []

@@ -1,1 +1,0 @@
-proof_run craft: exit=0 -> .qa_logs/proofs/craft.out (32 lines)

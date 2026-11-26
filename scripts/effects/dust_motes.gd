@@ -9,7 +9,10 @@ const RANGE_M: float = 28.0
 const SCAN_SEC: float = 1.0
 const BEAM_DROP_M: float = 2.2  # the middle of the beam under the lamp head
 const BEAM_BOX := Vector3(1.3, 2.2, 1.3)  # half sizes
-const MOTE_TEXTURE := preload("res://assets/textures/fx/dust.png")
+## Visual overhaul v2: a soft radial sodium mote with alpha=0 at the border,
+## so a lamp beam no longer shows the square edge of the old dust sprite.
+## EMITTERS * EMITTER_AMOUNT = 24 particles, far below the VFX 500 budget.
+const MOTE_TEXTURE := preload("res://assets/textures/visual_v2/fx_sodium_mote_soft_128.webp")
 const MOTE_COLOR := Color(0.95, 0.86, 0.62, 0.3)
 
 var _emitters: Array[GPUParticles3D] = []

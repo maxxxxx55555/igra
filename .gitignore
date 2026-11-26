@@ -130,3 +130,6 @@ _tmp_*
 .mypy_cache/
 .vscode/
 .idea/
+
+# Wave 2 optimizer raw originals (never shipped)
+_backup_raw_media/

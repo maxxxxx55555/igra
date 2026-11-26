@@ -36,7 +36,7 @@ func _place_lamp(pos: Vector3, dir: String) -> void:
 	mat.albedo_color = Color("#1a1a1a")
 	mat.roughness = 0.55
 	mat.metallic = 0.6
-	var pole_tex: Texture2D = load("res://assets/textures/surfaces/streetlight_metal_512.png")
+	var pole_tex: Texture2D = load("res://assets/textures/surfaces/streetlight_metal_512.webp")
 	if pole_tex:
 		mat.albedo_texture = pole_tex
 	bm.material = mat

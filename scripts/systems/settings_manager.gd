@@ -292,7 +292,7 @@ func set_difficulty(idx: int) -> void:
 	EventBus.settings_changed.emit("difficulty", _settings["difficulty"])
 
 ## What each difficulty (Easy, Normal, Hard) scales; Normal is the game as tuned. Readers: base_monster.gd (monster_hp, monster_damage),
-## player_3d.gd (player_hp, damage_cap: the most one hit takes, 12 HP at Normal, scaled again by the New Game+ level), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none),
+## player_3d.gd (player_hp, damage_cap: the most one hit takes, 12 HP at Normal, scaled again by the New Game+ level), district_loot.gd (extra_parts: spare repair parts per district),
 ## base_monster.gd (search: the share of the search time; reaction_sec: seconds a monster stands noticing before it chases).
 const DIFFICULTY_PRESETS: Dictionary = {
 	"monster_hp": [0.7, 1.0, 1.3],
@@ -425,7 +425,7 @@ func set_dyslexia_font(enabled: bool) -> void:
 func _apply_dyslexia_font() -> void:
 	if not _settings.get("dyslexia_font", false):
 		return
-	var path := "res://assets/fonts/OpenDyslexic-Regular.ttf"
+	var path := "res://assets/fonts/RobotoCondensed-Regular.ttf"
 	if not ResourceLoader.exists(path):
 		return
 	var f: Font = load(path)
@@ -549,7 +549,7 @@ func set_fps_cap(idx: int) -> void:
 ## a fullscreen Android device; this renders at a fraction of the real
 ## viewport and upscales, the standard mobile perf knob.
 func set_render_scale(v: float) -> void:
-	_settings["render_scale"] = clampf(v, 0.5, 1.0)
+	_settings["render_scale"] = clampf(v, 0.78 if OS.has_feature("android") else 0.5, 1.0)
 	var vp := get_viewport()
 	if vp != null:
 		vp.scaling_3d_scale = _settings["render_scale"]

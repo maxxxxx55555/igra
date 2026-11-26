@@ -5,6 +5,7 @@ class_name CitySkyline
 ## for the blocks and the windows). Windows light up with the district's power
 ## stage, so the city reads as a city that is waking up (GDD 4.2, STYLE_GUIDE 1).
 
+const DETAIL := preload("res://scripts/overhaul/ProceduralDetailMeshes.gd")
 const RING_GAP := 8.0
 ## The ground slab is flush with the street tiles (their top is 0.05 m); the facade walls stop the player at the ring.
 const GROUND_TOP := 0.05
@@ -35,22 +36,53 @@ const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const SHELL_DEPTH := 0.30
 const OPEN_X := 1.16
 const OPEN_Y := 1.52
-const FACADE_TEX := {
-	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.png",
-	&"residential": "res://assets/textures/pbr/painted_brick_albedo.png",
-	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"school": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"hospital": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"police": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"industrial": "res://assets/textures/pbr/cracked_concrete_albedo.png",
-	&"substation": "res://assets/textures/pbr/panel_facade_albedo.png",
-	&"power_station": "res://assets/textures/pbr/panel_facade_albedo.png",
+const FACADE_TEX_LOW := {
+	&"suburbs": "res://assets/textures/pbr/painted_brick_albedo.webp",
+	&"residential": "res://assets/textures/pbr/painted_brick_albedo.webp",
+	&"park": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"school": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"hospital": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"gas_station": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"police": "res://assets/textures/pbr/panel_facade_albedo.webp",
+	&"warehouses": "res://assets/textures/pbr/cracked_concrete_albedo.webp",
+	&"industrial": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
+	&"substation": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
+	&"power_station": "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp",
 }
+## Wave 3: the menu-canon peeling plaster for the city districts and the
+## corroded cast iron for the industrial ones - the reference's raw, damp
+## surfaces. The old pbr/v2 maps stay as the Low-tier fallback, so no shipped
+## texture is orphaned.
+const FACADE_TEX_CANON := {
+	&"suburbs": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"residential": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"park": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"school": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"hospital": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"gas_station": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"police": "res://assets/textures/menu_canon_pbr/menu_facade_albedo.webp",
+	&"warehouses": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"industrial": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"substation": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+	&"power_station": "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp",
+}
+const MENU_FACADE_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_facade_normal.webp")
+const MENU_FACADE_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_facade_roughness.webp")
+const MENU_IRON_NORMAL := preload("res://assets/textures/menu_canon_pbr/menu_iron_normal.webp")
+const MENU_IRON_ROUGHNESS := preload("res://assets/textures/menu_canon_pbr/menu_iron_roughness.webp")
+## Visual overhaul v2: weathered concrete with baked roughness in 0.72–0.98.
+## The world_craft pair stays as the Low-tier fallback so the craft set is not orphaned.
+const V2_FACADE_ALBEDO := "res://assets/textures/visual_v2/facade_concrete_albedo_v2.webp"
+const V2_FACADE_NORMAL := preload("res://assets/textures/visual_v2/facade_concrete_normal_v2.webp")
+const V2_FACADE_ROUGHNESS := preload("res://assets/textures/visual_v2/facade_concrete_roughness_v2.webp")
+const CONCRETE_NORMAL := preload("res://assets/textures/world_craft/facade_concrete_normal.webp")
+const CONCRETE_ROUGHNESS := preload("res://assets/textures/world_craft/facade_concrete_roughness.webp")
 const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
+## Wave 2 seamless PBR set (Albedo / Normal / ORM) for panel facades.
+const W2_FACADE_ALBEDO := "res://assets/textures/wave2/panel_facade_albedo.png"
+const W2_FACADE_ORM := "res://assets/textures/wave2/panel_facade_orm.png"
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
@@ -93,6 +125,7 @@ var _district_id: StringName = &""
 var _windows: MultiMeshInstance3D
 var _rolls := PackedFloat32Array()
 var _tones := PackedFloat32Array()
+var _concrete_detail: StandardMaterial3D
 var _facade_mat: ShaderMaterial = null
 var _window_mat: ShaderMaterial = null
 var _halos: MultiMeshInstance3D = null
@@ -179,8 +212,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	# B10: reusable recessed masonry bays at walking distance, LOD-switched.
 	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
-	_add_detail_batch("FacadeTrim", BoxMesh.new(), trim, _detail_material("panel_facade", Color(0.58, 0.58, 0.55)))
-	_add_detail_batch("WindowSills", BoxMesh.new(), sills, _detail_material("cracked_concrete", Color(0.62, 0.61, 0.57)))
+	_add_building_colliders(blocks)
+	_add_detail_batch("FacadeTrim", DETAIL.module(&"slab"), trim, _concrete_material())
+	_add_detail_batch("WindowSills", DETAIL.module(&"slab"), sills, _concrete_material())
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055
 	pipe_mesh.bottom_radius = 0.055
@@ -221,6 +255,9 @@ func occupies_local(point: Vector2) -> bool:
 
 func has_footprints() -> bool:
 	return not _footprints.is_empty()
+
+func get_footprints() -> Array[Rect2]:
+	return _footprints.duplicate()
 
 ## The front plate of the block: a sill band below the windows, a lintel band above them, an upright pier between every pair
 ## of windows and a jamb at each end, all SHELL_DEPTH deep. The body of the block stands behind it, so every opening is a
@@ -325,6 +362,11 @@ func _dress_window(rng: RandomNumberGenerator, trim: Array[Transform3D], sills: 
 
 ## Base course, cornice, parapet and a rain pipe with brackets give the block a hand-built silhouette.
 func _dress_front(trim: Array[Transform3D], pipes: Array[Transform3D], frame: Transform3D, size: Vector3) -> void:
+	# Wave 2 silhouette: two-step plinth and an intermediate cornice band.
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.50, 0.30, 0.42)), Vector3(0.0, 0.15, 0.20)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.18, 0.58, 0.30)), Vector3(0.0, 0.31, 0.14)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.10, 0.16, 0.30)), Vector3(0.0, size.y * 0.52, 0.13)))
+	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.22, 0.22, 0.36)), Vector3(0.0, 0.12, 0.13)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x, 0.82, 0.18)), Vector3(0.0, 0.41, 0.09)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x + 0.24, 0.26, 0.34)), Vector3(0.0, size.y - 0.14, 0.12)))
 	trim.append(frame * Transform3D(Basis.from_scale(Vector3(size.x - 0.18, 0.34, 0.42)), Vector3(0.0, size.y + 0.10, -size.z * 0.34)))
@@ -348,6 +390,49 @@ func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D]
 	mmi.material_override = material
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
+
+## The facade map of this district: the menu-canon plaster (city) or the
+## corroded cast iron (industrial) from the owner's reference, and the old
+## pbr/v2 maps on the Low tier.
+func _facade_tex_path() -> String:
+	if int(SettingsManager.get_setting("graphics_tier", 2)) > 0 and ResourceLoader.exists(W2_FACADE_ALBEDO):
+		return W2_FACADE_ALBEDO
+	if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:
+		return String(FACADE_TEX_LOW.get(_district_id, FACADE_TEX_LOW[&"suburbs"]))
+	var canon: String = String(FACADE_TEX_CANON.get(_district_id, FACADE_TEX_CANON[&"suburbs"]))
+	if ResourceLoader.exists(canon):
+		return canon
+	return String(FACADE_TEX_LOW.get(_district_id, V2_FACADE_ALBEDO))
+
+
+## Sills and trim use the same poured concrete and retain their existing instance batches.
+func _concrete_material() -> StandardMaterial3D:
+	if _concrete_detail == null:
+		_concrete_detail = _detail_material("panel_facade", Color(0.60, 0.59, 0.56))
+		_concrete_detail.normal_enabled = true
+		# Low tier keeps the world_craft maps; the menu-canon plaster (city) or
+		# the corroded cast iron (industrial) otherwise.
+		var low_tier: bool = int(SettingsManager.get_setting("graphics_tier", 2)) <= 0
+		var industrial: bool = FACADE_TEX_CANON.get(_district_id, "") == "res://assets/textures/menu_canon_pbr/menu_iron_albedo.webp"
+		if low_tier:
+			_concrete_detail.normal_texture = CONCRETE_NORMAL
+			_concrete_detail.roughness_texture = CONCRETE_ROUGHNESS
+		elif industrial:
+			_concrete_detail.normal_texture = MENU_IRON_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_normal.webp") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_IRON_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_iron_roughness.webp") else V2_FACADE_ROUGHNESS
+		else:
+			_concrete_detail.normal_texture = MENU_FACADE_NORMAL if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_normal.webp") else V2_FACADE_NORMAL
+			_concrete_detail.roughness_texture = MENU_FACADE_ROUGHNESS if ResourceLoader.exists("res://assets/textures/menu_canon_pbr/menu_facade_roughness.webp") else V2_FACADE_ROUGHNESS
+		_concrete_detail.normal_scale = 0.5
+		# The maps are baked inside [0.72, 0.98]; multiply by 1.0 to keep them exact.
+		_concrete_detail.roughness = 1.0
+		_concrete_detail.metallic = 0.0
+	return _concrete_detail
+
+func _exit_tree() -> void:
+	_concrete_detail = null
+	_facade_mat = null
+	_window_mat = null
 
 func _detail_material(set_name: String, tint: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
@@ -383,9 +468,10 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
+		_facade_mat.set_shader_parameter("facade_roughness", load(W2_FACADE_ORM))
 		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
-		var facade_tex_path: String = FACADE_TEX.get(_district_id, FACADE_TEX[&"suburbs"])
+		var facade_tex_path: String = _facade_tex_path()
 		if ResourceLoader.exists(facade_tex_path):
 			_facade_mat.set_shader_parameter("facade_tex", load(facade_tex_path))
 		var facade_nrm_path: String = facade_tex_path.replace("_albedo", "_normal")
@@ -422,9 +508,35 @@ func _add_ground() -> void:
 
 ## The dark ground is a floor, not a picture: the blocks between the streets can be walked, and four walls along the
 ## building fronts keep the player inside the district (the buildings themselves stay visual).
+var building_collider_count: int = 0
+
+## Every visual building instance becomes a real static collider. The source
+## transform already carries rotation and mesh scale; the BoxShape3D size comes
+## from that matrix and is clamped to the 0.40 m minimum thickness.
+func _add_building_colliders(transform_list: Array[Transform3D]) -> void:
+	var host := StaticBody3D.new()
+	host.name = "BuildingColliders"
+	host.collision_layer = 1
+	host.collision_mask = 0
+	add_child(host)
+	var created_colliders: int = 0
+	for xf: Transform3D in transform_list:
+		var scale3: Vector3 = xf.basis.get_scale()
+		var box := BoxShape3D.new()
+		box.size = Vector3(maxf(0.4, scale3.x), maxf(0.4, scale3.y), maxf(0.4, scale3.z))
+		var cs := CollisionShape3D.new()
+		cs.shape = box
+		cs.transform = Transform3D(xf.basis.orthonormalized(), xf.origin)
+		host.add_child(cs)
+		created_colliders += 1
+	building_collider_count = created_colliders
+	print("TLS_BUILDING_COLLIDERS=%d" % created_colliders)
+
 func _add_solid_ground(edge: float) -> void:
 	var body := StaticBody3D.new()
 	body.name = "GroundBody"
+	body.collision_layer = 1
+	body.collision_mask = 0
 	add_child(body)
 	var reach := edge + 12.0
 	_add_box(body, Vector3(reach * 2.0, GROUND_THICKNESS, reach * 2.0), Vector3(0.0, GROUND_TOP - GROUND_THICKNESS * 0.5, 0.0))

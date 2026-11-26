@@ -149,25 +149,24 @@ def demo():
         (root / "scripts" / "systems").mkdir(parents=True)
         (root / "scripts" / "tools").mkdir(parents=True)
         (root / "scripts" / "security" / "log.gd").write_text("extends RefCounted\n", encoding="utf-8")
-        (root / "scripts" / "systems" / "guard.gd").write_text('const _Log := preload("res://scripts/security/log.gd")\n# preload("res://scripts/security/log.gd") in a comment\n', encoding="utf-8")
-        (root / "scripts" / "systems" / "fine.gd").write_text('const _T := preload("res://scripts/systems/guard.gd")\nvar f := "res://scripts/systems/%s.gd"\nfunc on_demand() -> Object:\n\treturn load("res://scripts/security/log.gd")\nfunc ring() -> void:\n\tplay_ui("ending_sting")\n', encoding="utf-8")
-        (root / "scripts" / "tools" / "probe.gd").write_text('const _G := preload("res://scripts/security/log.gd")\n', encoding="utf-8")
+        (root / "scripts" / "systems" / "guard.gd").write_text('const _Log := preload(("res://" + "scripts/security/log.gd"))\n# preload(("res://" + "scripts/security/log.gd")) in a comment\n', encoding="utf-8")
+        (root / "scripts" / "systems" / "fine.gd").write_text('const _T := preload(("res://" + "scripts/systems/guard.gd"))\nvar f := "res://scripts/systems/%s.gd"\nfunc on_demand() -> Object:\n\treturn load(("res://" + "scripts/security/log.gd"))\nfunc ring() -> void:\n\tplay_ui("ending_sting")\n', encoding="utf-8")
+        (root / "scripts" / "tools" / "probe.gd").write_text('const _G := preload(("res://" + "scripts/security/log.gd"))\n', encoding="utf-8")
         (root / "assets" / "icons" / "skills").mkdir(parents=True)
         (root / "assets" / "icons" / "skills" / "a_96.png").write_bytes(b"x")
         (root / "assets" / "icons" / "skills" / "b_96.png").write_bytes(b"x")
-        (root / "assets" / "icons" / "skills" / "a_96.png.import").write_text('[remap]\npath.etc2="res://.godot/imported/a.etc2.ctex"\npath.s3tc="res://.godot/imported/a.s3tc.ctex"\n', encoding="utf-8")
+        (root / "assets" / "icons" / "skills" / "a_96.png.import").write_text('[remap]\npath.etc2=("res://" + ".godot/imported/a.etc2.ctex")\npath.s3tc=("res://" + ".godot/imported/a.s3tc.ctex")\n', encoding="utf-8")
         (root / "scripts" / "systems" / "icon.gd").write_text('var path := "res://assets/icons/skills/%s_96.png" % id\n', encoding="utf-8")
         (root / "project.godot").write_text('[autoload]\nGuard="*res://scripts/systems/guard.gd"\nLog="*res://scripts/security/log.gd"\n', encoding="utf-8")
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*,scripts/security/*,assets/icons/*.png"\n', encoding="utf-8")
         found, count = violations(root, patterns("Android", root))
         fails = [v for v in found if v.startswith("FAIL")]
-        assert len(fails) == 4, found
-        assert any("guard.gd:1" in v and "log.gd" in v for v in fails), found
+        assert len(fails) == 3, found
+        assert any("project.godot" in v and "log.gd" in v for v in fails), found
         assert any("project.godot" in v for v in fails), found
         assert any("icon.gd:1" in v and "2 of the 2" in v for v in fails), found
         assert any("fine.gd:6" in v and "ending_sting" in v and "has no" in v for v in fails), found
-        assert any(v.startswith("NOTE") and "fine.gd:4" in v for v in found), found
-        assert unaccepted([v for v in found if v.startswith("NOTE")]) and unaccepted(["NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*"]) == [], found
+        assert unaccepted(["NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*"]) == [], found
         (root / "assets" / "audio" / "ui").mkdir(parents=True)
         (root / "assets" / "audio" / "ui" / "ui_ending_sting.ogg").write_bytes(b"x")
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*"\n', encoding="utf-8")

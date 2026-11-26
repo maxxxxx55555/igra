@@ -19,7 +19,7 @@ func _on_lang_changed(_lang: String) -> void:
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	# Затемнение фона
 	var bg := ColorRect.new()
 	bg.name = "BG"

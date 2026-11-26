@@ -21,7 +21,7 @@ var _close_btn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	theme = ThemeProvider.build_theme()
+	theme = CraftThemeBridge.build()
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var background := ColorRect.new()
 	background.color = ThemeProvider.COLOR_BG_DARK

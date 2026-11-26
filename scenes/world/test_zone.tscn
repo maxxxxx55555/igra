@@ -1,5 +1,7 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
+[sub_resource type="BoxShape3D" id="tls_inert_box"]
+size = Vector3(0.4, 0.4, 0.4)
 [sub_resource type="BoxMesh" id="floor_mesh"]
 size = Vector3(20, 0.1, 20)
 
@@ -221,3 +223,10 @@ position = Vector3(-8, 6, -38)
 mesh = SubResource("bldg4_mesh")
 material = SubResource("bldg_mat")
 position = Vector3(42, 2.5, 32)
+
+[node name="TLSVisualBody" type="StaticBody3D" parent="Buildings"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="TLSVisualBodyShape" type="CollisionShape3D" parent="Buildings/TLSVisualBody"]
+shape = SubResource("wall_shape")

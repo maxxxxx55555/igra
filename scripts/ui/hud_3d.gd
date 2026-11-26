@@ -34,7 +34,6 @@ var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
 var _safe_area_inset: Vector4 = Vector4.ZERO
-var _battery_ad_button: Button = null
 var _vignette_default_color: Color
 ## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
 var _vignette_tween: Tween
@@ -48,11 +47,11 @@ var _hp_caption: Label
 var _stam_caption: Label
 var _bat_caption: Label
 
-@onready var hp_fill: ColorRect = $TopLeft/HP/HPF
+@onready var hp_fill: TextureRect = $TopLeft/HP/HPF
 @onready var hp_val: Label = $TopLeft/HP/HPVal
-@onready var stam_fill: ColorRect = $TopLeft/Stam/StamF
+@onready var stam_fill: TextureRect = $TopLeft/Stam/StamF
 @onready var stam_val: Label = $TopLeft/Stam/StamVal
-@onready var bat_fill: ColorRect = $TopLeft/Bat/BatF
+@onready var bat_fill: TextureRect = $TopLeft/Bat/BatF
 @onready var bat_val: Label = $TopLeft/Bat/BatVal
 @onready var ammo_val: Label = $AmmoCounter/AmmoVal
 @onready var prompt: Label = $PromptLabel
@@ -77,9 +76,9 @@ func _ready() -> void:
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
-	hp_fill.color = Color(0.752941, 0.223529, 0.168627)
-	stam_fill.color = Color(0.373, 0.541, 0.306)
-	bat_fill.color = Color(0.788, 0.635, 0.290)
+	hp_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_rust.webp")
+	stam_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_cold.webp")
+	bat_fill.texture = preload("res://assets/textures/ui_craft/hud_bar_fill_amber.webp")
 	var player := get_tree().get_first_node_in_group("player")
 	var hp_ratio := 1.0
 	var stam_ratio := 1.0
@@ -129,7 +128,6 @@ func _ready() -> void:
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
-	_add_battery_ad_button()
 	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
@@ -170,6 +168,9 @@ func _ready() -> void:
 	_setup_context_hints()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
+	if has_touch_ui():
+		_apply_touch_arc_layout()
+	get_viewport().size_changed.connect(_on_viewport_resized)
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
 	_apply_hud_opacity_setting()
@@ -669,7 +670,7 @@ func _on_hud_visibility(v: bool) -> void:
 	_sync_damage_indicator_visibility()
 
 func has_touch_ui() -> bool:
-	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
+	return DisplayServer.is_touchscreen_available() or _TOUCH_LAYOUT.is_mobile()
 
 ## GDD V.1 3.7: the prompt said what the interaction does ("Open", "Search",
 ## "Repair") but never which button does it. The key is read from the project's
@@ -699,13 +700,23 @@ func _apply_touch_visibility() -> void:
 	_apply_button_size()
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
 		if key == "button_size" or key == "one_handed":
-			_apply_button_size())
+			_apply_button_size()
+			if _TOUCH_LAYOUT.is_mobile():
+				_apply_mobile_metrics())
 	_install_joystick()
 
 ## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
 ## The floor is MIN_TOUCH over the smallest cluster control (TOUCH_BTN, 64 px), so no button ever shrinks under 48.
 func _apply_button_size() -> void:
 	var factor := clampf(float(SettingsManager.get_setting("button_size", 1.0)), UiScale.min_touch() / TOUCH_BTN.x, 2.0)
+	# Wave 2.5: normal touch keeps the four-zone thumb arc. Its absolute global
+	# geometry is rebuilt from the current viewport/safe inset on every call, so
+	# the clusters must stay at scale 1 or Button Size would compound positions.
+	# One-Handed Mode still uses the original left-side cluster: A11Y8 requires
+	# those eight controls in the left half, clear of the joystick.
+	if has_touch_ui() and not _one_handed():
+		_apply_touch_arc_layout()
+		return
 	_layout_touch_buttons(factor)
 	for path in ["BottomLeft", "BottomRight"]:
 		var cluster := get_node_or_null(path) as Control
@@ -718,7 +729,9 @@ func _apply_button_size() -> void:
 const _JOYSTICK_W: float = 200.0  # the BottomLeft control of hud_3d.tscn
 const _ONE_HAND_GAP: float = 24.0
 const _TOUCH_LAYOUT := preload("res://scripts/ui/hud_touch_layout.gd")
+const _PUBG_TOUCH := preload("res://scripts/ui/pubg_touch_arc_layout.gd")
 var _action_extent := Vector2(308.0, 372.0)
+var _pubg_layout_report: Dictionary = {}
 
 func _layout_touch_buttons(factor: float = 1.0) -> void:
 	var cluster := get_node_or_null("BottomRight") as Control
@@ -728,7 +741,43 @@ func _layout_touch_buttons(factor: float = 1.0) -> void:
 	if _one_handed():
 		var half_width: float = get_viewport().get_visible_rect().size.x * 0.5 - _safe_area_inset.x
 		row_limit = minf(row_limit, (half_width - _ONE_HAND_GAP) / factor - _JOYSTICK_W)
-	_action_extent = _TOUCH_LAYOUT.arrange(cluster, row_limit)
+	_action_extent = _TOUCH_LAYOUT.arrange(cluster, row_limit, factor)
+
+## A phone rotation (or the windowed touch audit) must rebuild absolute arcs,
+## not just scale the old corner cluster.
+func _on_viewport_resized() -> void:
+	_apply_safe_area()
+	if has_touch_ui():
+		_apply_touch_arc_layout()
+	if _TOUCH_LAYOUT.is_mobile():
+		_apply_mobile_metrics()
+
+
+## Convert screen pixels to HUD units after viewport stretch and the player's touch-size setting.
+func _apply_mobile_metrics() -> void:
+	var ratio := _TOUCH_LAYOUT.pixel_ratio(get_viewport())
+	for control: Control in find_children("*", "Control", true, false):
+		if not (control is Button or control is Label):
+			continue
+		var factor: float = $BottomRight.scale.x if $BottomRight.is_ancestor_of(control) else 1.0
+		var baseline: int = control.get_meta(&"hud_font_base", control.get_theme_font_size("font_size"))
+		control.set_meta(&"hud_font_base", baseline)
+		control.add_theme_font_size_override("font_size", maxi(baseline, ceili(12.0 / (ratio * factor))))
+	var target := Vector2.ONE * maxf(56.0, ceilf(56.0 / ratio))
+	var pause_button := $BtnPause as Button
+	pause_button.custom_minimum_size = target
+	pause_button.offset_right = -16.0 - _safe_area_inset.z
+	pause_button.offset_left = pause_button.offset_right - target.x
+	pause_button.offset_bottom = pause_button.offset_top + target.y
+	var map_button := get_node_or_null("MapButton") as Button
+	if map_button != null:
+		map_button.custom_minimum_size = target
+		map_button.size = Vector2(UiScale.min_touch() * 1.5, UiScale.min_touch()).max(target)
+	if has_touch_ui() and not _one_handed():
+		_apply_touch_arc_layout()
+	else:
+		_layout_touch_buttons($BottomRight.scale.x)
+		_place_action_cluster($BottomRight.scale.x)
 
 func _place_action_cluster(factor: float) -> void:
 	var cluster := get_node_or_null("BottomRight") as Control
@@ -748,6 +797,108 @@ func _place_action_cluster(factor: float) -> void:
 		var ammo_h: float = ammo.offset_bottom - ammo.offset_top
 		ammo.offset_bottom = -(_action_extent.y * factor + 16.0) - _safe_area_inset.w
 		ammo.offset_top = ammo.offset_bottom - ammo_h
+
+## Wave 2.5: four-zone PUBG-style touch ergonomics. The supplied layout module
+## owns every absolute button rectangle and its zero-overlap arithmetic; this
+## wrapper only keeps the legacy parents out of the way, moves the ammo counter
+## above the combat arc, and gives the captions a restrained type scale.
+func _apply_touch_arc_layout() -> void:
+	if not has_touch_ui() or _one_handed():
+		return
+	var vp := get_viewport().get_visible_rect().size
+	for path: String in ["BottomLeft", "BottomRight"]:
+		var cluster := get_node_or_null(path) as Control
+		if cluster != null:
+			cluster.clip_contents = false
+			cluster.pivot_offset = Vector2.ZERO
+			cluster.scale = Vector2.ONE
+
+	var touch_cluster := get_node_or_null("BottomRight") as Control
+	if touch_cluster == null:
+		return
+	_pubg_layout_report = _PUBG_TOUCH.apply_layout(touch_cluster, vp - Vector2(_safe_area_inset.x + _safe_area_inset.z, _safe_area_inset.y + _safe_area_inset.w), Vector2(_safe_area_inset.x, _safe_area_inset.y))
+	# The module styles every control it places. Mark them so the older Wave 2
+	# skin does not overwrite the new tactical boxes on the next rest pass.
+	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash",
+			"BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench", "MapButton"]:
+		var button := find_child(button_name, true, false) as Button
+		if button != null:
+			button.set_meta("_wave2_touch_style", true)
+
+	_place_map_button_in_arc()
+	_place_ammo_above_arc(vp)
+	_tidy_touch_captions()
+
+
+## Wave 3: the AAA plates and icons replace the flat style boxes, so the
+## buttons have one border, one icon and no text stub (the localized .text
+## stays on the button for HUDP15, it is simply not painted).
+func _style_aaa_touch_button(button: Button, node_name: String, tier: String) -> void:
+	if button == null:
+		return
+	_PUBG_TOUCH._style_touch_button(button, node_name, tier)
+	button.set_meta("_wave2_touch_style", true)
+
+
+## Wave 3: the shared plate/icon cache must not keep textures alive after the
+## HUD is gone (the touch audit swaps the HUD on every aspect change).
+func _exit_tree() -> void:
+	_PUBG_TOUCH.clear_cache()
+
+
+func _place_map_button_in_arc() -> void:
+	var btn := get_node_or_null("MapButton") as Button
+	if btn == null:
+		return
+	var sz := Vector2(72.0, 56.0)
+	btn.custom_minimum_size = sz
+	btn.size = sz
+	btn.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	var p: Vector2 = Vector2(
+		_PUBG_TOUCH.SAFE_MARGIN_X + _safe_area_inset.x,
+		_PUBG_TOUCH.SAFE_MARGIN_Y + roundf(260.0 * clampf((get_viewport().get_visible_rect().size.y - _safe_area_inset.y - _safe_area_inset.w) / 720.0, 0.78, 1.25)) + _safe_area_inset.y)
+	btn.position = p
+	_style_aaa_touch_button(btn, "MapButton", "dock")
+
+
+func _place_ammo_above_arc(vp: Vector2) -> void:
+	var ammo := get_node_or_null("AmmoCounter") as Control
+	if ammo == null:
+		return
+	var rects: Dictionary = _pubg_layout_report.get("rects", {})
+	var top: float = vp.y
+	for button_name: String in ["BtnInteract", "BtnJump", "BtnMelee", "BtnDodge"]:
+		if rects.has(button_name):
+			top = minf(top, (rects[button_name] as Rect2).position.y)
+	var h: float = ammo.offset_bottom - ammo.offset_top
+	var w: float = ammo.offset_right - ammo.offset_left
+	var bottom_y: float = maxf(160.0, top - 14.0)
+	ammo.offset_bottom = bottom_y - vp.y
+	ammo.offset_top = ammo.offset_bottom - h
+	ammo.offset_right = -24.0 - _safe_area_inset.z
+	ammo.offset_left = ammo.offset_right - w
+
+
+func _tidy_touch_captions() -> void:
+	var arc_names: Array[String] = ["BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge"]
+	for button_name: String in arc_names:
+		var button := find_child(button_name, true, false) as Button
+		if button != null and not button.text.is_empty():
+			button.add_theme_font_size_override("font_size", 13)
+			button.clip_text = true
+			button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	for button_name: String in ["BtnStrobe", "BtnWheel", "BtnInventory", "BtnWorkbench"]:
+		var button := find_child(button_name, true, false) as Button
+		if button != null and not button.text.is_empty():
+			button.add_theme_font_size_override("font_size", 12)
+			button.clip_text = true
+			button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var map_button := get_node_or_null("MapButton") as Button
+	if map_button != null and not map_button.text.is_empty():
+		map_button.add_theme_font_size_override("font_size", 14)
+		map_button.clip_text = true
+		map_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+
 
 func _one_handed() -> bool:
 	return bool(SettingsManager.get_setting("one_handed", false))
@@ -779,7 +930,7 @@ func _install_joystick() -> void:
 ## theme once on each top-level Control child here reaches every one of
 ## them via normal Control ancestry, same coverage as before.
 func _apply_canonical_theme() -> void:
-	var t := ThemeProvider.build_theme()
+	var t := CraftThemeBridge.build()
 	for child in get_children():
 		if child is Control:
 			(child as Control).theme = t
@@ -794,7 +945,7 @@ func _add_status_backing() -> void:
 	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
-	style.border_color = Color(ThemeProvider.COLOR_TEXT_DIM, 0.18)
+	style.border_color = ThemeProvider.COLOR_BORDER
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(0)
 	backing.add_theme_stylebox_override("panel", style)
@@ -804,7 +955,7 @@ func _add_status_backing() -> void:
 	move_child(backing, top_left.get_index())
 
 func _apply_safe_area() -> void:
-	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size))
+	_inset_controls(UiScale.insets(get_viewport().get_visible_rect().size) - _safe_area_inset)
 
 ## Slides each edge of the corner controls by the inset of the side its anchor is on (an offset counts from its anchor): a fixed control keeps its size, a stretched one gives up the margin.
 func _inset_controls(inset: Vector4) -> void:
@@ -830,7 +981,7 @@ func _remove_dup_leftbottom() -> void:
 			if cr.position.x < vp.x * 0.25 and cr.position.y + cr.size.y > vp.y * 0.75:
 				c.queue_free()
 
-## Noise/visibility/ammo/radar captions and the sprint/stealth touch
+## Noise/visibility/ammo captions and the sprint/stealth touch
 ## buttons were hardcoded raw text (mixed Russian/English) in the .tscn
 ## with no code path ever overriding .text - permanently stuck in that
 ## exact mixed-language state in every locale.
@@ -1021,9 +1172,9 @@ var _noise_reduce_flash_t: float = 0.0
 func _process(delta: float) -> void:
 	if _bat < 0.25:
 		var pulse: float = sin(Time.get_ticks_msec() * 0.0095) * 0.5 + 0.5
-		bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.752941, 0.223529, 0.168627), pulse)
+		bat_fill.self_modulate = Color.WHITE.lerp(Color(0.752941, 0.223529, 0.168627), pulse)
 	else:
-		bat_fill.color = Color(0.788, 0.635, 0.290)
+		bat_fill.self_modulate = Color.WHITE
 	_process_noise_vignette(delta)
 	_process_enemy_bar(delta)
 	_process_bar_shake(delta)
@@ -1168,7 +1319,7 @@ func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 ## The shared visibility predicate (BaseMonster.is_perceptible): camera frustum, clear line of sight, and the
 ## flashlight beam or a rendered light pool. Every enemy telemetry path in this file asks it.
 func _monster_perceptible(monster: Node3D) -> bool:
-	return is_instance_valid(monster) and monster.has_method("is_perceptible") and monster.is_perceptible()
+	return is_instance_valid(monster) and monster.is_inside_tree() and monster.has_method("is_perceptible") and monster.is_perceptible()
 
 func _resolve_monster(monster_id: StringName) -> Node3D:
 	var match_instance: Node3D = null
@@ -1564,13 +1715,7 @@ func _on_bat(ratio: float) -> void:
 	_tween_fill(bat_fill, _pip_fill(ratio))
 	bat_val.text = str(int(ratio * 100))
 	bat_val.visible = ratio <= _BAT_LOW
-	if _battery_ad_button != null and is_instance_valid(_battery_ad_button) and not _battery_ad_button.disabled:
-		_battery_ad_button.visible = ratio < 0.3
 
-## FINAL PERFECTION P5: extra_battery reward was wired end-to-end in
-## GameManager._on_ad_reward() (adds 50 charge) but had no UI trigger -
-## AdService.show_rewarded(&"extra_battery") was never called from
-## anywhere. Same pattern as death_screen.gd's _add_revive_button().
 ## FINAL HARDENING PASS (BLOCKER 3): one-time touch calibration on first
 ## touch-device launch - drag the joystick, tap interact, feel the haptic
 ## pulse. has_touch_ui() already gates every other touch-only setup here.
@@ -1581,28 +1726,6 @@ func _maybe_show_touch_calibration() -> void:
 		return
 	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
 	get_tree().root.add_child(overlay)
-
-func _add_battery_ad_button() -> void:
-	if not AdService.can_show_reward(&"extra_battery"):
-		return
-	var bat_row: Control = get_node_or_null("TopLeft/Bat")
-	if bat_row == null:
-		return
-	var btn := Button.new()
-	btn.name = "BatteryAdButton"
-	btn.text = LocalizationManager.t("AD_EXTRA_BATTERY")
-	btn.visible = false
-	# Long locales (ru/fr ~2x the EN length) overflow a fixed 150px button —
-	# wrap to a second line instead of spilling past the edge.
-	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	btn.custom_minimum_size = Vector2(150.0, UiScale.min_touch())
-	btn.position = Vector2(BAR_W + 52.0, -12.0)  # beside the segments: below them it sat on the health row
-	btn.pressed.connect(func() -> void:
-		btn.disabled = true
-		btn.visible = false
-		AdService.show_rewarded(&"extra_battery"))
-	bat_row.add_child(btn)
-	_battery_ad_button = btn
 
 ## S04 (GDD §7): inside a hiding spot visibility is 0, and the view dims to say so.
 var _hide_overlay: ColorRect = null
@@ -1680,7 +1803,7 @@ func _apply_ammo_caption() -> void:
 	if ammo_val != null:
 		ammo_val.visible = _weapon_present
 
-func _tween_fill(cr: ColorRect, ratio: float) -> void:
+func _tween_fill(cr: TextureRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
 	var tween := create_tween()
 	tween.tween_property(cr, "offset_right", target, 0.15)
@@ -1694,7 +1817,7 @@ func _on_pause() -> void:
 		GameManager.pause_game()
 
 func _setup_button_feedback() -> void:
-	for b in [$BottomRight/BtnAttack, $BottomRight/BtnSprint, $BottomRight/BtnStealth, $BottomRight/BtnInteract]:
+	for b in [$BtnPause, $BottomRight/BtnAttack, $BottomRight/BtnSprint, $BottomRight/BtnStealth, $BottomRight/BtnInteract]:
 		if b:
 			b.pressed.connect(_on_btn_pressed.bind(b))
 	_wire_action_buttons()
@@ -1726,9 +1849,7 @@ func _wire_action_buttons() -> void:
 	_add_side_buttons(isv)
 
 func _on_btn_pressed(btn: Button) -> void:
-	var tween := create_tween()
-	tween.tween_property(btn, "scale", Vector2(0.92, 0.92), 0.04)
-	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.04)
+	UISFX.press_pulse(btn)
 	if OS.has_feature("mobile") and SettingsManager != null and SettingsManager.haptics_enabled():
 		Input.vibrate_handheld(15)
 
@@ -1771,7 +1892,9 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 		b.custom_minimum_size = TOUCH_BTN
 		b.focus_mode = Control.FOCUS_NONE
 		b.add_theme_font_size_override("font_size", 22)
+		_style_touch_button(b)
 		b.button_down.connect(cb)
+		b.pressed.connect(_on_btn_pressed.bind(b))
 		$BottomRight.add_child(b)  # in the cluster, so Button Size grows them with it
 		return b
 	var jump := mk.call("BtnJump", "", func() -> void: isv.request_jump()) as Button
@@ -1824,15 +1947,47 @@ func _add_side_buttons(isv: Node, force: bool = false) -> void:
 	_localize_static_labels()
 	_rest_touch_controls()
 
+## Wave 2: one bronze-iron skin for every touch action. Semi-transparent
+## #0f1314 fill, a 2 px bronze edge, parchment glyphs, and a sodium wake on
+## press. It is applied by node name as well as at creation so the scene's
+## four original buttons get the same treatment as the generated cluster.
+func _style_touch_button(button: Button) -> void:
+	if button == null or button.has_meta("_wave2_touch_style"):
+		return
+	button.set_meta("_wave2_touch_style", true)
+	var base := StyleBoxFlat.new()
+	base.bg_color = Color(ThemeProvider.COLOR_BG_PANEL, 0.78)
+	base.border_color = ThemeProvider.COLOR_BORDER
+	base.set_border_width_all(2)
+	base.set_corner_radius_all(0)
+	base.set_content_margin_all(6)
+	var hover := base.duplicate() as StyleBoxFlat
+	hover.bg_color = Color(ThemeProvider.COLOR_IRON, 0.92)
+	hover.border_color = ThemeProvider.COLOR_AMBER
+	var pressed := base.duplicate() as StyleBoxFlat
+	pressed.bg_color = Color(ThemeProvider.COLOR_SODIUM, 0.22)
+	pressed.border_color = ThemeProvider.COLOR_SODIUM
+	for state: StringName in [&"normal", &"hover", &"hover_pressed", &"focus", &"disabled"]:
+		button.add_theme_stylebox_override(state, hover if state == &"hover" or state == &"focus" else base)
+	button.add_theme_stylebox_override(&"pressed", pressed)
+	button.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_LIGHT)
+	button.add_theme_color_override("font_hover_color", ThemeProvider.COLOR_TEXT_LIGHT)
+	button.add_theme_color_override("font_pressed_color", ThemeProvider.COLOR_SODIUM)
+	button.button_down.connect(func() -> void: button.modulate = Color(1.10, 1.03, 0.82))
+	button.button_up.connect(func() -> void: button.modulate = Color.WHITE)
+
 ## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full
 ## under the thumb (docs/HUD_PLAN.md rows 18 and 23).
 func _rest_touch_controls() -> void:
 	var buttons: Array = []
 	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel",
-			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench"]:
+			"BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench", "MapButton"]:
 		var button := get_node_or_null("BottomRight/" + button_name) as Button
 		if button == null:
+			button = get_node_or_null(button_name) as Button
+		if button == null:
 			continue
+		_style_touch_button(button)
 		buttons.append(button)
 		button.button_down.connect(func() -> void: _FADE.show_for([button], 0.4, _TOUCH_REST, false, "self_modulate:a"))
 	_FADE.settle(buttons, _TOUCH_REST, "self_modulate:a")
@@ -1856,11 +2011,12 @@ func _setup_slot_placeholders() -> void:
 			child.queue_free()
 		# V2 SKIN WIRING P1: real slot chrome texture in place of the flat
 		# color swatch; falls back to the old ColorRect if missing on disk.
-		var chrome_path := "res://assets/textures/ui_v2/quickslot_v2_72.png"
+		var chrome_path := "res://assets/textures/ui_craft/quickslot_craft_72.webp"
+		var legacy_chrome := "res://assets/textures/ui_v2/quickslot_v2_72.png"
 		var border: Control
-		if ResourceLoader.exists(chrome_path):
+		if ResourceLoader.exists(chrome_path) or ResourceLoader.exists(legacy_chrome):
 			var tex_border := TextureRect.new()
-			tex_border.texture = load(chrome_path)
+			tex_border.texture = load(chrome_path) if ResourceLoader.exists(chrome_path) else load(legacy_chrome)
 			tex_border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tex_border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			border = tex_border
@@ -1886,7 +2042,7 @@ func _setup_slot_placeholders() -> void:
 		# the badge only means something for the five item slots.
 		badge.visible = item_id != &"flashlight"
 		badge.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
-		badge.add_theme_font_size_override("font_size", 11)
+		badge.add_theme_font_size_override("font_size", 12 if _TOUCH_LAYOUT.is_mobile() else 11)
 		badge.position = Vector2(34, 34)
 		slot.add_child(badge)
 		if inv and item_id != &"":
@@ -2064,14 +2220,19 @@ func _add_map_button() -> void:
 	btn.text = LocalizationManager.t("MAP_TITLE")
 	btn.visible = has_touch_ui()  # a keyboard has the city_map_toggle key
 	btn.pressed.connect(_on_map_btn)
+	btn.pressed.connect(_on_btn_pressed.bind(btn))
 	add_child(btn)
 	get_viewport().size_changed.connect(_place_map_button)
 	_place_map_button()
 
 func _place_map_button() -> void:
 	var btn := get_node_or_null("MapButton") as Button
-	if btn != null:
-		btn.position = UiScale.log_map_row(get_viewport().get_visible_rect().size) + Vector2(UiScale.min_touch() * 1.5 + 8.0, 0.0)
+	if btn == null:
+		return
+	if has_touch_ui() and not _one_handed():
+		_place_map_button_in_arc()
+		return
+	btn.position = UiScale.log_map_row(get_viewport().get_visible_rect().size) + Vector2(UiScale.min_touch() * 1.5 + 8.0, 0.0)
 
 func _on_map_btn() -> void:
 	if UIManager and UIManager.has_method("open"):

@@ -1,0 +1,14 @@
+extends Node
+## Scene-root wrapper for the final-tree store gallery runner. The runner is
+## added under /root so Routes.goto() scene swaps do not free it mid-capture.
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_start")
+
+
+func _start() -> void:
+	var runner := Node.new()
+	runner.name = "ReleaseStoreShotsRunner"
+	runner.set_script(load("res://scripts/tools/_release_store_shots_runner.gd"))
+	get_tree().root.add_child(runner)

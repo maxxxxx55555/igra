@@ -24,8 +24,8 @@ signal fuel_empty()
 
 var _light: OmniLight3D
 const _Props := preload("res://scripts/art/prop_meshes.gd")
-const _START_SFX := preload("res://assets/audio/sfx/interact/generator_start.wav")
-const _STOP_SFX := preload("res://assets/audio/sfx/interact/generator_stop.wav")
+const _START_SFX := preload("res://assets/audio/sfx/interact/generator_start.ogg")
+const _STOP_SFX := preload("res://assets/audio/sfx/interact/generator_stop.ogg")
 var _mesh: MeshInstance3D
 var _glow: StandardMaterial3D
 

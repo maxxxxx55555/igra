@@ -47,7 +47,6 @@ func _ready() -> void:
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_rejected()
-	_check_release_has_no_ad_stub()
 	_check_leaderboard_signed_and_validated()
 	_S28.run(self)
 	_cleanup()
@@ -548,14 +547,6 @@ func _check_reset_progress_clears_ng_plus() -> void:
 		wf2.store_string(ngp_backup)
 		wf2.close()
 	NewGamePlus._load_save()
-
-## SECURITY_SWEEP_V2 #2: a release build without an AppLovin key must get no
-## provider (offers hide themselves); the claim stub is debug-only.
-func _check_release_has_no_ad_stub() -> void:
-	var release: Object = AdService._default_provider(false)
-	var debug: Object = AdService._default_provider(true)
-	_ok(OS.has_feature("mobile") or OS.has_feature("web") or (release == null and debug != null),
-		"release build gets no ad provider, debug keeps the stub (release=%s)" % [release])
 
 ## SECURITY_SWEEP_V2 #5: tampered signed leaderboard rejected; a legacy plain
 ## file keeps only well-formed entries and is re-saved signed.

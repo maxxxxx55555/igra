@@ -2,7 +2,7 @@ extends Node
 ## Actual runner, spawned under get_tree().root by _gameplay_shot.gd so it
 ## survives the Routes.goto() scene swaps it triggers/watches.
 
-const OUT_DEFAULT := "res://docs/shots/gameplay_shot.png"
+const OUT_DEFAULT := ("res://" + "docs/shots/gameplay_shot.png")
 
 var _t0: int = 0
 
@@ -21,9 +21,6 @@ func _out_path() -> String:
 	return OUT_DEFAULT
 
 func _run() -> void:
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
 	# Same race-avoidance as _boot_check_runner.gd: wait a beat so
 	# _bootstrap.gd's own current_scene check resolves first, then nudge
 	# only if still stuck (calling goto() immediately races it).

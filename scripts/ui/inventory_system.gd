@@ -16,20 +16,32 @@ const MAX_WEIGHT: float = 40.0
 var current_weight: float = 0.0
 var is_open: bool = false
 var items_db: Dictionary = {
-	"medkit": {"name": "Aptechka", "weight": 0.5, "icon": "res://assets/textures/items/medkit.png", "type": "consumable", "effect": "heal", "value": 25},
-	"flashlight": {"name": "Fonarik", "weight": 0.8, "icon": "res://assets/textures/items/flashlight.png", "type": "tool"},
-	"can_food": {"name": "Konservy", "weight": 0.4, "icon": "res://assets/textures/items/can_food.png", "type": "consumable", "effect": "hunger", "value": 20},
-	"key": {"name": "Kljuch", "weight": 0.1, "icon": "res://assets/textures/items/key.png", "type": "key"},
-	"water": {"name": "Voda", "weight": 0.6, "icon": "res://assets/textures/items/water.png", "type": "consumable", "effect": "thirst", "value": 30},
-	"wrench": {"name": "Gaechnyj kljuch", "weight": 1.2, "icon": "res://assets/textures/items/wrench.png", "type": "tool"},
-	"backpack": {"name": "Rjuzak", "weight": 1.0, "icon": "res://assets/textures/items/backpack.png", "type": "container"},
-	"pistol": {"name": "Pistolet", "weight": 1.5, "icon": "res://assets/textures/items/pistol.png", "type": "weapon"}
+	"medkit": {"name": "Aptechka", "weight": 0.5, "icon": "res://assets/textures/items/medkit.webp", "type": "consumable", "effect": "heal", "value": 25},
+	"flashlight": {"name": "Fonarik", "weight": 0.8, "icon": "res://assets/textures/items/flashlight.webp", "type": "tool"},
+	"can_food": {"name": "Konservy", "weight": 0.4, "icon": "res://assets/textures/items/can_food.webp", "type": "consumable", "effect": "hunger", "value": 20},
+	"key": {"name": "Kljuch", "weight": 0.1, "icon": "res://assets/textures/items/key.webp", "type": "key"},
+	"water": {"name": "Voda", "weight": 0.6, "icon": "res://assets/textures/items/water.webp", "type": "consumable", "effect": "thirst", "value": 30},
+	"wrench": {"name": "Gaechnyj kljuch", "weight": 1.2, "icon": "res://assets/textures/items/wrench.webp", "type": "tool"},
+	"backpack": {"name": "Rjuzak", "weight": 1.0, "icon": "res://assets/textures/items/backpack.webp", "type": "container"},
+	"pistol": {"name": "Pistolet", "weight": 1.5, "icon": "res://assets/textures/items/pistol.webp", "type": "weapon"}
 }
 
 func _ready() -> void:
 	inventory_panel.visible = false
 	close_button.pressed.connect(_on_close_pressed)
 	_init_slots()
+	# P2: an OPEN inventory must retranslate INV_WEIGHT immediately on RU <-> EN.
+	var i18n := get_node_or_null("/root/I18nSync")
+	if i18n != null and not i18n.is_connected("locale_changed", Callable(self, "_on_locale_changed")):
+		i18n.connect("locale_changed", Callable(self, "_on_locale_changed"))
+
+func _notification(what: int) -> void:
+	if what == Control.NOTIFICATION_TRANSLATION_CHANGED and is_instance_valid(weight_label):
+		_update_ui()
+
+func _on_locale_changed(_lang: String) -> void:
+	if is_instance_valid(weight_label):
+		_update_ui()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):
@@ -124,7 +136,7 @@ func _update_ui() -> void:
 				label.add_theme_color_override("font_color", Color("#d8d5cc"))  # bone-text
 				slot_btn.add_child(label)
 	weight_bar.value = (current_weight / MAX_WEIGHT) * 100.0
-	weight_label.text = str("%.1f" % current_weight) + " / " + str(MAX_WEIGHT) + " kg"
+	weight_label.text = tr("INV_WEIGHT") % [current_weight, MAX_WEIGHT]
 	if current_weight > MAX_WEIGHT * 0.9:
 		weight_bar.modulate = Color("#c0392b")  # ember — danger
 	elif current_weight > MAX_WEIGHT * 0.7:

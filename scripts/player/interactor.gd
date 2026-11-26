@@ -34,6 +34,8 @@ const EdgeHighlight := preload("res://scripts/effects/edge_highlight.gd")
 var _player: Node3D = null
 var _aim: Node3D = null
 var _target: Node = null
+const INTERACT_DEBOUNCE_MSEC := 180
+var _last_interact_msec := -INTERACT_DEBOUNCE_MSEC
 var _scan_timer: float = 0.0
 var _last_available: bool = false
 
@@ -97,7 +99,7 @@ func _find_best() -> Node:
 		var dist: float = to.length()
 		if dist > REACH:
 			continue
-		if not _is_available(node):
+		if not node.has_method("interact") or node.is_queued_for_deletion() or not _is_available(node):
 			continue
 		var flat: Vector3 = Vector3(to.x, 0.0, to.z)
 		var dot: float = 1.0
@@ -107,7 +109,7 @@ func _find_best() -> Node:
 				continue
 		# Ближе и прямее по курсу — выше приоритет.
 		var score: float = dot * 2.0 - dist / REACH
-		if score > best_score:
+		if score > best_score and _has_clear_ray(n3):
 			best_score = score
 			best = node
 	return best
@@ -136,15 +138,34 @@ func _prompt_for(node: Node) -> String:
 		return String(node.call("get_prompt"))
 	return LocalizationManager.t("PROMPT_INTERACT")
 
+func _has_clear_ray(target: Node3D) -> bool:
+	if not is_instance_valid(_player) or not _player.is_inside_tree() or not target.is_inside_tree():
+		return false
+	var origin := _player.global_position + Vector3.UP * 0.7
+	var end := target.global_position + Vector3.UP * 0.15
+	if origin.distance_squared_to(end) < 0.00001:
+		return true
+	var ray := PhysicsRayQueryParameters3D.create(origin, end, 1)
+	if _player is CollisionObject3D:
+		ray.exclude = [(_player as CollisionObject3D).get_rid()]
+	var hit := _player.get_world_3d().direct_space_state.intersect_ray(ray)
+	var collider: Node = hit.get("collider")
+	return hit.is_empty() or (is_instance_valid(collider) and (collider == target or target.is_ancestor_of(collider)))
+
 func _on_interact_requested() -> void:
 	# behind an open screen (the workbench, the map, the codex) the key belongs to that screen: it toggled the generator and replayed the bench
 	if UIManager.is_hud_blocked():
 		return
 	if _target == null or not is_instance_valid(_target):
 		return
-	if not _is_available(_target):
+	var now := Time.get_ticks_msec()
+	if now - _last_interact_msec < INTERACT_DEBOUNCE_MSEC:
 		return
-	_invoke(_target)
+	var current := _find_best()
+	if current != _target or current == null:
+		return
+	_last_interact_msec = now
+	_invoke(current)
 	# Цель могла исчезнуть (queue_free) или перестать быть доступной.
 	_scan_timer = 0.0
 	call_deferred("_refresh_target")

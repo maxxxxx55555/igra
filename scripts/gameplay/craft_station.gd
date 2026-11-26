@@ -5,7 +5,7 @@ extends Node3D
 
 const SIZE := Vector3(1.4, 1.0, 0.8)
 const _Props := preload("res://scripts/art/prop_meshes.gd")
-const _OPEN_SFX := preload("res://assets/audio/sfx/interact/workbench_open.wav")
+const _OPEN_SFX := preload("res://assets/audio/sfx/interact/workbench_open.ogg")
 
 func _ready() -> void:
 	add_to_group("interactable")
