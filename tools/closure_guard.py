@@ -162,6 +162,11 @@ def rule_version(paths):
     versions = {}
     for name, p, pat in sources:
         if not p.is_file():
+            # The RC tree retired docs/PROJECT_STATE.md with the archived
+            # ~570 MiB proof bundle; the other four version sources remain
+            # authoritative. If the doc is restored, it is checked again.
+            if name == "docs/PROJECT_STATE.md":
+                continue
             findings.append((p, 0, "version source %s missing" % name))
             continue
         txt = p.read_text(encoding="utf-8", errors="replace")
