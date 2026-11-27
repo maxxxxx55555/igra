@@ -71,7 +71,7 @@ var _rng := RandomNumberGenerator.new()
 var _landmark: Node3D = null
 var _district_id: StringName = &""
 var _clear: Array[Vector2] = []
-var _pool_mat: StandardMaterial3D = null
+var _pool_mat: ShaderMaterial = null
 var _fog_mat: ShaderMaterial = null
 var _inner: float = 3.5
 var _grid: float = 16.0
@@ -139,7 +139,9 @@ func build(district_id: StringName, sb: Node) -> void:
 	_batch("Barrels", _BARREL, barrels, barrel_colors, _plain(Color.WHITE, 0.75, 0.35, true, "rusted_metal"), true)
 	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5, false, "rusted_metal"), true)
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4, false, "rusted_metal"), true)
-	_pool_mat = _soft(Color(BRASS, 0.0), true)
+	_pool_mat = ShaderMaterial.new()
+	_pool_mat.shader = preload("res://shaders/overhaul/landmark_halo.gdshader")
+	_pool_mat.set_shader_parameter("tint", BRASS)
 	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
 	var details: Node3D = _LAMP_DETAILS.new()
 	details.name = "LampDetails"
@@ -365,7 +367,7 @@ func _apply_stage(stage: int) -> void:
 	if _fog_mat != null:
 		_fog_mat.set_shader_parameter("alpha", FOG_BY_STAGE[clampi(stage, 0, FOG_BY_STAGE.size() - 1)])
 	var pool: float = POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)]
-	_pool_mat.albedo_color = Color(BRASS, pool)
+	_pool_mat.set_shader_parameter("strength", pool * 0.36)
 	var pools := get_node_or_null("LampPools") as Node3D
 	if pools != null:
 		pools.visible = pool > 0.0  # a blended quad of opacity 0 still costs its fill

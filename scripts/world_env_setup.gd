@@ -19,16 +19,14 @@ extends Node
 ## The samples of the 3D by tier (Low, Medium, High, Ultra): off, 2x, 2x, 4x. The 4x cost 5.5 to 9 ms of the 19 ms GPU frame of the High tier on the dev iGPU (docs/PERF_PASS.md, Session 23).
 const MSAA_BY_TIER: Array[Viewport.MSAA] = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]
 const AMBIENT_DARK: float = 0.16
-const AMBIENT_LIT: float = 0.19
-const AMBIENT_FULL: float = 0.22
 const AMBIENT_COLOR_DARK: Color = Color(0.078, 0.125, 0.157)  # #142028
 const AMBIENT_COLOR_LIT: Color = Color(0.084, 0.137, 0.169)  # #142028 lift
-const AMBIENT_COLOR_FULL: Color = Color(0.098, 0.153, 0.184)  # #19282f
+const AMBIENT_COLOR_FULL: Color = Color(0.36, 0.43, 0.48)
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
-## The light the fog itself carries, by stage (DARK/PARTIAL/STREETS/FULL): at 0.6 everywhere the teal haze lit every
-## facade of an unpowered district; a restored street gets the haze back. This live Environment is the single owner.
+const CINEMATIC_AMBIENT_BY_STAGE: Array[float] = [1.10, 1.22, 1.45, 2.45]
+## Restored districts have a stronger ambient bounce through the fog.
 const FOG_LIGHT_BY_STAGE: Array[float] = [0.08, 0.2, 0.32, 0.42]
 ## The moon casts a shadow only where it is bright enough to show one: at 0.12 (the dark stages) the shadow is invisible and
 ## cost a quarter of the first district's draw calls (66 of 235, windowed perf_check_scene).
@@ -104,18 +102,23 @@ func _ready() -> void:
 	_player_glow = _find_player_glow()
 	_boot_look()
 
-## Single final owner of the look. The preset/tier/stage/LUT/post-fx passes below all
-## mutate the same Environment, so the cinematic night is reasserted last on every one of
-## those paths. The theme also drops the moon's shadow pass (66 of a measured 235 draw
-## calls in a dark district) and keeps the rim light out of the visible-light budget.
+## The stage owns the moon and brightness. The preset supplies the film grade.
+var _lighting_stage: int = DistrictData.Stage.DARK
+
+
 func _apply_cinematic_night() -> void:
 	if _we == null or _env == null:
 		return
-	_VISUAL_THEME.apply_cinematic_night_env(_we, _moon)
+	_VISUAL_THEME.apply_cinematic_night_env(_we)
+	_env.ambient_light_energy = CINEMATIC_AMBIENT_BY_STAGE[_lighting_stage]
+	var restored := _lighting_stage == DistrictData.Stage.FULL
+	if restored:
+		_env.ambient_light_color = AMBIENT_COLOR_FULL
+		_env.ambient_light_sky_contribution = 0.0
 	_env.fog_light_energy = maxf(_env.fog_light_energy, 0.50)
 	_env.adjustment_enabled = true
 	_env.adjustment_brightness = 1.0
-	_env.adjustment_contrast = 1.15
+	_env.adjustment_contrast = 1.01 if restored else 1.15
 	_env.adjustment_saturation = 1.05
 	if is_inside_tree():
 		_de_mud_grade(_find_postfx_overlay())
@@ -134,7 +137,7 @@ func _de_mud_grade(overlay: Node) -> void:
 	mat.set_shader_parameter("shadow_tint", Color(0.055, 0.094, 0.129, 1.0))
 	mat.set_shader_parameter("vignette_strength", 0.0)
 	mat.set_shader_parameter("halation_strength", 0.20)
-	mat.set_shader_parameter("contrast_lift", 1.10)
+	mat.set_shader_parameter("contrast_lift", 1.02 if _lighting_stage == DistrictData.Stage.FULL else 1.10)
 	mat.set_shader_parameter("mid_pivot", 0.22)
 
 ## The order the look boots in (docs/VISUAL_PASS.md section 8, W1 to W7), in one place so that it cannot be scrambled: the preset of the profile, the camera attributes, the numbers of the
@@ -165,27 +168,23 @@ func _process(delta: float) -> void:
 func apply_for_stage(stage: int) -> void:
 	if _env == null:
 		return
-	var ambient_energy: float
+	_lighting_stage = clampi(stage, 0, CINEMATIC_AMBIENT_BY_STAGE.size() - 1)
 	var ambient_color: Color
 	var moon_energy: float
 	var glow_energy: float
 	match stage:
 		0, 1:
-			ambient_energy = AMBIENT_DARK
 			ambient_color = AMBIENT_COLOR_DARK
 			moon_energy = MOON_DARK
 			glow_energy = GLOW_DARK
 		2:
-			ambient_energy = AMBIENT_LIT
 			ambient_color = AMBIENT_COLOR_LIT
 			moon_energy = MOON_LIT
 			glow_energy = GLOW_LIT
 		_:
-			ambient_energy = AMBIENT_FULL
 			ambient_color = AMBIENT_COLOR_FULL
 			moon_energy = MOON_FULL
 			glow_energy = GLOW_FULL
-	_env.ambient_light_energy = ambient_energy
 	_env.ambient_light_color = ambient_color
 	_env.fog_light_energy = FOG_LIGHT_BY_STAGE[clampi(stage, 0, FOG_LIGHT_BY_STAGE.size() - 1)]
 	_apply_menu_canon_fog(stage)
@@ -439,6 +438,4 @@ func _apply_moon_bias(district_id: StringName) -> void:
 
 
 func _moon_shadows_enabled(energy: float) -> bool:
-	# On the mobile GL path a town-wide shadow map redraws the facades and
-	# street props a second time. Their contact shadows are already batched.
 	return energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0

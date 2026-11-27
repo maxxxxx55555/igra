@@ -42,7 +42,7 @@ func _update_lights() -> void:
 			continue
 		var id: int = light.get_instance_id()
 		seen[id] = true
-		if light is DirectionalLight3D or (is_instance_valid(player) and player.is_ancestor_of(light)):
+		if light is DirectionalLight3D or (light is SpotLight3D and is_instance_valid(player) and player.is_ancestor_of(light)):
 			if light.is_visible_in_tree() and light.light_energy > LIT_MIN:
 				reserved += 1
 			continue
@@ -56,11 +56,24 @@ func _update_lights() -> void:
 		return a.global_position.distance_squared_to(cam_pos) < b.global_position.distance_squared_to(cam_pos)
 	)
 	var nearest: Light3D
+	for light: Light3D in lit:
+		if light.is_in_group("interior_fixtures"):
+			lit.erase(light)
+			lit.push_front(light)
+			break
+	for light: Light3D in lit:
+		if light is SpotLight3D and light.get_parent().is_in_group("streetlights"):
+			nearest = light
+			break
+	if nearest != null and reserved < MAX_VISIBLE:
+		# Keep the closest real street beam ahead of its decorative omni glow.
+		lit.erase(nearest)
+		lit.push_front(nearest)
+	else:
+		nearest = null
 	for i in lit.size():
 		var light: Light3D = lit[i]
 		if i < MAX_VISIBLE - reserved:
-			if nearest == null and light is SpotLight3D and light.get_parent().is_in_group("streetlights"):
-				nearest = light
 			if _hidden.erase(light.get_instance_id()):
 				light.visible = true
 		else:

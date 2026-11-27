@@ -115,7 +115,7 @@ func build(monster: Node3D, id: StringName) -> void:
 	_torso.name = "Torso"
 	_torso.position.y = _hip_y
 	_root.add_child(_torso)
-	_part("BodyMesh", body, _torso, -_hip_y, _mat)
+	_part("BodyMesh", body, _torso, -_hip_y, _mat).layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER | ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER
 	_head = _part("HeadMesh", _look["head"], _torso, -_hip_y, _mat, true)
 	_legs = _limbs(legs, _root, 0.0, "Leg")
 	_arms = _limbs(_look["arms"], _torso, -_hip_y, "Arm")

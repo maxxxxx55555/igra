@@ -9,13 +9,18 @@ extends RefCounted
 ##   Stage 3 (100%): Restored      — 100% warm amber streetlamps + safe exit beacon.
 
 
+# Keep shadowed light passes on the road, walls and playable silhouettes.
+# The decorative meshes still receive the ambient grade and emissive light.
 const WORLD_CASTER_LAYER := 1 << 15
+const LOCAL_RECEIVER_LAYER := 1 << 14
+const MOON_RECEIVER_LAYER := 1 << 13
 
 
 static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: DirectionalLight3D, primary_lamp: Light3D = null) -> void:
 	if flashlight != null and is_instance_valid(flashlight):
 		flashlight.shadow_enabled = true
 		flashlight.shadow_caster_mask = WORLD_CASTER_LAYER
+		flashlight.light_cull_mask = LOCAL_RECEIVER_LAYER
 		flashlight.shadow_bias = 0.035
 		flashlight.shadow_normal_bias = 1.4
 		flashlight.shadow_blur = 1.5
@@ -23,15 +28,17 @@ static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: Directio
 	if key_moon != null and is_instance_valid(key_moon):
 		key_moon.shadow_enabled = true
 		key_moon.shadow_caster_mask = WORLD_CASTER_LAYER
+		key_moon.light_cull_mask = MOON_RECEIVER_LAYER
 		key_moon.shadow_bias = 0.05
 		key_moon.shadow_normal_bias = 1.6
 		key_moon.shadow_blur = 2.0
 		key_moon.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
-		key_moon.directional_shadow_max_distance = 24.0
+		key_moon.directional_shadow_max_distance = 13.0
 		key_moon.shadow_opacity = 0.74
 	if primary_lamp != null and is_instance_valid(primary_lamp):
 		primary_lamp.shadow_enabled = true
 		primary_lamp.shadow_caster_mask = WORLD_CASTER_LAYER
+		primary_lamp.light_cull_mask = LOCAL_RECEIVER_LAYER
 		primary_lamp.shadow_bias = 0.045
 		primary_lamp.shadow_normal_bias = 1.5
 		primary_lamp.shadow_blur = 1.8

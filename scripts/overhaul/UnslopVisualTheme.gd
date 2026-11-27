@@ -198,7 +198,7 @@ static func set_modal_isolated(hud_nodes: Array, modal_open: bool) -> void:
 			n.visible = not modal_open
 
 
-static func apply_cinematic_night_env(world_env: WorldEnvironment, rim_light: DirectionalLight3D = null) -> void:
+static func apply_cinematic_night_env(world_env: WorldEnvironment) -> void:
 	if world_env == null or world_env.environment == null:
 		return
 	var env: Environment = world_env.environment
@@ -218,7 +218,3 @@ static func apply_cinematic_night_env(world_env: WorldEnvironment, rim_light: Di
 	env.glow_hdr_threshold = 0.95
 	env.glow_intensity = 0.45
 	env.glow_bloom = 0.14
-	if rim_light != null and is_instance_valid(rim_light):
-		rim_light.light_color = Color(0.478, 0.627, 0.737, 1.0)
-		rim_light.light_energy = 0.36
-		rim_light.shadow_enabled = false

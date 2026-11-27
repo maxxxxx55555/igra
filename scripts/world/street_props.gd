@@ -38,7 +38,7 @@ const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 var _lamp_mat: ShaderMaterial
 var _halo_mat: StandardMaterial3D
-var _pool_mat: StandardMaterial3D
+var _pool_mat: ShaderMaterial
 var _district_id: StringName = &""
 const _BRASS := Color("#c9a24a")
 const _HALO_ALPHA: Array[float] = [0.0, 0.02, 0.04, 0.06]
@@ -295,7 +295,7 @@ func _build_streetlight_multimesh() -> void:
 	pole_mmi.name = "StreetlightPolesBatched"
 	pole_mmi.set_meta("spots", _lamp_local_positions)
 	pole_mmi.multimesh = pole_mm
-	pole_mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
+	pole_mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER | ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER | ShadowAndRestorationRig.MOON_RECEIVER_LAYER
 	pole_mmi.material_override = _HARDWARE.material()
 	add_child(pole_mmi)
 	var wires := MeshInstance3D.new()
@@ -352,13 +352,9 @@ func _build_light_pools() -> void:
 	for i in _lamp_local_positions.size():
 		var pos: Vector3 = _lamp_local_positions[i]
 		pool_mm.set_instance_transform(i, Transform3D(flat, Vector3(pos.x + 1.16, POOL_LIFT_M, pos.z)))
-	_pool_mat = StandardMaterial3D.new()
-	_pool_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_pool_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_pool_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	_pool_mat.albedo_texture = _GLOW_TEX.glow_texture()
-	_pool_mat.disable_receive_shadows = true
-	_pool_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_pool_mat = ShaderMaterial.new()
+	_pool_mat.shader = preload("res://shaders/overhaul/landmark_halo.gdshader")
+	_pool_mat.set_shader_parameter("tint", _BRASS)
 	var pool_mmi := MultiMeshInstance3D.new()
 	pool_mmi.name = "StreetlightPoolsBatched"
 	pool_mmi.multimesh = pool_mm
@@ -379,7 +375,7 @@ func _apply_halo_stage(stage: int) -> void:
 	if _halo_mat != null:
 		_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
 	if _pool_mat != null:
-		_pool_mat.albedo_color = Color(_BRASS, _POOL_ALPHA[clampi(stage, 0, _POOL_ALPHA.size() - 1)])
+		_pool_mat.set_shader_parameter("strength", _POOL_ALPHA[clampi(stage, 0, _POOL_ALPHA.size() - 1)] * 0.34)
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

@@ -85,6 +85,7 @@ func _ready() -> void:
 	# of the flashlight's shadow pass removes five draw calls per street.
 	var street_mms: Array[MultiMeshInstance3D] = [_road_mm, _sidewalk_mm, _marking_mm, _curb_mm, _damage_mm]
 	for mm in street_mms:
+		mm.layers |= ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER | ShadowAndRestorationRig.MOON_RECEIVER_LAYER
 		mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_road_mm,     _make_road_mesh())
 	_init_mm(_sidewalk_mm, DETAIL.module(&"pavement"))

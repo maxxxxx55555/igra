@@ -12,9 +12,9 @@ const BODY_SELF_GLOW := Color(0.08, 0.10, 0.14)
 ## Per power stage (DARK, PARTIAL, STREETS, FULL): the emission energy of the glowing parts, the share of the body's self-glow, the opacity of the halo.
 const GLOW_BY_STAGE: Array[float] = [0.0, 0.6, 1.3, 2.4]
 const BODY_BY_STAGE: Array[float] = [0.15, 0.5, 0.8, 1.1]
-const HALO_BY_STAGE: Array[float] = [0.0, 0.05, 0.10, 0.17]
+const HALO_BY_STAGE: Array[float] = [0.0, 0.018, 0.033, 0.052]
 ## A halo that hugs the silhouette: the 110 m quad of the first version filled a third of the sky with flat brass (decision HALO-27).
-const HALO_SIZE := Vector2(64.0, 52.0)
+const HALO_SIZE := Vector2(31.0, 26.0)
 const HALO_BEHIND_M: float = 16.0
 
 static var _glow_texture: GradientTexture2D = null
@@ -178,13 +178,9 @@ static func build(district_id: StringName, at: Vector3) -> Node3D:
 	glow_mat.albedo_color = GLOW_COLOR
 	glow_mat.emission_enabled = true
 	glow_mat.emission = GLOW_COLOR
-	var halo_mat := StandardMaterial3D.new()
-	halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	halo_mat.disable_fog = true  # fog on an additive quad lights its whole square, not just the glow
-	halo_mat.albedo_texture = glow_texture()
-	halo_mat.albedo_color = Color(GLOW_COLOR, 0.0)
+	var halo_mat := ShaderMaterial.new()
+	halo_mat.shader = preload("res://shaders/overhaul/landmark_halo.gdshader")
+	halo_mat.set_shader_parameter("tint", GLOW_COLOR)
 	root.set_meta(&"glow", glow_mat)
 	root.set_meta(&"body", body_mat)
 	root.set_meta(&"halo", halo_mat)
@@ -192,7 +188,7 @@ static func build(district_id: StringName, at: Vector3) -> Node3D:
 	_add(root, "Glow", glow.commit(), glow_mat)
 	var halo := QuadMesh.new()
 	halo.size = HALO_SIZE
-	_add(root, "Halo", halo, halo_mat).position = Vector3(0.0, HALO_SIZE.y * 0.38, -HALO_BEHIND_M)
+	_add(root, "Halo", halo, halo_mat).position = Vector3(0.0, HALO_SIZE.y * 0.74, -HALO_BEHIND_M)
 	return root
 
 ## A soft round gradient, white at the middle and clear at the edge: the pool of light under a lamp and the halo behind a landmark are quads that carry it.
@@ -215,8 +211,8 @@ static func apply_stage(root: Node3D, stage: int) -> void:
 	var i: int = clampi(stage, 0, GLOW_BY_STAGE.size() - 1)
 	(root.get_meta(&"glow") as StandardMaterial3D).emission_energy_multiplier = GLOW_BY_STAGE[i]
 	(root.get_meta(&"body") as StandardMaterial3D).emission_energy_multiplier = BODY_BY_STAGE[i]
-	var halo_mat := root.get_meta(&"halo") as StandardMaterial3D
-	halo_mat.albedo_color = Color(GLOW_COLOR, HALO_BY_STAGE[i])
+	var halo_mat := root.get_meta(&"halo") as ShaderMaterial
+	halo_mat.set_shader_parameter("strength", HALO_BY_STAGE[i])
 	var halo := root.get_node_or_null("Halo") as Node3D
 	if halo != null:
 		halo.visible = HALO_BY_STAGE[i] > 0.0

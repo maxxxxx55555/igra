@@ -135,6 +135,7 @@ static func build(
 	# 8. Interior Zone Area3D
 	var fixture := OmniLight3D.new()
 	fixture.name = "InteriorFixture"
+	fixture.add_to_group("interior_fixtures")
 	fixture.position = Vector3(0.0, ROOM_H - 0.35, -0.35)
 	fixture.light_color = Color("#d7ae76")
 	fixture.omni_range = 5.2

@@ -492,7 +492,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 	mmi.material_override = mat
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if unshaded else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	if not unshaded:
-		mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
+		mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER | ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER | ShadowAndRestorationRig.MOON_RECEIVER_LAYER
 	add_child(mmi)
 
 func _add_ground() -> void:
@@ -508,6 +508,7 @@ func _add_ground() -> void:
 	_set_detail()
 	var ground := MeshInstance3D.new()
 	ground.name = "DarkGround"
+	ground.layers |= ShadowAndRestorationRig.MOON_RECEIVER_LAYER
 	ground.mesh = plane
 	ground.material_override = _ground_mat
 	ground.position.y = -0.05

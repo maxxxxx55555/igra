@@ -176,8 +176,6 @@ func _ready() -> void:
 	_player_hiding = hider != null and hider.get("_in_hiding") == true
 	add_to_group("enemies")
 	add_to_group("monsters")
-	for mesh: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
-		mesh.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
 	_status_node = load("res://scripts/enemies/status_effects.gd").new()
 	_status_node.mob = self
 	add_child(_status_node)

@@ -320,7 +320,8 @@ func _ready() -> void:
 		add_child(_collision_guard)
 
 	ShadowAndRestorationRig.configure_mobile_shadows(flashlight, null)
-	flashlight.shadow_enabled = enable_shadows and int(SettingsManager.get_setting("shadows", 2)) > 0
+	_update_flashlight_shadows("shadows", SettingsManager.get_setting("shadows", 2))
+	EventBus.settings_changed.connect(_update_flashlight_shadows)
 	dust.emitting = enable_dust
 	pivot.rotation.y = 0.0
 	_setup_cone(cone_force_off)
@@ -392,6 +393,11 @@ func _ready() -> void:
 	call_deferred("_resolve_camera")
 	if gm and gm.has_method("is_playing") and gm.is_playing():
 		call_deferred("_on_game_started")
+
+func _update_flashlight_shadows(key: String, value: Variant) -> void:
+	if key == "shadows":
+		flashlight.shadow_enabled = enable_shadows and int(value) > 0
+
 
 func _buffer_jump() -> void:
 	_jump_buffer_timer = jump_buffer_time
