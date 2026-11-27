@@ -29,10 +29,6 @@ const FADE_OUT: float = 0.3
 
 ## 3.14: how many read-back entries the log keeps.
 const HISTORY_MAX: int = 50
-## The LOG toggle rests see-through and is full for a few seconds after a new entry (docs/HUD_PLAN.md row 17).
-const _LOG_REST: float = 0.8
-const _LOG_WAKE_SEC: float = 4.0
-const _FADE := preload("res://scripts/ui/hud_fade.gd")
 ## Share Tech Mono - the canon font for numbers/stats (GDD 11.3).
 const _MONO_FONT_PATH: String = "res://assets/fonts/ShareTechMono-Regular.ttf"
 var _mono_font: Font = null
@@ -50,8 +46,6 @@ const _TYPE_ICON: Dictionary = {
 
 var _column: VBoxContainer
 var _root: Control
-var _header: Control
-var _log_toggle: Button
 var _log_panel: PanelContainer
 var _log_title: Label
 var _log_scroll: ScrollContainer
@@ -60,12 +54,12 @@ var _stack: VBoxContainer
 var _queue: Array[Dictionary] = []
 var _visible_count: int = 0
 var _hud_visible: bool = true
+var _log_from_modal: bool = false
 ## 3.14: newest last, capped at HISTORY_MAX.
 var _history: Array[Dictionary] = []
 
-## The column starts under the HUD's stat panel (about 260 px tall): at the corner, the LOG button sat on its first label.
-## The LOG toggle and the HUD's Map button share one row: both read UiScale.log_map_row(), so the safe-area inset is
-## applied once, by the same calculation, and a resize re-places them absolutely instead of adding it twice.
+## The column starts under the HUD's stat panel (about 260 px tall). Unslop pass: the floating
+## left-edge LOG toggle is gone; read-back is opened from Pause via open_log(), never from gameplay HUD.
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -81,7 +75,6 @@ func _ready() -> void:
 	_column.add_theme_constant_override("separation", 8)
 	_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_column)
-	_build_log_header()
 	_stack = VBoxContainer.new()
 	_stack.name = "ToastStack"
 	_stack.add_theme_constant_override("separation", 8)
@@ -156,7 +149,6 @@ func _make_stamp_label(stamp_text: String) -> Label:
 ## Records every requested message, whether or not it still fits on screen.
 func _record(text: String, type: String) -> Dictionary:
 	var entry := {"text": text, "type": type, "stamp": _stamp()}
-	_FADE.show_for([_log_toggle], _LOG_WAKE_SEC, _LOG_REST, false, "self_modulate:a")  # a new entry brings the toggle up for a moment
 	_history.append(entry)
 	if _history.size() > HISTORY_MAX:
 		_history.remove_at(0)
@@ -168,19 +160,23 @@ func _record(text: String, type: String) -> Dictionary:
 			_scroll_log_to_end()
 	return entry
 
-func _build_log_header() -> void:
-	_header = HBoxContainer.new()
-	_header.name = "LogHeader"
-	_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_column.add_child(_header)
-	_log_toggle = Button.new()
-	_log_toggle.name = "LogToggle"
-	_log_toggle.focus_mode = Control.FOCUS_NONE
-	_log_toggle.add_theme_font_size_override("font_size", 16)
-	_log_toggle.custom_minimum_size = Vector2(UiScale.min_touch() * 1.5, UiScale.min_touch())
-	_log_toggle.pressed.connect(_toggle_log)
-	_log_toggle.self_modulate.a = _LOG_REST
-	_header.add_child(_log_toggle)
+## Pause-side entry point (no gameplay HUD button). Pause menu calls this; the
+## manager keeps the toast layer visible while the modal is open so the log is
+## actually readable there, then restores the normal HUD-visibility rules.
+func open_log() -> void:
+	_log_from_modal = true
+	visible = true
+	_log_panel.visible = true
+	_rebuild_log()
+	call_deferred("_cap_log_height")
+
+func close_log() -> void:
+	_log_from_modal = false
+	_log_panel.visible = false
+	_on_hud_visibility(_hud_visible)
+
+func is_log_open() -> bool:
+	return _log_from_modal
 
 func _build_log_panel() -> void:
 	_log_panel = PanelContainer.new()
@@ -208,29 +204,10 @@ func _build_log_panel() -> void:
 	_log_rows.add_theme_constant_override("separation", 4)
 	_log_scroll.add_child(_log_rows)
 
-## GDD 11.4: panels are `panel` fill, a 1 px `panel-edge` frame, chamfer (radius
-## 0) and a light drop shadow; amber is the accent for active text, not for every
-## message frame - the toast rectangle used to outline itself in brass.
+## Unslop pass: one theme-owned toast panel, no 1 px frame. The brass reads as a
+## single left accent, not as a bright box around every message.
 func _panel_style() -> StyleBoxFlat:
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(ThemeProvider.COLOR_BG_PANEL.r, ThemeProvider.COLOR_BG_PANEL.g,
-		ThemeProvider.COLOR_BG_PANEL.b, 0.92)
-	sb.border_color = ThemeProvider.COLOR_BORDER
-	sb.set_border_width_all(1)
-	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
-	sb.shadow_size = 4
-	sb.shadow_offset = Vector2(0.0, 2.0)
-	sb.content_margin_left = 10
-	sb.content_margin_right = 10
-	sb.content_margin_top = 6
-	sb.content_margin_bottom = 6
-	return sb
-
-func _toggle_log() -> void:
-	_log_panel.visible = not _log_panel.visible
-	if _log_panel.visible:
-		_rebuild_log()
-		call_deferred("_cap_log_height")
+	return UnslopVisualTheme.make_toast_panel()
 
 func _rebuild_log() -> void:
 	for c in _log_rows.get_children():
@@ -274,7 +251,8 @@ func _apply_log_scroll() -> void:
 ## instead of drawing a 360 px panel over the open menu.
 func _on_hud_visibility(v: bool) -> void:
 	_hud_visible = v
-	_header.visible = v
+	if _log_from_modal:
+		return  # Pause opened the log: keep it readable over the modal.
 	_stack.visible = v and not bool(SettingsManager.get_setting("trailer_mode", false))
 	if not v:
 		_log_panel.visible = false
@@ -282,7 +260,6 @@ func _on_hud_visibility(v: bool) -> void:
 		_pump()
 
 func _retranslate(_lang: Variant = null) -> void:
-	_log_toggle.text = LocalizationManager.t("HUD_LOG_TOGGLE")
 	_log_title.text = LocalizationManager.t("HUD_LOG_TITLE")
 	if _log_panel.visible:
 		_rebuild_log()

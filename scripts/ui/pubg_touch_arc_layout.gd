@@ -15,21 +15,21 @@ const COLOR_TEXT_SUB := Color(0.84, 0.80, 0.72, 0.88)
 const COLOR_TEXT_HOT := Color(0.831, 0.663, 0.306, 1.0)
 
 const ICON_MAP: Dictionary = {
-	"BtnAttack": "icon_touch_attack.png",
-	"BtnInteract": "icon_touch_interact.png",
-	"BtnMelee": "icon_touch_melee.png",
-	"BtnJump": "icon_touch_jump.png",
-	"BtnDodge": "icon_touch_dodge.png",
-	"BtnReload": "icon_touch_reload.png",
-	"BtnSprint": "icon_touch_sprint.png",
-	"BtnStealth": "icon_touch_stealth.png",
-	"BtnFlash": "icon_touch_flash.png",
-	"BtnUV": "icon_touch_uv.png",
-	"BtnStrobe": "icon_touch_strobe.png",
-	"BtnWheel": "icon_touch_wheel.png",
-	"BtnInventory": "icon_touch_inventory.png",
-	"BtnWorkbench": "icon_touch_workbench.png",
-	"MapButton": "icon_touch_map.png",
+	"BtnAttack": "icon_touch_attack.webp",
+	"BtnInteract": "icon_touch_interact.webp",
+	"BtnMelee": "icon_touch_melee.webp",
+	"BtnJump": "icon_touch_jump.webp",
+	"BtnDodge": "icon_touch_dodge.webp",
+	"BtnReload": "icon_touch_reload.webp",
+	"BtnSprint": "icon_touch_sprint.webp",
+	"BtnStealth": "icon_touch_stealth.webp",
+	"BtnFlash": "icon_touch_flash.webp",
+	"BtnUV": "icon_touch_uv.webp",
+	"BtnStrobe": "icon_touch_strobe.webp",
+	"BtnWheel": "icon_touch_wheel.webp",
+	"BtnInventory": "icon_touch_inventory.webp",
+	"BtnWorkbench": "icon_touch_workbench.webp",
+	"MapButton": "icon_touch_map.webp",
 }
 
 static var _tex_cache: Dictionary = {}
@@ -120,6 +120,8 @@ static func _style_touch_button(btn: Control, node_name: String, tier: String) -
 		if icon_tex != null:
 			button.icon = icon_tex
 			button.expand_icon = true
+			for state in ["normal", "hover", "pressed", "focus", "hover_pressed"]:
+				button.add_theme_color_override("icon_%s_color" % state, Color("#d4a94e"))
 			button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 			button.add_theme_color_override("font_color", Color(0.90, 0.87, 0.82, 0.0))

@@ -94,22 +94,25 @@ func _setup_objective_label() -> void:
 	var hud := get_parent().get_node_or_null("HUD") as CanvasLayer
 	if hud == null or hud.get_node_or_null("Wave2Objective") != null:
 		return
-	var holder := Control.new()
+	var holder := CenterContainer.new()
 	holder.name = "Wave2Objective"
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	holder.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	holder.offset_left = -280.0
-	holder.offset_right = 280.0
 	holder.offset_top = 84.0
 	holder.offset_bottom = 116.0
 	var label := Label.new()
 	label.name = "ObjectiveText"
-	label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 20)
 	label.add_theme_color_override("font_color", COL_BRASS)
-	holder.add_child(label)
+	var plate := PanelContainer.new()
+	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	plate.add_theme_stylebox_override("panel", UnslopVisualTheme.make_glass_panel())
+	plate.add_child(label)
+	holder.add_child(plate)
 	hud.add_child(holder)
 	_objective_label = label
 
@@ -152,11 +155,22 @@ func _build_content() -> void:
 		_make_relay(i)
 	_make_fusebox()
 	_make_gate()
+	_disable_small_shadows()
 	var flow := get_node_or_null("/root/Wave2Flow")
 	if flow != null and bool(flow.call("is_gate_unlocked")):
 		_on_gate_unlocked(_index)
 	_needs_map = true
 	_configure_map()
+
+## Relays, the fusebox and the gate are small emissive props: their shadows
+## never read at night, so keep them out of the flashlight's shadow pass.
+func _disable_small_shadows() -> void:
+	if _content == null:
+		return
+	for node in _content.find_children("*", "MeshInstance3D", true, false):
+		var mi := node as MeshInstance3D
+		if mi != null:
+			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func _signal_material(tint: Color, glow: float) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()

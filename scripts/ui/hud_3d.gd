@@ -28,6 +28,37 @@ const _WEAPON_SLOTS: Array = [[&"pistol"], [&"rifle", &"shotgun"]]
 const _QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const _SLOT_SPECIAL_COLOR := Color(0.788, 0.635, 0.290)
 const _SLOT_FALLBACK_COLOR := Color(0.352941, 0.290196, 0.164706)
+## Unslop: the wide visibility bar becomes a small vector eye + a 3 px line,
+## both painted by the installed theme toolkit. No new assets.
+const _VIS_GAUGE_W: float = 112.0
+
+class _EyeGauge extends Control:
+	var ratio: float = 0.0
+	func _draw() -> void:
+		var mid: float = size.y * 0.5
+		UnslopVisualTheme.draw_eye_icon(self, Vector2(14.0, mid), 7.0)
+		var w: float = maxf(1.0, size.x - 30.0)
+		var track: Color = UnslopVisualTheme.COL_SLATE
+		track.a = 0.55
+		draw_rect(Rect2(30.0, mid - 1.5, w, 3.0), track)
+		draw_rect(Rect2(30.0, mid - 1.5, w * clampf(ratio, 0.0, 1.0), 3.0),
+			UnslopVisualTheme.visibility_bar_color(ratio))
+
+## Unslop: theme vector replacements for the old MS-Paint red-cross fallback.
+class _VectorSlotIcon extends Control:
+	var kind: StringName = &""
+	func _draw() -> void:
+		var half: float = minf(size.x, size.y) * 0.34
+		if kind == &"medkit":
+			UnslopVisualTheme.draw_medkit_icon(self, size * 0.5, half)
+		elif kind == &"flashlight":
+			UnslopVisualTheme.draw_lantern_icon(self, size * 0.5, half)
+
+var _vis_gauge: _EyeGauge
+## Modal isolation: a single dim layer behind UIManager's screens (layer 10).
+var _modal_backdrop: CanvasLayer
+var _modal_backdrop_rect: ColorRect
+var _map_isolated: bool = false
 
 var _slot_items: Array = _SLOT_ITEMS.duplicate()
 var _hp: float = 1.0
@@ -70,6 +101,7 @@ var vignette: ColorRect:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	child_entered_tree.connect(_on_child_entered)
 	_apply_canonical_theme()
 	_add_status_backing()
 	_apply_safe_area()
@@ -111,6 +143,8 @@ func _ready() -> void:
 	# Цвет по умолчанию читаем отложенно — оверлея ещё нет на этом кадре.
 	call_deferred("_cache_vignette_default")
 	_add_captions()
+	_setup_visibility_gauge()
+	call_deferred("_setup_modal_backdrop")
 	_localize_static_labels()
 	LocalizationManager.language_changed.connect(func(_l: String) -> void:
 		_localize_static_labels()
@@ -446,9 +480,9 @@ func _poll_noise_visibility() -> void:
 	if noise_fill:
 		noise_fill.offset_right = noise * BAR_W
 		noise_fill.color = _pick_noise_color(noise)
-	if vis_fill:
-		vis_fill.offset_right = vis * BAR_W
-		vis_fill.color = _pick_vis_color(vis)
+	if _vis_gauge != null and is_instance_valid(_vis_gauge):
+		_vis_gauge.ratio = vis  # slate calm -> amber alert -> muted rust in a chase
+		_vis_gauge.queue_redraw()
 	var loud := noise >= _NOISE_SHOWN
 	if loud != _noise_loud:
 		_noise_loud = loud
@@ -456,26 +490,18 @@ func _poll_noise_visibility() -> void:
 	var seen := vis >= _VIS_SHOWN
 	if seen != _vis_seen:
 		_vis_seen = seen
-		_FADE.show_for([vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill], 1.5, 0.0, seen)
+		_FADE.show_for([vis_caption, _vis_gauge], 1.5, 0.0, seen)
 
-## The bars glide to the player's noise and visibility (the state of the player steps them) and their colour shades from green through brass to
-## ember with the value: no step in the colour, no jump in the width.
+## The noise row stays, but subdued: a calm slate line warming to brass, with
+## no ember-red treatment. Visibility moved to the theme's vector gauge above.
 const GLIDE_PER_TICK: float = 0.15  # of a full bar, per 0.1 s poll
-const _CALM := Color(0.373, 0.541, 0.306)  # stamina
-const _WARN := Color(0.788, 0.635, 0.290)  # brass
-const _LOUD := Color(0.752941, 0.223529, 0.168627)  # ember
+const _NOISE_CALM := Color(0.322, 0.427, 0.478, 0.78)
+const _NOISE_WARN := Color(0.831, 0.663, 0.306, 0.86)
 var _noise_shown: float = 0.0
 var _vis_shown: float = 0.0
 
-func _shade(v: float, warn_at: float) -> Color:
-	return _CALM.lerp(_WARN, v / warn_at) if v < warn_at else _WARN.lerp(_LOUD, (v - warn_at) / (1.0 - warn_at))
-
 func _pick_noise_color(v: float) -> Color:
-	return _shade(v, 0.5)
-
-func _pick_vis_color(v: float) -> Color:
-	# Visibility the other way round from noise: quiet and dark is green.
-	return _shade(v, 0.3)
+	return _NOISE_CALM.lerp(_NOISE_WARN, clampf(v, 0.0, 1.0))
 
 ## 3.6 Спека: прицел меняет цвет по наведению на врага
 ## YAGNI: не делаем RayCast-tick, а слушаем EventBus.
@@ -661,16 +687,92 @@ func _on_game_state(state: int) -> void:
 		visible = not UIManager.is_hud_blocked()
 	_sync_damage_indicator_visibility()
 
-## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
-## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
+## UIManager emits this whenever a blocking screen (map, pause, settings,
+## inventory, death, win) opens or closes. Unslop pass: isolate the HUD root,
+## toasts and touch clusters with the theme helper, and dim the world behind
+## the modal with the theme's rgba(4,9,12,0.84) backdrop.
 func _on_hud_visibility(v: bool) -> void:
+	var in_game: bool = GameManager.is_playing() or GameManager.is_paused()
+	var show: bool = v and in_game
 	if not v:
-		InputService.attack_held = false  # an overlay can swallow the button's release: no fire left held behind it
-	visible = v and (GameManager.is_playing() or GameManager.is_paused())
+		InputService.attack_held = false  # an overlay can swallow the button's release
+	UnslopVisualTheme.set_modal_isolated(_modal_hud_nodes(), not show)
+	visible = show
+	# The isolation pass restores every hidden modal node when the modal closes,
+	# and that included the phone control clusters. On a desktop rig the HUD
+	# must keep them hidden: only has_touch_ui() may ever turn them on.
+	for path: String in ["BottomLeft", "BottomRight"]:
+		var cluster := get_node_or_null(path) as CanvasItem
+		if cluster != null:
+			cluster.visible = has_touch_ui()
 	_sync_damage_indicator_visibility()
+	if _modal_backdrop_rect != null:
+		# Only a real blocking screen dims the world; trailer mode / photo mode
+		# also hide the HUD but must not put a plate over the scene.
+		_modal_backdrop_rect.visible = not show and UIManager.is_hud_blocked()
+
+func _modal_hud_nodes() -> Array:
+	var nodes: Array = [self]
+	for path: String in ["BottomLeft", "BottomRight", "BottomCenter"]:
+		var n := get_node_or_null(path)
+		if n != null and (n is CanvasItem or n is CanvasLayer):
+			nodes.append(n)
+	var toast := get_tree().root.get_node_or_null("ToastManager") if is_inside_tree() else null
+	# A log deliberately opened from Pause must stay readable over the modal.
+	if toast != null and (toast is CanvasItem or toast is CanvasLayer) \
+			and (not toast.has_method(&"is_log_open") or not bool(toast.call("is_log_open"))):
+		nodes.append(toast)
+	return nodes
+
+func _setup_modal_backdrop() -> void:
+	if _modal_backdrop != null and is_instance_valid(_modal_backdrop):
+		return
+	_modal_backdrop = CanvasLayer.new()
+	_modal_backdrop.name = "UnslopModalBackdrop"
+	_modal_backdrop.layer = 9  # below UIManager screens (10), above the world
+	_modal_backdrop_rect = ColorRect.new()
+	_modal_backdrop_rect.color = UnslopVisualTheme.COL_BG_MODAL_BACKDROP
+	_modal_backdrop_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_modal_backdrop_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_modal_backdrop_rect.visible = false
+	_modal_backdrop.add_child(_modal_backdrop_rect)
+	add_child(_modal_backdrop)
+	# A modal may already be open when this deferred setup runs.
+	_on_hud_visibility(not UIManager.is_hud_blocked())
+
+## The bridge adds a second centered objective line to this HUD. The tracker
+## (quest_tracker_hud.gd) is the single owned line, so hide the duplicate
+## as soon as it is parented here.
+func _on_child_entered(node: Node) -> void:
+	if node.name == &"Wave2Objective" and node is Control:
+		(node as Control).visible = false
+
+## The visibility row: a minimal theme vector eye + 3 px line instead of the
+## old 220 px red bar. The legacy ColorRects stay for fade bookkeeping only.
+func _setup_visibility_gauge() -> void:
+	var parent := get_node_or_null("TopLeft") as Control
+	if parent == null or _vis_gauge != null:
+		return
+	var track := get_node_or_null("TopLeft/VisibilityT") as Control
+	if track != null:
+		track.visible = false
+	if vis_fill != null:
+		vis_fill.visible = false
+	_vis_gauge = _EyeGauge.new()
+	_vis_gauge.name = "VisibilityGauge"
+	_vis_gauge.custom_minimum_size = Vector2(_VIS_GAUGE_W, 18.0)
+	_vis_gauge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vis_gauge.offset_left = 0.0
+	_vis_gauge.offset_right = _VIS_GAUGE_W
+	var top: float = BAR_ROW_PITCH + BAR_ROW_TOP  # row 1, same grid as the caption
+	_vis_gauge.offset_top = top
+	_vis_gauge.offset_bottom = top + 18.0
+	parent.add_child(_vis_gauge)
 
 func has_touch_ui() -> bool:
-	return DisplayServer.is_touchscreen_available() or _TOUCH_LAYOUT.is_mobile()
+	return DisplayServer.is_touchscreen_available() or _TOUCH_LAYOUT.is_mobile() \
+		or Input.emulate_touch_from_mouse \
+		or OS.get_environment("TLS_FORCE_MOBILE_TOUCH") == "1"
 
 ## GDD V.1 3.7: the prompt said what the interaction does ("Open", "Search",
 ## "Repair") but never which button does it. The key is read from the project's
@@ -697,6 +799,12 @@ func _apply_touch_visibility() -> void:
 				n.visible = false
 		($BtnPause as Button).self_modulate.a = 0.5  # Esc pauses on a keyboard, the button only rests there
 		return
+	# The desktop branch above hides the clusters, so the switch back to the
+	# phone HUD has to turn them on again.
+	for path: String in ["BottomLeft", "BottomRight"]:
+		var n := get_node_or_null(path) as CanvasItem
+		if n != null:
+			n.visible = true
 	_apply_button_size()
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
 		if key == "button_size" or key == "one_handed":
@@ -817,6 +925,7 @@ func _apply_touch_arc_layout() -> void:
 	if touch_cluster == null:
 		return
 	_pubg_layout_report = _PUBG_TOUCH.apply_layout(touch_cluster, vp - Vector2(_safe_area_inset.x + _safe_area_inset.z, _safe_area_inset.y + _safe_area_inset.w), Vector2(_safe_area_inset.x, _safe_area_inset.y))
+	_enforce_action_arc_minimums(vp)
 	# The module styles every control it places. Mark them so the older Wave 2
 	# skin does not overwrite the new tactical boxes on the next rest pass.
 	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash",
@@ -828,6 +937,44 @@ func _apply_touch_arc_layout() -> void:
 	_place_map_button_in_arc()
 	_place_ammo_above_arc(vp)
 	_tidy_touch_captions()
+
+## Unslop touch spec: the right-hand action arc keeps >=72 px targets. The
+## generator floors several of them at 56, so grow them in place, nudge any
+## rect that touches the fire button radially outward, then clamp to the
+## viewport. Zero overlap with the centre hotbar and screen edges.
+const _ARC_ACTION_MIN: float = 72.0
+
+func _enforce_action_arc_minimums(vp: Vector2) -> void:
+	var attack := find_child("BtnAttack", true, false) as Button
+	if attack == null:
+		return
+	var fire_rect: Rect2 = attack.get_global_rect()
+	var fire_center: Vector2 = fire_rect.position + fire_rect.size * 0.5
+	for button_name: String in ["BtnAttack", "BtnInteract", "BtnMelee", "BtnDodge", "BtnJump", "BtnReload"]:
+		var b := find_child(button_name, true, false) as Button
+		if b == null or not b.is_visible_in_tree():
+			continue
+		var r: Rect2 = b.get_global_rect()
+		if r.size.x >= _ARC_ACTION_MIN and r.size.y >= _ARC_ACTION_MIN:
+			continue
+		var center: Vector2 = r.position + r.size * 0.5
+		var sz := Vector2(maxf(r.size.x, _ARC_ACTION_MIN), maxf(r.size.y, _ARC_ACTION_MIN))
+		b.custom_minimum_size = sz
+		b.size = sz
+		b.global_position = center - sz * 0.5
+		var rect: Rect2 = b.get_global_rect()
+		if rect.intersects(attack.get_global_rect()):
+			var rect_center: Vector2 = rect.position + rect.size * 0.5
+			var dir: Vector2 = (rect_center - fire_center).normalized()
+			for _i in range(8):
+				b.global_position += dir * 4.0
+				if not b.get_global_rect().intersects(attack.get_global_rect()):
+					break
+		rect = b.get_global_rect()
+		var wanted: Vector2 = Vector2(
+			clampf(rect.position.x, 20.0, maxf(20.0, vp.x - rect.size.x - 20.0)),
+			clampf(rect.position.y, 20.0, maxf(20.0, vp.y - rect.size.y - 20.0)))
+		b.global_position += wanted - rect.position
 
 
 ## Wave 3: the AAA plates and icons replace the flat style boxes, so the
@@ -943,12 +1090,8 @@ func _add_status_backing() -> void:
 	var backing := Panel.new()
 	backing.name = "StatusBacking"
 	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(ThemeProvider.COLOR_BG_DARK, 0.72)
-	style.border_color = ThemeProvider.COLOR_BORDER
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(0)
-	backing.add_theme_stylebox_override("panel", style)
+	# Unslop: one theme glass panel, no 1 px frame around the status stack.
+	backing.add_theme_stylebox_override("panel", UnslopVisualTheme.make_glass_panel())
 	backing.position = Vector2(8.0, 8.0)
 	backing.size = Vector2(300.0, 92.0)  # ends between the visibility bar and the noise caption: at 104 its edge crossed that caption
 	add_child(backing)
@@ -1022,7 +1165,6 @@ func _add_captions() -> void:
 		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam, 4]
 	]
 	var outline_col := Color(0.0235294, 0.0588235, 0.0745098, 1.0)
-	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
 	for d in data:
 		var row: int = d[2]
 		var lbl := Label.new()
@@ -1032,9 +1174,6 @@ func _add_captions() -> void:
 		lbl.add_theme_font_size_override("font_size", 18)
 		lbl.add_theme_color_override("font_outline_color", outline_col)
 		lbl.add_theme_constant_override("outline_size", 2)
-		lbl.add_theme_color_override("font_shadow_color", shadow_col)
-		lbl.add_theme_constant_override("shadow_offset_x", 1)
-		lbl.add_theme_constant_override("shadow_offset_y", 1)
 		d[1].add_child(lbl)
 		var cap_h: float = maxf(lbl.get_combined_minimum_size().y, 22.0)
 		lbl.size = Vector2(BAR_W, cap_h)
@@ -1099,15 +1238,34 @@ func _layout_extra_rows(start_row: int) -> void:
 func _pip_fill(ratio: float) -> float:
 	return ceilf(clampf(ratio, 0.0, 1.0) * _PIPS) / float(_PIPS)
 
+## The seven separators of the segmented charge scale used to be seven
+## ColorRect children, and every one of them was its own draw call. One
+## control draws the whole set with a single draw_multiline.
+class _BatteryPips extends Control:
+	var pips: int = 8
+	var bar_w: float = 220.0
+	var bar_h: float = 10.0
+	func _draw() -> void:
+		var strokes := PackedVector2Array()
+		for i in range(1, pips):
+			var x: float = bar_w * float(i) / float(pips) - 1.0
+			strokes.append(Vector2(x, 0.0))
+			strokes.append(Vector2(x, bar_h))
+		draw_multiline(strokes, ThemeProvider.COLOR_BG_DARK, 2.0, true)
+
 func _add_battery_pips() -> void:
 	var row := $TopLeft/Bat as Control
-	for i in range(1, _PIPS):
-		var gap := ColorRect.new()
-		gap.color = ThemeProvider.COLOR_BG_DARK
-		gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		gap.position = Vector2(BAR_W * float(i) / float(_PIPS) - 1.0, 0.0)
-		gap.size = Vector2(2.0, BAR_H)
-		row.add_child(gap)
+	if row == null or row.get_node_or_null("Pips") != null:
+		return
+	var pips := _BatteryPips.new()
+	pips.name = "Pips"
+	pips.pips = _PIPS
+	pips.bar_w = BAR_W
+	pips.bar_h = BAR_H
+	pips.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pips.position = Vector2.ZERO
+	pips.size = Vector2(BAR_W, BAR_H)
+	row.add_child(pips)
 
 ## The calm start (docs/HUD_PLAN.md rows 1 to 5): the battery's value shows only when low, the stamina value never, and the rows that
 ## carry no news begin faded.
@@ -1116,7 +1274,7 @@ func _finish_rows(hp_ratio: float, bat_ratio: float) -> void:
 	bat_val.visible = bat_ratio <= _BAT_LOW
 	stam_val.visible = false
 	_hp_hurt = hp_ratio < 0.999
-	_FADE.settle([$TopLeft/Stam, noise_caption, get_node_or_null("TopLeft/NoiseT"), noise_fill, vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill])
+	_FADE.settle([$TopLeft/Stam, noise_caption, get_node_or_null("TopLeft/NoiseT"), noise_fill, vis_caption, _vis_gauge])
 	if not _hp_hurt:
 		_FADE.settle([$TopLeft/HP])
 	_FADE.settle(_combat_items(), 0.0, "self_modulate:a")
@@ -1135,25 +1293,22 @@ func _setup_number_fonts() -> void:
 
 func _apply_text_outlines() -> void:
 	var outline_col := Color(0.0235294, 0.0588235, 0.0745098, 1.0)
-	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
 	for lbl in [hp_val, stam_val, bat_val, prompt, notice]:
 		if lbl:
 			lbl.add_theme_color_override("font_outline_color", outline_col)
 			lbl.add_theme_constant_override("outline_size", 2)
-			lbl.add_theme_color_override("font_shadow_color", shadow_col)
-			lbl.add_theme_constant_override("shadow_offset_x", 1)
-			lbl.add_theme_constant_override("shadow_offset_y", 1)
-	_outline_recursive(self, outline_col, shadow_col)
+	_outline_recursive(self, outline_col)
 
-func _outline_recursive(node: Node, oc: Color, sc: Color) -> void:
+## Every label used to carry a font shadow next to its outline. The shadow is a
+## second draw pass per label, and the HUD shows a dozen of them: the hard
+## outline alone separates the text from a lit road, so the soft drop shadow
+## went away with the draw call it cost.
+func _outline_recursive(node: Node, oc: Color) -> void:
 	if node is Label:
 		node.add_theme_color_override("font_outline_color", oc)
 		node.add_theme_constant_override("outline_size", 4 if node == notice or node == prompt else 2)  # the two lines that float over a lit road get the outline of the toast (S26)
-		node.add_theme_color_override("font_shadow_color", sc)
-		node.add_theme_constant_override("shadow_offset_x", 1)
-		node.add_theme_constant_override("shadow_offset_y", 1)
 	for c in node.get_children():
-		_outline_recursive(c, oc, sc)
+		_outline_recursive(c, oc)
 
 ## GDD.md:213 (S03): noise indicator is an ember-vignette pulse at the
 ## screen edge, not a number. Reuses the same sin-pulse idiom the low-
@@ -1169,7 +1324,21 @@ var _vignette_player: Node = null
 var _noise_reduce_flash_cache: bool = false
 var _noise_reduce_flash_t: float = 0.0
 
+## The progression map is its own CanvasLayer and opens without UIManager, so
+## the normal blocking-screen signal never fires. Isolate HUD on its real state.
+func _sync_map_isolation() -> void:
+	var m: Node = get_tree().root.get_node_or_null("Main3D/Wave2ProgressionMap")
+	if m == null or not m.has_method("is_full_map_open"):
+		return
+	var open_now: bool = bool(m.call("is_full_map_open"))
+	if open_now == _map_isolated:
+		return
+	_map_isolated = open_now
+	_on_hud_visibility(not open_now)
+
+
 func _process(delta: float) -> void:
+	_sync_map_isolation()
 	if _bat < 0.25:
 		var pulse: float = sin(Time.get_ticks_msec() * 0.0095) * 0.5 + 0.5
 		bat_fill.self_modulate = Color.WHITE.lerp(Color(0.752941, 0.223529, 0.168627), pulse)
@@ -2071,8 +2240,18 @@ func _apply_slot_bindings() -> void:
 			continue
 		for child in icon_parent.get_children():
 			child.queue_free()
-		item_icons.draw_icon(icon_parent, _slot_items[i], 32.0)
-		var special: bool = _slot_items[i] == &"flashlight"
+		var item_id: StringName = _slot_items[i]
+		# Unslop: item_icons' .png fallback paints an MS-Paint red cross for
+		# medkit and a blocky flashlight. Draw the theme's vector kit instead.
+		if item_id == &"medkit" or item_id == &"flashlight":
+			var vector := _VectorSlotIcon.new()
+			vector.kind = item_id
+			vector.size = Vector2(48.0, 48.0)
+			vector.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			icon_parent.add_child(vector)
+		else:
+			item_icons.draw_icon(icon_parent, item_id, 32.0)
+		var special: bool = item_id == &"flashlight"
 		var border := slot.get_node_or_null("Border")
 		if border is ColorRect:
 			(border as ColorRect).color = _SLOT_SPECIAL_COLOR if special else _SLOT_FALLBACK_COLOR

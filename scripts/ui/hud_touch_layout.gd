@@ -5,8 +5,11 @@ const EDGE: float = 48.0
 const GAP: float = 12.0
 const SIDE_BUTTONS: Array[String] = ["BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel", "BtnInventory", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnWorkbench"]
 
+## QA override: TLS_FORCE_MOBILE_TOUCH=1 forces the phone HUD in a desktop
+## window, so the 1600x720 touch audit can exercise the real arc layout.
 static func is_mobile() -> bool:
-	return OS.has_feature("mobile") or OS.has_feature("android")
+	return OS.has_feature("mobile") or OS.has_feature("android") \
+		or OS.get_environment("TLS_FORCE_MOBILE_TOUCH") == "1"
 
 static func pixel_ratio(viewport: Viewport) -> float:
 	var window := viewport.get_window()
