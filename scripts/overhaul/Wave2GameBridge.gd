@@ -369,9 +369,9 @@ func _configure_map() -> void:
 					rects.append(r)
 	var half := DistrictArchitect11.half_size(DistrictArchitect11.blueprint(_district_id))
 	for room: Dictionary in _root.get_meta("district_rooms", []):
-		var at := (_root.to_local(room.root.global_position))
-		var size: Vector2 = room.footprint_size
-		rects.append(Rect2(Vector2(at.x, at.z) - size * 0.5, size))
+		var bounds: AABB = room.aabb
+		rects.append(Rect2(Vector2(bounds.position.x, bounds.position.z),
+			Vector2(bounds.size.x, bounds.size.z)))
 	_map.call("configure_district", _index, -half, half,
 		rects, Vector2(GATE_POS.x, GATE_POS.z), true)
 	var flow := get_node_or_null("/root/Wave2Flow")

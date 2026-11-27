@@ -121,7 +121,9 @@ func _apply_cinematic_night() -> void:
 	_env.adjustment_contrast = 1.01 if restored else 1.15
 	_env.adjustment_saturation = 1.05
 	if is_inside_tree():
-		_de_mud_grade(_find_postfx_overlay())
+		var overlay := _find_postfx_overlay()
+		if overlay != null:
+			overlay.set_shadow_toe(_lighting_stage < DistrictData.Stage.STREETS)
 
 ## The menu-canon grade blended 46% of a near-black tint over the frame and added a
 ## 0.22 vignette: flat gray mud that crushed the street's dark end. Keep the split tone
@@ -351,11 +353,10 @@ func _apply_lut(district_id: StringName) -> void:
 	if _env == null:
 		return
 	var lut_path := "res://assets/textures/luts/lut_%s.webp" % String(district_id)
-	if ResourceLoader.exists(lut_path):
-		_env.adjustment_enabled = true
-		_env.adjustment_color_correction = load(lut_path)
-	else:
-		_env.adjustment_enabled = false
+	var overlay := _find_postfx_overlay()
+	if overlay != null:
+		var palette := load(lut_path) as Texture2D if ResourceLoader.exists(lut_path) else null
+		overlay.set_district_lut(palette)
 
 ## 2026-09-13 FINALE merge: cinematic post-fx presets per district
 ## (assets/textures/postfx/README.md). Bloom lands on this WorldEnvironment

@@ -238,6 +238,17 @@ func _build_grain() -> void:
 	mat.shader = _grain_shader()
 	_grain.material = mat
 
+func set_shadow_toe(unpowered: bool) -> void:
+	if _grade != null:
+		(_grade.material as ShaderMaterial).set_shader_parameter("shadow_toe", 0.50 if unpowered else 0.65)
+
+func set_district_lut(palette: Texture2D) -> void:
+	if _grade == null:
+		return
+	var material := _grade.material as ShaderMaterial
+	material.set_shader_parameter("district_lut", palette)
+	material.set_shader_parameter("lut_strength", 0.24 if palette != null else 0.0)
+
 func _build_craft_grade() -> void:
 	var canvas := CanvasLayer.new()
 	canvas.layer = 5

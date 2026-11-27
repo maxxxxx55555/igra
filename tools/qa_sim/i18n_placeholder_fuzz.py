@@ -21,7 +21,8 @@ LOCALES = ["en", "ru"]
 SCRIPT = {"ru": r"[Ѐ-ӿ]"}
 SPEC = re.compile(r"%[-+0#]*\d*(?:\.\d+)?[sdifxXc]|\{\w+\}")
 SPACE_FLAG = re.compile(r"%[ ]\w")
-LATIN_OK = ["SETTINGS_LANG_EN", "boot_title", "VSync", "INV_ITEM_WEIGHT", "NG_PLUS_LABEL", "STATS_METERS"]
+# The wordmark is the same in both locales.
+LATIN_OK = ["GAME_TITLE", "menu_title", "SETTINGS_LANG_EN", "boot_title", "VSync", "INV_ITEM_WEIGHT", "NG_PLUS_LABEL", "STATS_METERS"]
 GLOSSARY = ROOT / "data" / "i18n_glossary.json"
 # term -> the key whose value says it, in all 13 locales
 TERMS = {
@@ -131,7 +132,7 @@ def main(argv):
     calls = code_calls()
     stored = json.loads(GLOSSARY.read_text(encoding="utf-8")) if GLOSSARY.exists() else {}
     if "--write-glossary" in argv:
-        GLOSSARY.write_text(json.dumps(glossary(data), ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        GLOSSARY.write_text(json.dumps(glossary(data), ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
         stored = json.loads(GLOSSARY.read_text(encoding="utf-8"))
     allowed = {"latin_ok": stored.get("latin_ok", []), "cognates": stored.get("cognates", {})}
     bad = findings(data, calls, allowed)

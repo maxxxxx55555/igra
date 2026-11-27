@@ -4,6 +4,9 @@
   "English": [
    "ru"
   ],
+  "LAST STREETLIGHT": [
+   "ru"
+  ],
   "Last Streetlight": [
    "ru"
   ],
@@ -12,6 +15,8 @@
   ]
  },
  "latin_ok": [
+  "GAME_TITLE",
+  "menu_title",
   "SETTINGS_LANG_EN",
   "boot_title",
   "VSync",

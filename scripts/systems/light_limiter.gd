@@ -12,6 +12,7 @@ var _hidden: Dictionary = {}  # instance id -> true: the lights this limiter has
 
 func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)
+	EventBus.district_stage_changed.connect(func(_id: StringName, _stage: int) -> void: _update_lights.call_deferred())
 
 func _on_node_added(node: Node) -> void:
 	if node is Light3D:

@@ -20,7 +20,7 @@ copy* changed only where the claim audit required it.
 ## Title
 
 - **EN:** Last Streetlight
-- **RU:** Последний фонарь
+- **RU:** Last Streetlight
 
 ## Tagline (quotable — trailers, Shorts, press-kit, socials)
 

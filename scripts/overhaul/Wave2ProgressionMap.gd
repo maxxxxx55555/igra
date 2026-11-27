@@ -668,8 +668,9 @@ func _draw_marks(layer: Control, is_mini: bool) -> void:
 		var hw: float = 3.0 if is_mini else 6.0
 		layer.draw_line(gp - Vector2(hw, 0.0), gp + Vector2(hw, 0.0), COL_BRASS, 2.0, true)
 
-	UnslopVisualTheme.draw_corner_ticks(layer, rect, 7.0, COL_BRASS)
-	layer.draw_rect(rect, COL_BRASS * Color(1.0, 1.0, 1.0, 0.45), false, 1.0)
+	if not is_mini:
+		UnslopVisualTheme.draw_corner_ticks(layer, rect, 7.0, COL_BRASS)
+		layer.draw_rect(rect, COL_BRASS * Color(1.0, 1.0, 1.0, 0.45), false, 1.0)
 
 
 ## A ring as the flat point pairs draw_multiline expects: every edge of the

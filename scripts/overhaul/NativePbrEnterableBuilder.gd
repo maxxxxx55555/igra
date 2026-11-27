@@ -222,12 +222,13 @@ static func build(
 		"doorway_world": xf * Vector3(0.0, 0.18, hd + 1.15),
 		"interior_center": xf * Vector3(0.0, 0.18, 0.15),
 		"loot_points": loot_world,
+		"footprint_size": Vector2(w, d),
 		"aabb": root.transform * AABB(Vector3(-hw - 0.20, 0.0, -hd - 0.20), Vector3(w + 0.40, ROOM_H + 0.6, d + 0.40)),
 	}
 
 
 static func _update_fixture(fixture: OmniLight3D, stage: int) -> void:
-	fixture.light_energy = 3.4 if stage == DistrictData.Stage.FULL else 0.0
+	fixture.light_energy = 1.75 if stage == DistrictData.Stage.FULL else 0.0
 	fixture.visible = fixture.light_energy > 0.0
 
 

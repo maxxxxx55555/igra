@@ -193,7 +193,9 @@ static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 		mesh.mesh = data[0].commit()
 		mesh.material_override = data[1]
 		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		mesh.layers |= ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER | ShadowAndRestorationRig.MOON_RECEIVER_LAYER
+		mesh.layers |= ShadowAndRestorationRig.LOCAL_RECEIVER_LAYER
+		if float(data[2]) <= 0.0:
+			mesh.layers |= ShadowAndRestorationRig.MOON_RECEIVER_LAYER
 		mesh.visibility_range_end = data[2]
 		data[3].add_child(mesh)
 
