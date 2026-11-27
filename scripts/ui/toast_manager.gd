@@ -98,6 +98,7 @@ func _on_setting_changed(key: String, _value: Variant) -> void:
 
 func _layout_root() -> void:
 	_root.position = UiScale.log_map_row(get_viewport().get_visible_rect().size)
+	_root.position.y = maxf(_root.position.y - 28.0, UiScale.insets(get_viewport().get_visible_rect().size).y + 12.0)
 	_cap_log_height()
 
 ## The open log must stop above the joystick: the column shares the left edge with it, and Button Size grows the

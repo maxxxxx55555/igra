@@ -89,6 +89,7 @@ func _ready() -> void:
 	_moon.light_energy = moon_energy_default
 	_moon.light_color = Color("#536f84")
 	_moon.rotation_degrees = moon_rotation_deg
+	ShadowAndRestorationRig.configure_mobile_shadows(null, _moon)
 	_moon.shadow_enabled = _moon_shadows_enabled(moon_energy_default)
 
 	# Flashlight defaults (set on player scene)
@@ -440,5 +441,4 @@ func _apply_moon_bias(district_id: StringName) -> void:
 func _moon_shadows_enabled(energy: float) -> bool:
 	# On the mobile GL path a town-wide shadow map redraws the facades and
 	# street props a second time. Their contact shadows are already batched.
-	return energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0 \
-		and not OS.has_feature("mobile") and RenderingServer.get_current_rendering_method() != "gl_compatibility"
+	return energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0

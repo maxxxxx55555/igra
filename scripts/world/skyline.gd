@@ -215,7 +215,7 @@ func build(district_id: StringName, _half_extent: float, with_windows: bool) -> 
 	_B10.add_facade_bays(self, district_id, _fronts, _widths)
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1], customs)
 	_add_building_colliders(blocks)
-	_add_detail_batch("FacadeTrim", DETAIL.module(&"slab"), trim, _concrete_material())
+	_add_detail_batch("FacadeTrim", DETAIL.module(&"slab"), trim, DETAIL.weathered(Color("#313739")))
 	_add_detail_batch("WindowSills", DETAIL.module(&"slab"), sills, _concrete_material())
 	var pipe_mesh := CylinderMesh.new()
 	pipe_mesh.top_radius = 0.055

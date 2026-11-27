@@ -1,7 +1,7 @@
 class_name SeamlessEnterableBuilding
 extends RefCounted
 
-## Zero-Z-Fighting Enterable Building Builder for The Last Streetlight.
+## Zero-Z-Fighting Enterable Building Builder for Last Streetlight.
 ## Fixes all 3 visual defects seen in V4:
 ##  1) No coplanar faces / no overlapping textures (every joint inset by exact thickness/margin).
 ##  2) No clipping into existing street buildings or road markings (strict AABB lot check).
@@ -14,13 +14,13 @@ const DOOR_W: float = 1.68
 const DOOR_H: float = 2.42
 const ROOM_H: float = 3.40
 const MARGIN_EPS: float = 0.015
-const CULL_DIST: float = 40.0
+const CULL_DIST: float = 38.0
 
 
 static func is_lot_clear(origin: Vector3, footprint: Vector2, existing_aabbs: Array, road_half_width: float = 4.6) -> bool:
-	"""Returns true only if the candidate building lot does not overlap existing buildings or road centerlines."""
-	var half_x: float = footprint.x * 0.5 + 0.85
-	var half_z: float = footprint.y * 0.5 + 0.85
+	# Check the finished footprint plus clearance against all reserved lots.
+	var half_x: float = footprint.x * 0.5 + 0.32
+	var half_z: float = footprint.y * 0.5 + 0.48
 	# Reject lots overlapping primary X=0 or Z=0 road stripes
 	if absf(origin.x) < (road_half_width + half_x * 0.55) and absf(origin.z) < (road_half_width + half_z * 0.55):
 		return false
@@ -56,17 +56,17 @@ static func build(
 	parent.add_child(root)
 
 	# Cohesive dark slate/charcoal materials (no bright chalk gray, no flat beige plastic)
-	var ext_wall_mat: Material = _make_pbr_mat(pbr_shader, Color(0.082, 0.110, 0.132), Color(0.028, 0.039, 0.048), 0.82, 0.06, origin.y, 0.0)
-	var int_wall_mat: Material = _make_pbr_mat(pbr_shader, Color(0.115, 0.125, 0.128), Color(0.040, 0.046, 0.048), 0.86, 0.02, origin.y + 0.14, 1.0)
-	var plinth_mat: Material = _make_pbr_mat(pbr_shader, Color(0.048, 0.060, 0.068), Color(0.020, 0.026, 0.030), 0.72, 0.12, origin.y, 0.0)
+	var ext_wall_mat: Material = _make_pbr_mat(pbr_shader, Color(0.082, 0.110, 0.132), Color(0.028, 0.039, 0.048), 0.82, 0.06, origin.y, 1.0)
+	
+	var plinth_mat: Material = _make_pbr_mat(pbr_shader, Color(0.048, 0.060, 0.068), Color(0.020, 0.026, 0.030), 0.72, 0.12, origin.y, 1.0)
 	var floor_mat: Material = _make_pbr_mat(pbr_shader, Color(0.068, 0.076, 0.082), Color(0.025, 0.030, 0.034), 0.68, 0.08, origin.y + 0.14, 0.0)
 	var wood_mat: Material = _make_pbr_mat(pbr_shader, Color(0.135, 0.098, 0.068), Color(0.048, 0.034, 0.024), 0.78, 0.04, origin.y + 0.14, 0.0)
 	var metal_mat: Material = _make_pbr_mat(pbr_shader, Color(0.095, 0.108, 0.118), Color(0.035, 0.040, 0.044), 0.56, 0.42, origin.y + 0.14, 0.0)
 
 	# 1. Raised concrete floor slab (strictly above asphalt y=0 to kill road z-fighting)
-	_solid_box(root, "FloorSlab", Vector3(0.0, 0.08, 0.0), Vector3(w - 0.04, 0.16, d - 0.04), floor_mat, 0.0, true)
+	_solid_box(root, "FloorSlab", Vector3(0.0, -0.074, 0.0), Vector3(w - 0.04, 0.16, d - 0.04), floor_mat, 0.0, true)
 	# Entry threshold apron (smooth beveled step from street y=0.02 up to y=0.14)
-	_solid_box(root, "EntryStep", Vector3(0.0, 0.045, d * 0.5 + 0.24), Vector3(DOOR_W + 0.52, 0.09, 0.46), plinth_mat, CULL_DIST, true)
+	_visual_box(root, "EntryApron", Vector3(0.0, 0.003, d * 0.5 + 0.24), Vector3(DOOR_W + 0.52, 0.012, 0.46), plinth_mat, CULL_DIST, false)
 
 	# 2. Ceiling & roof parapet cornice (protrudes cleanly, zero coplanar overlap with walls)
 	_solid_box(root, "CeilingSlab", Vector3(0.0, ROOM_H + 0.11, 0.0), Vector3(w + 0.18, 0.22, d + 0.18), plinth_mat, 0.0, true)
@@ -108,7 +108,7 @@ static func build(
 	bulb_mat.albedo_color = Color(0.92, 0.76, 0.42, 1.0)
 	bulb_mat.emission_enabled = true
 	bulb_mat.emission = Color(0.83, 0.64, 0.29, 1.0)
-	bulb_mat.emission_energy_multiplier = 1.25
+	bulb_mat.emission_energy_multiplier = 0.24
 	_visual_box(root, "PorchLampBulb", Vector3(0.0, DOOR_H + 0.14, half_d + 0.24), Vector3(0.22, 0.06, 0.14), bulb_mat, CULL_DIST, false)
 	_visual_box(root, "CeilingBulb", Vector3(0.0, ROOM_H - 0.06, -0.35), Vector3(0.42, 0.06, 0.16), bulb_mat, CULL_DIST, false)
 
@@ -130,7 +130,7 @@ static func build(
 	loot_local.append(rack_pos + Vector3(-0.35, 0.96, 0.0))
 
 	# Low wooden crate + metal locker for stealth cover without blocking the camera
-	_solid_box(root, "CrateCover", Vector3(0.45, 0.16 + 0.42, 0.55), Vector3(0.88, 0.84, 0.82), wood_mat, CULL_DIST, true)
+	_solid_box(root, "CrateCover", Vector3(1.58, 0.16 + 0.42, 0.55), Vector3(0.88, 0.84, 0.82), wood_mat, CULL_DIST, true)
 
 	# 8. Interior Zone Area3D
 	var area: Area3D = Area3D.new()
@@ -138,12 +138,22 @@ static func build(
 	area.set_meta("theme_id", theme_id)
 	area.set_meta("is_interior", true)
 	var sh_node: CollisionShape3D = CollisionShape3D.new()
+	area.collision_layer = 0
+	area.collision_mask = 1
+	area.add_to_group("district_interiors")
+	sh_node.name = "CollisionShape3D"
 	var sh_box: BoxShape3D = BoxShape3D.new()
 	sh_box.size = Vector3(in_w - 0.2, ROOM_H - 0.3, in_d - 0.2)
 	sh_node.shape = sh_box
 	sh_node.position = Vector3(0.0, 0.16 + (ROOM_H - 0.3) * 0.5, 0.0)
 	area.add_child(sh_node)
 	root.add_child(area)
+	area.body_entered.connect(func(body: Node3D) -> void:
+		if body.is_in_group("player"):
+			body.set_meta("inside_district_building", true))
+	area.body_exited.connect(func(body: Node3D) -> void:
+		if body.is_in_group("player"):
+			body.set_meta("inside_district_building", false))
 
 	var xf: Transform3D = root.global_transform
 	var loot_world: Array[Vector3] = []
@@ -156,6 +166,7 @@ static func build(
 		"doorway_world": xf * Vector3(0.0, 0.16, half_d + 1.05),
 		"interior_center": xf * Vector3(0.0, 0.16, 0.15),
 		"loot_points": loot_world,
+		"footprint_size": Vector2(w, d),
 		"aabb": AABB(origin - Vector3(half_w, 0.0, half_d), Vector3(w, ROOM_H + 0.5, d)),
 	}
 

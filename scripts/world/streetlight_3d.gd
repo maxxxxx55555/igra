@@ -138,6 +138,12 @@ func _apply_stage(stage: int) -> void:
 	_energy_scale = 0.55 if (partial_lit and stage < 2 and not force_on) else 1.0
 	_update_light(stage)
 
+func set_restoration_preview(stage: int, powered: bool) -> void:
+	_on = powered or force_on
+	_energy_scale = 0.55 if stage == 1 else 1.0
+	_update_light(stage)
+
+
 func _in_partial_set() -> bool:
 	var cell := Vector2i(int(round(global_position.x)), int(round(global_position.z)))
 	return abs(hash(cell)) % 5 < 2

@@ -9,7 +9,7 @@ extends RefCounted
 ##   Stage 3 (100%): Restored      — 100% warm amber streetlamps + safe exit beacon.
 
 
-static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: DirectionalLight3D, primary_lamp: OmniLight3D = null) -> void:
+static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: DirectionalLight3D, primary_lamp: Light3D = null) -> void:
 	if flashlight != null and is_instance_valid(flashlight):
 		flashlight.shadow_enabled = true
 		flashlight.shadow_bias = 0.035
@@ -22,7 +22,7 @@ static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: Directio
 		key_moon.shadow_normal_bias = 1.6
 		key_moon.shadow_blur = 2.0
 		key_moon.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
-		key_moon.directional_shadow_max_distance = 58.0
+		key_moon.directional_shadow_max_distance = 24.0
 		key_moon.shadow_opacity = 0.74
 	if primary_lamp != null and is_instance_valid(primary_lamp):
 		primary_lamp.shadow_enabled = true
@@ -33,16 +33,16 @@ static func configure_mobile_shadows(flashlight: SpotLight3D, key_moon: Directio
 
 static func apply_restoration_stage(stage_0_to_3: int, streetlamps: Array, world_env: WorldEnvironment) -> float:
 	var s: int = clampi(stage_0_to_3, 0, 3)
-	var lit_fraction: float = [0.18, 0.42, 0.76, 1.0][s]
+	var lit_fraction: float = [0.0, 0.42, 0.76, 1.0][s]
 	var total: int = streetlamps.size()
-	var active_count: int = maxi(1, int(roundf(float(total) * lit_fraction))) if total > 0 else 0
+	var active_count: int = int(roundf(float(total) * lit_fraction)) if total > 0 else 0
 	for i in range(total):
 		var lamp: Node = streetlamps[i]
 		if not is_instance_valid(lamp):
 			continue
 		var on: bool = (i < active_count)
-		if lamp.has_method("set_lamp_powered"):
-			lamp.call("set_lamp_powered", on)
+		if lamp.has_method("set_restoration_preview"):
+			lamp.call("set_restoration_preview", s, on)
 		elif lamp is Light3D:
 			(lamp as Light3D).visible = on
 	if world_env != null and world_env.environment != null:

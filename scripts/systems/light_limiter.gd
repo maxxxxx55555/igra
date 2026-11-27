@@ -7,6 +7,7 @@ const GROUP := &"budgeted_world_lights"
 const LIT_MIN := 0.001
 
 var _timer: float = 0.0
+var _shadow_lamp: Light3D
 var _hidden: Dictionary = {}  # instance id -> true: the lights this limiter has hidden
 
 func _ready() -> void:
@@ -54,13 +55,24 @@ func _update_lights() -> void:
 	lit.sort_custom(func(a: Node3D, b: Node3D) -> bool:
 		return a.global_position.distance_squared_to(cam_pos) < b.global_position.distance_squared_to(cam_pos)
 	)
+	var nearest: Light3D
 	for i in lit.size():
 		var light: Light3D = lit[i]
 		if i < MAX_VISIBLE - reserved:
+			if nearest == null and light is SpotLight3D and light.get_parent().is_in_group("streetlights"):
+				nearest = light
 			if _hidden.erase(light.get_instance_id()):
 				light.visible = true
 		else:
 			_hide(light)
+	if int(SettingsManager.get_setting("shadows", 2)) == 0:
+		nearest = null
+	if nearest != _shadow_lamp:
+		if is_instance_valid(_shadow_lamp):
+			_shadow_lamp.shadow_enabled = false
+		_shadow_lamp = nearest
+		if is_instance_valid(nearest):
+			ShadowAndRestorationRig.configure_mobile_shadows(null, null, nearest)
 	for id: int in _hidden.keys():
 		if not seen.has(id):
 			_hidden.erase(id)

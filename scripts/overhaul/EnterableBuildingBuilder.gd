@@ -180,7 +180,7 @@ static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 		var mesh := MeshInstance3D.new()
 		mesh.mesh = data[0].commit()
 		mesh.material_override = data[1]
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.visibility_range_end = data[2]
 		data[3].add_child(mesh)
 

@@ -161,6 +161,9 @@ func _build_content() -> void:
 		_on_gate_unlocked(_index)
 	_needs_map = true
 	_configure_map()
+	# Restore a saved partial relay collection once the lamp nodes exist.
+	var progress := Wave2Flow.to_dict()
+	_on_parts_changed(int(progress.get("parts", 0)), 6)
 
 ## Relays, the fusebox and the gate are small emissive props: their shadows
 ## never read at night, so keep them out of the flashlight's shadow pass.
@@ -273,8 +276,20 @@ func _on_flow_state(_state: StringName, _idx: int) -> void:
 	if is_instance_valid(_map):
 		_map.call("set_progression_state", _index, _completed_indices(), Wave2Flow.get_step_number(), Wave2Flow.is_gate_unlocked())
 
-func _on_parts_changed(_have: int, _need: int) -> void:
+func _on_parts_changed(have: int, _need: int) -> void:
 	_refresh_objective()
+	if not is_instance_valid(_root):
+		return
+	var stage := maxi(PowerGrid.get_stage(_district_id), mini(have / 2, 2))
+	var lamps: Array[Node] = []
+	for lamp in get_tree().get_nodes_in_group("streetlights"):
+		if _root.is_ancestor_of(lamp):
+			lamps.append(lamp)
+	ShadowAndRestorationRig.apply_restoration_stage(stage, lamps, null)
+	var props := _root.get_node_or_null("Props")
+	if props != null:
+		props.call("_apply_lamp_stage", stage)
+	_on_streetlights(_district_id)
 
 func _on_fusebox_repaired(_idx: int) -> void:
 	var tension := get_node_or_null("/root/HorrorTension")

@@ -321,7 +321,8 @@ func _ready() -> void:
 
 	if OS.has_feature("mobile") or RenderingServer.get_current_rendering_method() == "gl_compatibility":
 		enable_shadows = false
-	flashlight.shadow_enabled = enable_shadows
+	ShadowAndRestorationRig.configure_mobile_shadows(flashlight, null)
+	flashlight.shadow_enabled = enable_shadows or int(SettingsManager.get_setting("shadows", 2)) > 0
 	dust.emitting = enable_dust
 	pivot.rotation.y = 0.0
 	_setup_cone(cone_force_off)

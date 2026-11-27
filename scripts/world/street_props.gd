@@ -140,7 +140,8 @@ func build() -> void:
 	_low_tier = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
 	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
 	_district_id = district_id
-	_build_interiors(DistrictArchitect11.blueprint(district_id))
+	_build_skyline(sb, district_id)
+	_build_interiors(DistrictArchitect11.blueprint(district_id), sb)
 	for road in sb.roads:
 		var distances := pole_distances(float(road.get("length", 0.0)))
 		for s in distances.size():
@@ -156,7 +157,6 @@ func build() -> void:
 	_build_streetlight_multimesh()
 	_build_prop_multimesh()
 	add_child(preload("res://scripts/effects/dust_motes.gd").new())
-	_build_skyline(sb, district_id)
 	var dressing: Node3D = preload("res://scripts/world/district_dressing.gd").new()
 	dressing.name = "DistrictDressing"
 	add_child(dressing)
@@ -177,23 +177,33 @@ func _build_skyline(sb: Node, district_id: StringName) -> void:
 	if floating_windows != null and not _low_tier:
 		floating_windows.visible = false
 
-func _build_interiors(plan: Dictionary) -> void:
+func _build_interiors(plan: Dictionary, streets: Node) -> void:
 	var half := DistrictArchitect11.half_size(plan)
 	var rooms: Array[Dictionary] = []
+	var occupied: Array[AABB] = []
 	_room_keepouts.clear()
-	var wall := DETAIL.weathered(Color("#485054"))
-	var floor_mat := DETAIL.weathered(Color("#323638"))
-	var prop := DETAIL.weathered(Color("#4a3828"))
+	var skyline: Node = get_node("Skyline")
+	var footprint := Vector2(7.2, 5.6)
+	for rect: Rect2 in skyline.get_footprints() + streets.road_footprints():
+		occupied.append(AABB(Vector3(rect.position.x, -1, rect.position.y), Vector3(rect.size.x, 9, rect.size.y)))
+	var shader := preload("res://shaders/overhaul/grounded_contact_ao_pbr.gdshader")
 	for i in int(plan.enterable_count):
-		var north := i % 2 == 0
-		var side := -1.0 if north else 1.0
+		var side := -1.0 if i % 2 == 0 else 1.0
 		var x := half.x * (-0.24 if i < 2 else 0.24)
 		var z := side * (half.y - 3.9)
-		var info := EnterableBuildingBuilder.build_enterable_room(self, str(i + 1),
-			Vector3(x, 0, z), 0.0 if north else PI, 7.2, 5.6,
-			plan.enterable_themes[i], wall, floor_mat, prop)
-		rooms.append(info)
-		_room_keepouts.append(Rect2(x - 3.6, z - 2.8, 7.2, 5.6).grow(0.5))
+		for shift: float in [0.0, -4.0, 4.0, -8.0, 8.0, -12.0, 12.0]:
+			var origin := Vector3(x + shift, 0, z)
+			if absf(origin.x) + footprint.x * 0.5 + 0.5 >= half.x:
+				continue
+			if not SeamlessEnterableBuilding.is_lot_clear(origin, footprint, occupied):
+				continue
+			var info := SeamlessEnterableBuilding.build(self, str(i + 1), origin, 0.0 if side < 0 else PI,
+				footprint.x, footprint.y, plan.enterable_themes[i], shader)
+			rooms.append(info)
+			var bounds: AABB = info.aabb
+			occupied.append(bounds)
+			_room_keepouts.append(Rect2(bounds.position.x, bounds.position.z, footprint.x, footprint.y).grow(0.65))
+			break
 	get_parent().set_meta("district_rooms", rooms)
 	EnterableBuildingBuilder.batch_visuals(self, rooms)
 
