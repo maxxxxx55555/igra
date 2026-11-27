@@ -21,12 +21,24 @@ def read(rel):
     return (ROOT / rel).read_text(encoding="utf-8").replace("\r\n", "\n")
 
 
-def png_size(rel):
+def image_size(rel):
     p = ROOT / rel
     if not p.is_file():
         return None
-    d = p.read_bytes()[:24]
-    return struct.unpack(">II", d[16:24]) if d[:8] == b"\x89PNG\r\n\x1a\n" else None
+    with p.open("rb") as fh:
+        d = fh.read(30)
+    if d.startswith(b"\x89PNG\r\n\x1a\n") and len(d) >= 24:
+        return struct.unpack(">II", d[16:24])
+    if len(d) < 25 or d[:4] != b"RIFF" or d[8:12] != b"WEBP":
+        return None
+    if d[12:16] == b"VP8X" and len(d) == 30:
+        return (1 + int.from_bytes(d[24:27], "little"), 1 + int.from_bytes(d[27:30], "little"))
+    if d[12:16] == b"VP8L" and d[20] == 0x2f:
+        bits = int.from_bytes(d[21:25], "little")
+        return (1 + (bits & 0x3fff), 1 + ((bits >> 14) & 0x3fff))
+    if d[12:16] == b"VP8 " and len(d) == 30 and d[23:26] == b"\x9d\x01\x2a":
+        return tuple(value & 0x3fff for value in struct.unpack("<HH", d[26:30]))
+    return None
 
 
 def lit_beds(text):
@@ -155,9 +167,9 @@ def render():
     a("| District | Master (1024 x 1536) | 512 twin | In game |")
     a("|---|---|---|---|")
     for d in DISTRICTS:
-        m = png_size("content/cards/district_%s.png" % d)
-        t = png_size("content/cards/twins/card_%s_512.png" % d)
-        g = png_size("assets/textures/cards/card_%s_512.png" % d)
+        m = image_size("content/cards/district_%s.png" % d)
+        t = image_size("content/cards/twins/card_%s_512.png" % d)
+        g = image_size("assets/textures/cards/card_%s_512.webp" % d)
         a("| `%s` | %s | %s | %s |" % (d, size(m), size(t), size(g)))
     a("")
     a("### 3.2 Settings, seeds and what to ask for")
@@ -211,7 +223,7 @@ def render():
     a("## 4. Integration checklist for the final pass")
     a("")
     a("1. **Licence rows first** (`docs/ASSET_LICENSES.md`), one per accepted file. 2. **Cards:** grade (3.4), then `python scripts/make_locked_cards.py` for the `_locked_512` variants, `python scripts/make_card_contact_sheet.py`, and the audit of 3.4;")
-    a("   the twins replace `assets/textures/cards/card_<district>_512.png`. 3. **Music:** section 2.4, files at the exact paths; a track the game does not load yet needs the wiring named in `docs/MUSIC_SPEC.md` for its row, which is a code change")
+    a("   the twins replace `assets/textures/cards/card_<district>_512.webp`. 3. **Music:** section 2.4, files at the exact paths; a track the game does not load yet needs the wiring named in `docs/MUSIC_SPEC.md` for its row, which is a code change")
     a("   with its own AF2 pair. 4. **Gates:** `bash tools/check.sh --static` (the audio and card gates, `gitignore_check`, `secret_scan`), `python tools/af5_check.py`. 5. **Frames:** a card shows in the collection screen only: re-shoot the")
     a("   frames of the collection view and read them (`docs/stills/`), or declare the reach in `tools/qa_sim/af3_f4_scope.tsv` if a runtime path changed. 6. **One launch:** `bash tools/check.sh --all`, then the 3-seed bot if a track was wired")
     a("   (`tools/qa_sim/autoplay_bot`). 7. **Bundle:** one export, then `python tools/qa_sim/aab_check.py build/tls.aab` (the bundle scan, `integrity` and `refs`), `version/code` raised.")
@@ -227,7 +239,7 @@ def render():
     a("| Remaining music | the %d targets of 2.3 and the upgrade of the 11 beds of 2.2 | which of them are worth a take | section 2.4 and the licence ledger |" % missing)
     a("| Seven district card photographs | graded generated cards are in the game (3.1), with licence rows; the open point is a replacement if better art exists | replace or keep | section 3 and 4 |")
     a("")
-    return "\n".join(L) + "\n"
+    return "\n".join(L).rstrip() + "\n"
 
 
 def demo():

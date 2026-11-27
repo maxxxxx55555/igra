@@ -12,12 +12,8 @@ const COL_BLOCK: Color = Color("#1c1e1d")
 const COL_ROAD_DIM: Color = Color("#5a4a2a")
 const COL_ROAD_LIT: Color = Color("#c9a24a")
 const COL_AMBER: Color = Color("#d4a94e")
+const COL_PERCENT := Color(0.60, 0.54, 0.42)
 const COL_IVORY: Color = Color("#e6dfd1")
-
-const LEGEND_DISTRICT_RU: String = "Свет — разведано | Контуры — здания | Стрелка — вы (враги и предметы скрыты)"
-const LEGEND_DISTRICT_EN: String = "Light — explored | Outlines — buildings | Arrow — you (enemies & items hidden)"
-const LEGEND_CITY_RU: String = "Янтарь — свет возвращён | Кольцо — текущий район | Тень — закрыто"
-const LEGEND_CITY_EN: String = "Amber — light restored | Ring — current district | Dark — locked"
 
 const COORDS: Array[Vector2] = [
 	Vector2(0.14, 0.22),
@@ -35,10 +31,7 @@ const COORDS: Array[Vector2] = [
 
 
 static func get_legend(is_city_tab: bool) -> String:
-	var is_ru: bool = TranslationServer.get_locale().to_lower().begins_with("ru")
-	if is_city_tab:
-		return LEGEND_CITY_RU if is_ru else LEGEND_CITY_EN
-	return LEGEND_DISTRICT_RU if is_ru else LEGEND_DISTRICT_EN
+	return I18nSync.t("MAP_LEGEND_CITY" if is_city_tab else "MAP_LEGEND_DISTRICT")
 
 
 static func draw_compass_minimap_chrome(canvas: CanvasItem, center: Vector2, radius: float, font: Font) -> void:
@@ -59,59 +52,86 @@ static func draw_city_map(
 	canvas: CanvasItem,
 	rect: Rect2,
 	current_district_1_based: int,
-	cleared_count: int,
+	progress: Array[int],
 	district_names: Array[String],
 	font: Font
 ) -> void:
 	if canvas == null or rect.size.x < 100.0 or rect.size.y < 100.0:
 		return
+
+	# 1. Dark map parchment base
 	canvas.draw_rect(rect, COL_BG, true)
 
-	var river: PackedVector2Array = PackedVector2Array([
-		_pt(rect, 0.48, 0.0), _pt(rect, 0.52, 0.26), _pt(rect, 0.45, 0.54),
-		_pt(rect, 0.53, 0.78), _pt(rect, 0.46, 1.0),
+	# 2. Organic river ribbon winding diagonally through the city
+	var river_pts: PackedVector2Array = PackedVector2Array([
+		_pt(rect, 0.48, 0.035), _pt(rect, 0.52, 0.25), _pt(rect, 0.45, 0.52),
+		_pt(rect, 0.53, 0.78), _pt(rect, 0.46, 0.965),
 	])
-	canvas.draw_polyline(river, COL_PARK, maxf(18.0, rect.size.x * 0.032), true)
-	canvas.draw_circle(_pt(rect, 0.30, 0.46), rect.size.y * 0.11, COL_RIVER)
-	canvas.draw_circle(_pt(rect, 0.68, 0.23), rect.size.y * 0.09, COL_RIVER)
+	canvas.draw_polyline(_round_corners(river_pts), COL_RIVER, maxf(18.0, rect.size.x * 0.032), true)
 
+	# 3. Park green-slate organic blobs
+	canvas.draw_circle(_pt(rect, 0.30, 0.45), rect.size.y * 0.11, COL_PARK)
+	canvas.draw_circle(_pt(rect, 0.68, 0.24), rect.size.y * 0.09, COL_PARK)
+
+	# 4. Subtle city block rectangles along districts
 	for i in range(COORDS.size()):
 		var c: Vector2 = _pt(rect, COORDS[i].x, COORDS[i].y)
-		for b in range(5):
-			var ang: float = float(i * 5 + b) * 1.18
-			var off: Vector2 = Vector2(cos(ang) * 28.0, sin(ang) * 18.0)
+		for b in range(4):
+			var ang: float = float(i * 3 + b) * 1.15
+			var off: Vector2 = Vector2(cos(ang) * 26.0, sin(ang) * 18.0)
 			canvas.draw_rect(Rect2(c + off - Vector2(10.0, 6.0), Vector2(20.0, 12.0)), COL_BLOCK, true)
 
+	# 5. Connecting arterial roads (lit amber between restored districts, dim slate for unlit)
 	for i in range(COORDS.size() - 1):
 		var p0: Vector2 = _pt(rect, COORDS[i].x, COORDS[i].y)
 		var p1: Vector2 = _pt(rect, COORDS[i + 1].x, COORDS[i + 1].y)
-		var mid: Vector2 = (p0 + p1) * 0.5 + Vector2(0.0, 11.0 if (i % 2 == 0) else -11.0)
-		var lit: bool = (i + 1) <= cleared_count
-		canvas.draw_polyline(PackedVector2Array([p0, mid, p1]), COL_ROAD_LIT if lit else Color(COL_ROAD_DIM, 0.55), 2.2 if lit else 1.4, true)
+		var mid: Vector2 = (p0 + p1) * 0.5 + Vector2(0.0, 12.0 if (i % 2 == 0) else -12.0)
+		var is_lit: bool = progress[i] == 100 and progress[i + 1] > 0
+		var road_col: Color = COL_ROAD_LIT if is_lit else COL_ROAD_DIM
+		canvas.draw_polyline(_round_corners(PackedVector2Array([p0, mid, p1])), road_col, 2.2 if is_lit else 1.5, true)
 
+	# 6. District nodes with warm amber glow pools + restoration %
 	for i in range(COORDS.size()):
 		var idx: int = i + 1
 		var c: Vector2 = _pt(rect, COORDS[i].x, COORDS[i].y)
-		var cleared: bool = idx <= cleared_count
-		var cur: bool = idx == current_district_1_based
-		var pct: int = 100 if cleared else (35 if cur else 0)
+		var pct: int = progress[i]
+		var is_cleared: bool = pct == 100
+		var is_cur: bool = idx == current_district_1_based
 
-		if cleared or cur:
-			var r_glow: float = 38.0 if cleared else 28.0
-			canvas.draw_circle(c, r_glow, Color(COL_AMBER, 0.14 if cleared else 0.10))
-			canvas.draw_circle(c, r_glow * 0.55, Color(COL_AMBER, 0.24))
+		if is_cleared or is_cur:
+			var glow_r: float = 34.0 if is_cleared else 26.0
+			canvas.draw_circle(c, glow_r, Color(COL_AMBER.r, COL_AMBER.g, COL_AMBER.b, 0.14 if is_cleared else 0.10))
+			canvas.draw_circle(c, glow_r * 0.58, Color(COL_AMBER.r, COL_AMBER.g, COL_AMBER.b, 0.22))
 
-		var fill: Color = COL_AMBER if cleared else (COL_BLOCK if cur else COL_RIVER)
-		canvas.draw_circle(c, 10.0, fill)
-		canvas.draw_arc(c, 10.0, 0.0, TAU, 24, COL_AMBER if (cleared or cur) else COL_ROAD_DIM, 1.6, true)
-		if cur:
+		var fill_c: Color = COL_AMBER if is_cleared else (Color(0.22, 0.29, 0.34, 1.0) if is_cur else Color(0.09, 0.13, 0.16, 1.0))
+		canvas.draw_circle(c, 10.5, fill_c)
+		canvas.draw_arc(c, 10.5, 0.0, TAU, 24, COL_AMBER if (is_cleared or is_cur) else COL_ROAD_DIM, 1.6, true)
+		if is_cur:
 			canvas.draw_arc(c, 16.0, 0.0, TAU, 28, COL_AMBER, 1.8, true)
 
 		if font != null:
-			var nm: String = district_names[i] if i < district_names.size() else ("D%02d" % idx)
-			canvas.draw_string(font, c + Vector2(-32.0, 24.0), nm, HORIZONTAL_ALIGNMENT_LEFT, 130.0, 11, COL_IVORY)
-			canvas.draw_string(font, c + Vector2(-12.0, 36.0), "%d%%" % pct, HORIZONTAL_ALIGNMENT_LEFT, 48.0, 10, COL_AMBER if pct > 0 else COL_ROAD_DIM)
+			var label: String = district_names[i] if i < district_names.size() else ("D%02d" % idx)
+			var sub: String = "%d%%" % pct
+			var label_width := rect.size.x * 0.22
+			var font_size := 13
+			while font_size > 9 and font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > label_width:
+				font_size -= 1
+			canvas.draw_string(font, c + Vector2(-label_width * 0.5, 26), label,
+				HORIZONTAL_ALIGNMENT_CENTER, label_width, font_size, COL_IVORY)
+			canvas.draw_string(font, c + Vector2(-24, 40), sub,
+				HORIZONTAL_ALIGNMENT_CENTER, 48, 11, COL_AMBER if pct > 0 else COL_PERCENT)
 
 
 static func _pt(r: Rect2, nx: float, ny: float) -> Vector2:
 	return Vector2(r.position.x + r.size.x * nx, r.position.y + r.size.y * ny)
+
+
+static func _round_corners(points: PackedVector2Array) -> PackedVector2Array:
+	for _pass_idx in 3:
+		var refined := PackedVector2Array([points[0]])
+		for i in points.size() - 1:
+			refined.append(points[i].lerp(points[i + 1], 0.24))
+			refined.append(points[i].lerp(points[i + 1], 0.76))
+		refined.append(points[-1])
+		points = refined
+	return points

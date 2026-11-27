@@ -59,6 +59,7 @@ var map_tab_legend_distinct: bool = false
 var map_threat_or_loot_markers: int = 0
 
 # UI nodes
+var _craft_theme: Theme
 var _mini_btn: Button = null
 var _mini_canvas: Control = null
 var _mini_fog: Control = null
@@ -77,7 +78,7 @@ var _legend_lbl: Label = null
 var _info_lbl: Label = null
 var _district_buttons: Array[Button] = []
 
-const CITY_NODE_UV = OrganicCityMapRenderer.DISTRICT_COORDS
+const CITY_NODE_UV = Style3OrganicCityMap.COORDS
 
 
 func _ready() -> void:
@@ -268,20 +269,19 @@ func refresh_localization() -> void:
 	if _close_btn != null:
 		_close_btn.text = I18nSync.t("UI_CLOSE", {})
 	if _legend_lbl != null:
-		_legend_lbl.text = UnslopVisualTheme.get_map_legend(_active_tab == 1)
-	map_tab_legend_distinct = UnslopVisualTheme.get_map_legend(false) != UnslopVisualTheme.get_map_legend(true)
+		_legend_lbl.text = Style3OrganicCityMap.get_legend(_active_tab == 1)
+	map_tab_legend_distinct = Style3OrganicCityMap.get_legend(false) != Style3OrganicCityMap.get_legend(true)
 	_refresh_selected_district_info()
 
 
 func _build_ui() -> void:
+	_craft_theme = CraftThemeBridge.build()
 	# 1. Clickable top-right minimap button (enough width to clear the pause cluster).
 	_mini_btn = Button.new()
 	_mini_btn.name = "ProgressionMinimapButton"
 	_mini_btn.custom_minimum_size = Vector2(190.0, 120.0)
 	_mini_btn.focus_mode = Control.FOCUS_NONE
-	_mini_btn.add_theme_stylebox_override("normal", MinimalNoSlopHud.make_minimap_frame())
-	_mini_btn.add_theme_stylebox_override("hover", MinimalNoSlopHud.make_minimap_frame())
-	_mini_btn.add_theme_stylebox_override("pressed", _make_panel_box(COL_BG_DEEP, COL_AMBER, 3, 6))
+	_mini_btn.theme = _craft_theme
 	_mini_btn.pressed.connect(func() -> void: open_full_map(1))
 	add_child(_mini_btn)
 
@@ -298,6 +298,10 @@ func _build_ui() -> void:
 	_mini_btn.add_child(_mini_canvas)
 	_mini_fog = _make_fog_layer(_mini_canvas)
 	_mini_marks = _make_marks_layer(_mini_canvas, true)
+	_mini_marks.draw.connect(func() -> void:
+		var center := _mini_marks.size * 0.5
+		Style3OrganicCityMap.draw_compass_minimap_chrome(_mini_marks, center,
+			minf(center.x, center.y) - 7.0, _craft_theme.default_font))
 
 	_mini_title = Label.new()
 	_mini_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -333,7 +337,7 @@ func _build_ui() -> void:
 	frame.offset_top = 28.0
 	frame.offset_right = -44.0
 	frame.offset_bottom = -28.0
-	frame.add_theme_stylebox_override("panel", _make_panel_box(COL_BG_DEEP, COL_BRASS, 2, 10))
+	frame.theme = _craft_theme
 	_overlay_root.add_child(frame)
 
 	var vbox: VBoxContainer = VBoxContainer.new()
@@ -457,9 +461,9 @@ func _update_tab_visuals() -> void:
 	if _full_marks != null:
 		_full_marks.visible = not show_city
 	if _tab_city_btn != null:
-		_tab_city_btn.add_theme_stylebox_override("normal", _make_panel_box(COL_BG_DEEP, COL_AMBER if show_city else COL_BRASS, 2 if show_city else 1, 6))
+		_tab_city_btn.add_theme_stylebox_override("normal", _craft_theme.get_stylebox("pressed" if show_city else "normal", "Button"))
 	if _tab_district_btn != null:
-		_tab_district_btn.add_theme_stylebox_override("normal", _make_panel_box(COL_BG_DEEP, COL_AMBER if (not show_city) else COL_BRASS, 2 if (not show_city) else 1, 6))
+		_tab_district_btn.add_theme_stylebox_override("normal", _craft_theme.get_stylebox("normal" if show_city else "pressed", "Button"))
 	_position_city_buttons()
 
 
@@ -708,7 +712,7 @@ func _draw_city_progression_view(canvas: Control, rect: Rect2) -> void:
 		if index == _current_district_idx:
 			stage = maxi(stage, mini(int(float(parts) / 2.0), 2))
 		progress.append([0, 33, 67, 100][clampi(stage, 0, 3)])
-	OrganicCityMapRenderer.draw_organic_city_map(canvas, rect, _current_district_idx + 1,
+	Style3OrganicCityMap.draw_city_map(canvas, rect, _current_district_idx + 1,
 		progress, names, ThemeDB.fallback_font)
 
 
@@ -737,26 +741,4 @@ func _make_action_btn(min_w: float, min_h: float) -> Button:
 	b.focus_mode = Control.FOCUS_NONE
 	b.add_theme_font_size_override("font_size", 15)
 	b.add_theme_color_override("font_color", COL_TEXT_MAIN)
-	b.add_theme_stylebox_override("normal", _make_panel_box(COL_BG_DEEP, COL_BRASS, 1, 6))
-	b.add_theme_stylebox_override("hover", _make_panel_box(COL_BG_DEEP, COL_AMBER, 2, 6))
-	b.add_theme_stylebox_override("pressed", _make_panel_box(COL_BG_DEEP, COL_AMBER, 2, 6))
 	return b
-
-
-func _make_panel_box(bg: Color, border: Color, border_w: int, radius: int) -> StyleBoxFlat:
-	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = bg
-	sb.border_color = border
-	sb.border_width_left = border_w
-	sb.border_width_top = border_w
-	sb.border_width_right = border_w
-	sb.border_width_bottom = border_w
-	sb.corner_radius_top_left = radius
-	sb.corner_radius_top_right = radius
-	sb.corner_radius_bottom_left = radius
-	sb.corner_radius_bottom_right = radius
-	sb.content_margin_left = 10.0
-	sb.content_margin_right = 10.0
-	sb.content_margin_top = 8.0
-	sb.content_margin_bottom = 8.0
-	return sb
