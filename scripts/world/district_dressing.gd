@@ -353,7 +353,8 @@ func _add_fog() -> void:
 		add_child(fog)
 
 func _add_landmark() -> void:
-	_landmark = _LANDMARK.build(_district_id, Vector3(0.0, 0.0, -_LANDMARK.NORTH_M))
+	var half := DistrictArchitect11.half_size(DistrictArchitect11.blueprint(_district_id))
+	_landmark = _LANDMARK.build(_district_id, Vector3(0.0, 0.0, -maxf(_LANDMARK.NORTH_M, half.y + 17.0)))
 	add_child(_landmark)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:

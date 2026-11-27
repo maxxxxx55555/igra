@@ -48,14 +48,13 @@ const DISTRICT_TINTS: Array[Color] = [
 ]
 
 
-static func is_lot_clear(origin: Vector3, footprint: Vector2, existing_aabbs: Array, road_half_width: float = 4.9) -> bool:
-	var hx: float = footprint.x * 0.5 + 1.25
-	var hz: float = footprint.y * 0.5 + 1.25
-	if absf(origin.x) < (road_half_width + hx * 0.62) and absf(origin.z) < (road_half_width + hz * 0.62):
-		return false
-	var cand: AABB = AABB(Vector3(origin.x - hx, -0.5, origin.z - hz), Vector3(hx * 2.0, ROOM_H + 3.0, hz * 2.0))
-	for item in existing_aabbs:
-		if item is AABB and cand.intersects(item as AABB):
+static func is_lot_clear(origin: Vector3, footprint: Vector2, existing_aabbs: Array[AABB]) -> bool:
+	# Include the pilasters and roof edge when reserving the lot.
+	var half := footprint * 0.5 + Vector2(0.32, 0.48)
+	var bounds := AABB(Vector3(origin.x - half.x, -0.5, origin.z - half.y),
+		Vector3(half.x * 2.0, ROOM_H + 1.0, half.y * 2.0))
+	for occupied: AABB in existing_aabbs:
+		if bounds.intersects(occupied):
 			return false
 	return true
 
@@ -92,8 +91,8 @@ static func build(
 
 	_shadow_skirt(root, "GroundContactShadow", Vector3(0.0, 0.018, 0.0), Vector2(w + 2.6, d + 2.6), 0.76)
 
-	_solid_box(root, "WoodFloorSlab", Vector3(0.0, 0.09, 0.0), Vector3(w - 0.06, 0.18, d - 0.06), floor_wood, 0.0, true)
-	_solid_box(root, "StoneEntryStep", Vector3(0.0, 0.05, hd + 0.28), Vector3(DOOR_W + 0.70, 0.10, 0.54), conc_mat, CULL_DIST, true)
+	_solid_box(root, "WoodFloorSlab", Vector3(0.0, -0.084, 0.0), Vector3(w - 0.06, 0.18, d - 0.06), floor_wood, 0.0, true)
+	_visual_box(root, "StoneEntryStep", Vector3(0.0, -0.043, hd + 0.28), Vector3(DOOR_W + 0.70, 0.10, 0.54), conc_mat, CULL_DIST, true)
 
 	var wy: float = 0.18 + (ROOM_H - 0.18) * 0.5
 	var wh: float = ROOM_H - 0.18
@@ -162,29 +161,55 @@ static func build(
 	var loot_local: Array[Vector3] = []
 	var tbl_pos: Vector3 = Vector3(-w * 0.24, 0.18, -d * 0.20)
 	_build_table(root, "WorkTable", tbl_pos, 1.65, 0.78, 0.80, floor_wood, metal_mat)
-	_shadow_skirt(root, "WorkTableShadow", tbl_pos + Vector3(0.0, 0.012, 0.0), Vector2(2.05, 1.15), 0.60)
+	_shadow_skirt(root, "WorkTableShadow", Vector3(tbl_pos.x, 0.012, tbl_pos.z), Vector2(2.05, 1.15), 0.60)
 	loot_local.append(tbl_pos + Vector3(0.0, 0.86, 0.0))
 
 	var rack_pos: Vector3 = Vector3(w * 0.30, 0.18, -d * 0.26)
 	_build_rack(root, "SupplyRack", rack_pos, 1.45, 0.46, 1.85, metal_mat, floor_wood)
-	_shadow_skirt(root, "SupplyRackShadow", rack_pos + Vector3(0.0, 0.012, 0.0), Vector2(1.75, 0.82), 0.60)
+	_shadow_skirt(root, "SupplyRackShadow", Vector3(rack_pos.x, 0.012, rack_pos.z), Vector2(1.75, 0.82), 0.60)
 	loot_local.append(rack_pos + Vector3(-0.35, 0.96, 0.0))
 
-	var crate_pos: Vector3 = Vector3(0.50, 0.18 + 0.38, 0.65)
+	var crate_pos: Vector3 = Vector3(1.58, 0.18 + 0.38, 0.65)
 	_solid_box(root, "WoodenCrate", crate_pos, Vector3(0.84, 0.76, 0.78), floor_wood, CULL_DIST, true)
-	_shadow_skirt(root, "CrateShadow", Vector3(crate_pos.x, 0.192, crate_pos.z), Vector2(1.20, 1.12), 0.64)
+	_shadow_skirt(root, "CrateShadow", Vector3(crate_pos.x, 0.012, crate_pos.z), Vector2(1.20, 1.12), 0.64)
 
+	var fixture := OmniLight3D.new()
+	fixture.name = "InteriorFixture"
+	fixture.add_to_group("interior_fixtures")
+	fixture.position = Vector3(0.0, ROOM_H - 0.35, -0.35)
+	fixture.light_color = Color("#d7ae76")
+	fixture.omni_range = 5.2
+	fixture.omni_attenuation = 0.85
+	fixture.light_energy = 0.0
+	fixture.hide()
+	root.add_child(fixture)
+	var district_id := StringName(parent.get("_district_id"))
 	var area: Area3D = Area3D.new()
 	area.name = "InteriorZone"
 	area.set_meta("theme_id", theme_id)
 	area.set_meta("is_interior", true)
+	area.collision_layer = 0
+	area.collision_mask = 1
+	area.add_to_group("district_interiors")
 	var sh_node: CollisionShape3D = CollisionShape3D.new()
+	sh_node.name = "CollisionShape3D"
 	var sh_box: BoxShape3D = BoxShape3D.new()
 	sh_box.size = Vector3(in_w - 0.2, ROOM_H - 0.3, in_d - 0.2)
 	sh_node.shape = sh_box
 	sh_node.position = Vector3(0.0, 0.18 + (ROOM_H - 0.3) * 0.5, 0.0)
 	area.add_child(sh_node)
 	root.add_child(area)
+
+	area.body_entered.connect(func(body: Node3D) -> void:
+		if body.is_in_group("player"):
+			body.set_meta("inside_district_building", true)
+			_update_fixture(fixture, PowerGrid.get_stage(district_id)))
+	area.body_exited.connect(func(body: Node3D) -> void:
+		if body.is_in_group("player"):
+			body.set_meta("inside_district_building", false)
+			fixture.light_energy = 0.0
+			fixture.hide())
+
 
 	var xf: Transform3D = root.global_transform
 	var loot_world: Array[Vector3] = []
@@ -197,8 +222,13 @@ static func build(
 		"doorway_world": xf * Vector3(0.0, 0.18, hd + 1.15),
 		"interior_center": xf * Vector3(0.0, 0.18, 0.15),
 		"loot_points": loot_world,
-		"aabb": AABB(origin - Vector3(hw + 0.25, 0.0, hd + 0.25), Vector3(w + 0.5, ROOM_H + 0.6, d + 0.5)),
+		"aabb": root.transform * AABB(Vector3(-hw - 0.20, 0.0, -hd - 0.20), Vector3(w + 0.40, ROOM_H + 0.6, d + 0.40)),
 	}
+
+
+static func _update_fixture(fixture: OmniLight3D, stage: int) -> void:
+	fixture.light_energy = 3.4 if stage == DistrictData.Stage.FULL else 0.0
+	fixture.visible = fixture.light_energy > 0.0
 
 
 static func _triplanar(alb_p: String, nrm_p: String, rgh_p: String, tint: Color, uv_s: float, n_depth: float, r_scale: float, met: float, gy: float, ceil_ao: float) -> Material:

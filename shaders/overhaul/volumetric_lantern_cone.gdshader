@@ -12,6 +12,7 @@ void fragment() {
 	float top_soft = smoothstep(0.0, 0.14, UV.y);
 	float bot_fade = pow(clamp(1.0 - UV.y, 0.0, 1.0), vertical_fade);
 	float edge = pow(clamp(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.0, 1.0), fresnel_power);
-	ALBEDO = cone_color;
-	ALPHA = clamp(top_soft * bot_fade * edge * intensity, 0.0, 0.30);
+	float density = clamp(top_soft * bot_fade * edge, 0.0, 1.0);
+	ALBEDO = cone_color * density * intensity;
+	ALPHA = density;
 }

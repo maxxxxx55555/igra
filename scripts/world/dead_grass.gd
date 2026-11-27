@@ -29,7 +29,7 @@ func _ready() -> void:
 		var cell: int = i % 9
 		var at := Vector3((cell % 3 - 1) * CELL_STEP + rng.randf_range(-CELL_REACH, CELL_REACH), 0.0, (cell / 3 - 1) * CELL_STEP + rng.randf_range(-CELL_REACH, CELL_REACH))
 		var width: float = rng.randf_range(0.8, 1.4)
-		var basis := Basis(Vector3.UP, rng.randf() * TAU) * Basis.from_scale(Vector3(width, rng.randf_range(0.5, 0.95), width))
+		var basis := Basis(Vector3.UP, rng.randf() * TAU) * Basis.from_scale(Vector3(width, rng.randf_range(0.22, 0.46), width))
 		var blocked := false
 		for lot: Rect2 in keepouts:
 			if lot.has_point(Vector2(at.x, at.z)):

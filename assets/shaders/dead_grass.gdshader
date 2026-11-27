@@ -32,12 +32,12 @@ void vertex() {
 }
 
 void fragment() {
-	float x = UV.x * 5.0;
+	float x = UV.x * 9.0;
 	float i = floor(x) + v_seed * 17.0;
 	float up = 1.0 - UV.y;
 	float height = 0.45 + 0.55 * hash11(i * 3.7);
 	float centre = 0.5 + (hash11(i * 5.3) - 0.5) * 0.5 * up;
-	float inside = step(abs(fract(x) - centre), 0.5 * (1.0 - up / height) * 0.9) * step(up, height);
+	float inside = step(abs(fract(x) - centre), 0.5 * pow(max(1.0 - up / height, 0.0), 1.5) * 0.65) * step(up, height);
 	ALPHA = inside;
 	ALPHA_SCISSOR_THRESHOLD = 0.5;
 	ALBEDO = straw * (0.7 + 0.6 * up) * (0.8 + 0.4 * hash11(i * 7.1));

@@ -86,6 +86,7 @@ func _wire() -> void:
 	_map = get_parent().get_node_or_null("Wave2ProgressionMap") as CanvasLayer
 	if _map != null and not _map.map_opened.is_connected(_on_map_opened):
 		_map.map_opened.connect(_on_map_opened)
+		_map.map_closed.connect(_on_map_closed)
 	_setup_objective_label()
 	_refresh_objective()
 	_on_district_entered(StringName(DistrictManager.current_district))
@@ -416,6 +417,15 @@ func _on_map_opened() -> void:
 	var ui := get_node_or_null("/root/UIManager")
 	if ui != null and ui.has_method("close"):
 		ui.call("close", &"city_map")
+	_set_map_toast_visibility(true)
+
+func _on_map_closed() -> void:
+	_set_map_toast_visibility(false)
+
+func _set_map_toast_visibility(map_open: bool) -> void:
+	var toasts := get_parent().get_node_or_null("ToastManager")
+	if toasts != null:
+		toasts.set_progression_map_open(map_open)
 
 func _process(delta: float) -> void:
 	var player := get_tree().get_first_node_in_group("player") as Node3D

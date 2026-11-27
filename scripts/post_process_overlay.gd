@@ -250,7 +250,7 @@ func _build_craft_grade() -> void:
 	_grade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(_grade)
 	var material := ShaderMaterial.new()
-	material.shader = preload("res://shaders/overhaul/film_atmosphere_grade.gdshader")
+	material.shader = preload("res://shaders/overhaul/film_style3_grade.gdshader")
 	material.set_shader_parameter("vignette_strength", 0.12)
 	material.set_shader_parameter("grain_amount", 0.008)
 	_grade.material = material

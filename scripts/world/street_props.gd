@@ -186,7 +186,6 @@ func _build_interiors(plan: Dictionary, streets: Node) -> void:
 	var footprint := Vector2(7.2, 5.6)
 	for rect: Rect2 in skyline.get_footprints() + streets.road_footprints():
 		occupied.append(AABB(Vector3(rect.position.x, -1, rect.position.y), Vector3(rect.size.x, 9, rect.size.y)))
-	var shader := preload("res://shaders/overhaul/grounded_contact_ao_pbr.gdshader")
 	for i in int(plan.enterable_count):
 		var preferred_side := -1.0 if i % 2 == 0 else 1.0
 		var preferred_x := half.x * (-0.24 if i < 2 else 0.24)
@@ -207,15 +206,15 @@ func _build_interiors(plan: Dictionary, streets: Node) -> void:
 					if absf(candidate.x) + lot_size.x * 0.5 >= half.x or absf(candidate.z) + lot_size.y * 0.5 >= half.y:
 						continue
 					var distance: float = absf(candidate.x - preferred_x) + absf(candidate.z - preferred_side * half.y) * 1.35
-					if distance >= best_distance or not SeamlessEnterableBuilding.is_lot_clear(candidate, lot_size, occupied):
+					if distance >= best_distance or not NativePbrEnterableBuilder.is_lot_clear(candidate, lot_size, occupied):
 						continue
 					best_distance = distance
 					origin = candidate
 					yaw = atan2(across.x * facing, across.z * facing)
 		if best_distance == INF:
 			continue
-		var info := SeamlessEnterableBuilding.build(self, str(i + 1), origin, yaw,
-			footprint.x, footprint.y, plan.enterable_themes[i], shader)
+		var info := NativePbrEnterableBuilder.build(self, str(i + 1), origin, yaw,
+			footprint.x, footprint.y, plan.enterable_themes[i], int(plan.index))
 		rooms.append(info)
 		var bounds: AABB = info.aabb
 		occupied.append(bounds)

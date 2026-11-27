@@ -54,6 +54,7 @@ var _stack: VBoxContainer
 var _queue: Array[Dictionary] = []
 var _visible_count: int = 0
 var _hud_visible: bool = true
+var _progression_map_open := false
 var _log_from_modal: bool = false
 ## 3.14: newest last, capped at HISTORY_MAX.
 var _history: Array[Dictionary] = []
@@ -250,14 +251,16 @@ func _apply_log_scroll() -> void:
 
 ## A blocking screen (pause, codex, city map) hides the HUD; the log follows it
 ## instead of drawing a 360 px panel over the open menu.
+func set_progression_map_open(opened: bool) -> void:
+	_progression_map_open = opened
+	_on_hud_visibility(_hud_visible)
+
 func _on_hud_visibility(v: bool) -> void:
 	_hud_visible = v
-	if _log_from_modal:
-		return  # Pause opened the log: keep it readable over the modal.
-	_stack.visible = v and not bool(SettingsManager.get_setting("trailer_mode", false))
-	if not v:
+	_stack.visible = v and not _progression_map_open and not UIManager.is_hud_blocked() and not bool(SettingsManager.get_setting("trailer_mode", false))
+	if _progression_map_open or (not v and not _log_from_modal):
 		_log_panel.visible = false
-	else:
+	if _stack.visible:
 		_pump()
 
 func _retranslate(_lang: Variant = null) -> void:

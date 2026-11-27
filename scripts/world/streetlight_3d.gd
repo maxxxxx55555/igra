@@ -82,8 +82,8 @@ func _build_cone() -> void:
 	mesh.rings = 1
 	var mat := ShaderMaterial.new()
 	mat.shader = _CONE
-	mat.set_shader_parameter("sodium_color", MenuCanonAtmosphereDirector.SODIUM_KEY_COLOR)
-	mat.set_shader_parameter("cone_opacity", 0.05)
+	mat.set_shader_parameter("cone_color", MenuCanonAtmosphereDirector.SODIUM_KEY_COLOR)
+	mat.set_shader_parameter("intensity", 0.045)
 	mesh.material = mat
 	_cone = MeshInstance3D.new()
 	_cone.name = "LightCone"

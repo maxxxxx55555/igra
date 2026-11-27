@@ -24,6 +24,8 @@ void fragment() {
 	vec2 d = SCREEN_UV - vec2(0.5);
 	float vig = 1.0 - smoothstep(0.30, 0.90, length(d)) * vignette_strength;
 	col *= vig;
+	col = pow(max(col, vec3(0.0)), vec3(0.62)) * 1.04;
+	col /= vec3(1.0) + 1.25 * col;
 
 	float g = (hash12(FRAGCOORD.xy + vec2(fract(TIME * 31.0) * 256.0, fract(TIME * 17.0) * 256.0)) - 0.5) * grain_amount;
 	col = clamp(col + vec3(g) * smoothstep(0.02, 0.16, luma), 0.0, 1.0);
