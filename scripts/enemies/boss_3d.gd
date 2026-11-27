@@ -160,7 +160,7 @@ func _teleport_near_player() -> void:
 		var ang := randf() * TAU
 		var spot := from + Vector3(cos(ang), 0.0, sin(ang)) * randf_range(6.0, 12.0)
 		var query := PhysicsRayQueryParameters3D.create(from + Vector3.UP, spot + Vector3.UP, collision_mask, exclude)
-		if space.intersect_ray(query).is_empty():
+		if not DistrictArchitect11.interior_at(self, spot) and space.intersect_ray(query).is_empty():
 			target = spot
 			break
 	if target == Vector3.INF:

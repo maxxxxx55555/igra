@@ -207,13 +207,33 @@ func build() -> void:
 
 func _layout() -> void:
 	roads.clear()
-	var cols := 3
-	var rows := 3
-	for r in range(rows + 1):
-		roads.append({"start": Vector2i(0, r), "end": Vector2i(cols, r), "dir": "h", "length": float(cols) * grid_spacing})
-	for c in range(cols + 1):
-		roads.append({"start": Vector2i(c, 0), "end": Vector2i(c, rows), "dir": "v", "length": float(rows) * grid_spacing})
-	_update_center()
+	var plan := DistrictArchitect11.blueprint(district_id)
+	var extent := DistrictArchitect11.half_size(plan) - Vector2(9, 9)
+	var axes: Array = DistrictArchitect11.AXES[int(plan.index) - 1]
+	var index := int(plan.index)
+	for row: float in axes[1]:
+		var west := -extent.x
+		var east := extent.x
+		# Alternate dead ends open a plaza or a pedestrian strip instead of
+		# laying asphalt through every block. The complete perimeter still links all streets.
+		if absf(row) < 0.8:
+			match index:
+				3, 7, 10:
+					east = float(axes[0][-2]) * extent.x
+				5:
+					west = float(axes[0][1]) * extent.x
+				8, 9:
+					if row > 0.0:
+						west = float(axes[0][1]) * extent.x
+		_add_road(Vector2(west, row * extent.y), Vector2(east, row * extent.y), "h")
+	for column: float in axes[0]:
+		_add_road(Vector2(column * extent.x, -extent.y), Vector2(column * extent.x, extent.y), "v")
+	_center = Vector2.ZERO
+
+
+func _add_road(start: Vector2, end: Vector2, direction: String) -> void:
+	roads.append({"start": start / grid_spacing, "end": end / grid_spacing,
+		"dir": direction, "length": start.distance_to(end)})
 
 ## Точка на дороге по номеру плитки. Начало дороги переводится из клеток
 ## сетки в метры (× grid_spacing), иначе улицы строятся вплотную друг к другу.
@@ -300,7 +320,7 @@ func _fill_sidewalks() -> void:
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 					if s == 0:
 						_create_collision(t.origin, r, steps, &"concrete")
-					if _on_crossing(s):
+					if _on_crossing(r, s):
 						continue
 					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					idx += 1
@@ -327,9 +347,20 @@ func _fill_markings() -> void:
 			idx += 1
 
 ## Whether the tile of step `s` lies on the carriageway of a cross street (one every grid_spacing along a road): the walk and the kerb stop there, so no tile lies flush on the asphalt of the crossing.
-func _on_crossing(s: int) -> bool:
-	var along: float = float(s) * tile_size - (LEGACY_HALF_TILE - tile_size * 0.5)
-	return absf(along - roundf(along / grid_spacing) * grid_spacing) < road_width * 0.5 + tile_size * 0.5
+func _on_crossing(road: Dictionary, step: int) -> bool:
+	var point := road_step_pos(road, step)
+	for cross: Dictionary in roads:
+		if cross.dir == road.dir:
+			continue
+		var origin := road_pos_at(cross, 0.0)
+		var distance := absf(point.x - origin.x) if road.dir == "h" else absf(point.z - origin.z)
+		var along := point.z if road.dir == "h" else point.x
+		var cross_end := road_pos_at(cross, cross.length)
+		var start := origin.z if road.dir == "h" else origin.x
+		var finish := cross_end.z if road.dir == "h" else cross_end.x
+		if along >= start - tile_size and along <= finish + tile_size and distance < (road_width + tile_size) * 0.5:
+			return true
+	return false
 
 ## Raised kerbs separate the road from the walk on every block edge; the gaps at crossings read as
 ## dropped kerbs and keep the old visual road grid from looking like one poured slab.
@@ -338,7 +369,7 @@ func _fill_curbs() -> void:
 	for r in roads:
 		var steps := int(r.length / tile_size)
 		for s in range(steps):
-			if _on_crossing(s):
+			if _on_crossing(r, s):
 				continue
 			var pos: Vector3 = road_step_pos(r, s)
 			for side in [-1.0, 1.0]:

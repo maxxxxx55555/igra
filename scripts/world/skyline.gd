@@ -139,7 +139,7 @@ var _cur_seed := 0.0
 var _frontage: Node3D
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
-func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
+func build(district_id: StringName, _half_extent: float, with_windows: bool) -> void:
 	_district_id = district_id
 	_footprints.clear()
 	add_to_group(&"city_skyline")
@@ -151,7 +151,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var extra := RandomNumberGenerator.new()
 	extra.seed = hash("skyline_extra_" + String(district_id))
 	var balconies: float = float(BALCONIES.get(district_id, 0.0))
-	var edge := half_extent + RING_GAP
+	var plan := DistrictArchitect11.blueprint(district_id)
+	var bounds := DistrictArchitect11.half_size(plan)
 	var blocks: Array[Transform3D] = []
 	var tints: Array[Color] = []
 	var customs: Array[Color] = []
@@ -169,12 +170,13 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
-		var span := edge + 12.0 if side % 2 == 0 else edge
+		var edge := bounds.y if side % 2 == 0 else bounds.x
+		var span := bounds.x + 10.0 if side % 2 == 0 else bounds.y
 		var along := -span
 		while along < span:
 			var w: float = rng.randf_range(style[2], style[3])
 			var d: float = rng.randf_range(8.0, 12.0)
-			var h: float = rng.randf_range(style[0], style[1])
+			var h: float = float(rng.randi_range(plan.building_stories_min, plan.building_stories_max)) * 2.7
 			var skip: bool = false
 			rng.randf()
 			var cx := along + w * 0.5
@@ -243,7 +245,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	grass.district_id = district_id
 	add_child(grass)
 	_add_ground()
-	_add_solid_ground(edge)
+	_add_solid_ground(bounds)
 
 ## True when a skyline-local XZ point falls inside a recorded building footprint. The map queries this
 ## instead of guessing at the outer ring, so alleys and real front widths classify as street, not wall.
@@ -532,17 +534,17 @@ func _add_building_colliders(transform_list: Array[Transform3D]) -> void:
 	building_collider_count = created_colliders
 	print("TLS_BUILDING_COLLIDERS=%d" % created_colliders)
 
-func _add_solid_ground(edge: float) -> void:
+func _add_solid_ground(bounds: Vector2) -> void:
 	var body := StaticBody3D.new()
 	body.name = "GroundBody"
 	body.collision_layer = 1
 	body.collision_mask = 0
 	add_child(body)
-	var reach := edge + 12.0
-	_add_box(body, Vector3(reach * 2.0, GROUND_THICKNESS, reach * 2.0), Vector3(0.0, GROUND_TOP - GROUND_THICKNESS * 0.5, 0.0))
+	var reach := bounds + Vector2(12, 12)
+	_add_box(body, Vector3(reach.x * 2.0, GROUND_THICKNESS, reach.y * 2.0), Vector3(0.0, GROUND_TOP - GROUND_THICKNESS * 0.5, 0.0))
 	for side in [-1.0, 1.0]:
-		_add_box(body, Vector3(WALL_THICKNESS, WALL_HEIGHT, reach * 2.0), Vector3(side * edge, WALL_HEIGHT * 0.5, 0.0))
-		_add_box(body, Vector3(reach * 2.0, WALL_HEIGHT, WALL_THICKNESS), Vector3(0.0, WALL_HEIGHT * 0.5, side * edge))
+		_add_box(body, Vector3(WALL_THICKNESS, WALL_HEIGHT, reach.y * 2.0), Vector3(side * bounds.x, WALL_HEIGHT * 0.5, 0.0))
+		_add_box(body, Vector3(reach.x * 2.0, WALL_HEIGHT, WALL_THICKNESS), Vector3(0.0, WALL_HEIGHT * 0.5, side * bounds.y))
 
 func _add_box(body: StaticBody3D, size: Vector3, at: Vector3) -> void:
 	var shape := CollisionShape3D.new()

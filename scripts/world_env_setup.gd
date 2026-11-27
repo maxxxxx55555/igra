@@ -199,12 +199,15 @@ func apply_for_stage(stage: int) -> void:
 ## Wave 3: the cold slate-teal mist of the owner's main-menu reference
 ## (#142126) and its per-stage density. The stage table above still owns the
 ## ambient energy and the fog light, so the lighting gates keep their numbers.
-func _apply_menu_canon_fog(stage: int) -> void:
+func _apply_menu_canon_fog(_stage: int) -> void:
 	_apply_menu_canon_fog_color()
 	if _env == null:
 		return
-	var stage_name: String = ["DARK", "PARTIAL", "STREETS", "FULL"][clampi(stage, 0, 3)]
-	_env.fog_density = maxf(_env.fog_density, float(MenuCanonAtmosphereDirector.STAGE_FOG_DENSITY.get(stage_name, 0.016)))
+	var id := StringName(DistrictManager.current_district)
+	var plan := DistrictArchitect11.blueprint(id)
+	_env.fog_density = float(plan.fog_density)
+	_env.fog_light_color = Color(plan.fog_hex)
+	_moon.light_color = Color(plan.ambient_hex).lightened(0.28)
 
 
 ## The mist's colour and sky contribution are safe to reapply at any time;

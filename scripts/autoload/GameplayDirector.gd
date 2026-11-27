@@ -353,7 +353,7 @@ func _refresh_scene() -> void:
 func _tick_survival(actor: Node3D, delta: float) -> void:
 	var flash: SpotLight3D = _flashlight()
 	var lit: bool = flash != null and flash.is_visible_in_tree() and flash.light_energy > 0.0
-	var sheltered: bool = false
+	var sheltered: bool = bool(actor.get_meta("inside_district_building", false))
 	for node: Node in get_tree().get_nodes_in_group(&"shelter"):
 		var heat: Node3D = node as Node3D
 		if heat != null and actor.global_position.distance_squared_to(heat.global_position) <= 25.0:
@@ -361,7 +361,7 @@ func _tick_survival(actor: Node3D, delta: float) -> void:
 			break
 	var difficulty: float = difficulty_multiplier()
 	battery = clampf(battery + delta * (-0.42 * difficulty if lit else 1.25), 0.0, 100.0)
-	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty * clampf(tension_cold_mult, 0.5, 2.0)), 0.0, 100.0)
+	warmth = clampf(warmth + delta * (2.4 if sheltered else -0.085 * difficulty * clampf(tension_cold_mult * float(DistrictArchitect11.blueprint(StringName(DistrictManager.current_district)).cold_mult), 0.5, 2.0)), 0.0, 100.0)
 	if lit and battery <= 0.0:
 		flash.visible = false
 		_spent_lamp = flash

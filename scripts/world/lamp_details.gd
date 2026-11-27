@@ -40,6 +40,7 @@ func build(district_id: StringName, props: Node) -> void:
 		mm.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3(1.0, length, 1.0)), Vector3(head.x, head.y - length * 0.5, head.z)))
 	_cone_mat = ShaderMaterial.new()
 	_cone_mat.shader = _CONE
+	_cone_mat.set_shader_parameter("cone_color", Color(DistrictArchitect11.blueprint(district_id).lamp_hex))
 	_cone_mat.render_priority = _HALOS.RENDER_PRIORITY  # sorted after the other transparent objects, as the halos are
 	_cones = MultiMeshInstance3D.new()
 	_cones.name = "LampCones"

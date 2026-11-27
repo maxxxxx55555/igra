@@ -96,6 +96,11 @@ func _teleport_behind_player() -> void:
 		return
 	var behind := player_ref.global_position - player_ref.global_transform.basis.z.normalized() * 2.0
 	behind.y = player_ref.global_position.y
+	if DistrictArchitect11.interior_at(self, behind):
+		return
+	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP, behind + Vector3.UP, 1, [get_rid(), player_ref.get_rid()])
+	if not get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+		return
 	global_position = behind
 	velocity = Vector3.ZERO
 	play_cue(&"teleport", 0.5)

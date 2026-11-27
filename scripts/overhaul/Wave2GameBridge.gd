@@ -196,7 +196,11 @@ func _make_relay(i: int) -> void:
 	var flow := get_node_or_null("/root/Wave2Flow")
 	if flow != null and bool(flow.call("has_relay_part", part_id)):
 		return
-	var holder := _holder(&"relay", "RelayPart_%02d" % (i+1), RELAY_OFFSETS[i], part_id)
+	var at := RELAY_OFFSETS[i]
+	var rooms: Array = _root.get_meta("district_rooms", [])
+	if i < rooms.size():
+		at = _root.to_local(rooms[i].loot_points[0])
+	var holder := _holder(&"relay", "RelayPart_%02d" % (i+1), at, part_id)
 	var coil := DETAIL.place(holder, &"relay", "RelayCoil", Vector3.ZERO)
 	coil.visibility_range_end = 20.0
 	var glint := DETAIL.place(holder, &"lens", "GlintMesh", Vector3(0,0.19,0),Vector3(0.27,0.34,0.27))
@@ -347,7 +351,12 @@ func _configure_map() -> void:
 			for r in raw:
 				if r is Rect2:
 					rects.append(r)
-	_map.call("configure_district", _index, Vector2(-60.0, -60.0), Vector2(60.0, 60.0),
+	var half := DistrictArchitect11.half_size(DistrictArchitect11.blueprint(_district_id))
+	for room: Dictionary in _root.get_meta("district_rooms", []):
+		var at := (_root.to_local(room.root.global_position))
+		var size: Vector2 = room.footprint_size
+		rects.append(Rect2(Vector2(at.x, at.z) - size * 0.5, size))
+	_map.call("configure_district", _index, -half, half,
 		rects, Vector2(GATE_POS.x, GATE_POS.z), true)
 	var flow := get_node_or_null("/root/Wave2Flow")
 	if flow != null:

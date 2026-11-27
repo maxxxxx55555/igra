@@ -154,6 +154,7 @@ func build() -> void:
 	_build_prop_multimesh()
 	add_child(preload("res://scripts/effects/dust_motes.gd").new())
 	_build_skyline(sb, district_id)
+	_build_interiors(DistrictArchitect11.blueprint(district_id))
 	var dressing: Node3D = preload("res://scripts/world/district_dressing.gd").new()
 	dressing.name = "DistrictDressing"
 	add_child(dressing)
@@ -173,6 +174,25 @@ func _build_skyline(sb: Node, district_id: StringName) -> void:
 	var floating_windows := get_node_or_null("../EmissiveWindows")
 	if floating_windows != null and not _low_tier:
 		floating_windows.visible = false
+
+func _build_interiors(plan: Dictionary) -> void:
+	var half := DistrictArchitect11.half_size(plan)
+	var rooms: Array[Dictionary] = []
+	var wall := DETAIL.weathered(Color("#485054"))
+	var floor_mat := DETAIL.weathered(Color("#323638"))
+	var prop := DETAIL.weathered(Color("#4a3828"))
+	for i in int(plan.enterable_count):
+		var north := i % 2 == 0
+		var side := -1.0 if north else 1.0
+		var x := half.x * (-0.24 if i < 2 else 0.24)
+		var z := side * (half.y - 3.9)
+		var info := EnterableBuildingBuilder.build_enterable_room(self, str(i + 1),
+			Vector3(x, 0, z), 0.0 if north else PI, 7.2, 5.6,
+			plan.enterable_themes[i], wall, floor_mat, prop)
+		rooms.append(info)
+	get_parent().set_meta("district_rooms", rooms)
+	EnterableBuildingBuilder.batch_visuals(self, rooms)
+
 
 ## Shift along the road so a prop clears the streetlight pole that stands at each step.
 func _along(road: Dictionary) -> Vector3:
@@ -221,6 +241,7 @@ func _build_streetlight_multimesh() -> void:
 	# the power stage of that district; the flicker of the mesh follows the one of the lights (streetlight_3d.gd)
 	# and Reduce Flash stills it.
 	_lamp_mat = _LampHead.make()
+	_lamp_mat.set_shader_parameter("lit_color", Color(DistrictArchitect11.blueprint(_district_id).lamp_hex))
 	_apply_lamp_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var lamp_mm := MultiMesh.new()

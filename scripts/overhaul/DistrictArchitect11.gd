@@ -1,7 +1,7 @@
 class_name DistrictArchitect11
 extends RefCounted
 
-## Authoritative 11-District Blueprint for The Last Streetlight.
+## Authoritative 11-District Blueprint for Last Streetlight.
 ## Guarantees every single district (01..11) has distinct physical dimensions (meters),
 ## architectural layout archetype, atmospheric palette, fog/rain intensity, enterable buildings,
 ## and pacing — eliminating identical grid rooms.
@@ -143,3 +143,37 @@ static func get_all_summaries() -> Array[Dictionary]:
 	for i in range(1, DISTRICTS.size() + 1):
 		out.append(get_district(i))
 	return out
+
+# Fractions of the buildable rectangle. The road builder uses the same axes for
+# pavement gaps, placement and the map, so irregular blocks remain navigable.
+const AXES := [
+	[[-1.0, -0.36, 0.36, 1.0], [-1.0, -0.42, 0.42, 1.0]],
+	[[-1.0, -0.65, -0.27, 0.13, 0.49, 1.0], [-1.0, -0.42, 0.37, 1.0]],
+	[[-1.0, -0.48, 0.51, 1.0], [-1.0, -0.65, -0.15, 0.31, 0.69, 1.0]],
+	[[-1.0, -0.28, 0.26, 1.0], [-1.0, -0.36, 0.0, 0.41, 1.0]],
+	[[-1.0, -0.36, 0.36, 1.0], [-1.0, -0.58, 0.19, 0.65, 1.0]],
+	[[-1.0, -0.53, 0.47, 1.0], [-1.0, -0.44, 0.43, 1.0]],
+	[[-1.0, -0.52, 0.0, 0.52, 1.0], [-1.0, -0.58, 0.0, 0.58, 1.0]],
+	[[-1.0, -0.48, 0.39, 1.0], [-1.0, -0.35, 0.33, 1.0]],
+	[[-1.0, -0.67, -0.16, 0.39, 0.71, 1.0], [-1.0, -0.51, -0.08, 0.52, 1.0]],
+	[[-1.0, -0.39, 0.42, 1.0], [-1.0, -0.67, -0.23, 0.24, 0.66, 1.0]],
+	[[-1.0, -0.53, 0.53, 1.0], [-1.0, -0.52, 0.52, 1.0]],
+]
+
+static func blueprint(district_id: StringName) -> Dictionary:
+	var ids := [&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"]
+	var index := ids.find(district_id)
+	return DISTRICTS[maxi(0, index)]
+
+static func half_size(plan: Dictionary) -> Vector2:
+	return Vector2(plan.width_m, plan.length_m) * 0.5
+
+static func interior_at(node: Node, point: Vector3) -> bool:
+	for area: Area3D in node.get_tree().get_nodes_in_group("district_interiors"):
+		var collider := area.get_node("CollisionShape3D") as CollisionShape3D
+		var box := collider.shape as BoxShape3D
+		var p := collider.to_local(point).abs()
+		var half := box.size * 0.5
+		if p.x < half.x and p.y < half.y and p.z < half.z:
+			return true
+	return false

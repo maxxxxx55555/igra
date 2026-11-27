@@ -32,6 +32,9 @@ void fragment() {
 	vec2 d = SCREEN_UV - vec2(0.5);
 	float vig = 1.0 - smoothstep(0.32, 0.88, length(d)) * vignette_strength;
 	col *= vig;
+	// A soft toe preserves separation between the slate walls and black sky.
+	col = pow(max(col, vec3(0.0)), vec3(0.65)) * 0.96;
+	col /= vec3(1.0) + 1.65 * col;
 
 	// Subtle animated micro film grain
 	float g = (hash12(FRAGCOORD.xy + vec2(fract(TIME * 37.0) * 256.0, fract(TIME * 19.0) * 256.0)) - 0.5) * grain_amount;

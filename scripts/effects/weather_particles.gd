@@ -25,6 +25,8 @@ func _on_weather_changed(weather: int, _name: String, _fog: float, rain: float) 
 	_apply(weather, rain)
 
 func _apply(weather: int, rain: float) -> void:
+	var plan := DistrictArchitect11.blueprint(StringName(DistrictManager.current_district))
+	rain = maxf(rain, float(plan.rain_intensity) * 0.38)
 	_rain.emitting = rain > MIN_RAIN
 	_rain.amount_ratio = clampf(rain, MIN_SHARE, 1.0)
 	_drops.emitting = weather == WeatherSystem.Weather.FOG
