@@ -284,8 +284,8 @@ func _build_ui() -> void:
 	_mini_btn.name = "ProgressionMinimapButton"
 	_mini_btn.custom_minimum_size = Vector2(190.0, 120.0)
 	_mini_btn.focus_mode = Control.FOCUS_NONE
-	_mini_btn.add_theme_stylebox_override("normal", _make_panel_box(COL_BG_DEEP, COL_BRASS, 2, 6))
-	_mini_btn.add_theme_stylebox_override("hover", _make_panel_box(COL_BG_DEEP, COL_AMBER, 2, 6))
+	_mini_btn.add_theme_stylebox_override("normal", MinimalNoSlopHud.make_minimap_frame())
+	_mini_btn.add_theme_stylebox_override("hover", MinimalNoSlopHud.make_minimap_frame())
 	_mini_btn.add_theme_stylebox_override("pressed", _make_panel_box(COL_BG_DEEP, COL_AMBER, 3, 6))
 	_mini_btn.pressed.connect(func() -> void: open_full_map(1))
 	add_child(_mini_btn)

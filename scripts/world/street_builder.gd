@@ -88,11 +88,12 @@ func _ready() -> void:
 		mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_road_mm,     _make_road_mesh())
 	_init_mm(_sidewalk_mm, DETAIL.module(&"pavement"))
-	_sidewalk_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
+	_sidewalk_mm.material_override = DETAIL.weathered(Color("#292e30"))
 	_sidewalk_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_marking_mm,  _make_marking_mesh())
 	_init_mm(_curb_mm, DETAIL.module(&"slab"))
 	_curb_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.125, 0.130, 0.125), 0.1156, 0.0, 0.0)
+	_curb_mm.material_override = DETAIL.weathered(Color("#313638"))
 	_curb_mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_damage_mm,   _make_damage_mesh())
 	_set_detail()

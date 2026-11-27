@@ -10,6 +10,14 @@ const CONCRETE := Color("#596066")
 static var _meshes := {}
 static var _hardware: ORMMaterial3D
 
+static func weathered(tint: Color, metallic := 0.08) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://shaders/overhaul/cinematic_weathered_pbr.gdshader")
+	material.set_shader_parameter("base_color", tint)
+	material.set_shader_parameter("metallic_amount", metallic)
+	return material
+
+
 static func hardware() -> ORMMaterial3D:
 	if _hardware == null:
 		_hardware = ORMMaterial3D.new()

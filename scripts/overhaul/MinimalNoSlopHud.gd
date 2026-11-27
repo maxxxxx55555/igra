@@ -88,7 +88,7 @@ static func make_modal_card() -> StyleBoxFlat:
 
 
 static func strip_yellow_boxes_recursive(node: Node) -> int:
-	"""Replaces loud 1px yellow StyleBoxFlat outlines on runtime HUD controls with subtle slate/brass hairlines."""
+	# Replace loud borders without changing control sizes.
 	var patched: int = 0
 	if node is Control:
 		var ctrl: Control = node as Control

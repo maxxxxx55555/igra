@@ -62,6 +62,7 @@ func _ready() -> void:
 func _build_visual() -> void:
 	_panel = MeshInstance3D.new()
 	_glow = _Props.dress(_panel, "switch")
+	_panel.set_surface_override_material(0, ProceduralDetailMeshes.weathered(Color("#242c30"), 0.34))
 	add_child(_panel)
 
 	# Щит нужно ещё и не проходить насквозь: голый Node3D был бесплотным.

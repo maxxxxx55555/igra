@@ -161,7 +161,7 @@ func _add_batch(node_name: String, kind: String, xforms: Array) -> void:
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = node_name
 	mmi.multimesh = mm
-	mmi.material_override = _material(kind)
+	mmi.material_override = preload("res://scripts/overhaul/ProceduralDetailMeshes.gd").weathered(LOOK[kind][0])
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if kind in ["wreck", "cabinet"] else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
 

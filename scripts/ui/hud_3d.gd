@@ -100,6 +100,8 @@ var vignette: ColorRect:
 @onready var enemy_hp_bar: ColorRect = $EnemyHPBar
 
 func _ready() -> void:
+	call_deferred("_apply_borderless_style")
+
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	child_entered_tree.connect(_on_child_entered)
 	_apply_canonical_theme()
@@ -2442,3 +2444,18 @@ func _show_notice(msg: String) -> void:
 		return
 	if notice.text == msg:
 		notice.text = ""
+
+func _apply_borderless_style() -> void:
+	MinimalNoSlopHud.strip_yellow_boxes_recursive(self)
+	for path in ["TopLeft", "BtnPause"]:
+		var control := get_node_or_null(path) as Control
+		if control != null:
+			var style := MinimalNoSlopHud.make_borderless_hud_style()
+			for state in ["panel", "normal", "pressed", "hover"]:
+				control.add_theme_stylebox_override(state, style)
+	for slot in $BottomCenter.get_children():
+		if slot is Panel:
+			slot.add_theme_stylebox_override("panel", MinimalNoSlopHud.make_hotbar_slot(false))
+			var border := slot.get_node_or_null("Border") as CanvasItem
+			if border != null:
+				border.modulate.a = 0.18

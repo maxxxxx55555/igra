@@ -27,6 +27,7 @@ func _build() -> void:
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
 	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(520, 580)
+	panel.add_theme_stylebox_override("panel", MinimalNoSlopHud.make_modal_card())
 	add_child(panel)
 
 	var vb := VBoxContainer.new()
@@ -418,7 +419,7 @@ func _dropdown(parent: Node, label: String, key: String, options: Array, callbac
 	ob.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for opt in options:
 		ob.add_item(opt)
-	var current = SettingsManager.get_setting(key, 0)
+	var current = LocalizationManager.SUPPORTED.find(LocalizationManager.current_lang) if key == "language" else SettingsManager.get_setting(key, 0)
 	ob.selected = clamp(current, 0, options.size() - 1)
 	ob.item_selected.connect(func(idx: int) -> void:
 		SettingsManager.set_setting(key, idx)
@@ -426,3 +427,4 @@ func _dropdown(parent: Node, label: String, key: String, options: Array, callbac
 			callback.call(idx)
 	)
 	row.add_child(ob)
+	MinimalNoSlopHud.strip_yellow_boxes_recursive(ob)

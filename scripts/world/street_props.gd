@@ -8,7 +8,7 @@ class_name CityStreetProps
 
 var _rng := RandomNumberGenerator.new()
 var _pole: Mesh
-var _lamp: Mesh
+var _lamp: SphereMesh
 var _bench: Mesh
 var _trunk: CylinderMesh
 var _leaf: Mesh
@@ -41,7 +41,7 @@ var _halo_mat: StandardMaterial3D
 var _pool_mat: StandardMaterial3D
 var _district_id: StringName = &""
 const _BRASS := Color("#c9a24a")
-const _HALO_ALPHA: Array[float] = [0.0, 0.067, 0.167, 0.307]
+const _HALO_ALPHA: Array[float] = [0.0, 0.02, 0.04, 0.06]
 ## The pool of light on the ground under a lamp, by power stage: DARK, PARTIAL,
 ## STREETS, FULL. A dead district throws none - the lamps must read dead in
 ## the dark, that is the game's namesake beat.
@@ -96,7 +96,11 @@ const POST_SEGMENTS := 8
 
 func _init_meshes() -> void:
 	_pole = _HARDWARE.pole_mesh()
-	_lamp = DETAIL.module(&"lens")
+	_lamp = SphereMesh.new()
+	_lamp.radius = 0.08
+	_lamp.height = 0.09
+	_lamp.radial_segments = 8
+	_lamp.rings = 4
 	_bench = DETAIL.module(&"bench_bin")
 	_trunk = CylinderMesh.new()
 	_trunk.top_radius = 0.12
@@ -247,7 +251,7 @@ func _build_streetlight_multimesh() -> void:
 	var halo_mm := MultiMesh.new()
 	halo_mm.transform_format = MultiMesh.TRANSFORM_3D
 	var halo_quad := QuadMesh.new()
-	halo_quad.size = Vector2(1.067, 1.067)
+	halo_quad.size = Vector2(0.32, 0.32)
 	halo_mm.mesh = halo_quad
 	halo_mm.instance_count = _lamp_local_positions.size()
 	for i in _lamp_local_positions.size():
@@ -371,13 +375,13 @@ func _on_setting_changed(key: String, _value: Variant) -> void:
 		_apply_sway()
 
 func _build_prop_multimesh() -> void:
-	_build_one_multimesh(_bench_positions, _bench, DETAIL.hardware(), "BenchesBatched")
+	_build_one_multimesh(_bench_positions, _bench, DETAIL.weathered(Color("#3b3328")), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
 			_bark_material(), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
-		_build_one_multimesh(_cone_positions, _cone, DETAIL.hardware(), "ConesBatched")
+		_build_one_multimesh(_cone_positions, _cone, DETAIL.weathered(Color("#252b2e")), "ConesBatched")
 
 ## Corroded cast iron from the main-menu canon: its normal/roughness maps break
 ## the flat cone silhouette and the dark tint keeps it from glowing beige.

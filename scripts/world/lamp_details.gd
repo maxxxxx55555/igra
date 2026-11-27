@@ -3,10 +3,10 @@ extends Node3D
 ## away, it fades out near the camera and far away, and it follows the power of the district, so a lamp that is dark throws none). It is built from the district's batched lamps (one draw call), follows the graphics
 ## tier (the Low tier has none) and nothing here runs per frame. Cracks in the pavement at the foot of a pole were tried and went: at a strength the style allows they cannot be seen (docs/TZ_DECISIONS.md, V1-28).
 
-const _CONE := preload("res://assets/shaders/lamp_cone.gdshader")
+const _CONE := preload("res://shaders/overhaul/volumetric_lantern_cone.gdshader")
 const _HALOS := preload("res://scripts/world/window_halos.gd")
 ## The strength of the cone by power stage (DARK, PARTIAL, STREETS, FULL).
-const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.3, 0.567, 0.8]
+const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.035, 0.055, 0.075]
 ## The cone is a cylinder this wide at the ground and this wide at the lamp head.
 const CONE_FOOT_RADIUS_M: float = 1.067
 const CONE_HEAD_RADIUS_M: float = 0.033
@@ -58,5 +58,5 @@ func _apply_stage(stage: int) -> void:
 	if _cones == null:
 		return
 	var strength: float = STRENGTH_BY_STAGE[clampi(stage, 0, STRENGTH_BY_STAGE.size() - 1)]
-	_cone_mat.set_shader_parameter("strength", strength)
+	_cone_mat.set_shader_parameter("intensity", strength)
 	_cones.visible = strength > 0.0  # a blended cone of strength 0 still costs its fill

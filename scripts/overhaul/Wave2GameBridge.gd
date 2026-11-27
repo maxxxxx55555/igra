@@ -205,7 +205,7 @@ func _make_relay(i: int) -> void:
 
 func _make_fusebox() -> void:
 	var holder := _holder(&"fusebox", "DistrictFusebox", FUSEBOX_POS)
-	DETAIL.place(holder, &"cabinet", "Cabinet", Vector3.ZERO)
+	DETAIL.place(holder, &"cabinet", "Cabinet", Vector3.ZERO).material_override = DETAIL.weathered(Color("#242c30"), 0.34)
 	_indicator = DETAIL.place(holder,&"lens","Indicator",Vector3(0.23,0.34,0.28),Vector3(0.34,0.45,0.34))
 	_indicator.rotation.x = PI * 0.5
 	_indicator.material_override = _signal_material(COL_LOCKED,0.55)

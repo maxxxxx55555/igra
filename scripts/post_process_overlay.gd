@@ -239,39 +239,21 @@ func _build_grain() -> void:
 	_grain.material = mat
 
 func _build_craft_grade() -> void:
-	# The grade samples the frame before grain/vignette and needs its own copy:
-	# without it, a screen-texture layer would read already-graded pixels and
-	# compound the tint/grain twice.
+	var canvas := CanvasLayer.new()
+	canvas.layer = 5
+	add_child(canvas)
 	_grade_copy = BackBufferCopy.new()
-	_grade_copy.name = "CraftGradeCopy"
 	_grade_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
-	add_child(_grade_copy)
+	canvas.add_child(_grade_copy)
 	_grade = ColorRect.new()
-	_grade.name = "CraftSodiumGradeOverlay"
 	_grade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_grade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(_grade)
-	var mat := ShaderMaterial.new()
-	# Visual overhaul v2: split-tone grade with selective sodium-only halation.
-	# The v1 grade stays on disk as the documented baseline; v2 caps highlights
-	# at #e8d9b0 and never reaches #ffffff. The supplied shader's defaults are
-	# authored for a brighter source; applied to this night build they crushed
-	# the mid-tones and compounded the separate vignette overlay (measured
-	# -40% mean luma on the lit-street frames). These integration values keep
-	# the split tone and sodium bloom but preserve exposure.
-	var shader := load("res://shaders/sodium_cinematic_grade_v2.gdshader") as Shader
-	if shader != null:
-		mat.shader = shader
-		var mobile: bool = OS.has_feature("mobile") or OS.has_feature("android")
-		mat.set_shader_parameter("grade_strength", 0.30 if mobile else 0.38)
-		mat.set_shader_parameter("vignette_strength", 0.06 if mobile else 0.10)
-		mat.set_shader_parameter("grain_strength", 0.008 if mobile else 0.012)
-		mat.set_shader_parameter("halation_strength", 0.07 if mobile else 0.12)
-		mat.set_shader_parameter("contrast_lift", 1.0)
-		# Wave 3: the grade follows the menu-canon photographic look - a
-		# stronger sodium halation, a real vignette and a little more grain.
-		MenuCanonAtmosphereDirector.tune_grade_for_menu_canon(mat, mobile)
-	_grade.material = mat
+	canvas.add_child(_grade)
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://shaders/overhaul/film_atmosphere_grade.gdshader")
+	material.set_shader_parameter("vignette_strength", 0.12)
+	material.set_shader_parameter("grain_amount", 0.008)
+	_grade.material = material
 
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
 ## статичные строки развёртки (mod по Y) — это скан-лайны из CRT-эффекта,
