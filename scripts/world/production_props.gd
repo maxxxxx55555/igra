@@ -45,6 +45,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 	var fences: Array[Transform3D] = []
 	var carts: Array[Transform3D] = []
 	var debris: Array[Transform3D] = []
+	var skip_foreground_props: bool = district_id == &"residential" or district_id == &"power_station"
 	for cx in [-1, 0, 1]:
 		for cz in [-1, 0, 1]:
 			var centre := Vector3(cx * grid, 0.0, cz * grid)
@@ -75,12 +76,12 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 						Vector3(fat.x, GROUND_Y, fat.z)))
 			# A handcart and rubble inside the block, clear of every usable object.
 			var hat := centre + _spread(_inner - 1.0)
-			if _free(hat, PROP_CLEAR_M):
+			if not skip_foreground_props and _free(hat, PROP_CLEAR_M):
 				carts.append(Transform3D(Basis(Vector3.UP, _rng.randf() * TAU),
 						Vector3(hat.x, GROUND_Y, hat.z)))
 			for i in 2:
 				var dat := centre + _spread(_inner - 0.8)
-				if _free(dat, PROP_CLEAR_M):
+				if not skip_foreground_props and _free(dat, PROP_CLEAR_M):
 					var s: float = _rng.randf_range(0.75, 1.30)
 					debris.append(Transform3D(Basis(Vector3.UP, _rng.randf() * TAU).scaled(Vector3(s, s, s)),
 							Vector3(dat.x, GROUND_Y, dat.z)))

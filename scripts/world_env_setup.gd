@@ -24,10 +24,10 @@ const AMBIENT_COLOR_LIT: Color = Color(0.084, 0.137, 0.169)  # #142028 lift
 const AMBIENT_COLOR_FULL: Color = Color(0.36, 0.43, 0.48)
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
-const MOON_FULL: float = 0.40
+const MOON_FULL: float = 0.55
 const CINEMATIC_AMBIENT_BY_STAGE: Array[float] = [1.10, 1.22, 1.45, 2.45]
 ## Restored districts have a stronger ambient bounce through the fog.
-const FOG_LIGHT_BY_STAGE: Array[float] = [0.08, 0.2, 0.32, 0.42]
+const FOG_LIGHT_BY_STAGE: Array[float] = [0.08, 0.24, 0.38, 0.58]
 ## The moon casts a shadow only where it is bright enough to show one: at 0.12 (the dark stages) the shadow is invisible and
 ## cost a quarter of the first district's draw calls (66 of 235, windowed perf_check_scene).
 const MOON_SHADOW_MIN: float = 0.2
@@ -117,7 +117,7 @@ func _apply_cinematic_night() -> void:
 		_env.ambient_light_sky_contribution = 0.0
 	_env.fog_light_energy = maxf(_env.fog_light_energy, 0.50)
 	_env.adjustment_enabled = true
-	_env.adjustment_brightness = 1.0
+	_env.adjustment_brightness = 1.16
 	_env.adjustment_contrast = 1.01 if restored else 1.15
 	_env.adjustment_saturation = 1.05
 	if is_inside_tree():

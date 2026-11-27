@@ -41,7 +41,7 @@ var _halo_mat: StandardMaterial3D
 var _pool_mat: ShaderMaterial
 var _district_id: StringName = &""
 const _BRASS := Color("#c9a24a")
-const _HALO_ALPHA: Array[float] = [0.0, 0.02, 0.04, 0.06]
+const _HALO_ALPHA: Array[float] = [0.0, 0.10, 0.20, 0.32]
 ## The pool of light on the ground under a lamp, by power stage: DARK, PARTIAL,
 ## STREETS, FULL. A dead district throws none - the lamps must read dead in
 ## the dark, that is the game's namesake beat.
@@ -374,7 +374,7 @@ func _apply_halo_stage(stage: int) -> void:
 	if _halo_mat != null:
 		_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
 	if _pool_mat != null:
-		_pool_mat.set_shader_parameter("strength", _POOL_ALPHA[clampi(stage, 0, _POOL_ALPHA.size() - 1)] * 0.34)
+		_pool_mat.set_shader_parameter("strength", _POOL_ALPHA[clampi(stage, 0, _POOL_ALPHA.size() - 1)])
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

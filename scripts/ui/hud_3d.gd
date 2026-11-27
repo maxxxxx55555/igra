@@ -10,7 +10,7 @@ const _ROWS: int = 5
 ## The crosshair and the ammo counter fade this long after the last shot, hit or aim; the touch controls rest at this alpha (the joystick
 ## ring in virtual_joystick.gd rests at the same one) and wake to full on a press.
 const _COMBAT_HOLD_SEC: float = 5.0
-const _TOUCH_REST: float = 0.8
+const _TOUCH_REST: float = 0.92
 const _FADE := preload("res://scripts/ui/hud_fade.gd")
 const _NOISE_SHOWN: float = 0.34
 const _VIS_SHOWN: float = 0.15

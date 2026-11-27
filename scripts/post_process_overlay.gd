@@ -94,9 +94,14 @@ func _set_chroma_pulse(px: float) -> void:
 	_sync_chroma()
 
 func _apply_tier() -> void:
-	_grain.visible = _tier >= TIER_GRAIN
+	# V8: the grade shader carries the only grain and the only vignette; the
+	# extra overlays made static snow and swallowed the wet-road highlights.
+	_grain.visible = false
+	_vignette.visible = false
 	_grade.visible = _tier >= 1
-	_grade_copy.visible = _grade.visible
+	# V8: the canvas shader reads hint_screen_texture directly; the explicit
+	# backbuffer copy was a redundant full-screen pass (one draw call).
+	_grade_copy.visible = false
 	_sync_chroma()
 	if _tier < TIER_BLUR:
 		_blur_strength = 0.0
@@ -262,8 +267,9 @@ func _build_craft_grade() -> void:
 	canvas.add_child(_grade)
 	var material := ShaderMaterial.new()
 	material.shader = preload("res://shaders/overhaul/film_style3_grade.gdshader")
-	material.set_shader_parameter("vignette_strength", 0.12)
-	material.set_shader_parameter("grain_amount", 0.008)
+	material.set_shader_parameter("vignette_strength", 0.06)
+	material.set_shader_parameter("grade_strength", 0.16)
+	material.set_shader_parameter("grain_amount", 0.0045)
 	_grade.material = material
 
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были

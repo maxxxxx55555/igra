@@ -170,7 +170,9 @@ static func half_size(plan: Dictionary) -> Vector2:
 
 static func interior_at(node: Node, point: Vector3) -> bool:
 	for area: Area3D in node.get_tree().get_nodes_in_group("district_interiors"):
-		var collider := area.get_node("CollisionShape3D") as CollisionShape3D
+		var collider := area.get_node_or_null("CollisionShape3D") as CollisionShape3D
+		if collider == null or collider.shape == null:
+			continue
 		var box := collider.shape as BoxShape3D
 		var p := collider.to_local(point).abs()
 		var half := box.size * 0.5
