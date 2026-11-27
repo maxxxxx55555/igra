@@ -1,7 +1,7 @@
 class_name UnslopVisualTheme
 extends RefCounted
 
-## Style-locked Anti-Slop UI, Cartography & Moonlight Atmosphere Toolkit for The Last Streetlight.
+## Style-locked Anti-Slop UI, Cartography & Moonlight Atmosphere Toolkit for Last Streetlight.
 ## Zero external image assets; keeps active repository strictly within <= 45.00 MiB.
 
 const COL_BG_GLASS: Color = Color(0.031, 0.055, 0.071, 0.58)

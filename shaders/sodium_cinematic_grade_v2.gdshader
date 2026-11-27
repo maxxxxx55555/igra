@@ -63,7 +63,7 @@ void fragment() {
 	// clipping to #ffffff
 	graded = (graded - mid_pivot) * contrast_lift + mid_pivot;
 	graded = min(graded, highlight_cap);
-	graded = max(graded, vec3(0.063)); // >= 16/255 purity floor
+	graded = max(graded, vec3(0.080)); // >= 20/255 shadow floor
 
 	// Subtle organic film grain (stronger in mid-shadows, restrained in pure highlights)
 	float n = hash12(floor(FRAGCOORD.xy) + fract(TIME * 24.0) * 100.0) - 0.5;
@@ -74,5 +74,5 @@ void fragment() {
 	float vig = clamp(dot(centered, centered) * 0.5, 0.0, 1.0);
 	graded *= (1.0 - vig * vignette_strength);
 
-	COLOR = vec4(clamp(graded, vec3(0.063), vec3(0.941)), 1.0);
+	COLOR = vec4(clamp(graded, vec3(0.080), vec3(0.941)), 1.0);
 }

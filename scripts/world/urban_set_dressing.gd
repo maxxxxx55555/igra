@@ -96,7 +96,9 @@ func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiM
 			(batches[kind] as Array).append(Transform3D(basis, at))
 			(places[kind] as Array).append(at)
 	for kind: String in batches:
-		_merge_into("Urban_" + kind.capitalize(), kind, batches[kind] as Array[Transform3D])
+		var transforms: Array[Transform3D] = []
+		transforms.assign(batches[kind])
+		_merge_into("Urban_" + kind.capitalize(), kind, transforms)
 		if shadows != null:
 			var pts: Array[Vector3] = []
 			for point: Variant in places[kind]:

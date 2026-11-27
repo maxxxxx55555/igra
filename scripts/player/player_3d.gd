@@ -18,6 +18,13 @@ enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 @export var mouse_sens: float = 0.003
 @export var fps_eye_height: float = 1.7
 
+## Anti-slop night beam: warm tungsten key, a 54 deg cone and a 26 m reach.
+## The scene's authored colour/angle/range are overridden here so the look is
+## owned by code and survives every respawn/upgrade reapply.
+const FLASHLIGHT_COLOR: Color = Color(1.0, 0.902, 0.722, 1.0)  # #ffe6b8
+const FLASHLIGHT_ANGLE: float = 54.0
+const FLASHLIGHT_RANGE: float = 26.0
+
 var current_state: State = State.IDLE
 var hp: float:
 	get: return SecurityVault.get_guarded_float(&"runtime_player_hp_%d" % get_instance_id(), 100.0)
@@ -288,7 +295,10 @@ func _ready() -> void:
 	# Continue silently reset them to unboosted base. Reapply here, once,
 	# before stats/hp/stamina/battery below read their now-correct values.
 	_scene_flashlight_energy = flashlight.light_energy
-	_scene_flashlight_range = flashlight.spot_range
+	_scene_flashlight_range = FLASHLIGHT_RANGE
+	flashlight.light_color = FLASHLIGHT_COLOR
+	flashlight.spot_angle = FLASHLIGHT_ANGLE
+	flashlight.spot_range = FLASHLIGHT_RANGE
 	if SkillTreeManager:
 		SkillTreeManager.reapply_all_effects()
 	# Flashlight upgrades were only applied at purchase, so every respawn or
@@ -1492,11 +1502,11 @@ func _exit_hiding() -> void:
 ## caches the former so _refresh_flashlight_range() can recompute the sum
 ## whenever either one changes, instead of one call overwriting the other.
 var _upgrade_range_bonus: float = 0.0
-## Scene-authored flashlight (14 energy, 16 m) is the base every upgrade and
-## skill scales; the formulas used to hard-code 1.0 / 8.0, so buying
+## Authored beam energy and the cinematic 26 m range are the base every upgrade
+## and skill scales; the formulas used to hard-code 1.0 / 8.0, so buying
 ## Brightness dimmed the light ~20x and light_radius shortened it.
 var _scene_flashlight_energy: float = 1.0
-var _scene_flashlight_range: float = 8.0
+var _scene_flashlight_range: float = FLASHLIGHT_RANGE
 
 func _update_low_battery_flicker() -> void:
 	if flashlight_stats == null:
@@ -1537,7 +1547,7 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	var bat_bonus: float = fl_up.get_bonus("battery")
 	_upgrade_range_bonus = fl_up.get_bonus("range")
 	flashlight.light_energy = _scene_flashlight_energy * (1.0 + b_bonus)
-	flashlight.spot_angle = 45.0 + a_bonus
+	flashlight.spot_angle = FLASHLIGHT_ANGLE + a_bonus
 	_flashlight_battery_bonus = bat_bonus
 	_flashlight_drain_cut = s_bonus
 	_flashlight_stability_maxed = fl_up.get_level("stability") >= fl_up.get_max_level()

@@ -1,7 +1,7 @@
 class_name Wave2ProgressionMap
 extends CanvasLayer
 
-## Dual-layer Map & Progression System for The Last Streetlight.
+## Dual-layer Map & Progression System for Last Streetlight.
 ## 1) Always-visible clickable Progression Minimap (top-right safe area): an
 ##    enlarged architectural crop around the player, lit-area fog only.
 ## 2) Full Overview Map with [District] and [Full City 11-District] tabs.
@@ -797,7 +797,8 @@ func _draw_city_progression_view(canvas: Control, rect: Rect2) -> void:
 		if font != null:
 			canvas.draw_string(font, p + Vector2(-8.0, 5.0), "%02d" % (i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 12,
 				COL_BG_DEEP if is_done else COL_TEXT_MAIN)
-			var nm: String = I18nSync.t("DISTRICT_NAME_%02d" % (i + 1), {})
+			var name_key := "DISTRICT_NAME_%02d" % (i + 1)
+			var nm: String = I18nSync.t(name_key, {})
 			var tw: float = font.get_string_size(nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
 			var cands: Array[Vector2] = [
 				p + Vector2(-tw * 0.5, 24.0),

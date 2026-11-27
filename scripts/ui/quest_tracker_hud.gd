@@ -7,7 +7,6 @@ class_name QuestTrackerHUD
 ## relay parts -> fusebox -> illuminated gate. RU/EN comes from the existing
 ## OBJ_STEP* keys; no new i18n keys are introduced.
 
-const _LINE_W: float = 560.0
 const _LINE_H: float = 34.0
 const _TOP: float = 76.0
 
@@ -25,6 +24,7 @@ func _ready() -> void:
 	LocalizationManager.language_changed.connect(func(_l: String) -> void: _refresh())
 	if I18nSync.has_signal(&"locale_changed"):
 		I18nSync.locale_changed.connect(func(_l: String) -> void: _refresh())
+	EventBus.settings_changed.connect(_on_setting_changed)
 	Wave2Flow.state_changed.connect(func(_s: StringName, _i: int) -> void: _refresh())
 	Wave2Flow.relay_parts_changed.connect(func(_c: int, _r: int) -> void: _refresh())
 	_refresh()
@@ -52,7 +52,8 @@ func _layout_line() -> void:
 		return
 	var vp: Vector2 = get_viewport().get_visible_rect().size
 	var inset: Vector4 = UiScale.insets(vp)
-	var w: float = minf(_LINE_W, maxf(120.0, vp.x - 32.0))
+	var w: float = minf(_panel.get_combined_minimum_size().x, maxf(120.0, vp.x - inset.x - inset.z - 32.0))
+	_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	_panel.offset_left = -w * 0.5
 	_panel.offset_right = w * 0.5
@@ -65,7 +66,14 @@ func _refresh() -> void:
 	var info: Dictionary = Wave2Flow.get_objective_key_and_args()
 	var key: String = String(info.get("key", "OBJ_STEP1_PARTS"))
 	var args: Dictionary = info.get("args", {})
-	_label.text = I18nSync.t(key, args)
+	var marker := "› " if SettingsManager.get_setting("objective_markers", false) else ""
+	_label.text = marker + I18nSync.t(key, args)
+	_panel.reset_size()
+	_layout_line()
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "objective_markers":
+		_refresh()
 
 func _on_game_state(_state: int) -> void:
 	_apply_visibility()
