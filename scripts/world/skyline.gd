@@ -241,11 +241,15 @@ func build(district_id: StringName, _half_extent: float, with_windows: bool) -> 
 			_tones.append(rng.randf())
 		_light_windows(PowerGrid.get_stage(district_id))
 		_SIGNS.build(self, district_id, _fronts, _widths)
-	var grass := _GRASS.new()
-	grass.district_id = district_id
-	add_child(grass)
 	_add_ground()
 	_add_solid_ground(bounds)
+
+
+func dress_courtyards(keepouts: Array[Rect2]) -> void:
+	var grass := _GRASS.new()
+	grass.district_id = _district_id
+	grass.keepouts = keepouts
+	add_child(grass)
 
 ## True when a skyline-local XZ point falls inside a recorded building footprint. The map queries this
 ## instead of guessing at the outer ring, so alleys and real front widths classify as street, not wall.
@@ -486,7 +490,9 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 	mmi.name = node_name
 	mmi.multimesh = mm
 	mmi.material_override = mat
-	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if unshaded else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	if not unshaded:
+		mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
 	add_child(mmi)
 
 func _add_ground() -> void:

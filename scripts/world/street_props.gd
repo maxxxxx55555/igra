@@ -188,24 +188,41 @@ func _build_interiors(plan: Dictionary, streets: Node) -> void:
 		occupied.append(AABB(Vector3(rect.position.x, -1, rect.position.y), Vector3(rect.size.x, 9, rect.size.y)))
 	var shader := preload("res://shaders/overhaul/grounded_contact_ao_pbr.gdshader")
 	for i in int(plan.enterable_count):
-		var side := -1.0 if i % 2 == 0 else 1.0
-		var x := half.x * (-0.24 if i < 2 else 0.24)
-		var z := side * (half.y - 3.9)
-		for shift: float in [0.0, -4.0, 4.0, -8.0, 8.0, -12.0, 12.0]:
-			var origin := Vector3(x + shift, 0, z)
-			if absf(origin.x) + footprint.x * 0.5 + 0.5 >= half.x:
-				continue
-			if not SeamlessEnterableBuilding.is_lot_clear(origin, footprint, occupied):
-				continue
-			var info := SeamlessEnterableBuilding.build(self, str(i + 1), origin, 0.0 if side < 0 else PI,
-				footprint.x, footprint.y, plan.enterable_themes[i], shader)
-			rooms.append(info)
-			var bounds: AABB = info.aabb
-			occupied.append(bounds)
-			_room_keepouts.append(Rect2(bounds.position.x, bounds.position.z, footprint.x, footprint.y).grow(0.65))
-			break
+		var preferred_side := -1.0 if i % 2 == 0 else 1.0
+		var preferred_x := half.x * (-0.24 if i < 2 else 0.24)
+		var best_distance := INF
+		var origin := Vector3.ZERO
+		var yaw := 0.0
+		for road: Dictionary in streets.roads:
+			var lateral: bool = road.dir == "h"
+			var start: Vector3 = streets.road_pos_at(road, 0.0)
+			var along := Vector3.RIGHT if lateral else Vector3.BACK
+			var across := Vector3.BACK if lateral else Vector3.RIGHT
+			var lot_size := footprint if lateral else Vector2(footprint.y, footprint.x)
+			var offset: float = float(streets.road_width) * 0.5 + float(streets.sidewalk_width) + footprint.y * 0.5 + 0.58
+			for facing: float in [-1.0, 1.0]:
+				for metre: int in range(ceili(footprint.x * 0.5), floori(float(road.length) - footprint.x * 0.5)):
+					var candidate := start + along * metre - across * facing * offset
+					candidate.y = 0.0
+					if absf(candidate.x) + lot_size.x * 0.5 >= half.x or absf(candidate.z) + lot_size.y * 0.5 >= half.y:
+						continue
+					var distance: float = absf(candidate.x - preferred_x) + absf(candidate.z - preferred_side * half.y) * 1.35
+					if distance >= best_distance or not SeamlessEnterableBuilding.is_lot_clear(candidate, lot_size, occupied):
+						continue
+					best_distance = distance
+					origin = candidate
+					yaw = atan2(across.x * facing, across.z * facing)
+		if best_distance == INF:
+			continue
+		var info := SeamlessEnterableBuilding.build(self, str(i + 1), origin, yaw,
+			footprint.x, footprint.y, plan.enterable_themes[i], shader)
+		rooms.append(info)
+		var bounds: AABB = info.aabb
+		occupied.append(bounds)
+		_room_keepouts.append(Rect2(bounds.position.x, bounds.position.z, bounds.size.x, bounds.size.z).grow(0.65))
 	get_parent().set_meta("district_rooms", rooms)
 	EnterableBuildingBuilder.batch_visuals(self, rooms)
+	skyline.dress_courtyards(_room_keepouts)
 
 
 ## Shift along the road so a prop clears the streetlight pole that stands at each step.
@@ -233,12 +250,12 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary, district_id: StringName
 	var perp: Vector3 = _side_offset(road, 3.5)
 	for side in [-1, 1]:
 		var lamp_at := center + perp * float(side)
-		if _reserved_for_room(lamp_at):
+		if is_room_reserved(lamp_at):
 			var shift := _along(road) * 2.0
 			lamp_at += shift
-			if _reserved_for_room(lamp_at):
+			if is_room_reserved(lamp_at):
 				lamp_at -= shift * 2.0
-			if _reserved_for_room(lamp_at):
+			if is_room_reserved(lamp_at):
 				continue
 		var l: Node3D = _STREETLIGHT_3D.instantiate()
 		l.set("district_id", district_id)
@@ -278,6 +295,7 @@ func _build_streetlight_multimesh() -> void:
 	pole_mmi.name = "StreetlightPolesBatched"
 	pole_mmi.set_meta("spots", _lamp_local_positions)
 	pole_mmi.multimesh = pole_mm
+	pole_mmi.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
 	pole_mmi.material_override = _HARDWARE.material()
 	add_child(pole_mmi)
 	var wires := MeshInstance3D.new()
@@ -353,7 +371,8 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 		_apply_lamp_stage(stage)
 
 func _apply_lamp_stage(stage: int) -> void:
-	_LampHead.apply_stage(_lamp_mat, stage, self)
+	if _lamp_mat != null:
+		_LampHead.apply_stage(_lamp_mat, stage, self)
 	_apply_halo_stage(stage)
 
 func _apply_halo_stage(stage: int) -> void:
@@ -383,7 +402,7 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 
 ## Benches and trees stand on the sidewalk (3.0-4.5 m from the road axis), not in the
 ## roadway; trees are shifted along the road so they clear the streetlight poles.
-func _reserved_for_room(at: Vector3) -> bool:
+func is_room_reserved(at: Vector3) -> bool:
 	for bounds in _room_keepouts:
 		if bounds.has_point(Vector2(at.x, at.z)):
 			return true
@@ -391,17 +410,17 @@ func _reserved_for_room(at: Vector3) -> bool:
 
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
 	var at := center + _side_offset(road, 3.9) + _along(road)
-	if not _reserved_for_room(at):
+	if not is_room_reserved(at):
 		_bench_positions.append(at)
 
 func _spawn_tree(center: Vector3, road: Dictionary) -> void:
 	var at := center + _side_offset(road, 3.9) + _along(road)
-	if not _reserved_for_room(at):
+	if not is_room_reserved(at):
 		_tree_positions.append(at)
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	var at := center + _side_offset(road, 2.4)
-	if not _reserved_for_room(at):
+	if not is_room_reserved(at):
 		_cone_positions.append(at)
 
 ## The canopies sway (assets/shaders/foliage_sway.gdshader); with Motion Comfort or Reduce UI Motion they stand still, also when it is switched while the district is up.

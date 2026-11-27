@@ -163,6 +163,8 @@ static func _add_visual_box(parent: Node3D, node_name: String, pos: Vector3, siz
 static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 	# Batch by material, but keep the furniture's 38 m visibility threshold.
 	var surfaces := {}
+	var casters := SurfaceTool.new()
+	casters.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for room in rooms:
 		var root: Node3D = room.root
 		for mesh: MeshInstance3D in root.find_children("*", "MeshInstance3D", true, false):
@@ -175,12 +177,22 @@ static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 				surfaces[key][0].begin(Mesh.PRIMITIVE_TRIANGLES)
 			var frame := anchor.global_transform.affine_inverse() * mesh.global_transform
 			surfaces[key][0].append_from(mesh.mesh, 0, frame)
+			if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON:
+				casters.append_from(mesh.mesh, 0, parent.global_transform.affine_inverse() * mesh.global_transform)
 			mesh.queue_free()
+	var shadow := casters.commit()
+	if shadow != null and shadow.get_surface_count() > 0:
+		var proxy := MeshInstance3D.new()
+		proxy.name = "InteriorShadowCasters"
+		proxy.mesh = shadow
+		proxy.layers |= ShadowAndRestorationRig.WORLD_CASTER_LAYER
+		proxy.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+		parent.add_child(proxy)
 	for data: Array in surfaces.values():
 		var mesh := MeshInstance3D.new()
 		mesh.mesh = data[0].commit()
 		mesh.material_override = data[1]
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mesh.visibility_range_end = data[2]
 		data[3].add_child(mesh)
 

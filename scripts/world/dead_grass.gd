@@ -12,6 +12,7 @@ const CELL_REACH: float = 3.4
 const SWAY_M: float = 0.08
 
 @export var district_id: StringName = &""
+var keepouts: Array[Rect2] = []
 var _mat: ShaderMaterial = null
 
 func _ready() -> void:
@@ -22,14 +23,23 @@ func _ready() -> void:
 	multimesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = _tuft_mesh()
-	multimesh.instance_count = 9 * PER_COURTYARD[-1]
+	var tufts: Array[Transform3D] = []
 	# round and round the courtyards, so that the first N tufts of the multimesh are the first N / 9 of every one
-	for i in multimesh.instance_count:
+	for i in 9 * PER_COURTYARD[-1]:
 		var cell: int = i % 9
 		var at := Vector3((cell % 3 - 1) * CELL_STEP + rng.randf_range(-CELL_REACH, CELL_REACH), 0.0, (cell / 3 - 1) * CELL_STEP + rng.randf_range(-CELL_REACH, CELL_REACH))
 		var width: float = rng.randf_range(0.8, 1.4)
 		var basis := Basis(Vector3.UP, rng.randf() * TAU) * Basis.from_scale(Vector3(width, rng.randf_range(0.5, 0.95), width))
-		multimesh.set_instance_transform(i, Transform3D(basis, at))
+		var blocked := false
+		for lot: Rect2 in keepouts:
+			if lot.has_point(Vector2(at.x, at.z)):
+				blocked = true
+				break
+		if not blocked:
+			tufts.append(Transform3D(basis, at))
+	multimesh.instance_count = tufts.size()
+	for i in tufts.size():
+		multimesh.set_instance_transform(i, tufts[i])
 	_mat = ShaderMaterial.new()
 	_mat.shader = _SHADER
 	material_override = _mat
@@ -61,7 +71,7 @@ static func _tuft_mesh() -> ArrayMesh:
 
 func _apply_tier() -> void:
 	var tier: int = clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, PER_COURTYARD.size() - 1)
-	multimesh.visible_instance_count = 9 * PER_COURTYARD[tier]
+	multimesh.visible_instance_count = mini(multimesh.instance_count, 9 * PER_COURTYARD[tier])
 	visible = tier > 0
 
 func _apply_sway() -> void:

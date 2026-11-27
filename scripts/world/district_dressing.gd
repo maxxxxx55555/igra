@@ -238,6 +238,8 @@ func _edge_spot() -> Vector3:
 
 ## The point, or INF when it is too close to a pickup, a hiding place or a door.
 func _solid_spot(at: Vector3) -> Vector3:
+	if get_parent().is_room_reserved(at):
+		return Vector3.INF
 	for other in _clear:
 		if other.distance_to(Vector2(at.x, at.z)) < KEEP_CLEAR_M:
 			return Vector3.INF

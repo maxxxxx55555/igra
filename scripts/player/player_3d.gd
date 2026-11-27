@@ -319,10 +319,8 @@ func _ready() -> void:
 		_collision_guard.min_safe_margin_m = 0.045
 		add_child(_collision_guard)
 
-	if OS.has_feature("mobile") or RenderingServer.get_current_rendering_method() == "gl_compatibility":
-		enable_shadows = false
 	ShadowAndRestorationRig.configure_mobile_shadows(flashlight, null)
-	flashlight.shadow_enabled = enable_shadows or int(SettingsManager.get_setting("shadows", 2)) > 0
+	flashlight.shadow_enabled = enable_shadows and int(SettingsManager.get_setting("shadows", 2)) > 0
 	dust.emitting = enable_dust
 	pivot.rotation.y = 0.0
 	_setup_cone(cone_force_off)

@@ -52,7 +52,7 @@ func build(district_id: StringName, sb: Node, clear: Array[Vector2], grid: float
 		var spots: Array[Vector3] = []
 		for i in count:
 			var at: Vector3 = _spot(clear, grid, inner)
-			if at == Vector3.INF:
+			if at == Vector3.INF or get_parent().get_parent().is_room_reserved(at):
 				continue
 			var body := Transform3D(Basis(Vector3.UP, _rng.randf() * TAU), at)
 			xforms.append(body)
@@ -87,7 +87,7 @@ func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiM
 			else:
 				at = pos + Vector3(off, 0.06, 0.0)
 				basis = basis.rotated(Vector3.UP, PI * 0.5)
-			if _blocked(Vector2(at.x, at.z), clear):
+			if _blocked(Vector2(at.x, at.z), clear) or get_parent().get_parent().is_room_reserved(at):
 				continue
 			var kind: String = kinds[_rng.randi() % kinds.size()]
 			if not batches.has(kind):

@@ -56,12 +56,12 @@ static func build(
 	parent.add_child(root)
 
 	# Cohesive dark slate/charcoal materials (no bright chalk gray, no flat beige plastic)
-	var ext_wall_mat: Material = _make_pbr_mat(pbr_shader, Color(0.082, 0.110, 0.132), Color(0.028, 0.039, 0.048), 0.82, 0.06, origin.y, 1.0)
-	
+	var ext_wall_mat: Material = _make_pbr_mat(pbr_shader, Color(0.16, 0.19, 0.21), Color(0.065, 0.078, 0.087), 0.82, 0.06, origin.y, 1.0)
+
 	var plinth_mat: Material = _make_pbr_mat(pbr_shader, Color(0.048, 0.060, 0.068), Color(0.020, 0.026, 0.030), 0.72, 0.12, origin.y, 1.0)
-	var floor_mat: Material = _make_pbr_mat(pbr_shader, Color(0.068, 0.076, 0.082), Color(0.025, 0.030, 0.034), 0.68, 0.08, origin.y + 0.14, 0.0)
-	var wood_mat: Material = _make_pbr_mat(pbr_shader, Color(0.135, 0.098, 0.068), Color(0.048, 0.034, 0.024), 0.78, 0.04, origin.y + 0.14, 0.0)
-	var metal_mat: Material = _make_pbr_mat(pbr_shader, Color(0.095, 0.108, 0.118), Color(0.035, 0.040, 0.044), 0.56, 0.42, origin.y + 0.14, 0.0)
+	var floor_mat: Material = _make_pbr_mat(pbr_shader, Color(0.16, 0.16, 0.16), Color(0.070, 0.073, 0.076), 0.68, 0.08, origin.y + 0.14, 0.0)
+	var wood_mat: Material = _make_pbr_mat(pbr_shader, Color(0.22, 0.16, 0.11), Color(0.084, 0.065, 0.046), 0.78, 0.04, origin.y + 0.14, 0.0)
+	var metal_mat: Material = _make_pbr_mat(pbr_shader, Color(0.17, 0.20, 0.21), Color(0.073, 0.085, 0.095), 0.56, 0.42, origin.y + 0.14, 0.0)
 
 	# 1. Raised concrete floor slab (strictly above asphalt y=0 to kill road z-fighting)
 	_solid_box(root, "FloorSlab", Vector3(0.0, -0.074, 0.0), Vector3(w - 0.04, 0.16, d - 0.04), floor_mat, 0.0, true)
@@ -133,6 +133,16 @@ static func build(
 	_solid_box(root, "CrateCover", Vector3(1.58, 0.16 + 0.42, 0.55), Vector3(0.88, 0.84, 0.82), wood_mat, CULL_DIST, true)
 
 	# 8. Interior Zone Area3D
+	var fixture := OmniLight3D.new()
+	fixture.name = "InteriorFixture"
+	fixture.position = Vector3(0.0, ROOM_H - 0.35, -0.35)
+	fixture.light_color = Color("#d7ae76")
+	fixture.omni_range = 5.2
+	fixture.omni_attenuation = 0.85
+	fixture.light_energy = 0.0
+	fixture.hide()
+	root.add_child(fixture)
+	var district_id := StringName(parent.get("_district_id"))
 	var area: Area3D = Area3D.new()
 	area.name = "InteriorZone"
 	area.set_meta("theme_id", theme_id)
@@ -150,10 +160,14 @@ static func build(
 	root.add_child(area)
 	area.body_entered.connect(func(body: Node3D) -> void:
 		if body.is_in_group("player"):
-			body.set_meta("inside_district_building", true))
+			body.set_meta("inside_district_building", true)
+			_update_fixture(fixture, PowerGrid.get_stage(district_id)))
 	area.body_exited.connect(func(body: Node3D) -> void:
 		if body.is_in_group("player"):
-			body.set_meta("inside_district_building", false))
+			body.set_meta("inside_district_building", false)
+			fixture.light_energy = 0.0
+			fixture.hide())
+
 
 	var xf: Transform3D = root.global_transform
 	var loot_world: Array[Vector3] = []
@@ -167,8 +181,13 @@ static func build(
 		"interior_center": xf * Vector3(0.0, 0.16, 0.15),
 		"loot_points": loot_world,
 		"footprint_size": Vector2(w, d),
-		"aabb": AABB(origin - Vector3(half_w, 0.0, half_d), Vector3(w, ROOM_H + 0.5, d)),
+		"aabb": root.transform * AABB(Vector3(-half_w, 0.0, -half_d), Vector3(w, ROOM_H + 0.5, d)),
 	}
+
+
+static func _update_fixture(fixture: OmniLight3D, stage: int) -> void:
+	fixture.light_energy = 3.4 if stage == DistrictData.Stage.FULL else 0.0
+	fixture.visible = fixture.light_energy > 0.0
 
 
 static func _build_table(parent: Node3D, prefix: String, base_pos: Vector3, tw: float, td: float, th: float, top_mat: Material, leg_mat: Material) -> void:

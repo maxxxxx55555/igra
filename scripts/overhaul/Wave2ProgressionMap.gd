@@ -77,12 +77,7 @@ var _legend_lbl: Label = null
 var _info_lbl: Label = null
 var _district_buttons: Array[Button] = []
 
-const CITY_NODE_UV: Array[Vector2] = [
-	Vector2(0.08, 0.72), Vector2(0.17, 0.50), Vector2(0.26, 0.68),
-	Vector2(0.35, 0.40), Vector2(0.44, 0.62), Vector2(0.53, 0.34),
-	Vector2(0.62, 0.58), Vector2(0.70, 0.30), Vector2(0.78, 0.54),
-	Vector2(0.86, 0.36), Vector2(0.93, 0.52),
-]
+const CITY_NODE_UV = OrganicCityMapRenderer.DISTRICT_COORDS
 
 
 func _ready() -> void:
@@ -703,150 +698,22 @@ func _draw_fog_layer(layer: Control) -> void:
 
 
 func _draw_city_progression_view(canvas: Control, rect: Rect2) -> void:
-	canvas.draw_rect(rect, UnslopVisualTheme.COL_MAP_BG, true)
-
-	# Night-city schematic: quarter blocks. The outline of every block used to
-	# be its own draw_rect, so the grid cost fifty-six calls; one
-	# draw_multiline carries all of them.
-	var cols: int = 7
-	var rows: int = 4
-	var cell: Vector2 = Vector2(rect.size.x / float(cols), rect.size.y / float(rows))
-	var quarter_edges := PackedVector2Array()
-	for gy in range(rows):
-		for gx in range(cols):
-			var q: Rect2 = Rect2(rect.position + Vector2(float(gx) * cell.x, float(gy) * cell.y) + Vector2(5.0, 5.0),
-				Vector2(maxf(1.0, cell.x - 10.0), maxf(1.0, cell.y - 10.0)))
-			canvas.draw_rect(q, COL_QUARTER, true)
-			quarter_edges.append(q.position); quarter_edges.append(Vector2(q.end.x, q.position.y))
-			quarter_edges.append(Vector2(q.end.x, q.position.y)); quarter_edges.append(q.end)
-			quarter_edges.append(q.end); quarter_edges.append(Vector2(q.position.x, q.end.y))
-			quarter_edges.append(Vector2(q.position.x, q.end.y)); quarter_edges.append(q.position)
-	if quarter_edges.size() >= 2:
-		canvas.draw_multiline(quarter_edges, Color(0.14, 0.20, 0.23, 0.6), 1.0, true)
-
-	# River silhouette.
-	var river := PackedVector2Array([
-		Vector2(rect.position.x, rect.position.y + rect.size.y * 0.82),
-		Vector2(rect.position.x + rect.size.x * 0.28, rect.position.y + rect.size.y * 0.60),
-		Vector2(rect.position.x + rect.size.x * 0.60, rect.position.y + rect.size.y * 0.68),
-		Vector2(rect.end.x, rect.position.y + rect.size.y * 0.32),
-	])
-	canvas.draw_polyline(river, COL_RIVER, maxf(10.0, rect.size.y * 0.035), true)
-	canvas.draw_polyline(river, Color(0.10, 0.20, 0.23, 0.5), 1.0, true)
-
-	# Highway silhouette.
-	var highway := PackedVector2Array([
-		Vector2(rect.position.x, rect.position.y + rect.size.y * 0.16),
-		Vector2(rect.position.x + rect.size.x * 0.34, rect.position.y + rect.size.y * 0.28),
-		Vector2(rect.position.x + rect.size.x * 0.68, rect.position.y + rect.size.y * 0.14),
-		Vector2(rect.end.x, rect.position.y + rect.size.y * 0.22),
-	])
-	canvas.draw_polyline(highway, COL_HIGHWAY, 5.0, true)
-	canvas.draw_polyline(highway, COL_BRASS * Color(1.0, 1.0, 1.0, 0.22), 1.0, true)
-
-	# Smooth route line, coloured per completed segment. Ten polylines became
-	# two: the lit run and the dark run each go into one draw_multiline.
-	var pts: Array[Vector2] = []
-	for i in range(TOTAL_DISTRICTS):
-		pts.append(_city_point(i, rect))
-	var route_lit := PackedVector2Array()
-	var route_dark := PackedVector2Array()
-	for i in range(TOTAL_DISTRICTS - 1):
-		var prev: Vector2 = pts[maxi(0, i - 1)]
-		var next: Vector2 = pts[mini(TOTAL_DISTRICTS - 1, i + 2)]
-		var curve: PackedVector2Array = _smooth_segment(pts[i], pts[i + 1], prev, next, 10)
-		var lit: bool = _completed_districts.has(i) or (i == _current_district_idx and _exit_gate_unlocked)
-		if lit:
-			for k in range(curve.size() - 1):
-				route_lit.append(curve[k])
-				route_lit.append(curve[k + 1])
-		else:
-			for k in range(curve.size() - 1):
-				route_dark.append(curve[k])
-				route_dark.append(curve[k + 1])
-	if route_lit.size() >= 2:
-		canvas.draw_multiline(route_lit, COL_AMBER, 3.0, true)
-	if route_dark.size() >= 2:
-		canvas.draw_multiline(route_dark, COL_ROUTE_DARK, 2.0, true)
-
-	# District nodes with localized RU/EN names placed without overlap.
-	# The rims of the eleven nodes used to be eleven draw_arc calls; they now
-	# share one draw_multiline.
-	var font: Font = ThemeDB.fallback_font
-	var placed: Array[Rect2] = []
-	var rim_brass := PackedVector2Array()
-	var rim_dim := PackedVector2Array()
-	var rim_cur := PackedVector2Array()
-	var rim_sel := PackedVector2Array()
-	for i in range(TOTAL_DISTRICTS):
-		var p: Vector2 = pts[i]
-		var is_done: bool = _completed_districts.has(i)
-		var is_cur: bool = (i == _current_district_idx)
-		var is_sel: bool = (i == _selected_district_idx)
-		if is_cur:
-			canvas.draw_circle(p, 26.0, Color(COL_AMBER.r, COL_AMBER.g, COL_AMBER.b, 0.20))
-			_append_ring(rim_cur, p, 22.0, 24)
-		if is_sel:
-			_append_ring(rim_sel, p, 28.0, 24)
-		var fill_c: Color = COL_AMBER if is_done else (Color(0.28, 0.24, 0.14, 1.0) if is_cur else Color(0.10, 0.15, 0.18, 1.0))
-		canvas.draw_circle(p, 15.0, fill_c)
-		if is_done or is_cur:
-			_append_ring(rim_brass, p, 15.0, 20)
-		else:
-			_append_ring(rim_dim, p, 15.0, 20)
-		if font != null:
-			canvas.draw_string(font, p + Vector2(-8.0, 5.0), "%02d" % (i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 12,
-				COL_BG_DEEP if is_done else COL_TEXT_MAIN)
-			var name_key := "DISTRICT_NAME_%02d" % (i + 1)
-			var nm: String = I18nSync.t(name_key, {})
-			var tw: float = font.get_string_size(nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
-			var cands: Array[Vector2] = [
-				p + Vector2(-tw * 0.5, 24.0),
-				p + Vector2(-tw * 0.5, -36.0),
-				p + Vector2(-tw * 0.5, 42.0),
-				p + Vector2(-tw * 0.5, -54.0),
-			]
-			for c in cands:
-				var cpos: Vector2 = Vector2(clampf(c.x, rect.position.x + 3.0, rect.end.x - tw - 3.0),
-					clampf(c.y, rect.position.y + 3.0, rect.end.y - 16.0))
-				var lr: Rect2 = Rect2(cpos, Vector2(tw + 6.0, 15.0))
-				if _rect_free(lr, placed):
-					placed.append(lr)
-					canvas.draw_string(font, cpos, nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, COL_TEXT_MUTED)
-					break
-	if rim_brass.size() >= 2:
-		canvas.draw_multiline(rim_brass, COL_BRASS, 2.0, true)
-	if rim_dim.size() >= 2:
-		canvas.draw_multiline(rim_dim, Color(0.32, 0.38, 0.42, 0.8), 2.0, true)
-	if rim_cur.size() >= 2:
-		canvas.draw_multiline(rim_cur, COL_AMBER, 2.5, true)
-	if rim_sel.size() >= 2:
-		canvas.draw_multiline(rim_sel, COL_TEXT_MAIN, 1.5, true)
-	UnslopVisualTheme.draw_corner_ticks(canvas, rect, 8.0, COL_BRASS)
-	canvas.draw_rect(rect, COL_BRASS * Color(1.0, 1.0, 1.0, 0.55), false, 1.5)
+	var names: Array[String] = []
+	var progress: Array[int] = []
+	var parts := int(Wave2Flow.to_dict().get("parts", 0))
+	for index in TOTAL_DISTRICTS:
+		var key := "DISTRICT_NAME_%02d" % (index + 1)
+		names.append(I18nSync.t(key))
+		var stage := PowerGrid.get_stage(DistrictSceneFactory.DISTRICTS[index])
+		if index == _current_district_idx:
+			stage = maxi(stage, mini(int(float(parts) / 2.0), 2))
+		progress.append([0, 33, 67, 100][clampi(stage, 0, 3)])
+	OrganicCityMapRenderer.draw_organic_city_map(canvas, rect, _current_district_idx + 1,
+		progress, names, ThemeDB.fallback_font)
 
 
 func _city_point(i: int, rect: Rect2) -> Vector2:
-	return Vector2(rect.position.x + CITY_NODE_UV[i].x * rect.size.x,
-		rect.position.y + CITY_NODE_UV[i].y * rect.size.y)
-
-
-func _smooth_segment(a: Vector2, b: Vector2, prev: Vector2, next: Vector2, steps: int) -> PackedVector2Array:
-	var out: PackedVector2Array = PackedVector2Array()
-	var c1: Vector2 = a + (b - prev) * 0.16
-	var c2: Vector2 = b - (next - a) * 0.16
-	for i in range(steps + 1):
-		var t: float = float(i) / float(steps)
-		var u: float = 1.0 - t
-		out.append(u * u * u * a + 3.0 * u * u * t * c1 + 3.0 * u * t * t * c2 + t * t * t * b)
-	return out
-
-
-func _rect_free(candidate: Rect2, others: Array[Rect2]) -> bool:
-	for r: Rect2 in others:
-		if candidate.grow(2.0).intersects(r):
-			return false
-	return true
+	return rect.position + CITY_NODE_UV[i] * rect.size
 
 
 func _is_world_point_revealed(pt: Vector2) -> bool:
