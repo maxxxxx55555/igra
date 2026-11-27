@@ -24,7 +24,7 @@ const LOOK := {
 	"wreck": [Color(0.14, 0.15, 0.16), "rusted_metal", 1.4],
 	"pallets": [Color("#3a2c20"), "plywood", 0.9],
 	"pipes": [Color(0.27, 0.18, 0.14), "rusted_metal", 1.1],
-	"cabinet": [Color(0.19, 0.22, 0.21), "rusted_metal", 0.7],
+	"cabinet": [Color("#242c30"), "rusted_metal", 0.75],
 	"barrier": [Color("#4a3828"), "plywood", 0.75],
 	"tyres": [Color(0.055, 0.055, 0.06), "", 0.7],
 	# Was a cream-brown blob under the sodium lamps: dark, wet, dirty cloth.
@@ -96,12 +96,27 @@ func _street_clutter(sb: Node, clear: Array[Vector2], low: bool, shadows: MultiM
 			(batches[kind] as Array).append(Transform3D(basis, at))
 			(places[kind] as Array).append(at)
 	for kind: String in batches:
-		_add_batch("UrbanStreet_" + kind.capitalize(), kind, batches[kind] as Array[Transform3D])
+		_merge_into("Urban_" + kind.capitalize(), kind, batches[kind] as Array[Transform3D])
 		if shadows != null:
 			var pts: Array[Vector3] = []
 			for point: Variant in places[kind]:
 				pts.append(point as Vector3)
 			shadows.stamp_all(pts, 0.7 if kind in ["wreck", "pipes", "cabinet"] else 0.45)
+
+## The walk clutter uses the same mesh and the same material as the yard
+## clutter of the same kind, so both layers live in ONE MultiMesh per kind.
+## They used to be two batches - and two draw calls - for every kind the walk
+## touched: five extra calls per district for the same handful of props.
+func _merge_into(node_name: String, kind: String, xforms: Array[Transform3D]) -> void:
+	var mmi := get_node_or_null(node_name) as MultiMeshInstance3D
+	if mmi == null or mmi.multimesh == null:
+		_add_batch(node_name, kind, xforms)
+		return
+	var mm := mmi.multimesh
+	var start: int = mm.instance_count
+	mm.instance_count = start + xforms.size()
+	for i in xforms.size():
+		mm.set_instance_transform(start + i, xforms[i])
 
 func _blocked(at: Vector2, clear: Array[Vector2]) -> bool:
 	for other in clear:

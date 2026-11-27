@@ -38,9 +38,20 @@ const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 var _lamp_mat: ShaderMaterial
 var _halo_mat: StandardMaterial3D
+var _pool_mat: StandardMaterial3D
 var _district_id: StringName = &""
 const _BRASS := Color("#c9a24a")
-const _HALO_ALPHA: Array[float] = [0.0, 0.12, 0.30, 0.52]
+const _HALO_ALPHA: Array[float] = [0.0, 0.067, 0.167, 0.307]
+## The pool of light on the ground under a lamp, by power stage: DARK, PARTIAL,
+## STREETS, FULL. A dead district throws none - the lamps must read dead in
+## the dark, that is the game's namesake beat.
+const _POOL_ALPHA: Array[float] = [0.0, 0.06, 0.18, 0.30]
+## The diameter of the pool on the tarmac, in metres.
+const POOL_SIZE_M: float = 6.5
+## The pool lies a hand's width above the tarmac: the road tiles are 0.1 m
+## thick and their top is at y = 0.06, so a pool drawn on the ground plane
+## itself is buried under the road and never seen.
+const POOL_LIFT_M: float = 0.11
 const _GLOW_TEX := preload("res://scripts/world/district_landmark.gd")
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.webp"
@@ -236,7 +247,7 @@ func _build_streetlight_multimesh() -> void:
 	var halo_mm := MultiMesh.new()
 	halo_mm.transform_format = MultiMesh.TRANSFORM_3D
 	var halo_quad := QuadMesh.new()
-	halo_quad.size = Vector2(1.15, 1.15)
+	halo_quad.size = Vector2(1.067, 1.067)
 	halo_mm.mesh = halo_quad
 	halo_mm.instance_count = _lamp_local_positions.size()
 	for i in _lamp_local_positions.size():
@@ -255,7 +266,40 @@ func _build_streetlight_multimesh() -> void:
 	halo_mmi.material_override = _halo_mat
 	halo_mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(halo_mmi)
+	_build_light_pools()
 	_apply_halo_stage(PowerGrid.get_stage(_district_id))
+
+## The pool of light a sodium lamp throws on the wet tarmac under it. The
+## light limiter keeps ONE lamp of the whole district lit (four slots, three
+## of them taken by the moon, the flashlight and the player's glow), so the
+## street had no light on the ground at all and every frame read as a black
+## void under a row of floating discs. The pool is an additive quad on the
+## ground, batched into one MultiMesh: it costs one draw call for the whole
+## district and it needs no light slot.
+func _build_light_pools() -> void:
+	var pool_mm := MultiMesh.new()
+	pool_mm.transform_format = MultiMesh.TRANSFORM_3D
+	var pool_quad := QuadMesh.new()
+	pool_quad.size = Vector2(POOL_SIZE_M, POOL_SIZE_M)
+	pool_mm.mesh = pool_quad
+	pool_mm.instance_count = _lamp_local_positions.size()
+	var flat := Basis(Vector3(1.0, 0.0, 0.0), -PI * 0.5)
+	for i in _lamp_local_positions.size():
+		var pos: Vector3 = _lamp_local_positions[i]
+		pool_mm.set_instance_transform(i, Transform3D(flat, Vector3(pos.x + 1.16, POOL_LIFT_M, pos.z)))
+	_pool_mat = StandardMaterial3D.new()
+	_pool_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_pool_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_pool_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	_pool_mat.albedo_texture = _GLOW_TEX.glow_texture()
+	_pool_mat.disable_receive_shadows = true
+	_pool_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var pool_mmi := MultiMeshInstance3D.new()
+	pool_mmi.name = "StreetlightPoolsBatched"
+	pool_mmi.multimesh = pool_mm
+	pool_mmi.material_override = _pool_mat
+	pool_mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(pool_mmi)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -266,9 +310,10 @@ func _apply_lamp_stage(stage: int) -> void:
 	_apply_halo_stage(stage)
 
 func _apply_halo_stage(stage: int) -> void:
-	if _halo_mat == null:
-		return
-	_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
+	if _halo_mat != null:
+		_halo_mat.albedo_color = Color(_BRASS, _HALO_ALPHA[clampi(stage, 0, _HALO_ALPHA.size() - 1)])
+	if _pool_mat != null:
+		_pool_mat.albedo_color = Color(_BRASS, _POOL_ALPHA[clampi(stage, 0, _POOL_ALPHA.size() - 1)])
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

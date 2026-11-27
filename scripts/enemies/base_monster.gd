@@ -9,6 +9,12 @@ const HEAVY_HIT: float = 0.3
 const STAGGER_SEC: float = 0.25
 ## What a dead body keeps lying there after it has fallen; the low tier frees it as soon as it is down.
 const CORPSE_LINGER: float = 1.5
+## A warm two-point catchlight that only shows while the flashlight actually
+## reaches the head: a silhouette in the beam reads as a creature, not a dark
+## cut-out. Unshaded + emissive so it survives the night grade without adding
+## a Light3D to the four-slot budget.
+const EYE_GLINT_COLOR: Color = Color("#c9b88a")
+const EYE_GLINT_ENERGY: float = 0.08
 
 enum State { IDLE, PATROL, INVESTIGATE, CHASE, ATTACK, FLEE, STUN, DEAD }
 
@@ -89,6 +95,9 @@ var _remote_rot: float = 0.0
 var _net_sync_timer: float = 0.0
 var _telegraph: Node = null
 var _rig: Node = null
+var _eye_glints: Array[MeshInstance3D] = []
+var _glint_mat: StandardMaterial3D = null
+var _glint_was_seen: bool = false
 
 # --- status effects (P7-data2) ---
 var _status_node: Node = null
@@ -188,6 +197,48 @@ func _build_visual() -> void:
 		return
 	_rig = _Rig.new()
 	_rig.build(self, monster_id)
+	_build_eye_glint()
+
+## One shared tiny sphere and one shared material per monster; hidden until the
+## beam reaches the head, so it costs no draw call in an empty frame.
+func _build_eye_glint() -> void:
+	var head: MeshInstance3D = _rig.get("_head") as MeshInstance3D
+	if head == null:
+		return
+	_glint_mat = StandardMaterial3D.new()
+	_glint_mat.albedo_color = EYE_GLINT_COLOR
+	_glint_mat.emission_enabled = true
+	_glint_mat.emission = EYE_GLINT_COLOR
+	_glint_mat.emission_energy_multiplier = EYE_GLINT_ENERGY
+	_glint_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.026
+	sphere.height = 0.052
+	sphere.radial_segments = 6
+	sphere.rings = 4
+	for side in [-1.0, 1.0]:
+		var mi := MeshInstance3D.new()
+		mi.name = "EyeGlint"
+		mi.mesh = sphere
+		mi.material_override = _glint_mat
+		mi.position = Vector3(side * 0.11, 0.04, -0.26)
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mi.visible = false
+		head.add_child(mi)
+		_eye_glints.append(mi)
+
+func _set_eye_glint(on: bool) -> void:
+	if on == _glint_was_seen:
+		return
+	_glint_was_seen = on
+	for mi in _eye_glints:
+		if is_instance_valid(mi):
+			mi.visible = on
+	if _rig != null:
+		var mat := _rig.get("_mat") as StandardMaterial3D
+		if mat != null:
+			mat.rim = 0.52 if on else 0.30
+			mat.rim_tint = 0.60 if on else 0.40
 
 ## Применяет канон-статы из data/balance/enemy_stats.tres по monster_id.
 ## Наследники задают monster_id (либо ai_id который мапится через
@@ -394,12 +445,14 @@ func _update_light_exposure(delta: float) -> void:
 	if not fl or not fl.visible or fl.light_energy <= 0.1:
 		_is_in_flashlight = false
 		_seen_in_beam = false
+		_set_eye_glint(false)
 		return
 	# the beam must reach the monster, point at it (its cone) and not be shaded by a wall; the bots aim by yaw since rc14
 	var to_monster: Vector3 = global_position + Vector3(0.0, 1.0, 0.0) - fl.global_position
 	_seen_in_beam = to_monster.length() < fl.spot_range and (-fl.global_transform.basis.z).angle_to(to_monster) <= deg_to_rad(fl.spot_angle) \
 			and _beam_reaches(fl.global_position, to_monster, p)
 	_is_in_flashlight = _seen_in_beam and near
+	_set_eye_glint(_seen_in_beam and ai_state != State.DEAD)
 	_handle_light_reaction(delta)
 
 ## Nothing but this monster between the lens and its body.
@@ -777,7 +830,6 @@ func _hit_feedback(reduced: float, src_pos: Vector3) -> void:
 		EventBus.crosshair_state_changed.emit(&"hit")
 
 const _HIT_FLASH_COLOR := Color("#c9a24a")
-const _HIT_FLASH_ENERGY: float = 2.0
 const _HIT_FLASH_SEC: float = 0.1
 
 func _hit_flash() -> void:
@@ -796,10 +848,8 @@ func _hit_flash() -> void:
 		var mat := orig.duplicate() as StandardMaterial3D
 		if mat == null:
 			continue
-		mat.albedo_color = _HIT_FLASH_COLOR
-		mat.emission_enabled = true
-		mat.emission = _HIT_FLASH_COLOR
-		mat.emission_energy_multiplier = _HIT_FLASH_ENERGY
+		mat.albedo_color = mat.albedo_color.lerp(_HIT_FLASH_COLOR, 0.12)
+		mat.emission_enabled = false
 		mesh.material_override = mat
 		var restore := func() -> void:
 			if is_instance_valid(mesh) and mesh.material_override == mat:

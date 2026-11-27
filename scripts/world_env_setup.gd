@@ -40,6 +40,7 @@ const GLOW_FULL: float = 0.7
 
 const _EnvPreset := preload("res://scripts/world/env_preset.gd")
 const _Weather := preload("res://scripts/effects/weather_particles.gd")
+const _VISUAL_THEME := preload("res://scripts/overhaul/UnslopVisualTheme.gd")
 ## W10 of docs/VISUAL_PASS.md section 8: the moon's shadow bias (the engine's 0.1 and 2.0 acned or floated blind), scaled by the moon_bias_mult of the district.
 const MOON_BIAS: float = 0.06
 const MOON_NORMAL_BIAS: float = 1.2
@@ -86,7 +87,7 @@ func _ready() -> void:
 		moon.owner = root
 	_moon = moon
 	_moon.light_energy = moon_energy_default
-	_moon.light_color = Color(0.439, 0.502, 0.753)  # #7080C0
+	_moon.light_color = Color("#536f84")
 	_moon.rotation_degrees = moon_rotation_deg
 	_moon.shadow_enabled = _moon_shadows_enabled(moon_energy_default)
 
@@ -102,6 +103,39 @@ func _ready() -> void:
 	_player_glow = _find_player_glow()
 	_boot_look()
 
+## Single final owner of the look. The preset/tier/stage/LUT/post-fx passes below all
+## mutate the same Environment, so the cinematic night is reasserted last on every one of
+## those paths. The theme also drops the moon's shadow pass (66 of a measured 235 draw
+## calls in a dark district) and keeps the rim light out of the visible-light budget.
+func _apply_cinematic_night() -> void:
+	if _we == null or _env == null:
+		return
+	_VISUAL_THEME.apply_cinematic_night_env(_we, _moon)
+	_env.fog_light_energy = maxf(_env.fog_light_energy, 0.50)
+	_env.adjustment_enabled = true
+	_env.adjustment_brightness = 1.0
+	_env.adjustment_contrast = 1.15
+	_env.adjustment_saturation = 1.05
+	if is_inside_tree():
+		_de_mud_grade(_find_postfx_overlay())
+
+## The menu-canon grade blended 46% of a near-black tint over the frame and added a
+## 0.22 vignette: flat gray mud that crushed the street's dark end. Keep the split tone
+## and the sodium halation, drop the lift so the wet asphalt and the lamps read clean.
+func _de_mud_grade(overlay: Node) -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		return
+	var grade := overlay.find_child("CraftSodiumGradeOverlay", true, false) as ColorRect
+	if grade == null or not (grade.material is ShaderMaterial):
+		return
+	var mat := grade.material as ShaderMaterial
+	mat.set_shader_parameter("grade_strength", 0.16)
+	mat.set_shader_parameter("shadow_tint", Color(0.055, 0.094, 0.129, 1.0))
+	mat.set_shader_parameter("vignette_strength", 0.0)
+	mat.set_shader_parameter("halation_strength", 0.20)
+	mat.set_shader_parameter("contrast_lift", 1.10)
+	mat.set_shader_parameter("mid_pivot", 0.22)
+
 ## The order the look boots in (docs/VISUAL_PASS.md section 8, W1 to W7), in one place so that it cannot be scrambled: the preset of the profile, the camera attributes, the numbers of the
 ## graphics tier, the colours of the stage, then the LUT and the post-fx LAST, because they refine the preset and do not replace it. The materials of the lamps and the roads (W4, W5) follow with each
 ## district (district_entered); the weather particles (W7) are made once, last of all.
@@ -116,6 +150,7 @@ func _boot_look() -> void:
 		_apply_lut(dm.current_district)
 		_apply_postfx(dm.current_district)
 		_apply_moon_bias(dm.current_district)
+	_apply_cinematic_night()
 	if get_node_or_null("WeatherParticles") == null:
 		add_child(_Weather.new())
 
@@ -158,6 +193,7 @@ func apply_for_stage(stage: int) -> void:
 		_moon.shadow_enabled = _moon_shadows_enabled(moon_energy)
 	if _player_glow:
 		_player_glow.light_energy = glow_energy
+	_apply_cinematic_night()
 
 
 ## Wave 3: the cold slate-teal mist of the owner's main-menu reference
@@ -264,6 +300,7 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = float(p.get("contrast", 1.0))
 	_env.adjustment_saturation = float(p.get("saturation", 1.0))
+	_apply_cinematic_night()
 
 func _on_settings_changed(key: String, value: Variant) -> void:
 	if key == "shadows":
@@ -343,13 +380,14 @@ func _apply_postfx(district_id: StringName) -> void:
 	_env.glow_intensity = float(bloom.get("intensity", glow_intensity))
 	_env.glow_strength = float(bloom.get("strength", 1.0))
 	_env.glow_hdr_threshold = float(bloom.get("hdr_threshold", 1.0))
+	_apply_cinematic_night()
 
 	var overlay := _find_postfx_overlay()
-	if overlay == null:
+	if overlay == null or not is_inside_tree():
 		return
-	var vignette: Dictionary = preset.get("vignette", {})
+	# No screen-edge vignette: it was the flat gray frame that buried the street.
 	if overlay.has_method("set_vignette_strength"):
-		overlay.set_vignette_strength(clampf(float(vignette.get("strength", 0.08)), 0.0, 0.10))
+		overlay.set_vignette_strength(0.0)
 	var chroma: Dictionary = preset.get("chroma", {})
 	if overlay.has_method("set_chroma_amount"):
 		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))

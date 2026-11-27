@@ -25,7 +25,7 @@ const _COPPER := Color(0.72, 0.42, 0.20)
 const _PAPER := Color(0.85, 0.82, 0.77)
 ## family -> [body colour, accent colour, emission of the accent, emission of the body]
 const LOOK: Dictionary = {
-	&"cell": [Color(0.55, 0.42, 0.14), Color(0.95, 0.72, 0.22), 1.3, 0.35], &"medkit": [Color(0.78, 0.78, 0.74), Color(0.78, 0.16, 0.12), 1.1, 0.0],
+	&"cell": [Color(0.55, 0.42, 0.14), Color(0.95, 0.72, 0.22), 1.3, 0.35], &"medkit": [Color("#6e7476"), Color("#7a2e2e"), 0.0, 0.0],
 	&"vial": [Color(0.50, 0.14, 0.12), _STEEL, 0.0, 0.7], &"shard": _JUNK, &"plate": _JUNK, &"cog": _JUNK, &"plank": _JUNK,
 	&"coil": [Color(0.18, 0.34, 0.20), _COPPER, 0.5, 0.0], &"spool": [Color(0.20, 0.20, 0.22), _COPPER, 0.5, 0.0], &"fuse": [Color(0.78, 0.72, 0.60), _STEEL, 0.6, 0.0],
 	&"transistor": [Color(0.10, 0.12, 0.10), _GOLD, 0.9, 0.0], &"board": [Color(0.12, 0.26, 0.16), _GOLD, 0.9, 0.0], &"transformer": [Color(0.30, 0.31, 0.34), _COPPER, 0.5, 0.0],

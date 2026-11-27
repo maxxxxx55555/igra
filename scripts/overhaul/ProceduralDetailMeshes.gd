@@ -86,7 +86,7 @@ func _relay() -> void:
 		_piece(Vector3(x,0.13,0),Vector3(0.025,0.04,0.025),BRASS,false)
 
 func _cabinet() -> void:
-	_piece(Vector3.ZERO, Vector3(0.88,1.23,0.44), IRON)
+	_piece(Vector3.ZERO, Vector3(0.88,1.23,0.44), Color("#242c30"))
 	_piece(Vector3(0,0.65,0.02),Vector3(1.02,0.09,0.57),IRON.lightened(0.13))
 	_piece(Vector3(0,0,0.235),Vector3(0.77,1.08,0.045),IRON.lightened(0.12))
 	_piece(Vector3(0.24,-0.07,0.293),Vector3(0.06,0.19,0.075),BRASS)

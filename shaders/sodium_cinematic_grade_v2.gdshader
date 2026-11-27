@@ -13,6 +13,12 @@ uniform float halation_threshold : hint_range(0.45, 0.90) = 0.62;
 uniform float vignette_strength : hint_range(0.0, 0.40) = 0.24;
 uniform float grain_strength : hint_range(0.0, 0.04) = 0.016;
 uniform float contrast_lift : hint_range(0.90, 1.18) = 1.06;
+// The pivot of the S-curve. It used to sit at 0.5, which is far above anything a
+// night street renders: every lit surface landed below the pivot and the curve
+// only pushed it further down, so the sodium pools and the wet asphalt ended up
+// on the same gray. A low pivot separates the mid-tones (the lamps, the road,
+// the lit facades) while the black floor still holds the frame's deep end.
+uniform float mid_pivot : hint_range(0.05, 0.50) = 0.22;
 
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -53,8 +59,9 @@ void fragment() {
 	vec3 halo = sample_amber_halation(uv, SCREEN_PIXEL_SIZE * 2.5);
 	graded += halo * halation_strength;
 
-	// S-curve micro-contrast without crushing blacks or clipping to #ffffff
-	graded = (graded - 0.5) * contrast_lift + 0.5;
+	// S-curve micro-contrast around the low pivot, without crushing blacks or
+	// clipping to #ffffff
+	graded = (graded - mid_pivot) * contrast_lift + mid_pivot;
 	graded = min(graded, highlight_cap);
 	graded = max(graded, vec3(0.063)); // >= 16/255 purity floor
 

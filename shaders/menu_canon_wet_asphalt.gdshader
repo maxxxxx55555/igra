@@ -15,7 +15,12 @@ uniform float normal_strength : hint_range(0.2, 1.4) = 0.82;
 uniform vec3 tint_color : source_color = vec3(0.68, 0.71, 0.72);
 uniform vec3 mist_sky_tint : source_color = vec3(0.078, 0.129, 0.149);  // #142126
 uniform vec3 sodium_bounce : source_color = vec3(0.788, 0.635, 0.290);  // #c9a24a
-uniform float sodium_bounce_energy : hint_range(0.0, 0.25) = 0.06;
+// The sodium sheen the street lamps throw back onto the wet tarmac. At 0.06 the
+// road was a black hole under the fog: with one live lamp out of 48 (the light
+// limiter's budget) the ground carried no light of its own, so every frame read
+// as "flat gray mud". The sheen is the street's own light - a wet mirror of the
+// lamps - and it costs no draw call and no light slot.
+uniform float sodium_bounce_energy : hint_range(0.0, 0.60) = 0.40;
 
 varying vec3 v_world_pos;
 
@@ -31,32 +36,14 @@ void fragment() {
 	float macro_b = texture(puddle_mask_tex, uv_macro * 0.43 + vec2(0.37, 0.19)).r;
 	float p_field = macro_a * 0.65 + macro_b * 0.35;
 
-	float puddle = smoothstep(0.50, 0.74, p_field * (0.68 + 0.50 * wetness));
-	float damp = smoothstep(0.30, 0.58, p_field * (0.68 + 0.50 * wetness));
-
-	vec3 base_albedo = texture(albedo_tex, uv_d).rgb * tint_color;
-	float base_rough = texture(roughness_tex, uv_d).r;
-
-	float ndotv = clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0);
-	float fresnel = pow(1.0 - ndotv, 3.8);
-
-	// Deep nocturnal wet tarmac matching main menu reference (#14181a -> #0c1012 in puddles)
-	vec3 dry_col = clamp(base_albedo, vec3(0.075), vec3(0.45));
-	vec3 damp_col = dry_col * mix(1.0, 0.74, damp);
-	vec3 puddle_col = damp_col * 0.48 + mist_sky_tint * (0.14 + 0.62 * fresnel);
-
-	vec3 final_albedo = mix(damp_col, puddle_col, puddle);
-	float final_rough = mix(max(base_rough, dry_roughness_floor), puddle_roughness, puddle);
-	float final_spec = clamp(mix(0.34, 0.88, puddle) + fresnel * 0.10 * puddle, 0.0, 0.94);
-
-	vec3 tex_n = texture(normal_tex, uv_d).rgb;
-	vec3 final_n = mix(tex_n, vec3(0.5, 0.5, 1.0), puddle * 0.92);
-
-	ALBEDO = clamp(final_albedo, vec3(0.075), vec3(0.88));
-	EMISSION = sodium_bounce * (fresnel * puddle * sodium_bounce_energy);
+	float puddle = smoothstep(0.35, 0.75, p_field) * wetness;
+	vec3 grain = mix(vec3(0.76), vec3(1.0), texture(albedo_tex, uv_d).rgb);
+	vec3 dry_col = vec3(0.063, 0.082, 0.094);
+	vec3 wet_col = vec3(0.035, 0.051, 0.063);
+	ALBEDO = mix(dry_col, wet_col, puddle) * grain * tint_color;
 	METALLIC = 0.0;
-	SPECULAR = final_spec;
-	ROUGHNESS = clamp(final_rough, 0.06, 0.95);
-	NORMAL_MAP = final_n;
+	SPECULAR = mix(0.34, 0.60, puddle);
+	ROUGHNESS = mix(0.72, 0.12, puddle);
+	NORMAL_MAP = mix(texture(normal_tex, uv_d).rgb, vec3(0.5, 0.5, 1.0), puddle * 0.92);
 	NORMAL_MAP_DEPTH = normal_strength;
 }

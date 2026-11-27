@@ -321,3 +321,7 @@ func set_grain_intensity(v: float) -> void:
 func set_vignette_strength(v: float) -> void:
 	if _vignette:
 		_vignette.color.a = clampf(v, 0.0, 0.7)
+		# A fully transparent ColorRect still costs a draw call every frame.
+		# The unslop pass zeroes the vignette (it was the flat gray frame), so
+		# the overlay must actually leave the pipeline when it is off.
+		_vignette.visible = _vignette.color.a > 0.001

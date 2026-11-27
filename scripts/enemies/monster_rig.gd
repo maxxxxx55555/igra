@@ -93,9 +93,9 @@ func build(monster: Node3D, id: StringName) -> void:
 	_root.position.y = _feet_y
 	monster.add_child(_root)
 	_mat = StandardMaterial3D.new()
-	_mat.albedo_color = _look["tint"]
+	_mat.albedo_color = Color("#14191d")
 	_mat.vertex_color_use_as_albedo = true  # the sockets of a skull are a darker vertex colour (monster_meshes.gd); a hit flash copies the material, so it keeps them
-	_mat.roughness = 0.5  # wet: under the flashlight a dark body shows highlights instead of a matt clay tan
+	_mat.roughness = 0.55  # wet: under the flashlight a dark body shows highlights instead of a matt clay tan
 	# a hide instead of clay: a mottled albedo (0.3 to 1 of the tint) and a lumpy surface, triplanar so the ring meshes show no seam
 	_mat.albedo_texture = _skin(0)
 	_mat.normal_enabled = true
@@ -105,10 +105,7 @@ func build(monster: Node3D, id: StringName) -> void:
 	_mat.rim_enabled = true  # a dark body in a dark street reads by its edge against the lamps
 	_mat.rim = 0.3
 	_mat.rim_tint = 0.4
-	if _look.has("emit"):
-		_mat.emission_enabled = true
-		_mat.emission = _look["emit"]
-		_mat.emission_energy_multiplier = 0.6
+	_mat.emission_enabled = false
 	var legs: Array = _look["legs"]
 	var body: Array = _look["body"]
 	_leg_len = float(legs[2])

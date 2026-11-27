@@ -51,7 +51,7 @@ const LEAF_COLORS: Array[Color] = [Color(0.17, 0.15, 0.08), Color(0.12, 0.14, 0.
 const CRATE_COLOR := Color(0.22, 0.17, 0.11)
 ## The mean sRGB albedo of the PBR sets the dressing uses (plywood, rusted_metal: ~0.38 measured), the divisor that keeps a tint over a texture at the look's colour.
 const ALBEDO_SET_MEAN: float = 0.38
-const BARREL_COLORS: Array[Color] = [Color(0.16, 0.17, 0.19), Color(0.27, 0.15, 0.10)]
+const BARREL_COLORS: Array[Color] = [Color("#2b2f32"), Color("#4a3326")]
 ## Per district and block: litter, leaves, puddles, crates, barrels, bins.
 const KIT := {
 	&"suburbs": {"litter": 6, "leaves": 6, "puddles": 2, "crates": 1, "barrels": 0, "bins": 2},
@@ -136,7 +136,7 @@ func build(district_id: StringName, sb: Node) -> void:
 	_batch("Litter", _flat(), litter, litter_colors, _plain(Color.WHITE, 0.95, 0.0, true), false)
 	_batch("Puddles", _patch(), puddles, none, _soft(Color(0.015, 0.02, 0.03, 0.55), false), false)
 	_batch("Crates", _CRATE, crates, none, _plain(CRATE_COLOR, 0.9, 0.0, false, "plywood"), true)
-	_batch("Barrels", _BARREL, barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true, "rusted_metal"), true)
+	_batch("Barrels", _BARREL, barrels, barrel_colors, _plain(Color.WHITE, 0.75, 0.35, true, "rusted_metal"), true)
 	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5, false, "rusted_metal"), true)
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4, false, "rusted_metal"), true)
 	_pool_mat = _soft(Color(BRASS, 0.0), true)

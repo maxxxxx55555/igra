@@ -81,6 +81,11 @@ func _ready() -> void:
 	_ensure_mm()
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))
+	# Flat ground tiles and paint never cast a visible shadow; keeping them out
+	# of the flashlight's shadow pass removes five draw calls per street.
+	var street_mms: Array[MultiMeshInstance3D] = [_road_mm, _sidewalk_mm, _marking_mm, _curb_mm, _damage_mm]
+	for mm in street_mms:
+		mm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_init_mm(_road_mm,     _make_road_mesh())
 	_init_mm(_sidewalk_mm, DETAIL.module(&"pavement"))
 	_sidewalk_mm.material_override = _surface(_TEX_CONCRETE, Vector3(0.115, 0.120, 0.115), 0.1156, 0.0, 1.0)
@@ -133,11 +138,12 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 			mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
 			mat.set_shader_parameter("puddle_uv_scale", Vector2(0.75, 0.75))
 			mat.set_shader_parameter("wetness", 0.58)
-			mat.set_shader_parameter("puddle_roughness", 0.16)
+			mat.set_shader_parameter("puddle_roughness", 0.18)
 			mat.set_shader_parameter("dry_roughness_floor", 0.84)
 			mat.set_shader_parameter("normal_strength", 0.78)
 			mat.set_shader_parameter("ripple_strength", 0.012)
 			mat.set_shader_parameter("tint_color", Color(1.28, 1.34, 1.42))
+			mat.set_shader_parameter("night_sky_reflect", Color(0.105, 0.165, 0.195))
 			return mat
 		mat.shader = _PUDDLES_CANON
 		mat.set_shader_parameter("albedo_tex", load(W2_ASPHALT_ALBEDO))
@@ -150,13 +156,13 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
 		mat.set_shader_parameter("world_puddle_scale", 0.045)
 		mat.set_shader_parameter("wetness", 0.62)
-		mat.set_shader_parameter("puddle_roughness", 0.10)
+		mat.set_shader_parameter("puddle_roughness", 0.13)
 		mat.set_shader_parameter("dry_roughness_floor", 0.84)
 		mat.set_shader_parameter("normal_strength", 0.82)
-		mat.set_shader_parameter("tint_color", Color(0.68, 0.71, 0.72))
-		mat.set_shader_parameter("mist_sky_tint", Color(0.078, 0.129, 0.149))
-		mat.set_shader_parameter("sodium_bounce", Color(0.788, 0.635, 0.290))
-		mat.set_shader_parameter("sodium_bounce_energy", 0.06)
+		mat.set_shader_parameter("tint_color", Color(1.02, 1.05, 1.08))
+		mat.set_shader_parameter("mist_sky_tint", Color(0.105, 0.165, 0.195))
+		mat.set_shader_parameter("sodium_bounce", Color(0.831, 0.663, 0.306))
+		mat.set_shader_parameter("sodium_bounce_energy", 0.40)
 		return mat
 	mat.shader = _ROAD
 	var w2_albedo: String = W2_SIDEWALK_ALBEDO if surface < 1.5 else W2_ASPHALT_ALBEDO

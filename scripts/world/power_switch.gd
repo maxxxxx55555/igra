@@ -41,8 +41,6 @@ const _FUSE_SFX := preload("res://assets/audio/sfx/interact/fuse_insert.ogg")
 var _panel: MeshInstance3D
 var _glow: StandardMaterial3D
 var _light: OmniLight3D
-var _label: Label3D
-var _stage_label: Label3D
 var _bus: Node
 
 func _ready() -> void:
@@ -84,22 +82,12 @@ func _build_visual() -> void:
 	_light.position = Vector3(0, 1.4, 0.6)
 	add_child(_light)
 
-	_label = Label3D.new()
-	_label.text = _district_name()
-	_label.font_size = 32
-	_label.position = Vector3(0, 2.2, 0.1)
-	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_label.modulate = Color(1.0, 0.85, 0.4)
-	add_child(_label)
-
-	# Вторая строка — сколько стадий пройдено. Без неё игрок не понимает,
-	# что щит можно чинить несколько раз.
-	_stage_label = Label3D.new()
-	_stage_label.font_size = 24
-	_stage_label.position = Vector3(0, 1.95, 0.1)
-	_stage_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_stage_label.modulate = Color(0.68, 0.71, 0.75)
-	add_child(_stage_label)
+	# Unslop pass: the floating district name and the "n/3" stage counter were
+	# billboard Label3D texts standing in the world. They were the classic
+	# "game dev placeholder" read: two extra draw calls per switch, a bright
+	# yellow label over a night street, and the stage was already on the
+	# interact prompt (PROMPT_REPAIR) and in the HUD's objective line. The
+	# switch now speaks through the panel's own glow only.
 
 func _district_name() -> String:
 	var pg := get_node_or_null("/root/PowerGrid")
@@ -126,8 +114,6 @@ func _refresh_visual() -> void:
 	_light.light_energy = energy
 	if _glow != null:
 		_glow.emission_energy_multiplier = maxf(0.2, energy)
-	if _stage_label != null:
-		_stage_label.text = "%d/3" % stage
 
 ## Interactor скрывает подсказку у полностью восстановленного щита.
 func can_interact() -> bool:

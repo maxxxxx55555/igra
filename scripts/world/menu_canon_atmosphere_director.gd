@@ -24,9 +24,9 @@ const STAGE_FOG_DENSITY: Dictionary = {
 
 const STAGE_WINDOW_ENERGY: Dictionary = {
 	"DARK": 0.02,
-	"PARTIAL": 0.14,
-	"STREETS": 0.28,
-	"FULL": 0.44,
+	"PARTIAL": 0.30,
+	"STREETS": 0.62,
+	"FULL": 0.95,
 }
 
 

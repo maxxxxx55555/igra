@@ -5,8 +5,8 @@ const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
 ## Wave 3: the soft dusty sodium cone of the owner's main-menu reference.
 const _CONE := preload("res://shaders/streetlight_cone_craft.gdshader")
 const CONE_HEIGHT: float = 5.2
-const CONE_TOP_R: float = 0.26
-const CONE_BOTTOM_R: float = 3.1
+const CONE_TOP_R: float = 0.087
+const CONE_BOTTOM_R: float = 1.033
 ## Only the lamps near the player draw their cone, so the perf budget keeps
 ## its room for the street itself.
 const CONE_RANGE: float = 34.0
@@ -83,7 +83,7 @@ func _build_cone() -> void:
 	var mat := ShaderMaterial.new()
 	mat.shader = _CONE
 	mat.set_shader_parameter("sodium_color", MenuCanonAtmosphereDirector.SODIUM_KEY_COLOR)
-	mat.set_shader_parameter("cone_opacity", 0.15)
+	mat.set_shader_parameter("cone_opacity", 0.05)
 	mesh.material = mat
 	_cone = MeshInstance3D.new()
 	_cone.name = "LightCone"
@@ -117,8 +117,8 @@ func _process(delta: float) -> void:
 	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
 	if not _reduce_flash and sin(_t * 15.0) > 0.95:
 		base = 0.2 * _energy_scale
-	spot.light_energy = base * 1.6 * _light_energy_mult
-	glow.light_energy = base * 0.8 * _light_energy_mult
+	spot.light_energy = base * 3.0 * _light_energy_mult
+	glow.light_energy = base * 1.7 * _light_energy_mult
 
 func _on_setting_changed(key: String, value: Variant) -> void:
 	if key == "reduce_flash":
@@ -148,21 +148,21 @@ func _update_light(stage: int = -1) -> void:
 	spot.visible = _on
 	glow.visible = _on
 	if _on and stage >= 3:
-		spot.light_energy = 2.8 * _light_energy_mult
+		spot.light_energy = 4.4 * _light_energy_mult
 		spot.spot_attenuation = 1.0
-		glow.light_energy = 1.1 * _light_energy_mult
-		glow.omni_range = 8.0
+		glow.light_energy = 2.0 * _light_energy_mult
+		glow.omni_range = 10.0
 	elif _on and stage >= 2:
-		spot.light_energy = 2.0 * _light_energy_mult
+		spot.light_energy = 3.2 * _light_energy_mult
 		spot.spot_attenuation = 1.5
-		glow.light_energy = 0.8 * _light_energy_mult
-		glow.omni_range = 6.0
+		glow.light_energy = 1.4 * _light_energy_mult
+		glow.omni_range = 8.0
 	elif _on:
 		# PARTIAL — tighter, weaker pool
-		spot.light_energy = 1.2 * _light_energy_mult
+		spot.light_energy = 2.2 * _light_energy_mult
 		spot.spot_attenuation = 2.0
-		glow.light_energy = 0.4 * _light_energy_mult
-		glow.omni_range = 4.0
+		glow.light_energy = 0.8 * _light_energy_mult
+		glow.omni_range = 6.0
 	else:
 		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
 		glow.light_energy = 0.0

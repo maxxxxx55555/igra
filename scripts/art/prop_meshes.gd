@@ -9,7 +9,7 @@ const LOOK: Dictionary = {
 	"secret": [Vector3(0.2, 0.15, 0.2), Color(0.30, 0.33, 0.34), Color(0.541, 0.62, 0.639), 0.9],
 	"workbench": [Vector3(1.4, 1.0, 0.8), Color(0.35, 0.28, 0.20), Color(0.56, 0.58, 0.61), -1.0],
 	"bed": [Vector3(2.0, 0.5, 1.0), Color(0.27, 0.22, 0.20), Color(0.55, 0.52, 0.46), -1.0],
-	"switch": [Vector3(0.8, 1.6, 0.2), Color(0.15, 0.15, 0.18), Color(1.0, 0.7, 0.3), 0.4],
+	"switch": [Vector3(0.8, 1.6, 0.2), Color("#242c30"), Color("#d4a94e"), 0.12],
 	"cable_box": [Vector3(0.6, 1.0, 0.4), Color(0.16, 0.16, 0.20), Color(0.788, 0.635, 0.29), 0.5],
 	"generator": [Vector3(1.0, 1.2, 0.8), Color(0.18, 0.17, 0.15), Color(0.706, 0.271, 0.184), 0.0],
 }
