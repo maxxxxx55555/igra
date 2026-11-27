@@ -194,7 +194,7 @@ func _open_detail(id: StringName) -> void:
 	vb.add_theme_constant_override("separation", 8)
 	card.add_child(vb)
 
-	var full_path := "res://assets/textures/portraits_v2/%s_full_512x768.png" % String(id)
+	var full_path := "res://assets/textures/portraits_v2/%s_full_512x768.webp" % String(id)
 	var art := TextureRect.new()
 	art.custom_minimum_size = Vector2(220, 220)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

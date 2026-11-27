@@ -62,7 +62,9 @@ func _ready() -> void:
 			var item: ItemData = data as ItemData
 			_by_id[item.id] = item
 			if item.icon == null:
-				var p: String = ICON_DIR + String(item.id) + ".png"
+				var p: String = ICON_DIR + String(item.id) + ".webp"
+				if not ResourceLoader.exists(p):
+					p = ICON_DIR + String(item.id) + ".png"
 				if ResourceLoader.exists(p):
 					item.icon = load(p) as Texture2D
 func get_item(id: StringName) -> ItemData:

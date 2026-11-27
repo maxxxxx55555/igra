@@ -39,7 +39,7 @@ func _show_fallback_photos() -> void:
 		var tex_rect := TextureRect.new()
 		tex_rect.custom_minimum_size = Vector2(64, 64)
 		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		var path := "res://assets/photos/%s.png" % name
+		var path := "res://assets/photos/%s.webp" % name
 		if ResourceLoader.exists(path):
 			tex_rect.texture = load(path)
 		_grid.add_child(tex_rect)

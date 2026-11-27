@@ -85,21 +85,21 @@ static func _style_touch_button(btn: Control, node_name: String, tier: String) -
 		return
 	var b: BaseButton = btn as BaseButton
 
-	var normal_file: String = "plate_arc_normal.png"
-	var pressed_file: String = "plate_arc_pressed.png"
+	var normal_file: String = "plate_arc_normal.webp"
+	var pressed_file: String = "plate_arc_pressed.webp"
 	var pad_px: float = 12.0
 	match tier:
 		"primary":
-			normal_file = "plate_primary_normal.png"
-			pressed_file = "plate_primary_pressed.png"
+			normal_file = "plate_primary_normal.webp"
+			pressed_file = "plate_primary_pressed.webp"
 			pad_px = 18.0
 		"interact":
-			normal_file = "plate_interact_normal.png"
-			pressed_file = "plate_interact_pressed.png"
+			normal_file = "plate_interact_normal.webp"
+			pressed_file = "plate_interact_pressed.webp"
 			pad_px = 14.0
 		"dock":
-			normal_file = "plate_dock_normal.png"
-			pressed_file = "plate_dock_pressed.png"
+			normal_file = "plate_dock_normal.webp"
+			pressed_file = "plate_dock_pressed.webp"
 			pad_px = 10.0
 
 	var normal_box: StyleBox = _make_plate_style(normal_file, pad_px)

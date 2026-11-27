@@ -434,7 +434,7 @@ FTUE_STREET_LIT,The street is lit again,Улица снова светится
 FULLSCREEN,Fullscreen,На весь экран
 Found server: %s,Found server: %s,Найден сервер: %s
 GAME_OVER_STATS,Time: %ds | Killed: %d,Время: %d с | Убито: %d
-GAME_TITLE,LAST STREETLIGHT,ПОСЛЕДНИЙ ФОНАРЬ
+GAME_TITLE,LAST STREETLIGHT,LAST STREETLIGHT
 GENERATOR_OUT_OF_FUEL,Generator out of fuel,В генераторе закончилось топливо
 Game saved to slot %d,Game saved to slot %d,Игра сохранена в слот %d
 Graphics Tier,Graphics Tier,Уровень графики
@@ -1659,7 +1659,7 @@ menu_join,Join LAN,Войти LAN
 menu_play,Play,Играть
 menu_quit,Quit,Выход
 menu_subtitle,A survivor in an eternal night. Bring the light back to the city.,Выживший в вечной ночи. Верни городу свет.
-menu_title,Last Streetlight,ПОСЛЕДНИЙ ФОНАРЬ
+menu_title,Last Streetlight,Last Streetlight
 msg_caught,You were caught!,Вас поймали!
 msg_lose,You failed...,Вы проиграли...
 msg_saved,Game saved,Игра сохранена

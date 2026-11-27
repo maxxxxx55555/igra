@@ -1,23 +1,37 @@
 extends RefCounted
-## The texture hook of the material factory (queue item B6): district_dressing.gd _plain() builds the material of every prop the dressing places, and names a texture set for it. A set is a name; its files are
-## assets/textures/pbr/<name>_albedo.png, _normal.png and _rough.png (tools/gen_pbr_textures.py). A set whose albedo does not exist leaves the material exactly as it was, so a prop may name its set before the
-## files exist, and one edit of this file textures every prop of the world. The textures tile, so the mapping is triplanar in the prop's own space: a crate and a 4 m container take the same grain.
+## The texture hook of the material factory (queue item B6): district_dressing.gd _plain() builds the material
+## of every prop the dressing places, and names a texture set for it. Supports both .webp (compressed mobile build)
+## and .png fallbacks so all 24 shipped PBR textures in assets/textures/pbr/ load reliably.
 
 const DIR: String = "res://assets/textures/pbr/"
 const TRIPLANAR_SCALE: float = 0.5
 
+static func _resolve_tex(base_no_ext: String) -> String:
+	var wp: String = base_no_ext + ".webp"
+	if ResourceLoader.exists(wp):
+		return wp
+	var pp: String = base_no_ext + ".png"
+	if ResourceLoader.exists(pp):
+		return pp
+	return ""
+
 static func apply(mat: StandardMaterial3D, set_name: String) -> StandardMaterial3D:
-	if set_name.is_empty() or not ResourceLoader.exists(DIR + set_name + "_albedo.png"):
+	if set_name.is_empty():
 		return mat
-	mat.albedo_texture = load(DIR + set_name + "_albedo.png")
+	var alb_path: String = _resolve_tex(DIR + set_name + "_albedo")
+	if alb_path.is_empty():
+		return mat
+	mat.albedo_texture = load(alb_path)
 	if not mat.vertex_color_use_as_albedo:
 		mat.albedo_color = Color.WHITE
-	if ResourceLoader.exists(DIR + set_name + "_normal.png"):
+	var nrm_path: String = _resolve_tex(DIR + set_name + "_normal")
+	if not nrm_path.is_empty():
 		mat.normal_enabled = true
-		mat.normal_texture = load(DIR + set_name + "_normal.png")
-	if ResourceLoader.exists(DIR + set_name + "_rough.png"):
+		mat.normal_texture = load(nrm_path)
+	var rgh_path: String = _resolve_tex(DIR + set_name + "_rough")
+	if not rgh_path.is_empty():
 		mat.roughness = 1.0
-		mat.roughness_texture = load(DIR + set_name + "_rough.png")
+		mat.roughness_texture = load(rgh_path)
 	mat.uv1_triplanar = true
 	mat.uv1_scale = Vector3.ONE * TRIPLANAR_SCALE
 	return mat

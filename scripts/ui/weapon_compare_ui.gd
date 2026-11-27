@@ -128,7 +128,7 @@ func _add_weapon_icon(parent: Node, weapon: WeaponBase) -> void:
 	if id == "":
 		return
 	# The render built for this screen.
-	var path := "res://assets/textures/renders_v2/weapons/%s_render_256.png" % id
+	var path := "res://assets/textures/renders_v2/weapons/%s_render_256.webp" % id
 	if not ResourceLoader.exists(path):
 		return
 	var icon := TextureRect.new()

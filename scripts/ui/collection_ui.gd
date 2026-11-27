@@ -102,7 +102,7 @@ func _district_card(district_id: StringName, found: int, total: int) -> Control:
 	vb.add_theme_constant_override("separation", 6)
 	panel.add_child(vb)
 
-	var art_path := "res://assets/textures/cards/card_%s%s_512.png" % [String(district_id), "" if lit else "_locked"]
+	var art_path := "res://assets/textures/cards/card_%s%s_512.webp" % [String(district_id), "" if lit else "_locked"]
 	if ResourceLoader.exists(art_path):
 		var art := TextureRect.new()
 		art.texture = load(art_path)

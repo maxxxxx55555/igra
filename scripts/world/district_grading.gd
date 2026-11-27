@@ -46,7 +46,7 @@ func _apply_ground(root: Node3D, c: Color, district_id: StringName) -> void:
 			var m := StandardMaterial3D.new()
 			m.albedo_color = c
 			m.roughness = 0.95
-			var tex_path := "res://assets/textures/tiles/%s_floor.png" % String(district_id)
+			var tex_path := "res://assets/textures/tiles/%s_floor.webp" % String(district_id)
 			if ResourceLoader.exists(tex_path):
 				m.albedo_texture = load(tex_path)
 				m.uv1_scale = Vector3(4.0, 4.0, 1.0)

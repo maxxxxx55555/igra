@@ -690,7 +690,9 @@ func build_Weather(content: ColorRect, card: ColorRect, cw: float, ch: float) ->
 		content.add_child(frame)
 		# V2 SKIN WIRING P1: real forecast thumbnail behind the name/effect
 		# labels, dimmed so the text stays readable over it.
-		var thumb_path := "res://assets/textures/ui_v2/weather_%s_256x144.png" % String(weathers[i]["thumb"])
+		var thumb_path := "res://assets/textures/ui_v2/weather_%s_256x144.webp" % String(weathers[i]["thumb"])
+		if not ResourceLoader.exists(thumb_path):
+			thumb_path = "res://assets/textures/ui_v2/weather_%s_256x144.png" % String(weathers[i]["thumb"])
 		if ResourceLoader.exists(thumb_path):
 			var thumb := TextureRect.new()
 			thumb.texture = load(thumb_path)

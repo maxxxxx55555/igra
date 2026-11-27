@@ -350,7 +350,7 @@ func _find_player_glow() -> OmniLight3D:
 func _apply_lut(district_id: StringName) -> void:
 	if _env == null:
 		return
-	var lut_path := "res://assets/textures/luts/lut_%s.png" % String(district_id)
+	var lut_path := "res://assets/textures/luts/lut_%s.webp" % String(district_id)
 	if ResourceLoader.exists(lut_path):
 		_env.adjustment_enabled = true
 		_env.adjustment_color_correction = load(lut_path)
