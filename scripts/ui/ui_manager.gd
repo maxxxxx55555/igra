@@ -138,7 +138,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("photo_mode"):
 			_photo.toggle()
 		elif event.is_action_pressed("city_map_toggle"):
-			toggle(&"district_map")
+			var m: Node = get_tree().root.get_node_or_null("Main3D/Wave2ProgressionMap")
+			if m != null and m.has_method("toggle_full_map"):
+				m.call("toggle_full_map")
+			else:
+				toggle(&"district_map")
 		elif event.is_action_pressed("encyclopedia_toggle"):
 			toggle(&"encyclopedia")
 		elif event.is_action_pressed("journal_toggle"):

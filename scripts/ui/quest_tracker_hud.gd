@@ -50,6 +50,11 @@ func _build_line() -> void:
 func _layout_line() -> void:
 	if _panel == null or not is_instance_valid(_panel):
 		return
+	if has_meta("ref3_docked"):
+		_panel.add_theme_stylebox_override("panel", Ref3HudDirector.make_objective_card_style())
+		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		_panel.reset_size()
+		return
 	var vp: Vector2 = get_viewport().get_visible_rect().size
 	var inset: Vector4 = UiScale.insets(vp)
 	var w: float = minf(_panel.get_combined_minimum_size().x, maxf(120.0, vp.x - inset.x - inset.z - 32.0))
@@ -67,7 +72,8 @@ func _refresh() -> void:
 	var key: String = String(info.get("key", "OBJ_STEP1_PARTS"))
 	var args: Dictionary = info.get("args", {})
 	var marker := "› " if SettingsManager.get_setting("objective_markers", false) else ""
-	_label.text = marker + I18nSync.t(key, args)
+	var header: String = "ЗАДАНИЕ" if LocalizationManager.current_lang == "ru" else "OBJECTIVE"
+	_label.text = header + "\n" + marker + I18nSync.t(key, args)
 	_panel.reset_size()
 	_layout_line()
 

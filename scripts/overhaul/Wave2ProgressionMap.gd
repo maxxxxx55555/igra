@@ -435,8 +435,22 @@ func _layout_safe_area() -> void:
 
 
 func layout_in_safe_area(vp_size: Vector2, inset: Vector4) -> void:
-	_mini_btn.position = Vector2(vp_size.x - inset.z - 300.0, inset.y + 12.0)
-	_mini_btn.size = Vector2(190.0, 120.0)
+	var radar_bottom: float = Ref3HudDirector.apply_circular_radar_style(_mini_btn, _mini_canvas, vp_size, inset)
+	var compass := _mini_btn.get_node_or_null("CompassN") as Label
+	if compass == null:
+		compass = Label.new()
+		compass.name = "CompassN"
+		compass.text = "N"
+		compass.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		compass.add_theme_font_size_override("font_size", 13)
+		compass.add_theme_color_override("font_color", COL_AMBER)
+		_mini_btn.add_child(compass)
+	compass.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	compass.position = Vector2(-6.0, 4.0)
+	var quest := get_tree().root.find_child("QuestHUD", true, false) as Control
+	if quest != null:
+		quest.set_meta("ref3_docked", true)
+		Ref3HudDirector.dock_objective_under_radar(quest, radar_bottom, vp_size, inset)
 	var frame := _overlay_root.get_node("MapModalFrame") as Control
 	frame.offset_left = 44.0 + inset.x
 	frame.offset_top = 28.0 + inset.y

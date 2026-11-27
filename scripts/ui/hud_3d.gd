@@ -206,6 +206,9 @@ func _ready() -> void:
 	_add_map_button()
 	if has_touch_ui():
 		_apply_touch_arc_layout()
+	Ref3HudDirector.deduplicate_joystick(self, get_viewport().get_visible_rect().size, _safe_area_inset)
+	Ref3HudDirector.arrange_ref3_stat_bars(self, get_viewport().get_visible_rect().size, _safe_area_inset, has_touch_ui())
+	_style_ref3_notice_card()
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
@@ -857,8 +860,11 @@ func _layout_touch_buttons(factor: float = 1.0) -> void:
 ## not just scale the old corner cluster.
 func _on_viewport_resized() -> void:
 	_apply_safe_area()
+	var vp: Vector2 = get_viewport().get_visible_rect().size
 	if has_touch_ui():
 		_apply_touch_arc_layout()
+	Ref3HudDirector.deduplicate_joystick(self, vp, _safe_area_inset)
+	Ref3HudDirector.arrange_ref3_stat_bars(self, vp, _safe_area_inset, has_touch_ui())
 	if _TOUCH_LAYOUT.is_mobile():
 		_apply_mobile_metrics()
 
@@ -939,6 +945,9 @@ func _apply_touch_arc_layout() -> void:
 	_place_map_button_in_arc()
 	_place_ammo_above_arc(vp)
 	_tidy_touch_captions()
+	Ref3HudDirector.deduplicate_joystick(self, vp, _safe_area_inset)
+	Ref3HudDirector.arrange_ref3_stat_bars(self, vp, _safe_area_inset, true)
+	_style_ref3_touch_buttons()
 
 ## Unslop touch spec: the right-hand action arc keeps >=72 px targets. The
 ## generator floors several of them at 56, so grow them in place, nudge any
@@ -1332,7 +1341,7 @@ func _sync_map_isolation() -> void:
 	var m: Node = get_tree().root.get_node_or_null("Main3D/Wave2ProgressionMap")
 	if m == null or not m.has_method("is_full_map_open"):
 		return
-	var open_now: bool = bool(m.call("is_full_map_open"))
+	var open_now: bool = bool(m.call("is_full_map_open")) or UIManager.is_hud_blocked()
 	if open_now == _map_isolated:
 		return
 	_map_isolated = open_now
@@ -2213,8 +2222,11 @@ func _setup_slot_placeholders() -> void:
 		# the badge only means something for the five item slots.
 		badge.visible = item_id != &"flashlight"
 		badge.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
+		if ResourceLoader.exists("res://assets/fonts/ShareTechMono-Regular.ttf"):
+			badge.add_theme_font_override("font", load("res://assets/fonts/ShareTechMono-Regular.ttf") as Font)
 		badge.add_theme_font_size_override("font_size", 12 if _TOUCH_LAYOUT.is_mobile() else 11)
-		badge.position = Vector2(34, 34)
+		badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		badge.position = Vector2(38, 36)
 		slot.add_child(badge)
 		if inv and item_id != &"":
 			var cnt: int = inv.count_of(item_id)
@@ -2416,6 +2428,10 @@ func _place_map_button() -> void:
 	btn.position = UiScale.log_map_row(get_viewport().get_visible_rect().size) + Vector2(UiScale.min_touch() * 1.5 + 8.0, 0.0)
 
 func _on_map_btn() -> void:
+	var m: Node = get_tree().root.get_node_or_null("Main3D/Wave2ProgressionMap")
+	if m != null and m.has_method("open_full_map"):
+		m.call("open_full_map", 0)
+		return
 	if UIManager and UIManager.has_method("open"):
 		UIManager.open(&"district_map")
 
@@ -2428,6 +2444,41 @@ func _on_interact_available(avail: bool) -> void:
 		_FADE.fade_to(prompt, 1.0, 0.12, "self_modulate:a")
 	else:
 		_FADE.fade_to(prompt, 0.0, 0.2, "self_modulate:a", true)
+
+## Reference #3: compact charcoal/bronze card in the top third instead of a
+## raw white line floating over the middle of the street.
+func _style_ref3_notice_card() -> void:
+	var card := get_node_or_null("Ref3NoticeCard") as PanelContainer
+	if card == null:
+		card = PanelContainer.new()
+		card.name = "Ref3NoticeCard"
+		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(card)
+		if is_instance_valid(notice):
+			notice.reparent(card)
+	card.add_theme_stylebox_override("panel", Ref3HudDirector.make_objective_card_style())
+	card.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	var vp: Vector2 = get_viewport().get_visible_rect().size
+	card.position = Vector2(vp.x * 0.5 - 170.0, 118.0)
+	card.custom_minimum_size = Vector2(340.0, 0.0)
+	if is_instance_valid(notice):
+		notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		notice.add_theme_font_size_override("font_size", 15)
+		notice.add_theme_color_override("font_color", Ref3HudDirector.COL_AMBER)
+
+
+func _style_ref3_touch_buttons() -> void:
+	for nm: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash",
+			"BtnStrobe", "BtnWheel", "BtnReload", "BtnMelee", "BtnUV", "BtnDodge", "BtnInventory", "BtnWorkbench", "MapButton"]:
+		var b := find_child(nm, true, false) as Button
+		if b == null:
+			continue
+		var primary: bool = nm == "BtnAttack" or nm == "BtnInteract"
+		var size: float = 72.0 if nm == "BtnInteract" else (56.0 if nm in ["BtnFlash", "BtnSprint", "BtnStealth"] else UiScale.min_touch())
+		b.custom_minimum_size = Vector2(size, size)
+		for st: StringName in [&"normal", &"hover", &"pressed", &"focus", &"disabled"]:
+			b.add_theme_stylebox_override(st, Ref3HudDirector.make_ref3_touch_button_style(st == &"pressed", primary))
+
 
 func _show_notice(msg: String) -> void:
 	# Scene replacement detaches the HUD before freeing it; autoload signals
