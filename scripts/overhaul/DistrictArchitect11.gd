@@ -45,7 +45,7 @@ const DISTRICTS: Array[Dictionary] = [
 		"name_ru": "Морозный бульвар", "name_en": "Frost Promenade",
 		"width_m": 92.0, "length_m": 70.0, "layout": "wide_avenue",
 		"building_stories_min": 4, "building_stories_max": 6,
-		"enterable_count": 3, "enterable_themes": ["pharmacy", "lobby", "kiosk"],
+		"enterable_count": 3, "enterable_themes": ["pharmacy", "foyer", "kiosk"],
 		"ambient_hex": "#152b3b", "fog_hex": "#0d1d29", "lamp_hex": "#c9ad68",
 		"fog_density": 0.019, "rain_intensity": 0.20, "cold_mult": 1.22,
 		"enemy_count": 4, "parts_required": 6,
@@ -122,11 +122,11 @@ const DISTRICTS: Array[Dictionary] = [
 		"name_ru": "Площадь Последнего Фонаря", "name_en": "Last Streetlight Plaza",
 		"width_m": 124.0, "length_m": 116.0, "layout": "radial_finale_plaza",
 		"building_stories_min": 5, "building_stories_max": 9,
-		"enterable_count": 4, "enterable_themes": ["city_hall_lobby", "clock_base", "archive", "sanctuary_vestibule"],
+		"enterable_count": 4, "enterable_themes": ["city_hall_foyer", "clock_base", "archive", "sanctuary_vestibule"],
 		"ambient_hex": "#132330", "fog_hex": "#09131b", "lamp_hex": "#e0b052",
 		"fog_density": 0.022, "rain_intensity": 0.80, "cold_mult": 1.38,
 		"enemy_count": 7, "parts_required": 6,
-		"landmark_ru": "Центральный монумент и ратуша", "landmark_en": "Central monument and city hall lobby",
+		"landmark_ru": "Центральный монумент и ратуша", "landmark_en": "Central monument and city hall foyer",
 	},
 ]
 

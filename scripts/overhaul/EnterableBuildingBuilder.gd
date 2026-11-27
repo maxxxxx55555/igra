@@ -86,7 +86,7 @@ static func build_enterable_room(
 
 	# Optional cover divider inside larger rooms (great stealth hiding spot!)
 	if w >= 7.0:
-		_add_solid_box(root, "CoverPartition", Vector3(0.35, 0.95, 0.45), Vector3(1.60, 1.78, 0.22), prop_mat, INTERIOR_CULL_DIST)
+		_add_solid_box(root, "CoverPartition", Vector3(1.62, 0.95, 0.15), Vector3(1.60, 1.78, 0.22), prop_mat, INTERIOR_CULL_DIST)
 
 	# 6. Interior Area3D trigger for warm shelter acoustics / stealth bonus / HUD hint
 	var area: Area3D = Area3D.new()
@@ -168,11 +168,12 @@ static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 		for mesh: MeshInstance3D in root.find_children("*", "MeshInstance3D", true, false):
 			var material: Material = mesh.material_override
 			var cull := mesh.visibility_range_end
-			var key := Vector2i(material.get_instance_id() % 2147483647, int(cull))
+			var anchor := root if cull > 0.0 else parent
+			var key := Vector2i(material.get_instance_id() % 2147483647, anchor.get_instance_id() % 2147483647)
 			if not surfaces.has(key):
-				surfaces[key] = [SurfaceTool.new(), material, cull]
+				surfaces[key] = [SurfaceTool.new(), material, cull, anchor]
 				surfaces[key][0].begin(Mesh.PRIMITIVE_TRIANGLES)
-			var frame := parent.global_transform.affine_inverse() * mesh.global_transform
+			var frame := anchor.global_transform.affine_inverse() * mesh.global_transform
 			surfaces[key][0].append_from(mesh.mesh, 0, frame)
 			mesh.queue_free()
 	for data: Array in surfaces.values():
@@ -181,7 +182,7 @@ static func batch_visuals(parent: Node3D, rooms: Array[Dictionary]) -> void:
 		mesh.material_override = data[1]
 		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mesh.visibility_range_end = data[2]
-		parent.add_child(mesh)
+		data[3].add_child(mesh)
 
 static var _shared_fixture: StandardMaterial3D
 

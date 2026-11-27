@@ -130,6 +130,8 @@ static func pole_distances(length: float) -> PackedFloat32Array:
 		out.append(float(s) * POLE_SPACING_M)
 	return out
 
+var _room_keepouts: Array[Rect2] = []
+
 func build() -> void:
 	var started: int = Time.get_ticks_usec()
 	var sb: Node = get_node_or_null(street_builder_path)
@@ -138,6 +140,7 @@ func build() -> void:
 	_low_tier = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
 	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
 	_district_id = district_id
+	_build_interiors(DistrictArchitect11.blueprint(district_id))
 	for road in sb.roads:
 		var distances := pole_distances(float(road.get("length", 0.0)))
 		for s in distances.size():
@@ -154,7 +157,6 @@ func build() -> void:
 	_build_prop_multimesh()
 	add_child(preload("res://scripts/effects/dust_motes.gd").new())
 	_build_skyline(sb, district_id)
-	_build_interiors(DistrictArchitect11.blueprint(district_id))
 	var dressing: Node3D = preload("res://scripts/world/district_dressing.gd").new()
 	dressing.name = "DistrictDressing"
 	add_child(dressing)
@@ -178,6 +180,7 @@ func _build_skyline(sb: Node, district_id: StringName) -> void:
 func _build_interiors(plan: Dictionary) -> void:
 	var half := DistrictArchitect11.half_size(plan)
 	var rooms: Array[Dictionary] = []
+	_room_keepouts.clear()
 	var wall := DETAIL.weathered(Color("#485054"))
 	var floor_mat := DETAIL.weathered(Color("#323638"))
 	var prop := DETAIL.weathered(Color("#4a3828"))
@@ -190,6 +193,7 @@ func _build_interiors(plan: Dictionary) -> void:
 			Vector3(x, 0, z), 0.0 if north else PI, 7.2, 5.6,
 			plan.enterable_themes[i], wall, floor_mat, prop)
 		rooms.append(info)
+		_room_keepouts.append(Rect2(x - 3.6, z - 2.8, 7.2, 5.6).grow(0.5))
 	get_parent().set_meta("district_rooms", rooms)
 	EnterableBuildingBuilder.batch_visuals(self, rooms)
 
@@ -218,10 +222,18 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary, district_id: StringName
 		return
 	var perp: Vector3 = _side_offset(road, 3.5)
 	for side in [-1, 1]:
+		var lamp_at := center + perp * float(side)
+		if _reserved_for_room(lamp_at):
+			var shift := _along(road) * 2.0
+			lamp_at += shift
+			if _reserved_for_room(lamp_at):
+				lamp_at -= shift * 2.0
+			if _reserved_for_room(lamp_at):
+				continue
 		var l: Node3D = _STREETLIGHT_3D.instantiate()
 		l.set("district_id", district_id)
 		l.set("mesh_visible", false)
-		l.position = center + perp * float(side)
+		l.position = lamp_at
 		add_child(l)
 		_lamp_local_positions.append(l.position)
 
@@ -236,7 +248,7 @@ func _build_streetlight_multimesh() -> void:
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
 	pole_mm.mesh = _HARDWARE.pole_mesh()
 	pole_mm.instance_count = _lamp_local_positions.size()
-	var lamp_mesh := DETAIL.module(&"lens")
+	var lamp_mesh := _lamp
 	# W4 (docs/VISUAL_PASS.md section 8): the head is mat_lamp_flicker.tres, one copy per district because `lit` is
 	# the power stage of that district; the flicker of the mesh follows the one of the lights (streetlight_3d.gd)
 	# and Reduce Flash stills it.
@@ -361,14 +373,26 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 
 ## Benches and trees stand on the sidewalk (3.0-4.5 m from the road axis), not in the
 ## roadway; trees are shifted along the road so they clear the streetlight poles.
+func _reserved_for_room(at: Vector3) -> bool:
+	for bounds in _room_keepouts:
+		if bounds.has_point(Vector2(at.x, at.z)):
+			return true
+	return false
+
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
-	_bench_positions.append(center + _side_offset(road, 3.9) + _along(road))
+	var at := center + _side_offset(road, 3.9) + _along(road)
+	if not _reserved_for_room(at):
+		_bench_positions.append(at)
 
 func _spawn_tree(center: Vector3, road: Dictionary) -> void:
-	_tree_positions.append(center + _side_offset(road, 3.9) + _along(road))
+	var at := center + _side_offset(road, 3.9) + _along(road)
+	if not _reserved_for_room(at):
+		_tree_positions.append(at)
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
-	_cone_positions.append(center + _side_offset(road, 2.4))
+	var at := center + _side_offset(road, 2.4)
+	if not _reserved_for_room(at):
+		_cone_positions.append(at)
 
 ## The canopies sway (assets/shaders/foliage_sway.gdshader); with Motion Comfort or Reduce UI Motion they stand still, also when it is switched while the district is up.
 const _LEAVES := preload("res://assets/env/mat_foliage_sway.tres")

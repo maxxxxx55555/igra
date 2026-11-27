@@ -99,7 +99,10 @@ func _roster_for(district_id: StringName) -> Array:
 ## Чем темнее район, тем больше врагов: DARK/PARTIAL — плюс половина состава,
 ## полностью освещённый район заметно спокойнее.
 func _target_count(district_id: StringName) -> int:
-	return mini(max_active, int(DistrictArchitect11.blueprint(district_id).enemy_count))
+	var stage := int(PowerGrid.get_stage(district_id))
+	var stage_factor: Array[float] = [1.36, 1.22, 1.10, 1.0]
+	var authored := int(DistrictArchitect11.blueprint(district_id).enemy_count)
+	return clampi(roundi(authored * stage_factor[clampi(stage, 0, 3)]), authored, max_active)
 
 func try_spawn(scene: PackedScene, pos: Vector3, parent: Node) -> Node3D:
 	if scene == null or parent == null or _active >= max_active:

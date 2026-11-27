@@ -98,7 +98,7 @@ func harden_world_colliders(root: Node) -> Dictionary:
 				if not concave.backface_collision:
 					concave.backface_collision = true
 					hardened_concave += 1
-		elif node is StaticBody3D:
+		elif node is StaticBody3D and not _is_inside_dynamic_entity(node):
 			var sb: StaticBody3D = node as StaticBody3D
 			if (sb.collision_layer & world_collision_layer) == 0:
 				sb.collision_layer |= world_collision_layer
