@@ -533,6 +533,13 @@ func _redraw_all() -> void:
 func _refresh_fog_texture() -> void:
 	if not _fog_dirty or _fog_image == null:
 		return
+	# Reference #3 clean fog: binary reveal only. The soft brush used to leave
+	# faint oval bleed marks along the unrevealed edges of the district plate.
+	for fy in range(_fog_image.get_height()):
+		for fx in range(_fog_image.get_width()):
+			var fc: Color = _fog_image.get_pixel(fx, fy)
+			var seen: float = 1.0 if fc.r >= 0.5 else 0.0
+			_fog_image.set_pixel(fx, fy, Color(seen, seen, seen, 1.0))
 	if _fog_tex == null:
 		_fog_tex = ImageTexture.create_from_image(_fog_image)
 	else:
@@ -668,6 +675,8 @@ func _draw_marks(layer: Control, is_mini: bool) -> void:
 	var dots := PackedVector2Array()
 	var ring_w: float = 2.0
 	for lamp: Vector2 in _lit_lamps:
+		if not _is_world_point_revealed(lamp):
+			continue
 		var lp: Vector2 = _world_to_rect(lamp, rect, view_min, view_span)
 		var hr: float = maxf(7.0, rect.size.x / view_span.x * 5.0)
 		ring_w = maxf(2.0, hr * 0.34)

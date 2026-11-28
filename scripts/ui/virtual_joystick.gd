@@ -6,14 +6,14 @@ extends Control
 
 const BASE_COLOR := Color("#0f1314")
 const BASE_INNER := Color("#161e22")
-const BASE_RIM := Color("#5a4a2a")
+const BASE_RIM := Color("#c9a24a")
 const KNOB_COLOR := Color("#1c1e1d")
 const KNOB_RIM := Color("#c9a24a")
 const SODIUM_RING := Color("#d4a94e")
-const ARROW_MUTED := Color("#8a8a85")
+const ARROW_MUTED := Color("#e6dfd1")
 const KNOB_RADIUS: float = 25.0
 const PRESS_SCALE: float = 1.15
-const REST_ALPHA: float = 0.82
+const REST_ALPHA: float = 1.0
 const RESPONSE_CURVE: float = 1.6
 const DOUBLE_TAP_WINDOW: float = 0.3
 const PRESS_ANIM_RATE: float = 10.0

@@ -4,14 +4,14 @@
   "gates": {
     "audit_and_patch_mobile": {
       "exit": 0,
-      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"74085dabdfce83f356aaeb14425056e030de93d3eeb8a60fa9e2f5783df7599d\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.93\n}"
+      "stdout": "{\n  \"report\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MOBILE_AUDIT_REPORT.json\",\n  \"report_sha256\": \"aead62c6cbe31a10347383cfa8e25ad2ea1033441b2a319a3a216a2c4a93a1d2\",\n  \"gate_pass\": true,\n  \"project_godot_status\": \"CLEAN\",\n  \"wifi_hits\": 0,\n  \"collision_findings\": 0,\n  \"ui_findings\": 0,\n  \"asset_issues\": 0,\n  \"repo_total_mb\": 44.78\n}"
     },
     "optimize_mobile_media_verify": {
       "exit": 0,
-      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"d10994649a489f9fdc2d9ebb13f5b56489ada2b3518c21ed07414cd169916b4f\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 36.26\n  }\n}"
+      "stdout": "{\n  \"manifest\": \"C:\\\\Users\\\\Maxsim\\\\Desktop\\\\TLS_Build.pr87\\\\MEDIA_OPTIMIZATION_MANIFEST.json\",\n  \"manifest_sha256\": \"fb139f818cca8f9d46d3b92b9a4b1bfe8217c8078984502a2bc45f2dff05edfe\",\n  \"gate_pass\": true,\n  \"summary\": {\n    \"audio_total\": 230,\n    \"audio_failed\": 0,\n    \"audio_refs_updated_files\": 0,\n    \"textures_total\": 638,\n    \"textures_failed\": 0,\n    \"total_media_mb\": 36.11\n  }\n}"
     },
     "repo_size_budget": {
-      "total_mb": 44.93,
+      "total_mb": 44.78,
       "max_mb": 45.0,
       "pass": true
     },

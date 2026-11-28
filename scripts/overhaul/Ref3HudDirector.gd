@@ -42,7 +42,7 @@ static func deduplicate_joystick(hud_root: Node, viewport_size: Vector2, inset: 
 	# One pad in the whole tree: a second pad left over from a scene swap is
 	# the duplicate the Reference #3 plate must not show.
 	for node in hud_root.get_tree().root.find_children("*", "CanvasItem", true, false):
-		if node != ring and node != bottom_left and ("joystick" in node.name.to_lower() or "joyring" in node.name.to_lower()):
+		if node != ring and node != bottom_left and (ring == null or not ring.is_ancestor_of(node)) and ("joystick" in node.name.to_lower() or "joyring" in node.name.to_lower()):
 			(node as CanvasItem).visible = false
 
 	if ring != null:
@@ -74,7 +74,7 @@ static func arrange_ref3_stat_bars(hud_root: Node, viewport_size: Vector2, inset
 		return
 	var sf: float = clampf(viewport_size.y / 720.0, 0.78, 1.25)
 	var joy_d: float = roundf(144.0 * sf) if touch_active else 0.0
-	var x0: float = 24.0 + inset.x + (joy_d + 32.0 if touch_active else 0.0)
+	var x0: float = 24.0 + inset.x + (joy_d + 18.0 if touch_active else 0.0)
 	var h: float = 98.0
 	var y0: float = viewport_size.y - (22.0 + inset.w) - h
 

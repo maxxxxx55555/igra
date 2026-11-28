@@ -29,7 +29,7 @@
   },
   "gate_pass": true,
   "total_files": 12,
-  "total_mb": 1.84,
+  "total_mb": 2.65,
   "errors": [],
   "sets": {
     "panel_facade": {
@@ -42,8 +42,8 @@
       "files": {
         "albedo": {
           "file": "panel_facade_albedo.png",
-          "kb": 152.8,
-          "sha256": "a849c736d4c735ac8c46157310f5c8e6fbf7970ec0b55111fe52990fb4dccde4"
+          "kb": 155.3,
+          "sha256": "e75a232daddcecb5899f3fe4822f4988352d0e2c2bc93ba7a75aafe90d54d815"
         },
         "normal": {
           "file": "panel_facade_normal.png",
@@ -52,8 +52,8 @@
         },
         "orm": {
           "file": "panel_facade_orm.png",
-          "kb": 3.4,
-          "sha256": "deec0a04bbc60db22301e47686e4115d54f7c79b2a6c40a5845180716e0269c1"
+          "kb": 200.4,
+          "sha256": "44dfb521fec3ea1cf33fbd4f88effa42a6b4bc881af799542fe20893b26ceedb"
         }
       }
     },
@@ -67,8 +67,8 @@
       "files": {
         "albedo": {
           "file": "wet_asphalt_albedo.png",
-          "kb": 110.8,
-          "sha256": "1f9d55cefcf54e88e7222cda2a7137fcf6ea68e12d02532a88d5e0a8ef560f74"
+          "kb": 193.6,
+          "sha256": "22e7125f10e610dea1c050484208200405a7474a6ad2178944859491cdac1d92"
         },
         "normal": {
           "file": "wet_asphalt_normal.png",
@@ -77,8 +77,8 @@
         },
         "orm": {
           "file": "wet_asphalt_orm.png",
-          "kb": 24.6,
-          "sha256": "a74e8deeeffb6b83b1953f5bd870588d90c55d6ee3223ecd94a7a835ca0727d9"
+          "kb": 310.0,
+          "sha256": "d1fb44195f37797ed97e76ef6050ced668d093a71beb28ad922ea94f86bd73a3"
         }
       }
     },
@@ -92,8 +92,8 @@
       "files": {
         "albedo": {
           "file": "concrete_sidewalk_albedo.png",
-          "kb": 97.5,
-          "sha256": "fbe1546182a4766c9fc4eb9fb069bb0e72d5c7bb695c8fb210e3c7e1bc6d8263"
+          "kb": 167.7,
+          "sha256": "e6427d4da13d50788f8c2aef3bbe5b3729830230b3c3e26d743ceeca127ef123"
         },
         "normal": {
           "file": "concrete_sidewalk_normal.png",
@@ -102,8 +102,8 @@
         },
         "orm": {
           "file": "concrete_sidewalk_orm.png",
-          "kb": 0.2,
-          "sha256": "c302015affbc07cb5d89f46019f1f135ecded6421fb3292f12073dfe9c1002e7"
+          "kb": 189.7,
+          "sha256": "df8bc6c81ec371baf6ef831f7f119c28d7425b30f3fc17ddbe05a3b25a885843"
         }
       }
     },
