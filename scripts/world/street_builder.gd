@@ -157,7 +157,7 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 		# and the ripple/two-extra-texture ALU of the old version is gone.
 		mat.set_shader_parameter("uv_scale", Vector2(4.0, 4.0))
 		mat.set_shader_parameter("world_puddle_scale", 0.045)
-		mat.set_shader_parameter("wetness", 0.62)
+		mat.set_shader_parameter("wetness", 0.74)
 		mat.set_shader_parameter("puddle_roughness", 0.13)
 		mat.set_shader_parameter("dry_roughness_floor", 0.84)
 		mat.set_shader_parameter("normal_strength", 0.82)

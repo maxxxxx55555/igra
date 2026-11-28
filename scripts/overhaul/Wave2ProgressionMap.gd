@@ -447,10 +447,17 @@ func layout_in_safe_area(vp_size: Vector2, inset: Vector4) -> void:
 		_mini_btn.add_child(compass)
 	compass.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	compass.position = Vector2(-6.0, 4.0)
+	# The district caption sits just under the bezel, never across the N tick.
+	if _mini_title != null:
+		_mini_title.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		_mini_title.offset_top = _mini_btn.size.y - 2.0
+		_mini_title.offset_bottom = _mini_btn.size.y + 16.0
+	if _mini_hint != null:
+		_mini_hint.visible = false
 	var quest := get_tree().root.find_child("QuestHUD", true, false) as Control
 	if quest != null:
 		quest.set_meta("ref3_docked", true)
-		Ref3HudDirector.dock_objective_under_radar(quest, radar_bottom, vp_size, inset)
+		Ref3HudDirector.dock_objective_under_radar(quest, radar_bottom + 22.0, vp_size, inset)
 	var frame := _overlay_root.get_node("MapModalFrame") as Control
 	frame.offset_left = 44.0 + inset.x
 	frame.offset_top = 28.0 + inset.y

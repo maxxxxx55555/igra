@@ -74,7 +74,7 @@ static func arrange_ref3_stat_bars(hud_root: Node, viewport_size: Vector2, inset
 		return
 	var sf: float = clampf(viewport_size.y / 720.0, 0.78, 1.25)
 	var joy_d: float = roundf(144.0 * sf) if touch_active else 0.0
-	var x0: float = 24.0 + inset.x + (joy_d + 18.0 if touch_active else 0.0)
+	var x0: float = 24.0 + inset.x + (joy_d + 32.0 if touch_active else 0.0)
 	var h: float = 98.0
 	var y0: float = viewport_size.y - (22.0 + inset.w) - h
 

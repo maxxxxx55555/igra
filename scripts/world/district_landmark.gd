@@ -8,9 +8,9 @@ extends RefCounted
 
 const BODY_COLOR := Color("#2a3340")
 const GLOW_COLOR := Color("#c9a24a")
-const BODY_SELF_GLOW := Color(0.08, 0.10, 0.14)
+const BODY_SELF_GLOW := Color(0.025, 0.035, 0.045)
 ## Per power stage (DARK, PARTIAL, STREETS, FULL): the emission energy of the glowing parts, the share of the body's self-glow, the opacity of the halo.
-const GLOW_BY_STAGE: Array[float] = [0.0, 0.6, 1.3, 2.4]
+const GLOW_BY_STAGE: Array[float] = [0.0, 0.24, 0.48, 0.82]
 const BODY_BY_STAGE: Array[float] = [0.15, 0.5, 0.8, 1.1]
 const HALO_BY_STAGE: Array[float] = [0.0, 0.018, 0.033, 0.052]
 ## A halo that hugs the silhouette: the 110 m quad of the first version filled a third of the sky with flat brass (decision HALO-27).

@@ -117,7 +117,7 @@ func _apply_cinematic_night() -> void:
 		_env.ambient_light_sky_contribution = 0.0
 	_env.fog_light_energy = maxf(_env.fog_light_energy, 0.50)
 	_env.adjustment_enabled = true
-	_env.adjustment_brightness = 1.16
+	_env.adjustment_brightness = 1.28
 	_env.adjustment_contrast = 1.01 if restored else 1.15
 	_env.adjustment_saturation = 1.05
 	if is_inside_tree():

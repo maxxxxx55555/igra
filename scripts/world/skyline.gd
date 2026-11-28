@@ -401,6 +401,9 @@ func _add_detail_batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D]
 ## corroded cast iron (industrial) from the owner's reference, and the old
 ## pbr/v2 maps on the Low tier.
 func _facade_tex_path() -> String:
+	var canon_first: String = String(FACADE_TEX_CANON.get(_district_id, FACADE_TEX_CANON[&"suburbs"]))
+	if ResourceLoader.exists(canon_first):
+		return canon_first
 	if int(SettingsManager.get_setting("graphics_tier", 2)) > 0 and ResourceLoader.exists(W2_FACADE_ALBEDO):
 		return W2_FACADE_ALBEDO
 	if int(SettingsManager.get_setting("graphics_tier", 2)) <= 0:

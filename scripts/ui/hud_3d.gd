@@ -1900,12 +1900,8 @@ func _on_bat(ratio: float) -> void:
 ## touch-device launch - drag the joystick, tap interact, feel the haptic
 ## pulse. has_touch_ui() already gates every other touch-only setup here.
 func _maybe_show_touch_calibration() -> void:
-	if not has_touch_ui():
-		return
-	if SettingsManager.get_setting("touch_calibration_done", false):
-		return
-	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
-	get_tree().root.add_child(overlay)
+	# Option B clean HUD: never cover live gameplay with duplicate top-left calibration joystick.
+	SettingsManager.set_setting("touch_calibration_done", true)
 
 ## S04 (GDD §7): inside a hiding spot visibility is 0, and the view dims to say so.
 var _hide_overlay: ColorRect = null
@@ -2461,6 +2457,7 @@ func _style_ref3_notice_card() -> void:
 	var vp: Vector2 = get_viewport().get_visible_rect().size
 	card.position = Vector2(vp.x * 0.5 - 170.0, 118.0)
 	card.custom_minimum_size = Vector2(340.0, 0.0)
+	card.visible = false
 	if is_instance_valid(notice):
 		notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		notice.add_theme_font_size_override("font_size", 15)
@@ -2486,6 +2483,9 @@ func _show_notice(msg: String) -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not is_instance_valid(notice):
 		return
 	notice.text = msg
+	var card: PanelContainer = get_node_or_null("Ref3NoticeCard") as PanelContainer
+	if card != null:
+		card.visible = true
 	notice.self_modulate.a = 1.0
 	_FADE.show_for([notice], 2.2, 0.0, false, "self_modulate:a")  # gone before the 3 s timer clears the text
 	await get_tree().create_timer(3.0).timeout
@@ -2495,6 +2495,9 @@ func _show_notice(msg: String) -> void:
 		return
 	if notice.text == msg:
 		notice.text = ""
+		var empty_card: PanelContainer = get_node_or_null("Ref3NoticeCard") as PanelContainer
+		if empty_card != null:
+			empty_card.visible = false
 
 func _apply_borderless_style() -> void:
 	MinimalNoSlopHud.strip_yellow_boxes_recursive(self)

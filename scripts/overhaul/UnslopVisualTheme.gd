@@ -206,7 +206,7 @@ static func apply_cinematic_night_env(world_env: WorldEnvironment) -> void:
 	env.ambient_light_energy = 1.30
 	env.ambient_light_sky_contribution = 0.68
 	env.tonemap_mode = Environment.TONE_MAPPER_ACES
-	env.tonemap_exposure = 2.05
+	env.tonemap_exposure = 2.48
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.047, 0.094, 0.129, 1.0)
 	env.fog_density = 0.009
